@@ -68,8 +68,8 @@ var form_interfazdministrador = function(){
                                 }
                             }]
                         }, {
-                            title: 'Maestra categor&iacute;a evento',
-                            tabTip: ' Maestra categor&iacute;a evento, utilice esto para crear categorizar de los eventos',
+                            title: 'Categor&iacute;a evento',
+                            tabTip: 'Categor&iacute;a evento, utilice esto para crear categorizar de los eventos',
                             border: false,
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',
@@ -82,8 +82,8 @@ var form_interfazdministrador = function(){
                                 }
                             }]
                         }, {
-                            title: 'Maestra evento',
-                            tabTip: ' Maestra evento, utilice esto para registrar los eventos que pueden causar perdidas',
+                            title: 'Evento',
+                            tabTip: 'Evento, utilice esto para registrar los eventos que pueden causar perdidas',
                             border: false,
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',
@@ -127,7 +127,7 @@ var form_interfazdministrador = function(){
                     }, {
                         expanded: true,
                         items: [{
-                            title: 'Maestra tipo de <br/>identificaci&oacute;n',
+                            title: 'Tipo de <br/>identificaci&oacute;n',
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',
                             border: false,

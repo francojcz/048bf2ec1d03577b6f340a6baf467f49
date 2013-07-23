@@ -126,6 +126,7 @@ class reporte_diarioActions extends sfActions
             $datos[$fila]['rdtiemp_TF_metodo'] = round($tf, 2);
             $datos[$fila]['rdtiemp_TO_metodo'] = round($to, 2);
             $datos[$fila]['observaciones'] = $registro -> getRumObservaciones();
+            $datos[$fila]['columnas'] = $registro -> getRumColumnas();
 
             $horasFin = $registro -> getRumHoraFinTrabajo('H');
             $minutosFin = $registro -> getRumHoraFinTrabajo('i');

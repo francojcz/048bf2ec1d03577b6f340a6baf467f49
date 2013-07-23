@@ -122,9 +122,9 @@ class reporte_eventoActions extends sfActions
 			$criteria->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA, $request->getParameter('hasta_fecha'), Criteria::LESS_EQUAL);
 		}
 
-		if($request->getParameter('categoria_codigo')!='') {
+		if($request->getParameter('categoria_codigo')!='') {                        
 			$criteria->addJoin(EventoPeer::EVE_CODIGO, EventoPorCategoriaPeer::EVCA_EVE_CODIGO);
-			$criteria->add(EventoPorCategoriaPeer::EVCA_CAT_CODIGO, $request->getParameter('categoria_codigo'));
+			$criteria->add(EventoPorCategoriaPeer::EVCA_CAT_CODIGO, $request->getParameter('categoria_codigo'));                        
 		}
 
 		if($request->getParameter('analista_codigo')!='') {
@@ -471,7 +471,8 @@ class reporte_eventoActions extends sfActions
 			$datos;
 			try{
 				$conexion = new Criteria();
-				$conexion->addDescendingOrderByColumn(CategoriaEventoPeer::CAT_NOMBRE);
+                                $conexion->add(CategoriaEventoPeer::CAT_ELIMINADO,0);
+				$conexion->addAscendingOrderByColumn(CategoriaEventoPeer::CAT_NOMBRE);
 				$categorias = CategoriaEventoPeer::doSelect($conexion);
 					
 				foreach($categorias as $temporal)

@@ -151,7 +151,7 @@ var maq_nombre = new Ext.form.TextField({
     maxLength: 100,
     name: 'maq_nombre',
     id: 'maq_nombre',
-    fieldLabel: 'Nombre del equipo',
+    fieldLabel: 'Nombre equipo',
     allowBlank: false,
     listeners: {
         'render': function(){
@@ -223,7 +223,7 @@ var maq_tiempo_inyeccion = new Ext.form.NumberField({
     labelStyle: ' text-align:right;',
     name: 'maq_tiempo_inyeccion',
     id: 'maq_tiempo_inyeccion',
-    fieldLabel: 'Tiempo inyección',
+    fieldLabel: 'Tiempo inyección (Min.)',
     allowDecimals: true,
     allowNegative: false,
     maxLength: 100,
@@ -281,7 +281,7 @@ var certificados_datastore = new Ext.data.Store({
         method: 'POST'
     }),
     reader: new Ext.data.JsonReader({
-        root: 'data',
+        root: 'data'
     }, [{
         name: 'certificado',
         type: 'string'
@@ -320,14 +320,15 @@ var crud_maquina_formpanel = new Ext.FormPanel({
     region: 'east',
     split: true,
     collapsible: true,
-    width: 450,
+    width: 400,
     border: true,
     title: 'Equipo detalle',
     //autoWidth: true,
     columnWidth: '0.6',
-    height: 450,
+    height: 470,
     layout: 'form',
     bodyStyle: 'padding:10px;',
+    labelWidth: 140,
     defaults: {
         anchor: '98%'
     },

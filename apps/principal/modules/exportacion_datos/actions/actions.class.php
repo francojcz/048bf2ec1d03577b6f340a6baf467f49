@@ -113,8 +113,8 @@ class exportacion_datosActions extends sfActions
    <Interior ss:Color="#f0a05f" ss:Pattern="Solid"/>
   </Style>
  </Styles>
- <Worksheet ss:Name="Hoja1">
-  <Table ss:ExpandedColumnCount="37" ss:ExpandedRowCount="'.((count($registros)*2)+1).'" x:FullColumns="1"
+ <Worksheet ss:Name="Hoja1"> 
+  <Table ss:ExpandedColumnCount="38" ss:ExpandedRowCount="'.((count($registros)*2)+1).'" x:FullColumns="1"
    x:FullRows="1" ss:DefaultRowHeight="15">');
 		$this->renderText('
 		<Column ss:AutoFitWidth="0" ss:Width="78.75"/>
@@ -160,7 +160,9 @@ class exportacion_datosActions extends sfActions
     <Cell ss:StyleID="s73"><Data ss:Type="String">Hora inicio de corrida</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Hora fin de corrida</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Fallas</Data></Cell>
-    <Cell ss:StyleID="s73"><Data ss:Type="String">Observaciones</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">Lote</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">Columna</Data></Cell>
+    
    </Row>');
 
 		$horasFin = 0;
@@ -214,6 +216,7 @@ class exportacion_datosActions extends sfActions
 			<Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraFinTrabajo('H:i:s').'</Data></Cell>
 			<Cell ss:StyleID="s69"><Data ss:Type="Number">'.number_format($registro->getRumFallas(), 2).'</Data></Cell>
                         <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumObservaciones().'</Data></Cell>
+                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumColumnas().'</Data></Cell>
 			</Row>');
 
 			$this->renderText('<Row>
@@ -256,6 +259,8 @@ class exportacion_datosActions extends sfActions
       <Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraFinTrabajo('H:i:s').'</Data></Cell>
       <Cell ss:StyleID="s69"><Data ss:Type="Number">'.number_format($registro->getRumFallas(), 2).'</Data></Cell>
       <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumObservaciones().'</Data></Cell>
+      <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumColumnas().'</Data></Cell>
+      
       </Row>');
 
 			$horasFin = $registro->getRumHoraFinTrabajo('H');
@@ -460,6 +465,8 @@ class exportacion_datosActions extends sfActions
 			$fields['hora_fin_corrida'] = $registro->getRumHoraFinTrabajo('H:i:s');
 			$fields['fallas'] = number_format($registro->getRumFallas(), 2);
                         $fields['observaciones'] = $registro->getRumObservaciones();
+                        $fields['columnas'] = $registro->getRumColumnas();
+                        
 
 			$data[] = $fields;
 
@@ -511,6 +518,8 @@ class exportacion_datosActions extends sfActions
 			$fields['hora_fin_corrida'] = $registro->getRumHoraFinTrabajo('H:i:s');
 			$fields['fallas'] = number_format($registro->getRumFallas(), 2);
                         $fields['observaciones'] = $registro->getRumObservaciones();
+                        $fields['columnas'] = $registro->getRumColumnas();
+                        
 
 			$horasFin = $registro->getRumHoraFinTrabajo('H');
 			$minutosFin = $registro->getRumHoraFinTrabajo('i');

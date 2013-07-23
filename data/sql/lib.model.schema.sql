@@ -637,6 +637,7 @@ CREATE TABLE `registro_uso_maquina`
 	`rum_num_inyec_x_mu_unifor_perd` DECIMAL(12,4),
 	`rum_fallas` DECIMAL(12,4),
 	`rum_observaciones` VARCHAR(300),
+        `rum_columnas` VARCHAR(300),
 	`rum_fecha` DATE,
 	`rum_fecha_hora_reg_sistema` DATETIME,
 	`rum_causa_eliminacion` VARCHAR(300),

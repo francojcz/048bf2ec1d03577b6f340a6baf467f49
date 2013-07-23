@@ -54,7 +54,7 @@ class graficos_anualesActions extends sfActions
     <text_size>13</text_size>
     <align>center</align>
     <text>
-    <![CDATA[<b>Inyecciones realizadas / Mes</b>]]>
+    <![CDATA[<b>Inyecciones realizadas / mes</b>]]>
     </text>        
     </label>
     <label lid="1">
@@ -343,7 +343,7 @@ class graficos_anualesActions extends sfActions
     <text_size>13</text_size>
     <align>center</align>
     <text>
-    <![CDATA[<b>Muestras analizadas / Mes</b>]]>
+    <![CDATA[<b>Muestras analizadas / mes</b>]]>
     </text>        
     </label>
     <label lid="1">
@@ -624,7 +624,7 @@ class graficos_anualesActions extends sfActions
     <text_size>13</text_size>
     <align>center</align>
     <text>
-    <![CDATA[<b>Discriminación de pérdidas (TPNP)</b>]]>
+    <![CDATA[<b>Consolidado pérdidas por año (TPNP)</b>]]>
     </text>        
     </label>
     </labels>
@@ -745,7 +745,7 @@ class graficos_anualesActions extends sfActions
 	    <text_size>13</text_size>
 	    <align>center</align>
 	    <text>
-	    <![CDATA[<b>Pérdidas (tiempo) / Mes</b>]]>
+	    <![CDATA[<b>Tendencia pérdidas (tiempo) / Mes</b>]]>
 	    </text>        
 	    </label>
 	    <label lid="1">
@@ -1108,7 +1108,7 @@ class graficos_anualesActions extends sfActions
     <text_size>13</text_size>
     <align>center</align>
     <text>
-    <![CDATA[<b>Indicadores Vs. Metas</b>]]>
+    <![CDATA[<b>Comparativo<br>Indicadores Vs. Metas</b>]]>
     </text>        
     </label>
     <label lid="1">
@@ -1331,7 +1331,7 @@ class graficos_anualesActions extends sfActions
     <text_size>13</text_size>
     <align>center</align>
     <text>
-    <![CDATA[<b>Indicadores / Mes</b>]]>
+    <![CDATA[<b>Tendencia indicadores / mes</b>]]>
     </text>        
     </label>
     <label lid="1">
@@ -2037,7 +2037,7 @@ class graficos_anualesActions extends sfActions
     <text_size>13</text_size>
     <align>center</align>
     <text>
-    <![CDATA[<b>Tiempos para cálculo OEE / Mes</b>]]>
+    <![CDATA[<b>Tendencia tiempos para cálculo OEE / mes</b>]]>
     </text>        
     </label>
     <label lid="1">
@@ -2454,7 +2454,7 @@ class graficos_anualesActions extends sfActions
     <text_size>13</text_size>
     <align>center</align>
     <text>
-    <![CDATA[<b>Porcentaje de tiempos para cálculo OEE</b>]]>
+    <![CDATA[<b>Consolidado año de tiempos para cálculo OEE</b>]]>
     </text>        
     </label>
     </labels>
