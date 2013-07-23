@@ -96,8 +96,8 @@ var form_interfazsuperadmin = function(){
                     }, {
                         expanded: true,
                         items: [{
-                            title: 'Maestra estado de equipo',
-                            tabTip: 'Maestra estado del equipo, utilice esto para especificar los posibles estados de sus equipos',
+                            title: 'Estado de equipo',
+                            tabTip: 'Estado del equipo, utilice esto para especificar los posibles estados de sus equipos',
                             border: false,
                             style: 'padding: 10px;',
                             items: [{
@@ -109,9 +109,9 @@ var form_interfazsuperadmin = function(){
                                 }
                             }]
                         }, {
-                            title: 'Maestra indicador',
+                            title: 'Indicador',
                             style: 'padding: 10px;',
-                            tabTip: 'Maestra indicador, listado de indicadores en reportes',
+                            tabTip: 'Indicador, listado de indicadores en reportes',
                             iconCls: 'x-icon-maestra',
                             border: false,
                             items: [{
@@ -123,7 +123,7 @@ var form_interfazsuperadmin = function(){
                                 }
                             }]
                         }, {
-                            title: 'Maestra perfil',
+                            title: 'Perfil',
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',
                             border: false,
@@ -136,7 +136,7 @@ var form_interfazsuperadmin = function(){
                                 }
                             }]
                         }, {
-                            title: 'Maestra tipo de identificaci&oacute;n',
+                            title: 'Tipo de identificaci&oacute;n',
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',
                             border: false,
