@@ -125,6 +125,7 @@ var form_interfazsuperadmin = function(){
                         }, {
                             title: 'Perfil',
                             style: 'padding: 10px;',
+                            tabTip: 'Perfil, listado de perfiles en reportes',
                             iconCls: 'x-icon-maestra',
                             border: false,
                             items: [{
@@ -138,6 +139,7 @@ var form_interfazsuperadmin = function(){
                         }, {
                             title: 'Tipo de identificaci&oacute;n',
                             style: 'padding: 10px;',
+                            tabTip: 'Tipo de identificación, listado de tipos de identificación en reportes',
                             iconCls: 'x-icon-maestra',
                             border: false,
                             items: [{
