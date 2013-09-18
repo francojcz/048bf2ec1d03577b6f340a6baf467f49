@@ -129,6 +129,7 @@ class reporte_diarioActions extends sfActions
             $datos[$fila]['columnas'] = $registro -> getRumColumnas();
 
             $horasFin = $registro -> getRumHoraFinTrabajo('H');
+ 
             $minutosFin = $registro -> getRumHoraFinTrabajo('i');
             $segundosFin = $registro -> getRumHoraFinTrabajo('s');
 

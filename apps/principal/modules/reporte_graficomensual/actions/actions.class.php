@@ -212,7 +212,6 @@ class reporte_graficomensualActions extends sfActions
 
 		$xml='<?xml version="1.0"?>';
 		$xml.='<chart>';
-
 		$xml.='<series>';
 		for($diasmes=1;$diasmes<$cant_dias;$diasmes++)
 		{
@@ -220,7 +219,7 @@ class reporte_graficomensualActions extends sfActions
 		}
 		$xml.='</series>';
 		$xml.='<graphs>';
-		$xml.='<graph color="#ffdc44" title="Número muestras analizadas" bullet="round">';
+		$xml.='<graph color="#ffdc44" title="Número lotes analizados" bullet="round">';
 		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
 			$numero_muestras_analizadas_dia=$datos[$diasmes]['analizadas'];
 			$xml.='<value xid="'.$diasmes.'">'.$numero_muestras_analizadas_dia.'</value>';
@@ -232,7 +231,7 @@ class reporte_graficomensualActions extends sfActions
 		}
 		$xml.='</graph>';
 
-		$xml.='<graph color="#47d552" title="Número muestras reanalizadas" bullet="round" >';
+		$xml.='<graph color="#47d552" title="Número lotes reanalizados" bullet="round" >';
 		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
 			$numero_muestras_reanalizadas_dia=$datos[$diasmes]['reanalizadas'];
 			$xml.='<value xid="'.$diasmes.'">'.$numero_muestras_reanalizadas_dia.'</value>';
@@ -255,10 +254,10 @@ class reporte_graficomensualActions extends sfActions
 		}
 		$unidad_separancion=($max_numero_muestra/8);
 
-		$xml.=$this->agregarGuiaGrafica('Total muestras               : '.round($total_muestras_mes,2),$max_numero_muestra+(3*$unidad_separancion));
+		$xml.=$this->agregarGuiaGrafica('Total lotes               : '.round($total_muestras_mes,2),$max_numero_muestra+(3*$unidad_separancion));
 		if($total_muestras_mes!=0){
-			$xml.=$this->agregarGuiaGrafica('Muestras analizadas    : '.round($total_muestras_analizadas_mes,2).' ('.$porcen_muestras_analizadas .' %)',$max_numero_muestra+(2*$unidad_separancion));
-			$xml.=$this->agregarGuiaGrafica('Muestras reanalizadas : '.round($total_muestras_reanalizadas_mes,2).' ('.$porcen_muestras_reanalizadas.' %)',$max_numero_muestra+(1*$unidad_separancion));
+			$xml.=$this->agregarGuiaGrafica('Lotes analizados    : '.round($total_muestras_analizadas_mes,2).' ('.$porcen_muestras_analizadas .' %)',$max_numero_muestra+(2*$unidad_separancion));
+			$xml.=$this->agregarGuiaGrafica('Lotes reanalizados : '.round($total_muestras_reanalizadas_mes,2).' ('.$porcen_muestras_reanalizadas.' %)',$max_numero_muestra+(1*$unidad_separancion));
 		}
 		$xml.='</guides>';
 		$xml.='</chart>';
@@ -692,13 +691,12 @@ class reporte_graficomensualActions extends sfActions
 				$tf_mes = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $tpp_mes, $tnp_mes);
 				$to_mes = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_mes, $tpnp_mes);
 			}
-
 			$datos['TP'] = $tp_mes;
 			$datos['TNP'] = $tnp_mes;
 			$datos['TPNP'] = $tpnp_mes;
 			$datos['TPP'] = $tpp_mes;
-			$datos['TO'] = $to_mes;
-//			$datos['TF'] = $tf_mes;
+			$datos['TO'] = $to_mes;                        
+			$datos['TF'] = $tf_mes;//Linea descomentada
 			$datos['HorasActivas'] = $tiempoCalendario;
 
 		}catch (Exception $excepcion)

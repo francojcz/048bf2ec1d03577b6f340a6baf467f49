@@ -291,7 +291,7 @@ Ext.onReady(function(){
                     border: true
                 }]
             }, {
-                title: 'Muestras e inyecciones',
+                title: 'Lotes e inyecciones',
                 layout: 'column',
                 items: [{
                     id: 'flashcontent7',

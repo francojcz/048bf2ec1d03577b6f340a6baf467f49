@@ -51,32 +51,6 @@ CREATE TABLE `computador`
 );
 
 #-----------------------------------------------------------------------------
-#-- consumible_maquina
-#-----------------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `consumible_maquina`;
-
-
-CREATE TABLE `consumible_maquina`
-(
-	`com_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
-	`com_maq_codigo` INTEGER(11),
-	`com_fecha_cambio` DATETIME,
-	`com_item` VARCHAR(200),
-	`com_numero_parte` VARCHAR(200),
-	`com_periodicidad` INTEGER(11),
-	`com_proximo_mantenimiento` DATETIME,
-	`com_fecha_registro_sistema` DATETIME,
-	PRIMARY KEY (`com_codigo`),
-	KEY `FK_reference_17`(`com_maq_codigo`),
-	CONSTRAINT `consumible_maquina_FK_1`
-		FOREIGN KEY (`com_maq_codigo`)
-		REFERENCES `maquina` (`maq_codigo`)
-		ON UPDATE RESTRICT
-		ON DELETE RESTRICT
-);
-
-#-----------------------------------------------------------------------------
 #-- empleado
 #-----------------------------------------------------------------------------
 

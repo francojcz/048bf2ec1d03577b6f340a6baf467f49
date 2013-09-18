@@ -14,7 +14,7 @@ class graficos_anualesActions extends sfActions
 		$this->renderText('<?xml version="1.0" encoding="UTF-8"?>');
 		$this->renderText('<settings>');
 		$this->renderText('<grid>
-    <x>                            
+    <x>
     <approx_count>10</approx_count>
     </x>                           
     </grid>');
@@ -343,7 +343,7 @@ class graficos_anualesActions extends sfActions
     <text_size>13</text_size>
     <align>center</align>
     <text>
-    <![CDATA[<b>Muestras analizadas / mes</b>]]>
+    <![CDATA[<b>Lotes analizados / mes</b>]]>
     </text>        
     </label>
     <label lid="1">
@@ -353,7 +353,7 @@ class graficos_anualesActions extends sfActions
       <width>100</width>
       <align>left</align>
       <text>
-        <![CDATA[<b>No. muestras</b>]]>
+        <![CDATA[<b>No. Lotes</b>]]>
       </text> 
     </label>
     </labels>');
@@ -481,7 +481,7 @@ class graficos_anualesActions extends sfActions
 			$muestrasReanalizadasNoviembre = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 11, $anho, $params);
 			$muestrasReanalizadasDiciembre = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 12, $anho, $params);
 		}
-		$this->renderText('<graph color="#ffdc44" title="Muestras analizadas" bullet="round">
+		$this->renderText('<graph color="#ffdc44" title="Lotes analizados" bullet="round">
           <value xid="0">'.$muestrasAnalizadasEnero.'</value>
           <value xid="1">'.$muestrasAnalizadasFebrero.'</value>
           <value xid="2">'.$muestrasAnalizadasMarzo.'</value>
@@ -495,7 +495,7 @@ class graficos_anualesActions extends sfActions
           <value xid="10">'.$muestrasAnalizadasNoviembre.'</value>
           <value xid="11">'.$muestrasAnalizadasDiciembre.'</value>
         </graph>'); 
-		$this->renderText('<graph color="#47d552" title="Muestras reanalizadas" bullet="round">
+		$this->renderText('<graph color="#47d552" title="Lotes reanalizados" bullet="round">
               <value xid="0">'.$muestrasReanalizadasEnero.'</value>
               <value xid="1">'.$muestrasReanalizadasFebrero.'</value>
               <value xid="2">'.$muestrasReanalizadasMarzo.'</value>
@@ -554,21 +554,21 @@ class graficos_anualesActions extends sfActions
       <max_min>true</max_min>
 	      <guide>
 		      <start_value>'.($maximoValor*1.2).'</start_value>
-		      <title>Total muestras: '.$totalMuestras.'</title>
+		      <title>Total lotes: '.$totalMuestras.'</title>
 		      <color>#00CC00</color>
 		      <inside>true</inside>
 		      <width>0</width>
 	      </guide>
 	      <guide>
 		      <start_value>'.($maximoValor*1.05).'</start_value>
-		      <title>Muestras analizadas: '.$totalMuestrasAnalizadas.' ('.round(($totalMuestrasAnalizadas/$totalMuestras)*100, 2).' %)</title>
+		      <title>Lotes analizados: '.$totalMuestrasAnalizadas.' ('.round(($totalMuestrasAnalizadas/$totalMuestras)*100, 2).' %)</title>
 		      <color>#00CC00</color>
 		      <inside>true</inside>
 		      <width>0</width>
 	      </guide>
 	      <guide>
 		      <start_value>'.($maximoValor*0.9).'</start_value>
-		      <title>Muestras reanalizadas: '.$totalMuestrasReanalizadas.' ('.round(($totalMuestrasReanalizadas/$totalMuestras)*100, 2).' %)</title>
+		      <title>Lotes reanalizados: '.$totalMuestrasReanalizadas.' ('.round(($totalMuestrasReanalizadas/$totalMuestras)*100, 2).' %)</title>
 		      <color>#00CC00</color>
 		      <inside>true</inside>
 		      <width>0</width>
@@ -583,7 +583,7 @@ class graficos_anualesActions extends sfActions
 		$this->renderText('<data_type>csv</data_type>');
 		$this->renderText('<pie>');
 		$this->renderText('<x>245</x>
-    <y>190</y>                     
+    <y>140</y>                     
     <inner_radius>40</inner_radius>
     <height>20</height>            
     <angle>30</angle>
@@ -619,7 +619,7 @@ class graficos_anualesActions extends sfActions
     <labels>
     <label>
     <x>0</x>
-    <y>40</y>
+    <y>12</y>
     <text_color>000000</text_color>
     <text_size>13</text_size>
     <align>center</align>
@@ -632,7 +632,7 @@ class graficos_anualesActions extends sfActions
 		$this->renderText('<legend>
     <enabled>true</enabled>        
     <x>100</x>                     
-    <y>300</y>                     
+    <y>270</y>                     
     <max_columns>2</max_columns>   
     <values>                       
     <enabled></enabled>          
@@ -2463,7 +2463,7 @@ class graficos_anualesActions extends sfActions
     <enabled>true</enabled>        
     <x>50</x>                     
     <y>300</y>                     
-    <max_columns>2</max_columns>   
+    <max_columns>4</max_columns>   
     <values>                       
     <enabled></enabled>          
     <width></width>              
@@ -2535,11 +2535,11 @@ class graficos_anualesActions extends sfActions
 		$TFAnual = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $TPPAnual, $TNPAnual);
 		$TOAnual = RegistroUsoMaquinaPeer::calcularTODiaMesAño($TFAnual, $TPNPAnual);
 
-		$this->renderText("Tiempo no programado;".round($TNPAnual/24, 2)."\n");
-		$this->renderText("Tiempo de paradas programadas;".round($TPPAnual/24, 2)."\n");
-		$this->renderText("Tiempo de paradas no programadas;".round($TPNPAnual/24, 2)."\n");
+		$this->renderText("TNP;".round($TNPAnual/24, 2)."\n");
+		$this->renderText("TPP;".round($TPPAnual/24, 2)."\n");
+		$this->renderText("TPNP;".round($TPNPAnual/24, 2)."\n");
 //		$this->renderText("Tiempo de funcionamiento;".round($TFAnual/24, 2)."\n");
-		return $this->renderText("Tiempo operativo real;".round($TOAnual/24, 2)."\n");
+		return $this->renderText("TO;".round($TOAnual/24, 2)."\n");
 	}
 
 	/** * Executes index action * *

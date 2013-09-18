@@ -403,8 +403,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         } else
         {
             $tiempoATrasladar = $segundosMuestras;
-        }
-        // $registro = new RegistroUsoMaquina();
+        }        
         $denominador = (($tiempoCorrida + $tiempoInyeccion) * $numeroInyeccionesPorMuestra * 60);
         if ($denominador == 0)
         {
@@ -412,7 +411,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         }
         $numeroMuestrasATrasladar = $tiempoATrasladar / $denominador;
         eval('$registroPrimerDia -> set' . $parametro2 . '($numeroMuestras - $numeroMuestrasATrasladar);');
-
         eval('$registroSegundoDia -> set' . $parametro1 . '($tiempoCorrida);');
         eval('$registroSegundoDia -> set' . $parametro2 . '($numeroMuestrasATrasladar);');
         eval('$registroSegundoDia -> set' . $parametro3 . '($numeroInyeccionesPorMuestra);');

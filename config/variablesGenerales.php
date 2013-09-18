@@ -1,2 +1,2 @@
 <?php
-$urlWeb = '/tpmqlabs/web/';
+$urlWeb = '/tpmlabs/web/';

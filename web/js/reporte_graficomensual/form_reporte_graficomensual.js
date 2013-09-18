@@ -243,7 +243,7 @@ Ext.onReady(function(){
             }]
         }, {
             xtype: 'panel',
-            title: 'Muestras e inyecciones',
+            title: 'Lotes e inyecciones',
             layout: 'column',
             autoScroll: true,
             monitorResize: true,

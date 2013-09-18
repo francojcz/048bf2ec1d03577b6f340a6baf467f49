@@ -1,8 +1,8 @@
 <?php require_once(dirname(__FILE__).'/../../../config/variablesGenerales.php'); ?>
 <?php echo "<?xml version='1.0' encoding='UTF-8'?>
-<settings> 
+<settings>
 <!-- fondo degradado de la grafica #F8ECE0 E0ECF8-->
-  <background> 
+  <background>
     <color>#FFFFFF</color>
 	<alpha>100</alpha>
 	<border_color>#FFFFFF</border_color>
@@ -10,19 +10,19 @@
   </background>
   <!-- margenes de la grafica -->
   <plot_area>
-    <margins> 
+    <margins>
       <left>70</left>
       <top>60</top>
-      <right>50</right> 
+      <right>50</right>
       <bottom>60</bottom>
     </margins>
   </plot_area>
   <!-- titulo de la grafica -->
   <labels>
     <label lid='0'>
-      <x>5</x> 
-      <y>20</y> 
-      <width>520</width> 
+      <x>5</x>
+      <y>20</y>
+      <width>520</width>
       <align>center</align>
       <text>
         <![CDATA[<b>Tendencia pérdidas (tiempo) / Día</b>]]>

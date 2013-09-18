@@ -15,11 +15,11 @@ class ingreso_datosActions extends sfActions
         $codigoMaquina = $request -> getParameter('codigo_maquina');
         $user = $this -> getUser();
         $codigo_usuario = $user -> getAttribute('usu_codigo');
-
+        
         $criteria = new Criteria();
         $criteria -> add(MaquinaPeer::MAQ_CODIGO, $codigoMaquina);
         $maquina = MaquinaPeer::doSelectOne($criteria);
-
+        
         $criteria = new Criteria();
         $criteria -> add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
         $operario = EmpleadoPeer::doSelectOne($criteria);
@@ -62,7 +62,19 @@ class ingreso_datosActions extends sfActions
         $registroSegundoDia -> setRumMaqCodigo($registro -> getRumMaqCodigo());
         $registroSegundoDia -> setRumMetCodigo($registro -> getRumMetCodigo());
         $registroSegundoDia -> setRumEliminado(FALSE);
-		$registroSegundoDia -> setRumUsuCodigo($registro -> getRumUsuCodigo());
+	$registroSegundoDia -> setRumUsuCodigo($registro -> getRumUsuCodigo());
+        
+        //Cambios: 16 de Septiembre de 2013
+        $registroSegundoDia -> setRumTiempoCorridaSistema($registro ->getRumTiempoCorridaSistema());
+        $registroSegundoDia -> setRumTiempoCorridaCurvas($registro ->getRumTiempoCorridaCurvas());
+        $registroSegundoDia -> setRumTiempoCorridaSistemaEst($registro ->getRumTiempoCorridaSistemaEst());
+        $registroSegundoDia -> setRumTiempoCorridaCurvasEsta($registro ->getRumTiempoCorridaCurvasEsta());
+        $registroSegundoDia -> setRumTcProductoTerminadoEsta($registro ->getRumTcProductoTerminadoEsta());
+        $registroSegundoDia -> setRumTcEstabilidadEstandar($registro ->getRumTcEstabilidadEstandar());
+        $registroSegundoDia -> setRumTcMateriaPrimaEstandar($registro ->getRumTcMateriaPrimaEstandar());
+        $registroSegundoDia -> setRumTcPurezaEstandar($registro ->getRumTcPurezaEstandar());
+        $registroSegundoDia -> setRumTcDisolucionEstandar($registro ->getRumTcDisolucionEstandar());
+        $registroSegundoDia -> setRumTcUniformidadEstandar($registro ->getRumTcUniformidadEstandar());
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirFallas($deficitTiempo, $registro, $registroSegundoDia);
 
@@ -112,19 +124,19 @@ class ingreso_datosActions extends sfActions
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirPerdidaAlistamiento($deficitTiempo, $registro, $registroSegundoDia);
 		
-		if($deficitTiempo > 0)
-		{
-			list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirTiempoAlistamientoConDeficit($deficitTiempo, $registro, $registroSegundoDia);
-		}
-		else
-		{
-			list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirTiempoAlistamientoSinDeficit($deficitTiempo, $registro, $registroSegundoDia);
-		}
-		
-		$registro -> setRumHoraFinTrabajo('23:59:59.999');
+        if($deficitTiempo > 0)
+        {
+                list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirTiempoAlistamientoConDeficit($deficitTiempo, $registro, $registroSegundoDia);
+        }
+        else
+        {
+                list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirTiempoAlistamientoSinDeficit($deficitTiempo, $registro, $registroSegundoDia);
+        }
+        
+        $registro -> setRumHoraFinTrabajo('23:59:59.999');
         $registro -> save();
         $registroSegundoDia -> save();
-
+        
         return $this -> renderText('Ok');
     }
 
@@ -1135,31 +1147,54 @@ class ingreso_datosActions extends sfActions
 
                     $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumeroInyeccionEstandar1());
                 }
+                if ($request -> hasParameter('numero_inyecciones_estandar2'))
+                {
+                    $registroModificacion -> setRemNombreCampo('Número de Inyecciones Estándar 2');
+                    $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumNumeroInyeccionEstandar2());
+
+                    $registro -> setRumNumeroInyeccionEstandar2($request -> getParameter('numero_inyecciones_estandar2'));
+
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumeroInyeccionEstandar2());
+                }
+                if ($request -> hasParameter('numero_inyecciones_estandar3'))
+                {
+                    $registroModificacion -> setRemNombreCampo('Número de Inyecciones Estándar 3');
+                    $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumNumeroInyeccionEstandar3());
+
+                    $registro -> setRumNumeroInyeccionEstandar3($request -> getParameter('numero_inyecciones_estandar3'));
+
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumeroInyeccionEstandar3());
+                }
+                if ($request -> hasParameter('numero_inyecciones_estandar4'))
+                {
+                    $registroModificacion -> setRemNombreCampo('Número de Inyecciones Estándar 4');
+                    $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumNumeroInyeccionEstandar4());
+
+                    $registro -> setRumNumeroInyeccionEstandar4($request -> getParameter('numero_inyecciones_estandar4'));
+
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumeroInyeccionEstandar4());
+                }
+                if ($request -> hasParameter('numero_inyecciones_estandar5'))
+                {
+                    $registroModificacion -> setRemNombreCampo('Número de Inyecciones Estándar 5');
+                    $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumNumeroInyeccionEstandar5());
+
+                    $registro -> setRumNumeroInyeccionEstandar5($request -> getParameter('numero_inyecciones_estandar5'));
+
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumeroInyeccionEstandar5());
+                }
+                if ($request -> hasParameter('numero_inyecciones_estandar6'))
+                {
+                    $registroModificacion -> setRemNombreCampo('Número de Inyecciones Estándar 6');
+                    $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumNumeroInyeccionEstandar6());
+
+                    $registro -> setRumNumeroInyeccionEstandar6($request -> getParameter('numero_inyecciones_estandar6'));
+
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumeroInyeccionEstandar6());
+                }
             }
-            //			if($request->hasParameter('numero_inyecciones_estandar1')) {
-            //				$registro->setRumNumeroInyeccionEstandar1($request->getParameter('numero_inyecciones_estandar1'));
-            //			}
-            //			if($request->hasParameter('numero_inyecciones_estandar2')) {
-            //				$registro->setRumNumeroInyeccionEstandar2($request->getParameter('numero_inyecciones_estandar2'));
-            //			}
-            //			if($request->hasParameter('numero_inyecciones_estandar3')) {
-            //				$registro->setRumNumeroInyeccionEstandar3($request->getParameter('numero_inyecciones_estandar3'));
-            //			}
-            //			if($request->hasParameter('numero_inyecciones_estandar4')) {
-            //				$registro->setRumNumeroInyeccionEstandar4($request->getParameter('numero_inyecciones_estandar4'));
-            //			}
-            //			if($request->hasParameter('numero_inyecciones_estandar5')) {
-            //				$registro->setRumNumeroInyeccionEstandar5($request->getParameter('numero_inyecciones_estandar5'));
-            //			}
-            //			if($request->hasParameter('numero_inyecciones_estandar6')) {
-            //				$registro->setRumNumeroInyeccionEstandar6($request->getParameter('numero_inyecciones_estandar6'));
-            //			}
-            //			if($request->hasParameter('numero_inyecciones_estandar7')) {
-            //				$registro->setRumNumeroInyeccionEstandar7($request->getParameter('numero_inyecciones_estandar7'));
-            //			}
-            //			if($request->hasParameter('numero_inyecciones_estandar8')) {
-            //				$registro->setRumNumeroInyeccionEstandar8($request->getParameter('numero_inyecciones_estandar8'));
-            //			}
+            
+            
             if ($request -> hasParameter('tiempo_corrida_producto'))
             {
                 $registroModificacion -> setRemNombreCampo('Tiempo de corrida - Producto');

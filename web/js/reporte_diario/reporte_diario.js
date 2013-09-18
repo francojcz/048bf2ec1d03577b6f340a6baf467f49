@@ -273,9 +273,6 @@ var rdtiemp_datastore = new Ext.data.Store({
     }, {
         name: 'observaciones',
         type: 'string'
-    }, {
-        name: 'columnas',
-        type: 'string'
     }])
 });
 //rdtiemp_datastore.load();
@@ -314,18 +311,6 @@ var rdtiemp_colmodel = new Ext.grid.ColumnModel({
         hidden: true,
         renderer: generarRenderer('#bfbfbf', '#000000')
     }, {
-        dataIndex: 'rdtiemp_TP_metodo',
-        header: 'TP <br/>(Hrs.)<br/>M&eacute;todo',
-        tooltip: 'Tiempo programado m&eacute;todo',
-        width: 60,
-        renderer: generarRenderer('#72a8cd', '#000000')
-    }, {
-        dataIndex: 'rdtiemp_TP_dia',
-        header: 'TP <br/>(Hrs.)<br/>D&iacute;a',
-        tooltip: 'Tiempo programado d&iacute;a',
-        width: 60,
-        renderer: generarRenderer('#72a8cd', '#000000')
-    }, {
         dataIndex: 'rdtiemp_TNP_metodo',
         header: 'TNP <br/>(Hrs.)<br/>M&eacute;todo',
         tooltip: 'Tiempo no programado m&eacute;todo',
@@ -362,6 +347,30 @@ var rdtiemp_colmodel = new Ext.grid.ColumnModel({
         width: 60,
         renderer: generarRenderer('#ff5454', '#000000')
     }, {
+        dataIndex: 'rdtiemp_TO_metodo',
+        header: 'TO <br/>(Hrs.)<br/>M&eacute;todo',
+        tooltip: 'Tiempo operativo m&eacute;todo',
+        width: 60,
+        renderer: generarRenderer('#72a8cd', '#000000')
+    }, {
+        dataIndex: 'rdtiemp_TO_dia',
+        header: 'TO<br/> (Hrs.)<br/>D&iacute;a',
+        tooltip: 'Tiempo de operativo d&iacute;a',
+        width: 60,
+        renderer: generarRenderer('#72a8cd', '#000000')
+    }, {
+        dataIndex: 'rdtiemp_TP_metodo',
+        header: 'TP <br/>(Hrs.)<br/>M&eacute;todo',
+        tooltip: 'Tiempo programado m&eacute;todo',
+        width: 60,
+        renderer: generarRenderer('#72a8cd', '#000000')
+    }, {
+        dataIndex: 'rdtiemp_TP_dia',
+        header: 'TP <br/>(Hrs.)<br/>D&iacute;a',
+        tooltip: 'Tiempo programado d&iacute;a',
+        width: 60,
+        renderer: generarRenderer('#72a8cd', '#000000')
+    }, {
         dataIndex: 'rdtiemp_TF_metodo',
         header: 'TF<br/> (Hrs)<br/>M&eacute;todo',
         tooltip: 'Tiempo de funcionamiento m&eacute;todo',
@@ -374,31 +383,11 @@ var rdtiemp_colmodel = new Ext.grid.ColumnModel({
         width: 60,
         renderer: generarRenderer('#f0a05f', '#000000')
     }, {
-        dataIndex: 'rdtiemp_TO_metodo',
-        header: 'TO <br/>(Hrs.)<br/>M&eacute;todo',
-        tooltip: 'Tiempo operativo m&eacute;todo',
-        width: 60,
-        renderer: generarRenderer('#72a8cd', '#000000')
-    }, {
-        dataIndex: 'rdtiemp_TO_dia',
-        header: 'TO<br/> (Hrs.)<br/>D&iacute;a',
-        tooltip: 'Tiempo de operativo d&iacute;a',
-        width: 60,
-        renderer: generarRenderer('#72a8cd', '#000000')
-    },
-    {
         dataIndex: 'observaciones',
-        header: 'Lote',
-        tooltip: 'Lote',
-        width: 150,
+        header: 'Observaciones',
+        tooltip: 'Observaciones',
+        width: 220,
         renderer: generarRenderer('#d2b48c', '#000000')
-    },
-    {
-        dataIndex: 'columnas',
-        header: 'Columna',
-        tooltip: 'Columna',
-        width: 150,
-        renderer: generarRenderer('#FFC459', '#000000')
     }]});
 
 var rdtiemp_grid = new Ext.grid.GridPanel({
@@ -792,28 +781,28 @@ var rdmuin_columns = [{
     renderer: generarRenderer('#bfbfbf', '#000000')
 }, {
     dataIndex: 'numero_muestras',
-    header: 'No. Muestras <br>analizadas<br>Método',
+    header: 'No. Lotes<br>analizadas<br>Método',
     tooltip: 'N&uacute;mero de muestras analizadas',
     width: 80,
     align: 'center',
     renderer: generarRenderer('#e1de98', '#000000')
 }, {
     dataIndex: 'numero_muestras_dia',
-    header: 'No. Muestras <br>analizadas<br>Día',
+    header: 'No. Lotes<br>analizadas<br>Día',
     tooltip: 'N&uacute;mero de muestras analizadas en el día',
     width: 80,
     align: 'center',
     renderer: generarRenderer('#e1de98', '#000000')
 }, {
     dataIndex: 'numero_muestras_reanalizadas',
-    header: 'No. Muestras<br>reanalizadas<br>Método',
+    header: 'No. Lotes<br>reanalizadas<br>Método',
     tooltip: 'N&uacute;mero de muestras reanalizadas',
     width: 80,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'numero_muestras_reanalizadas_dia',
-    header: 'No. Muestras<br>reanalizadas<br>Día',
+    header: 'No. Lotes<br>reanalizadas<br>Día',
     tooltip: 'N&uacute;mero de muestras reanalizadas en el día',
     width: 80,
     align: 'center',
@@ -903,7 +892,7 @@ var reportediario_contenedor = new Ext.Panel({
             border: false,
             items: [rdperdi_grid]
         }, {
-            title: 'Muestras e inyecciones',
+            title: 'Lotes e inyecciones',
             border: false,
             items: [rdmuin_grid]
         }],

@@ -25,7 +25,7 @@
       <width>520</width> 
       <align>center</align>
       <text>
-        <![CDATA[<b>Muestras analizadas / día</b>]]>
+        <![CDATA[<b>Lotes analizados / día</b>]]>
       </text> 
     </label>
 	<label lid='2'>
@@ -44,7 +44,7 @@
       <width>100</width>
       <align>left</align> 
       <text>
-        <![CDATA[<b>No. Muestras</b>]]>
+        <![CDATA[<b>No. Lotes</b>]]>
       </text> 
     </label>
   </labels>

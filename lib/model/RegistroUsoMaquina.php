@@ -108,7 +108,7 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
     public function calcularTPMinutos($inyeccionesEstandarPromedio)
     {
         $maquina = MaquinaPeer::retrieveByPK($this -> getRumMaqCodigo());
-
+        
         $TP = ($this -> getRumTiempoCorridaSistemaEst() + $maquina -> getMaqTiempoInyeccion()) * $this -> getRumNumeroInyeccionEstandar();
         for ($i = 1; $i <= $inyeccionesEstandarPromedio; $i++)
         {
@@ -445,7 +445,7 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 
         if ($minutosInicio == 0)
         {
-            $tf = 0;
+            $tf = $minutosFin;
             return $tf;
         }
 
