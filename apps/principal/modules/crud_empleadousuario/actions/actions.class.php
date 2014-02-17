@@ -47,6 +47,7 @@ class crud_empleadousuarioActions extends sfActions
 				$usuario->setUsuPerCodigo($perfil);
 				$usuario->setUsuFechaRegistroSistema(time());
 				$usuario->setUsuCrea($this->getUser()->getAttribute('usu_codigo'));
+                                $usuario->save();
 
 				if($perfil!='1')//no es un usuario superadmin entonces crear empleado
 				{
@@ -73,9 +74,7 @@ class crud_empleadousuarioActions extends sfActions
 						$empleado->setEmplUsuCrea($this->getUser()->getAttribute('usu_codigo'));
 						$empleado->setEmplUsuActualiza($this->getUser()->getAttribute('usu_codigo'));
 						$empleado->setEmplEliminado(0);
-
-						$empleado->setUsuarioRelatedByEmplUsuCodigo($usuario);
-							
+                                                $empleado->setEmplUsuCodigo($usuario->getUsuCodigo());
 						$empleado->save();
 						$this->guardarFoto($empleado);
 						$salida = "({success: true, mensaje:'El usuario fue creado exitosamente'})";
