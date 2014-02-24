@@ -1670,7 +1670,17 @@ Ext.onReady(function()
     triggerAction : 'all',
     forceSelection : true,
     allowBlank : false,
-    width : 140
+    width : 140,
+    allQuery: 'nombre',
+    listeners: {
+     'keyup': function() {
+           this.store.filter('nombre', this.getRawValue(), true, false);
+     },
+     'beforequery': function(queryEvent) {
+           queryEvent.combo.onLoad();
+           return false; 
+     }
+ }
   });
 
   var crearRegistroUsoMaquina = function(params)

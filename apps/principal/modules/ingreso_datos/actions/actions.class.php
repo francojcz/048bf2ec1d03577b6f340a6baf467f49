@@ -930,9 +930,6 @@ class ingreso_datosActions extends sfActions
         foreach ($eventos as $evento)
         {
             $fields = array();
-
-            //			$evento = new Evento();
-
             $fields['codigo'] = $evento -> getEveCodigo();
             $fields['nombre'] = $evento -> getEveNombre();
 
@@ -945,7 +942,9 @@ class ingreso_datosActions extends sfActions
 
     public function executeListarEventos()
     {
-        $eventos = EventoPeer::doSelect(new Criteria());
+        $criteria = new Criteria();
+        $criteria->add(EventoPeer::EVE_ELIMINADO, 0);
+        $eventos = EventoPeer::doSelect($criteria);
 
         $result = array();
         $data = array();
@@ -953,9 +952,6 @@ class ingreso_datosActions extends sfActions
         foreach ($eventos as $evento)
         {
             $fields = array();
-
-            //			$evento = new Evento();
-
             $fields['codigo'] = $evento -> getEveCodigo();
             $fields['nombre'] = $evento -> getEveNombre();
 
@@ -1954,13 +1950,11 @@ class ingreso_datosActions extends sfActions
     }
     
     public function executeListarMetodosSinOrden()
-    {
-        //15 de mayo cambio maryit
+    {        
         //se deben listar los metodos que no han sido eliminados
         //los metodos eliminados tiene en la columna MET_ELIMINADO un 1 los activos tiene un 0
         $conexion = new Criteria();
         $conexion -> add(MetodoPeer::MET_ELIMINADO, 0);
-//        $conexion -> addAscendingOrderByColumn(MetodoPeer::MET_NOMBRE);
         $metodos = MetodoPeer::doSelect($conexion);
         
         $result = array();

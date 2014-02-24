@@ -1,10 +1,8 @@
-﻿/*
+/*
 manejo Eventos - tpm labs
 Desarrollado maryit sanchez
 2010
-*/
-	
-	
+*/	
 	//ayudas
 	var ayuda_maestra_eve_codigo='C&oacute;digo identificador en el sistema';
 	var ayuda_maestra_eve_nombre='Nombre evento';

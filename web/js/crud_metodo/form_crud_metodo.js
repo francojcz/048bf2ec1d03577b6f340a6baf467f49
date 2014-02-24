@@ -1453,7 +1453,6 @@ var crud_metodo_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: crud_metodo_datastore,
     cm: crud_metodo_colmodel,
-    plugins: crud_metodo_columnHeaderGroup,
     selModel: new Ext.grid.RowSelectionModel({
         singleSelect: true,
         listeners: {
@@ -1545,7 +1544,18 @@ var crud_metodo_gridpanel = new Ext.grid.GridPanel({
                 mostrarMensajeConfirmacion('Error', "Seleccione un m&eacute;todo eliminado");
             }
         }
-    }]
+    }],
+    plugins:[crud_metodo_columnHeaderGroup,
+        new Ext.ux.grid.Search({
+                    mode:          'local',
+                    position:      top,
+                    searchText:    'Filtrar',
+                    iconCls:  'filtrar',
+                    selectAllText: 'Seleccionar todos',
+                    searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
+                    width:         150
+            })
+    ]
 });
 
 
