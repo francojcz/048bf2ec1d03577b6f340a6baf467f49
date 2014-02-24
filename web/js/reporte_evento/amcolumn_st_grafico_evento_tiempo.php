@@ -14,7 +14,7 @@
       <![CDATA[]]>                                   
     </data_labels>
     <balloon_text>                                                    
-      <![CDATA[{series} : {value} (minutos)]]>           
+      <![CDATA[{series}]]>
     </balloon_text>    
     <corner_radius_top>10</corner_radius_top>                
   </column>

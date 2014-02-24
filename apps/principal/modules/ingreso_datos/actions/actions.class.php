@@ -75,6 +75,10 @@ class ingreso_datosActions extends sfActions
         $registroSegundoDia -> setRumTcPurezaEstandar($registro ->getRumTcPurezaEstandar());
         $registroSegundoDia -> setRumTcDisolucionEstandar($registro ->getRumTcDisolucionEstandar());
         $registroSegundoDia -> setRumTcUniformidadEstandar($registro ->getRumTcUniformidadEstandar());
+        
+        //Cambios: 24 de Febrero de 2014
+        $registroSegundoDia ->setRumObservaciones($registro ->getRumObservaciones());
+        $registroSegundoDia ->setRumColumnas($registro ->getRumColumnas());
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirFallas($deficitTiempo, $registro, $registroSegundoDia);
 

@@ -163,7 +163,8 @@ class reporte_eventoActions extends sfActions
 
 		$i = 0;
 		foreach($eventos as $evento) {
-			$xmlSeries .= '<value xid="'.$i.'" >'.$evento[0].'</value>';
+                        //Valor del eje X
+			$xmlSeries .= '<value xid="'.$i.'" >'.$evento[0].' : '.$evento[1].' (veces)</value>';                        
 			$xmlGraphs .= '<value xid="'.$i.'" color="'.$colores[($i%$cantidadColores)].'">'.$evento[1].'</value>';
 			$i++;
 		}
@@ -239,7 +240,8 @@ class reporte_eventoActions extends sfActions
 
 		$i = 0;
 		foreach($eventos as $evento) {
-			$xmlSeries .= '<value xid="'.$i.'" >'.$evento[0].'</value>';
+                        //Valor del eje x                    
+			$xmlSeries .= '<value xid="'.$i.'" >'.$evento[0].' : '.((int)$evento[1]).' (minutos)</value>';
 			$xmlGraphs .= '<value xid="'.$i.'" color="'.$colores[($i%$cantidadColores)].'">'.$evento[1].'</value>';
 			$i++;
 		}
