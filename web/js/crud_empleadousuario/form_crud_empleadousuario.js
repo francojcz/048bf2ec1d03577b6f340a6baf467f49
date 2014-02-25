@@ -192,7 +192,7 @@ var crud_empleadousuario_gridpanel = new Ext.grid.GridPanel({
     }),
     listeners: {
         render: function(g){
-            g.getSelectionModel().selectRow(0);
+//            g.getSelectionModel().selectRow(0);
         },
         delay: 10
     },
