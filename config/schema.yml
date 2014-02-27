@@ -7,8 +7,8 @@ propel:
     cat_codigo: { phpName: CatCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
     cat_nombre: { phpName: CatNombre, type: VARCHAR, size: '200', required: false }
     cat_fecha_registro_sistema: { phpName: CatFechaRegistroSistema, type: TIMESTAMP, required: false }
-    cat_usu_crea: { phpName: CatUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    cat_usu_actualiza: { phpName: CatUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    cat_usu_crea: { phpName: CatUsuCrea, type: INTEGER, size: '11', required: false }
+    cat_usu_actualiza: { phpName: CatUsuActualiza, type: INTEGER, size: '11', required: false }
     cat_fecha_actualizacion: { phpName: CatFechaActualizacion, type: TIMESTAMP, required: false }
     cat_eliminado: { phpName: CatEliminado, type: SMALLINT, size: '6', required: false }
     cat_causa_eliminacion: { phpName: CatCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -32,16 +32,16 @@ propel:
   empleado:
     _attributes: { phpName: Empleado }
     empl_codigo: { phpName: EmplCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    empl_emp_codigo: { phpName: EmplEmpCodigo, type: INTEGER, size: '11', required: false, foreignTable: empresa, foreignReference: emp_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    empl_tid_codigo: { phpName: EmplTidCodigo, type: INTEGER, size: '11', required: false, foreignTable: tipo_identificacion, foreignReference: tid_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    empl_usu_codigo: { phpName: EmplUsuCodigo, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    empl_emp_codigo: { phpName: EmplEmpCodigo, type: INTEGER, size: '11', required: false }
+    empl_tid_codigo: { phpName: EmplTidCodigo, type: INTEGER, size: '11', required: false }
+    empl_usu_codigo: { phpName: EmplUsuCodigo, type: INTEGER, size: '11', required: false }
     empl_nombres: { phpName: EmplNombres, type: VARCHAR, size: '200', required: false }
     empl_apellidos: { phpName: EmplApellidos, type: VARCHAR, size: '200', required: false }
     empl_numero_identificacion: { phpName: EmplNumeroIdentificacion, type: INTEGER, size: '11', required: false }
     empl_url_foto: { phpName: EmplUrlFoto, type: VARCHAR, size: '200', required: false }
     empl_fecha_registro_sistema: { phpName: EmplFechaRegistroSistema, type: TIMESTAMP, required: false }
-    empl_usu_crea: { phpName: EmplUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    empl_usu_actualiza: { phpName: EmplUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    empl_usu_crea: { phpName: EmplUsuCrea, type: INTEGER, size: '11', required: false }
+    empl_usu_actualiza: { phpName: EmplUsuActualiza, type: INTEGER, size: '11', required: false }
     empl_fecha_actualizacion: { phpName: EmplFechaActualizacion, type: TIMESTAMP, required: false }
     empl_eliminado: { phpName: EmplEliminado, type: SMALLINT, size: '6', required: false }
     empl_causa_eliminacion: { phpName: EmplCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -58,8 +58,8 @@ propel:
     emp_inyect_estandar_promedio: { phpName: EmpInyectEstandarPromedio, type: INTEGER, size: '11', required: false }
     emp_tiempo_alerta_consumible: { phpName: EmpTiempoAlertaConsumible, type: INTEGER, size: '11', required: false }
     emp_fecha_registro_sistema: { phpName: EmpFechaRegistroSistema, type: TIMESTAMP, required: false }
-    emp_usu_crea: { phpName: EmpUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    emp_usu_actualiza: { phpName: EmpUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    emp_usu_crea: { phpName: EmpUsuCrea, type: INTEGER, size: '11', required: false }
+    emp_usu_actualiza: { phpName: EmpUsuActualiza, type: INTEGER, size: '11', required: false }
     emp_fecha_actualizacion: { phpName: EmpFechaActualizacion, type: TIMESTAMP, required: false }
     emp_eliminado: { phpName: EmpEliminado, type: SMALLINT, size: '6', required: false }
     emp_causa_eliminacion: { phpName: EmpCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -70,8 +70,8 @@ propel:
     est_codigo: { phpName: EstCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
     est_nombre: { phpName: EstNombre, type: VARCHAR, size: '200', required: false }
     est_fecha_registro_sistema: { phpName: EstFechaRegistroSistema, type: TIMESTAMP, required: false }
-    est_usu_crea: { phpName: EstUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    est_usu_actualiza: { phpName: EstUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    est_usu_crea: { phpName: EstUsuCrea, type: INTEGER, size: '11', required: false }
+    est_usu_actualiza: { phpName: EstUsuActualiza, type: INTEGER, size: '11', required: false }
     est_fecha_actualizacion: { phpName: EstFechaActualizacion, type: TIMESTAMP, required: false }
     est_eliminado: { phpName: EstEliminado, type: SMALLINT, size: '6', required: false }
     est_causa_eliminacion: { phpName: EstCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -82,8 +82,8 @@ propel:
     eve_codigo: { phpName: EveCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
     eve_nombre: { phpName: EveNombre, type: VARCHAR, size: '200', required: true }
     eve_fecha_registro_sistema: { phpName: EveFechaRegistroSistema, type: TIMESTAMP, required: false }
-    eve_usu_crea: { phpName: EveUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    eve_usu_actualiza: { phpName: EveUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    eve_usu_crea: { phpName: EveUsuCrea, type: INTEGER, size: '11', required: false }
+    eve_usu_actualiza: { phpName: EveUsuActualiza, type: INTEGER, size: '11', required: false }
     eve_fecha_actualizacion: { phpName: EveFechaActualizacion, type: TIMESTAMP, required: false }
     eve_eliminado: { phpName: EveEliminado, type: SMALLINT, size: '6', required: false }
     eve_causa_eliminacion: { phpName: EveCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -92,14 +92,14 @@ propel:
   evento_en_registro:
     _attributes: { phpName: EventoEnRegistro }
     evrg_codigo: { phpName: EvrgCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    evrg_rum_codigo: { phpName: EvrgRumCodigo, type: INTEGER, size: '11', required: false, foreignTable: registro_uso_maquina, foreignReference: rum_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    evrg_eve_codigo: { phpName: EvrgEveCodigo, type: INTEGER, size: '11', required: false, foreignTable: evento, foreignReference: eve_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    evrg_rum_codigo: { phpName: EvrgRumCodigo, type: INTEGER, size: '11', required: false }
+    evrg_eve_codigo: { phpName: EvrgEveCodigo, type: INTEGER, size: '11', required: false }
     evrg_observaciones: { phpName: EvrgObservaciones, type: VARCHAR, size: '200', required: false }
     evrg_hora_ocurrio: { phpName: EvrgHoraOcurrio, type: TIME, required: false }
     evrg_hora_registro: { phpName: EvrgHoraRegistro, type: TIME, required: false }
     evrg_fecha_registro_sistema: { phpName: EvrgFechaRegistroSistema, type: TIMESTAMP, required: false }
-    evrg_usu_crea: { phpName: EvrgUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    evrg_usu_actualiza: { phpName: EvrgUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    evrg_usu_crea: { phpName: EvrgUsuCrea, type: INTEGER, size: '11', required: false }
+    evrg_usu_actualiza: { phpName: EvrgUsuActualiza, type: INTEGER, size: '11', required: false }
     evrg_fecha_actualizacion: { phpName: EvrgFechaActualizacion, type: TIMESTAMP, required: false }
     evrg_eliminado: { phpName: EvrgEliminado, type: SMALLINT, size: '6', required: false }
     evrg_causa_eliminacion: { phpName: EvrgCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -108,9 +108,9 @@ propel:
     _indexes: { FK_reference_49: [evrg_usu_crea], FK_reference_50: [evrg_usu_actualiza], FK_ref_eventoenregistro_registrouso: [evrg_rum_codigo], FK_ref_eventoenregistro_evento: [evrg_eve_codigo] }
   evento_por_categoria:
     _attributes: { phpName: EventoPorCategoria }
-    evca_cat_codigo: { phpName: EvcaCatCodigo, type: INTEGER, size: '11', primaryKey: true, required: true, foreignTable: categoria_evento, foreignReference: cat_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    evca_eve_codigo: { phpName: EvcaEveCodigo, type: INTEGER, size: '11', primaryKey: true, required: true, foreignTable: evento, foreignReference: eve_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    evca_usu_crea: { phpName: EvcaUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    evca_cat_codigo: { phpName: EvcaCatCodigo, type: INTEGER, size: '11', primaryKey: true, required: true }
+    evca_eve_codigo: { phpName: EvcaEveCodigo, type: INTEGER, size: '11', primaryKey: true, required: true }
+    evca_usu_crea: { phpName: EvcaUsuCrea, type: INTEGER, size: '11', required: false }
     evca_fecha_registro_sistema: { phpName: EvcaFechaRegistroSistema, type: TIMESTAMP, required: false }
     _indexes: { FK_reference_51: [evca_usu_crea], FK_reference_24: [evca_eve_codigo] }
   indicador:
@@ -120,8 +120,8 @@ propel:
     ind_nombre: { phpName: IndNombre, type: VARCHAR, size: '200', required: false }
     ind_fecha_registro_sistema: { phpName: IndFechaRegistroSistema, type: TIMESTAMP, required: false }
     ind_unidad: { phpName: IndUnidad, type: VARCHAR, size: '20', required: false }
-    ind_usu_crea: { phpName: IndUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    ind_usu_actualiza: { phpName: IndUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    ind_usu_crea: { phpName: IndUsuCrea, type: INTEGER, size: '11', required: false }
+    ind_usu_actualiza: { phpName: IndUsuActualiza, type: INTEGER, size: '11', required: false }
     ind_fecha_actualizacion: { phpName: IndFechaActualizacion, type: TIMESTAMP, required: false }
     ind_eliminado: { phpName: IndEliminado, type: SMALLINT, size: '6', required: false }
     ind_causa_eliminacion: { phpName: IndCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -130,8 +130,8 @@ propel:
   maquina:
     _attributes: { phpName: Maquina }
     maq_codigo: { phpName: MaqCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    maq_est_codigo: { phpName: MaqEstCodigo, type: INTEGER, size: '11', required: false, foreignTable: estado, foreignReference: est_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    maq_com_certificado: { phpName: MaqComCertificado, type: VARCHAR, size: '40', required: false, foreignTable: computador, foreignReference: com_certificado, onDelete: 'SET NULL', onUpdate: 'SET NULL' }
+    maq_est_codigo: { phpName: MaqEstCodigo, type: INTEGER, size: '11', required: false }
+    maq_com_certificado: { phpName: MaqComCertificado, type: VARCHAR, size: '40', required: false }
     maq_nombre: { phpName: MaqNombre, type: VARCHAR, size: '200', required: false }
     maq_marca: { phpName: MaqMarca, type: VARCHAR, size: '200', required: false }
     maq_modelo: { phpName: MaqModelo, type: VARCHAR, size: '200', required: false }
@@ -140,8 +140,8 @@ propel:
     maq_tiempo_inyeccion: { phpName: MaqTiempoInyeccion, type: DECIMAL, size: '8', scale: '4', required: false }
     maq_fecha_registro_sistema: { phpName: MaqFechaRegistroSistema, type: TIMESTAMP, required: false }
     maq_codigo_inventario: { phpName: MaqCodigoInventario, type: VARCHAR, size: '20', required: false }
-    maq_usu_crea: { phpName: MaqUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    maq_usu_actualiza: { phpName: MaqUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    maq_usu_crea: { phpName: MaqUsuCrea, type: INTEGER, size: '11', required: false }
+    maq_usu_actualiza: { phpName: MaqUsuActualiza, type: INTEGER, size: '11', required: false }
     maq_fecha_actualizacion: { phpName: MaqFechaActualizacion, type: TIMESTAMP, required: false }
     maq_eliminado: { phpName: MaqEliminado, type: SMALLINT, size: '6', required: false }
     maq_causa_eliminacion: { phpName: MaqCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -149,13 +149,13 @@ propel:
     _indexes: { FK_reference_21: [maq_com_certificado], FK_reference_43: [maq_usu_crea], FK_reference_44: [maq_usu_actualiza], FK_reference_10: [maq_est_codigo] }
   meta_anual_x_indicador:
     _attributes: { phpName: MetaAnualXIndicador }
-    mea_ind_codigo: { phpName: MeaIndCodigo, type: INTEGER, size: '11', primaryKey: true, required: true, foreignTable: indicador, foreignReference: ind_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    mea_emp_codigo: { phpName: MeaEmpCodigo, type: INTEGER, size: '11', primaryKey: true, required: true, foreignTable: empresa, foreignReference: emp_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    mea_ind_codigo: { phpName: MeaIndCodigo, type: INTEGER, size: '11', primaryKey: true, required: true }
+    mea_emp_codigo: { phpName: MeaEmpCodigo, type: INTEGER, size: '11', primaryKey: true, required: true }
     mea_anio: { phpName: MeaAnio, type: INTEGER, size: '11', primaryKey: true, required: true }
     mea_valor: { phpName: MeaValor, type: DECIMAL, size: '8', scale: '2', required: false }
     mea_fecha_registro_sistema: { phpName: MeaFechaRegistroSistema, type: TIMESTAMP, required: false }
-    mea_usu_crea: { phpName: MeaUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    mea_usu_actualiza: { phpName: MeaUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    mea_usu_crea: { phpName: MeaUsuCrea, type: INTEGER, size: '11', required: false }
+    mea_usu_actualiza: { phpName: MeaUsuActualiza, type: INTEGER, size: '11', required: false }
     mea_fecha_actualizacion: { phpName: MeaFechaActualizacion, type: TIMESTAMP, required: false }
     mea_eliminado: { phpName: MeaEliminado, type: SMALLINT, size: '6', required: false }
     mea_causa_eliminacion: { phpName: MeaCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -187,8 +187,8 @@ propel:
     met_num_inyec_x_mu_disolucion: { phpName: MetNumInyecXMuDisolucion, type: INTEGER, size: '11', required: false }
     met_num_inyec_x_mu_uniformidad: { phpName: MetNumInyecXMuUniformidad, type: INTEGER, size: '11', required: false }
     met_numero_inyeccion_estandar: { phpName: MetNumeroInyeccionEstandar, type: INTEGER, size: '11', required: false }
-    met_usu_crea: { phpName: MetUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    met_usu_actualiza: { phpName: MetUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    met_usu_crea: { phpName: MetUsuCrea, type: INTEGER, size: '11', required: false }
+    met_usu_actualiza: { phpName: MetUsuActualiza, type: INTEGER, size: '11', required: false }
     met_fecha_actualizacion: { phpName: MetFechaActualizacion, type: TIMESTAMP, required: false }
     met_eliminado: { phpName: MetEliminado, type: SMALLINT, size: '6', required: false }
     met_causa_eliminacion: { phpName: MetCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -214,8 +214,8 @@ propel:
   registro_modificacion:
     _attributes: { phpName: RegistroModificacion }
     rem_id: { phpName: RemId, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    rem_rum_codigo: { phpName: RemRumCodigo, type: INTEGER, size: '11', required: false, foreignTable: registro_uso_maquina, foreignReference: rum_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    rem_usu_codigo: { phpName: RemUsuCodigo, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    rem_rum_codigo: { phpName: RemRumCodigo, type: INTEGER, size: '11', required: false }
+    rem_usu_codigo: { phpName: RemUsuCodigo, type: INTEGER, size: '11', required: false }
     rem_fecha_hora: { phpName: RemFechaHora, type: TIMESTAMP, required: false }
     rem_nombre_campo: { phpName: RemNombreCampo, type: VARCHAR, size: '255', required: false }
     rem_valor_antiguo: { phpName: RemValorAntiguo, type: VARCHAR, size: '255', required: false }
@@ -225,10 +225,10 @@ propel:
   registro_uso_maquina:
     _attributes: { phpName: RegistroUsoMaquina }
     rum_codigo: { phpName: RumCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    rum_maq_codigo: { phpName: RumMaqCodigo, type: INTEGER, size: '11', required: false, foreignTable: maquina, foreignReference: maq_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    rum_met_codigo: { phpName: RumMetCodigo, type: INTEGER, size: '11', required: false, foreignTable: metodo, foreignReference: met_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    rum_usu_codigo: { phpName: RumUsuCodigo, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    rum_usu_codigo_elimino: { phpName: RumUsuCodigoElimino, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    rum_maq_codigo: { phpName: RumMaqCodigo, type: INTEGER, size: '11', required: false }
+    rum_met_codigo: { phpName: RumMetCodigo, type: INTEGER, size: '11', required: false }
+    rum_usu_codigo: { phpName: RumUsuCodigo, type: INTEGER, size: '11', required: false }
+    rum_usu_codigo_elimino: { phpName: RumUsuCodigoElimino, type: INTEGER, size: '11', required: false }
     rum_hora_inicio_trabajo: { phpName: RumHoraInicioTrabajo, type: TIME, required: false }
     rum_hora_fin_trabajo: { phpName: RumHoraFinTrabajo, type: TIME, required: false }
     rum_tiempo_entre_modelo: { phpName: RumTiempoEntreModelo, type: TIME, required: false }
@@ -283,6 +283,8 @@ propel:
     rum_num_inyec_x_mu_disolu_perd: { phpName: RumNumInyecXMuDisoluPerd, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_num_inyec_x_mu_unifor_perd: { phpName: RumNumInyecXMuUniforPerd, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_fallas: { phpName: RumFallas, type: DECIMAL, size: '12', scale: '4', required: false }
+    rum_observaciones: { phpName: RumObservaciones, type: VARCHAR, size: '300', required: false }
+    rum_columnas: { phpName: RumColumnas, type: VARCHAR, size: '300', required: false }
     rum_fecha: { phpName: RumFecha, type: DATE, required: false }
     rum_fecha_hora_reg_sistema: { phpName: RumFechaHoraRegSistema, type: TIMESTAMP, required: false }
     rum_causa_eliminacion: { phpName: RumCausaEliminacion, type: VARCHAR, size: '300', required: false }
@@ -306,8 +308,8 @@ propel:
     tid_codigo: { phpName: TidCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
     tid_nombre: { phpName: TidNombre, type: VARCHAR, size: '30', required: false }
     tid_fecha_registro_sistema: { phpName: TidFechaRegistroSistema, type: TIMESTAMP, required: false }
-    tid_usu_crea: { phpName: TidUsuCrea, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    tid_usu_actualiza: { phpName: TidUsuActualiza, type: INTEGER, size: '11', required: false, foreignTable: usuario, foreignReference: usu_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    tid_usu_crea: { phpName: TidUsuCrea, type: INTEGER, size: '11', required: false }
+    tid_usu_actualiza: { phpName: TidUsuActualiza, type: INTEGER, size: '11', required: false }
     tid_fecha_actualizacion: { phpName: TidFechaActualizacion, type: TIMESTAMP, required: false }
     tid_eliminado: { phpName: TidEliminado, type: SMALLINT, size: '6', required: false }
     tid_causa_eliminacion: { phpName: TidCausaEliminacion, type: VARCHAR, size: '250', required: false }
@@ -316,7 +318,7 @@ propel:
   usuario:
     _attributes: { phpName: Usuario }
     usu_codigo: { phpName: UsuCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    usu_per_codigo: { phpName: UsuPerCodigo, type: INTEGER, size: '11', required: false, foreignTable: perfil, foreignReference: per_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    usu_per_codigo: { phpName: UsuPerCodigo, type: INTEGER, size: '11', required: false }
     usu_login: { phpName: UsuLogin, type: VARCHAR, size: '200', required: false }
     usu_password: { phpName: UsuPassword, type: VARCHAR, size: '200', required: false }
     usu_habilitado: { phpName: UsuHabilitado, type: SMALLINT, size: '6', required: false }
