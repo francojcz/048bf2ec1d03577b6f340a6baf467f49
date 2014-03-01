@@ -97,7 +97,7 @@ var operarios_combobox = new Ext.form.ComboBox({
     triggerAction: 'all',
     forceSelection: true,
     allowBlank: false,
-    width: 130,
+    width: 200,
     listeners: {
         select: function(){
             recargarDatosMetodos();
@@ -134,52 +134,86 @@ var maquinas_datastore = new Ext.data.Store({
     }])
 });
 
-//    maquinas_datastore.load();
+maquinas_datastore.load();
 
-var maquinas_combobox = new Ext.form.ComboBox({
-    fieldLabel: 'Equipo',
-    store: maquinas_datastore,
-    displayField: 'nombre',
-    valueField: 'codigo',
-    mode: 'local',
-    triggerAction: 'all',
-    forceSelection: true,
-    allowBlank: false,
-    width: 130,
-    listeners: {
-        select: function(){
+/**********************************************************************/
+//Cambios: 28 de febrero de 2014
+//Interfaz para seleccionar los equipos a filtrar en el reporte
+var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false,	
+        listeners: {
+                rowselect: function(sm, row, rec) {
+                }
+        }
+});
+
+var maquina_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+                maquina_selmodel,
+                { header: "Id", width: 30, dataIndex: 'codigo',hidden:true},
+                { header: "Nombre del Equipo", width: 400, dataIndex: 'nombre'}
+        ]
+});
+
+var maquinas_gridpanel = new Ext.grid.GridPanel({
+        id: 'maquinas_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: maquinas_datastore,
+        cm: maquina_colmodel,
+        sm: maquina_selmodel,
+        height: 120
+});
+
+var win = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 300,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Equipos',
+    items : maquinas_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win.hide();
             recargarDatosMetodos();
         }
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
     }
 });
-
-maquinas_datastore.load({
-    callback: function(){
-        maquinas_datastore.loadData({
-            data: [{
-                'codigo': '-1',
-                'nombre': 'TODOS'
-            }]
-        }, true);
-        maquinas_combobox.setValue('-1');
-        recargarDatosMetodos();
-    }
-});
+/**********************************************************************/
 
 var recargarDatosMetodos = function(callback){
     redirigirSiSesionExpiro();
     
-    if (operarios_combobox.isValid() && maquinas_combobox.isValid() && fechaField.isValid()) {
-    
-        var maq = maquinas_combobox.getValue();
+    if (operarios_combobox.isValid() && fechaField.isValid()) {
         var ope = operarios_combobox.getValue();
         var fecha = fechaField.getValue();
+        //Codigos de los equipos seleccionados
+        var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+        var equiposAFiltrar = [];
+        for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+                equiposAFiltrar.push(equiposSeleccionados[i].json.codigo);
+        }
+        var arrayEquipos = Ext.encode(equiposAFiltrar);
+        
         
         rdtiemp_datastore.load({
             callback: callback,
             params: {
                 'codigo_usu_operario': ope,
-                'codigo_maquina': maq,
+                'cods_equipos': arrayEquipos,
                 'fecha': fecha
             }
         });
@@ -188,7 +222,7 @@ var recargarDatosMetodos = function(callback){
             callback: callback,
             params: {
                 'codigo_usu_operario': ope,
-                'codigo_maquina': maq,
+                'cods_equipos': arrayEquipos,
                 'fecha': fecha
             }
         });
@@ -197,7 +231,7 @@ var recargarDatosMetodos = function(callback){
             callback: callback,
             params: {
                 'codigo_usu_operario': ope,
-                'codigo_maquina': maq,
+                'cods_equipos': arrayEquipos,
                 'fecha': fecha
             }
         });
@@ -206,7 +240,7 @@ var recargarDatosMetodos = function(callback){
             callback: callback,
             params: {
                 'codigo_usu_operario': ope,
-                'codigo_maquina': maq,
+                'cods_equipos': arrayEquipos,
                 'fecha': fecha
             }
         });
@@ -859,9 +893,6 @@ var rdmuin_grid = new Ext.grid.GridPanel({
     columns: rdmuin_columns
 });
 
-    
-
-
 var reportediario_contenedor = new Ext.Panel({
     renderTo: 'panel_principal_reporte_diario',
     border: true,
@@ -871,19 +902,35 @@ var reportediario_contenedor = new Ext.Panel({
         border: true,
         frame: true,
         items: [{
-            height: 70,
+            height: 35,
             layout: 'column',
             items: [{
-                width: '225',
+                width: '300',
                 layout: 'form',
-                labelWidth: 75,
-                items: [operarios_combobox, maquinas_combobox]
+                labelWidth: 55,
+                items: [operarios_combobox]
             }, {
-                width: '250',
+                width: '190',
                 layout: 'form',
-                labelWidth: 75,
-                items: [fechaField, horaField]
-            }]
+                labelWidth: 40,
+                items: [fechaField]
+            }, {
+                width: '140',
+                layout: 'form',
+                labelWidth: 35,
+                items: [horaField]
+            }, {
+                xtype: 'button',
+                iconCls : 'equipo',
+                text : 'Seleccionar Equipos',
+                tooltip: 'Seleccionar los equipos a filtrar en el reporte',                    
+                style: 'padding: 0px 0px 0px 40px',
+                handler : function() {
+                    Ext.getBody().mask();
+                    win.show();
+                }
+            }
+        ]
         }]
     }, {
         xtype: 'tabpanel',

@@ -36,10 +36,15 @@ class reporte_diarioActions extends sfActions
             $conexion -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha_dia, CRITERIA::EQUAL);
         }
 
-        if ($maquina_codigo != '-1' && $maquina_codigo != '')
-        {
-            $conexion -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $maquina_codigo, CRITERIA::EQUAL);
-        }
+        //Codigos de los equipos seleccionados
+        $temp = $this->getRequestParameter('cods_equipos');
+        $cods_equipos = json_decode($temp);
+        if($cods_equipos != ''){
+            foreach ($cods_equipos as $cod_equipo) {
+                $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+            }
+        }        
+        
         if ($metodo_codigo != '-1' && $metodo_codigo != '')
         {
             $conexion -> add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $metodo_codigo, CRITERIA::EQUAL);
@@ -76,7 +81,6 @@ class reporte_diarioActions extends sfActions
 
         //sacar los criterios de consulta
         $fecha_dia = $this -> getRequestParameter('fecha');
-        $maquina_codigo = $this -> getRequestParameter('codigo_maquina');
         // $metodo_codigo = $this -> getRequestParameter('metodo_codigo');
         $metodo_codigo = '-1';
         $analista_codigo = $this -> getRequestParameter('codigo_usu_operario');
@@ -88,10 +92,16 @@ class reporte_diarioActions extends sfActions
 
         $criteria = new Criteria();
         $criteria -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha_dia);
-        if ($maquina_codigo != '-1' && $maquina_codigo != '')
-        {
-            $criteria -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $maquina_codigo);
+                
+        //Codigos de los equipos seleccionados
+        $temp = $this->getRequestParameter('cods_equipos');
+        $cods_equipos = json_decode($temp);
+        if($cods_equipos != ''){
+            foreach ($cods_equipos as $cod_equipo) {
+                $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+            }
         }
+        
         if ($metodo_codigo != '-1' && $metodo_codigo != '')
         {
             $criteria -> add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $metodo_codigo);
@@ -358,10 +368,16 @@ class reporte_diarioActions extends sfActions
         $codigo_maquina = $request -> getParameter('codigo_maquina');
 
         $criteria = new Criteria();
-        if ($codigo_maquina != '-1' && $codigo_maquina != '')
-        {
-            $criteria -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $codigo_maquina);
+        
+        //Codigos de los equipos seleccionados
+        $temp = $this->getRequestParameter('cods_equipos');
+        $cods_equipos = json_decode($temp);
+        if($cods_equipos != ''){
+            foreach ($cods_equipos as $cod_equipo) {
+                $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+            }
         }
+        
         if ($codigo_usuario != '-1' && $codigo_usuario != '')
         {
             $criteria -> add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $codigo_usuario);
@@ -419,10 +435,16 @@ class reporte_diarioActions extends sfActions
         $codigo_maquina = $request -> getParameter('codigo_maquina');
 
         $criteria = new Criteria();
-        if ($codigo_maquina != '-1' && $codigo_maquina != '')
-        {
-            $criteria -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $codigo_maquina);
+        
+        //Codigos de los equipos seleccionados
+        $temp = $this->getRequestParameter('cods_equipos');
+        $cods_equipos = json_decode($temp);
+        if($cods_equipos != ''){
+            foreach ($cods_equipos as $cod_equipo) {
+                $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+            }
         }
+        
         if ($codigo_usuario != '-1' && $codigo_usuario != '')
         {
             $criteria -> add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $codigo_usuario);
