@@ -133,7 +133,6 @@ var maquinas_datastore = new Ext.data.Store({
         type: 'string'
     }])
 });
-
 maquinas_datastore.load();
 
 /**********************************************************************/
@@ -150,9 +149,9 @@ var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
 var maquina_colmodel = new Ext.grid.ColumnModel({
         defaults:{sortable: true, locked: false, resizable: true},
         columns:[
-                maquina_selmodel,
-                { header: "Id", width: 30, dataIndex: 'codigo',hidden:true},
-                { header: "Nombre del Equipo", width: 400, dataIndex: 'nombre'}
+            maquina_selmodel,
+            { header: "Id", width: 30, dataIndex: 'codigo',hidden:true},
+            { header: "Nombre del Equipo", width: 430, dataIndex: 'nombre'}
         ]
 });
 
@@ -162,15 +161,14 @@ var maquinas_gridpanel = new Ext.grid.GridPanel({
         frame: true,
         ds: maquinas_datastore,
         cm: maquina_colmodel,
-        sm: maquina_selmodel,
-        height: 120
+        sm: maquina_selmodel
 });
 
 var win = new Ext.Window(
 {
     layout : 'fit',
     width : 500,
-    height : 300,
+    height : 400,
     closeAction : 'hide',
     plain : true,
     title : 'Equipos',
