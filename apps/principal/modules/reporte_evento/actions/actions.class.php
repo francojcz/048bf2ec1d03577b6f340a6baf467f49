@@ -23,21 +23,35 @@ class reporte_eventoActions extends sfActions
 
 		$desde_fecha=$this->getRequestParameter('desde_fecha');
 		$hasta_fecha=$this->getRequestParameter('hasta_fecha');
-		$maquina_codigo=$this->getRequestParameter('maquina_codigo');
 		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 		$analista_codigo=$this->getRequestParameter('analista_codigo');
 		$categoriaevento_codigo=$this->getRequestParameter('categoria_codigo');
 
 		$conexion = new Criteria();
 		$conexion->addJoin(EventoEnRegistroPeer::EVRG_RUM_CODIGO,RegistroUsoMaquinaPeer::RUM_CODIGO);
-		if($desde_fecha!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$desde_fecha,CRITERIA::GREATER_EQUAL);}
+		if($desde_fecha!='')
+                    {$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$desde_fecha,CRITERIA::GREATER_EQUAL);
+                }
 		if($hasta_fecha!=''){
 			if($desde_fecha!=''){$conexion->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA,$hasta_fecha,CRITERIA::LESS_EQUAL);}
 			else{$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$hasta_fecha,CRITERIA::LESS_EQUAL);}
 		}
-		if($maquina_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO,$maquina_codigo,CRITERIA::EQUAL);}
-		if($metodo_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);}
-		if($analista_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);}
+                              
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
+                    }
+                } 
+                
+		if($metodo_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
+                }
+		if($analista_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);
+                }
 
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
 		if($categoriaevento_codigo!=''){
@@ -131,9 +145,14 @@ class reporte_eventoActions extends sfActions
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('analista_codigo'));
 		}
 
-		if($request->getParameter('maquina_codigo')!='') {
-			$criteria->add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $request->getParameter('maquina_codigo'));
-		}
+		//Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+                    }
+                }   
 
 		if($request->getParameter('metodo_codigo')!='') {
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $request->getParameter('metodo_codigo'));
@@ -208,9 +227,14 @@ class reporte_eventoActions extends sfActions
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('analista_codigo'));
 		}
 
-		if($request->getParameter('maquina_codigo')!='') {
-			$criteria->add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $request->getParameter('maquina_codigo'));
-		}
+		//Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
+                    }
+                }   
 
 		if($request->getParameter('metodo_codigo')!='') {
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $request->getParameter('metodo_codigo'));
@@ -349,7 +373,6 @@ class reporte_eventoActions extends sfActions
 		try{
 			$desde_fecha=$this->getRequestParameter('desde_fecha');
 			$hasta_fecha=$this->getRequestParameter('hasta_fecha');
-			$maquina_codigo=$this->getRequestParameter('maquina_codigo');
 			$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 			$analista_codigo=$this->getRequestParameter('analista_codigo');
 			$categoriaevento_codigo=$this->getRequestParameter('categoria_codigo');
@@ -369,7 +392,15 @@ class reporte_eventoActions extends sfActions
 
 			if($desde_fecha!=''){$consulta.=" and rum_fecha>='".$desde_fecha."' "; }
 			if($hasta_fecha!=''){$consulta.=" and rum_fecha<='".$hasta_fecha."' "; }
-			if($maquina_codigo!=''){$consulta.=" and rum_maq_codigo='".$maquina_codigo."' ";}
+                        
+                        //Codigos de los equipos seleccionados
+                        $temp = $this->getRequestParameter('cods_equipos');
+                        $cods_equipos = json_decode($temp);
+                        if($cods_equipos != ''){
+                            foreach ($cods_equipos as $cod_equipo) {                                
+                                $consulta.=" or rum_maq_codigo='".$cod_equipo."' ";
+                            }
+                        }                        
 			if($metodo_codigo!=''){$consulta.=" and rum_met_codigo='".$metodo_codigo."' ";}
 			if($analista_codigo!=''){$consulta.=" and rum_usu_codigo='".$analista_codigo."' ";}
 			if($hasta_fecha!=''){$consulta.=" and rum_eliminado=false"; }

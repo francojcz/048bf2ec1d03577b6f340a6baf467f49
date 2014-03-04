@@ -47,22 +47,57 @@ Ext.onReady(function(){
     });
     reporevent_maquina_codigo_datastore.load();
     
-    
-    var reporevent_maquina_codigo_combobox = new Ext.form.ComboBox({
-        xtype: 'combo',
-        store: reporevent_maquina_codigo_datastore,
-        hiddenName: 'maquina_codigo',
-        name: 'reporevent_maquina_codigo_combobox',
-        id: 'reporevent_maquina_codigo_combobox',
-        mode: 'local',
-        valueField: 'maq_codigo',
-        forceSelection: true,
-        displayField: 'maq_nombre',
-        triggerAction: 'all',
-        emptyText: 'Seleccione un equipo ó máquina...',
-        selectOnFocus: true
-    });
-    
+    /**********************************************************************/
+//Cambios: 28 de febrero de 2014
+//Interfaz para seleccionar los equipos a filtrar en el reporte
+var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false
+});
+
+var maquina_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+            maquina_selmodel,
+            { header: "Id", width: 30, dataIndex: 'maq_codigo', hidden:true},
+            { header: "Nombre del Equipo", width: 430, dataIndex: 'maq_nombre'}
+        ]
+});
+
+var maquinas_gridpanel = new Ext.grid.GridPanel({
+        id: 'maquinas_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: reporevent_maquina_codigo_datastore,
+        cm: maquina_colmodel,
+        sm: maquina_selmodel
+});
+
+var win = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 400,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Equipos',
+    items : maquinas_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win.hide();
+        }
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
+    }
+});
+/**********************************************************************/  
     
     var reporevent_metodo_codigo_datastore = new Ext.data.JsonStore({
         id: 'reporevent_metodo_codigo_datastore',
@@ -166,11 +201,16 @@ Ext.onReady(function(){
                 value: 'Analista'
             }, reporevent_analista_codigo_combobox, {
                 xtype: 'displayfield',
-                value: 'Equipo'
-            }, reporevent_maquina_codigo_combobox, {
-                xtype: 'displayfield',
                 value: 'M&eacute;todo'
             }, reporevent_metodo_codigo_combobox, {
+                text: 'Seleccionar Equipos',
+                xtype: 'button',
+                iconCls: 'equipo',
+                handler: function(){
+                    Ext.getBody().mask();
+                    win.show();
+                }
+            }, {
                 text: 'Buscar',
                 xtype: 'button',
                 iconCls: 'filtrar',
@@ -184,10 +224,17 @@ Ext.onReady(function(){
                     if (reporevent_hasta_fecha_datefield.getValue() != '') {
                         hasta = reporevent_hasta_fecha_datefield.getValue().format('Y-m-d');
                     }
+                    //Codigos de los equipos seleccionados
+                    var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+                    var equiposAFiltrar = [];
+                    for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+                            equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
+                    }
+                    var arrayEquipos = Ext.encode(equiposAFiltrar);
                     
                     reporevent_datastore.reload({
                         params: {
-                            maquina_codigo: reporevent_maquina_codigo_combobox.getValue(),
+                            cods_equipos: arrayEquipos,
                             metodo_codigo: reporevent_metodo_codigo_combobox.getValue(),
                             analista_codigo: reporevent_analista_codigo_combobox.getValue(),
                             categoria_codigo: reporevent_categoriaevento_codigo_combobox.getValue(),
@@ -294,7 +341,7 @@ Ext.onReady(function(){
             dataIndex: 'evrg_hora_registro'
         },{
             header: "Observaci&oacute;n",
-            width: 170,
+            width: 250,
             align : 'center',
             dataIndex: 'evrg_observaciones'
         }]
@@ -348,7 +395,14 @@ Ext.onReady(function(){
     function reporevent_cargardatosreportes(){
         redirigirSiSesionExpiro();
         
-        var maquina_codigo = reporevent_maquina_codigo_combobox.getValue();
+        //Codigos de los equipos seleccionados
+        var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+        var equiposAFiltrar = [];
+        for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+                equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
+        }
+        var arrayEquipos = Ext.encode(equiposAFiltrar);
+        
         var metodo_codigo = reporevent_metodo_codigo_combobox.getValue();
         var analista_codigo = reporevent_analista_codigo_combobox.getValue();
         var categoria_codigo = reporevent_categoriaevento_codigo_combobox.getValue();
@@ -363,7 +417,7 @@ Ext.onReady(function(){
             hasta = reporevent_hasta_fecha_datefield.getValue().format('Y-m-d');
         }
         
-        var params = '?maquina_codigo=' + maquina_codigo + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
+        var params = '?cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         params += '&desde_fecha=' + desde + '&hasta_fecha=' + hasta + '&categoria_codigo=' + categoria_codigo;
         
         //tiempos
