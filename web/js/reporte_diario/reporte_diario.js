@@ -194,14 +194,14 @@ var recargarDatosMetodos = function(callback){
     if (operarios_combobox.isValid() && fechaField.isValid()) {
         var ope = operarios_combobox.getValue();
         var fecha = fechaField.getValue();
+        
         //Codigos de los equipos seleccionados
         var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
         var equiposAFiltrar = [];
         for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
                 equiposAFiltrar.push(equiposSeleccionados[i].json.codigo);
         }
-        var arrayEquipos = Ext.encode(equiposAFiltrar);
-        
+        var arrayEquipos = Ext.encode(equiposAFiltrar);        
         
         rdtiemp_datastore.load({
             callback: callback,

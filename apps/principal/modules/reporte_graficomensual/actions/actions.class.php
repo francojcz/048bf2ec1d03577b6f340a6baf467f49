@@ -20,45 +20,74 @@ class reporte_graficomensualActions extends sfActions
 	}
 
 	public function obtenerConexionSinFecha() {
-		$maquina_codigo=$this->getRequestParameter('maquina_codigo');
 		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 		$analista_codigo=$this->getRequestParameter('analista_codigo');
 
-		$conexion = new Criteria();
-		if($maquina_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO,$maquina_codigo,CRITERIA::EQUAL);}
-		if($metodo_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);}
-		if($analista_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);}
+		$conexion = new Criteria();                
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
+                    }
+                }         
+		if($metodo_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
+                }
+		if($analista_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);
+                }
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
 		return $conexion;
 	}
 
 
 	public function obtenerConexionDia($dia) {
-		$maquina_codigo=$this->getRequestParameter('maquina_codigo');
 		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 		$analista_codigo=$this->getRequestParameter('analista_codigo');
 
 		$conexion = new Criteria();
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$dia,CRITERIA::EQUAL);
-		if($maquina_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO,$maquina_codigo,CRITERIA::EQUAL);}
-		if($metodo_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);}
-		if($analista_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);}
+		//Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
+                    }
+                }
+		if($metodo_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
+                }
+		if($analista_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);
+                }
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
 		return $conexion;
 	}
 
 	public function obtenerConexionMes($anio,$mes) {
-		$maquina_codigo=$this->getRequestParameter('maquina_codigo');
 		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 		$analista_codigo=$this->getRequestParameter('analista_codigo');
 
 		$conexion = new Criteria();
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$anio.'-'.$mes.'-01',CRITERIA::GREATER_EQUAL);
 		$conexion->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA,$anio.'-'.$mes.'-31',CRITERIA::LESS_EQUAL);
-
-		if($maquina_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO,$maquina_codigo,CRITERIA::EQUAL);}
-		if($metodo_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);}
-		if($analista_codigo!=''){$conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);}
+		//Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
+                    }
+                }
+		if($metodo_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
+                }
+		if($analista_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);
+                }
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
 		return $conexion;
 	}
@@ -530,16 +559,13 @@ class reporte_graficomensualActions extends sfActions
 
 	public function calcularTiemposDiariosMes($anio,$mes,$cant_dias,$inyeccionesEstandarPromedio)
 	{
-		$datos;
-
-		$maquina_codigo = $this->getRequestParameter('maquina_codigo');
+		$datos = array();
 
 		try{
 
 			$params = array();
 
 			for($dia=1;$dia<$cant_dias;$dia++){
-
 				$año = $anio;
 
 				$tpnp_dia = null;
@@ -550,41 +576,35 @@ class reporte_graficomensualActions extends sfActions
 				$tp_dia = null;
 
 				$horasActivas = 0;
+                                    
+                                $criteria = new Criteria();
+                                //Codigos de los equipos seleccionados
+                                $temp = $this->getRequestParameter('cods_equipos');
+                                $cods_equipos = json_decode($temp);
+                                if($cods_equipos != ''){
+                                    foreach ($cods_equipos as $cod_equipo) {
+                                        $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);                                        
+                                    }
+                                }
+                                $maquinas = MaquinaPeer::doSelect($criteria);
+                                $tpnp_dia = 0;
+                                $tnp_dia = 0;
+                                $tpp_dia = 0;
+                                $tf_dia = 0;
+                                $to_dia = 0;
+                                $tp_dia = 0;
+                                foreach($maquinas as $maquina) {
+                                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-				if($maquina_codigo!='-1' && $maquina_codigo!='') {
-					$maquina = MaquinaPeer::retrieveByPK($maquina_codigo);
-
-					$tpnp_dia = RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-					$tnp_dia = RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-					$tpp_dia = RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-					$horasActivas = $maquina->calcularNumeroHorasActivasDelDia($dia, $mes, $año);
-					$tf_dia = $horasActivas - $tpp_dia - $tnp_dia;
-					$to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
-					$tp_dia = RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-				}
-				else {
-					$maquinas = MaquinaPeer::doSelect(new Criteria());
-					$tpnp_dia = 0;
-					$tnp_dia = 0;
-					$tpp_dia = 0;
-					$tf_dia = 0;
-					$to_dia = 0;
-					$tp_dia = 0;
-					foreach($maquinas as $maquina) {
-						//                    $maquina = new Maquina();
-
-						$codigoTemporalMaquina = $maquina->getMaqCodigo();
-
-						$tpnp_dia += RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-						$tnp_dia += RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-						$tpp_dia += RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-						$horasActivas += $maquina->calcularNumeroHorasActivasDelDia($dia, $mes, $año);
-						$tp_dia += RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-					}
-					$tf_dia = $horasActivas - $tpp_dia - $tnp_dia;
-					$to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
-				}
-
+                                        $tpnp_dia += RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+                                        $tnp_dia += RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+                                        $tpp_dia += RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+                                        $horasActivas += $maquina->calcularNumeroHorasActivasDelDia($dia, $mes, $año);
+                                        $tp_dia += RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+                                }
+                                $tf_dia = $horasActivas - $tpp_dia - $tnp_dia;
+                                $to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
+				
 				$datos[$dia]['TP'] = $tp_dia;
 				$datos[$dia]['TNP'] = $tnp_dia;
 				$datos[$dia]['TPNP'] = $tpnp_dia;
@@ -640,57 +660,46 @@ class reporte_graficomensualActions extends sfActions
 	public function calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio)
 	{
 		$datos;
-
 		$tp_mes = 0;
 		$tnp_mes = 0;
 		$tpnp_mes = 0;
 		$tpp_mes = 0;
 		$to_mes = 0;
 		$tf_mes = 0;
-
-		$maquina_codigo = $this->getRequestParameter('maquina_codigo');
-
 		$params = array();
-
 		$tiempoCalendario = 0;
 
 		try{
-			//			$cantidadDias = RegistroUsoMaquinaPeer::calcularNumeroDiasDelMes($mes, $anio);
-			//			$cantidadHoras = $cantidadDias * 24;
+                        $criteria = new Criteria();
+                        //Codigos de los equipos seleccionados
+                        $temp = $this->getRequestParameter('cods_equipos');
+                        $cods_equipos = json_decode($temp);
+                        if($cods_equipos != ''){
+                            foreach ($cods_equipos as $cod_equipo) {
+                                $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                            }
+                        }
+                        $maquinas = MaquinaPeer::doSelect($criteria);
+                        $tpp_mes = 0;
+                        $tnp_mes = 0;
+                        $tpnp_mes = 0;
+                        $tf_mes = 0;
+                        $tp_mes = 0;
+                        $tiempoCalendario = 0;
+                        foreach($maquinas as $maquina) {
+                                //                    $maquina = new Maquina();
 
-			if($maquina_codigo!='-1' && $maquina_codigo!='') {
-				$maquina = MaquinaPeer::retrieveByPK($maquina_codigo);
+                                $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-				$tpp_mes = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($maquina_codigo, $mes, $anio, $params);
-				$tnp_mes = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($maquina_codigo, $mes, $anio, $params);
-				$tpnp_mes = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($maquina_codigo, $mes, $anio, $params);
-				$tiempoCalendario = $maquina->calcularNumeroHorasActivasDelMes($mes, $anio);
-				$tf_mes = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $tpp_mes, $tnp_mes);
-				$to_mes = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_mes, $tpnp_mes);
-				$tp_mes = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($maquina_codigo, $mes, $anio, $params, 8);
-			}
-			else {
-				$maquinas = MaquinaPeer::doSelect(new Criteria());
-				$tpp_mes = 0;
-				$tnp_mes = 0;
-				$tpnp_mes = 0;
-				$tf_mes = 0;
-				$tp_mes = 0;
-				$tiempoCalendario = 0;
-				foreach($maquinas as $maquina) {
-					//                    $maquina = new Maquina();
-
-					$codigoTemporalMaquina = $maquina->getMaqCodigo();
-
-					$tpp_mes += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
-					$tnp_mes += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
-					$tpnp_mes += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
-					$tiempoCalendario += $maquina->calcularNumeroHorasActivasDelMes($mes, $anio);
-					$tp_mes += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
-				}
-				$tf_mes = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $tpp_mes, $tnp_mes);
-				$to_mes = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_mes, $tpnp_mes);
-			}
+                                $tpp_mes += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
+                                $tnp_mes += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
+                                $tpnp_mes += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
+                                $tiempoCalendario += $maquina->calcularNumeroHorasActivasDelMes($mes, $anio);
+                                $tp_mes += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
+                        }
+                        $tf_mes = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $tpp_mes, $tnp_mes);
+                        $to_mes = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_mes, $tpnp_mes);
+			
 			$datos['TP'] = $tp_mes;
 			$datos['TNP'] = $tnp_mes;
 			$datos['TPNP'] = $tpnp_mes;
@@ -768,16 +777,17 @@ class reporte_graficomensualActions extends sfActions
 		try{
 			$datosTiempos = $this->calcularTiemposDiariosMes($anio, $mes, $cant_dias, $inyeccionesEstandarPromedio);
 			$datosInyecciones = $this->calcularInyecciones($anio, $mes, $cant_dias);
-
-			$maquina_codigo = $this->getRequestParameter('maquina_codigo');
-			$cantidadMaquinas = null;
-			if($maquina_codigo!='-1' && $maquina_codigo!='') {
-				$cantidadMaquinas = 1;
-			}
-			else {
-				$cantidadMaquinas = MaquinaPeer::doCount(new Criteria());
-			}
-
+                        
+                        $criteria = new Criteria();
+                        //Codigos de los equipos seleccionados
+                        $temp = $this->getRequestParameter('cods_equipos');
+                        $cods_equipos = json_decode($temp);
+                        if($cods_equipos != ''){
+                            foreach ($cods_equipos as $cod_equipo) {
+                                $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                            }
+                        }
+                        $cantidadMaquinas = MaquinaPeer::doCount($criteria);
 			$cantidadHoras = $cantidadMaquinas * 24;
 
 			for($dia=1;$dia<$cant_dias;$dia++){
@@ -887,14 +897,16 @@ class reporte_graficomensualActions extends sfActions
 		try{
 			$cant_dias = $this->obtenerCantidadDiasMes($mes,$anio);
 
-			$maquina_codigo = $this->getRequestParameter('maquina_codigo');
-			$cantidadMaquinas = null;
-			if($maquina_codigo!='-1' && $maquina_codigo!='') {
-				$cantidadMaquinas = 1;
-			}
-			else {
-				$cantidadMaquinas = MaquinaPeer::doCount(new Criteria());
-			}
+			$criteria = new Criteria();
+                        //Codigos de los equipos seleccionados
+                        $temp = $this->getRequestParameter('cods_equipos');
+                        $cods_equipos = json_decode($temp);
+                        if($cods_equipos != ''){
+                            foreach ($cods_equipos as $cod_equipo) {
+                                $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                            }
+                        }
+                        $cantidadMaquinas = MaquinaPeer::doCount($criteria);
 
 			$cantidadDias = RegistroUsoMaquinaPeer::calcularNumeroDiasDelMes($mes, $anio);
 			$cantidadHoras = $cantidadDias * $cantidadMaquinas * 24;

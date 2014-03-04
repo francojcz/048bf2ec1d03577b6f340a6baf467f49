@@ -50,22 +50,57 @@ Ext.onReady(function(){
     reporgrafmens_maquina_codigo_datastore.load();
     
     
-    var reporgrafmens_maquina_codigo_combobox = new Ext.form.ComboBox({
-        xtype: 'combo',
-        store: reporgrafmens_maquina_codigo_datastore,
-        hiddenName: 'maquina_codigo',
-        name: 'reporgrafmens_maquina_codigo_combobox',
-        id: 'reporgrafmens_maquina_codigo_combobox',
-        mode: 'local',
-        valueField: 'maq_codigo',
-        forceSelection: true,
-        displayField: 'maq_nombre',
-        triggerAction: 'all',
-        emptyText: 'Seleccione un equipo ó máquina...',
-        selectOnFocus: true
-        //        fieldLabel: 'Equipo',
-    });
-    
+/**********************************************************************/
+//Cambios: 28 de febrero de 2014
+//Interfaz para seleccionar los equipos a filtrar en el reporte
+var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false
+});
+
+var maquina_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+            maquina_selmodel,
+            { header: "Id", width: 30, dataIndex: 'maq_codigo', hidden:true},
+            { header: "Nombre del Equipo", width: 430, dataIndex: 'maq_nombre'}
+        ]
+});
+
+var maquinas_gridpanel = new Ext.grid.GridPanel({
+        id: 'maquinas_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: reporgrafmens_maquina_codigo_datastore,
+        cm: maquina_colmodel,
+        sm: maquina_selmodel
+});
+
+var win = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 400,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Equipos',
+    items : maquinas_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win.hide();
+        }
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
+    }
+});
+/**********************************************************************/    
     
     var reporgrafmens_metodo_codigo_datastore = new Ext.data.JsonStore({
         id: 'reporgrafmens_metodo_codigo_datastore',
@@ -183,16 +218,20 @@ Ext.onReady(function(){
                 value: 'Analista'
             }, reporgrafmens_analista_codigo_combobox, {
                 xtype: 'displayfield',
-                value: 'Equipo'
-            }, reporgrafmens_maquina_codigo_combobox, {
-                xtype: 'displayfield',
                 value: 'M&eacute;todo'
             }, reporgrafmens_metodo_codigo_combobox, {
+                text: 'Seleccionar Equipos',
+                xtype: 'button',
+                iconCls: 'equipo',
+                handler: function(){
+                    Ext.getBody().mask();
+                    win.show();
+                }
+            }, {
                 text: 'Generar gr&aacute;ficos',
                 xtype: 'button',
                 iconCls: 'reload',
                 handler: function(){
-                    //recargar charts
                     reporgrafmens_cargardatosreportes();
                 }
             }]
@@ -271,11 +310,19 @@ Ext.onReady(function(){
         
         var mes = reporgrafmens_mes_combobox.getValue();
         var anio = reporgrafmens_anio.getValue();
-        var maquina_codigo = reporgrafmens_maquina_codigo_combobox.getValue();
+        
+        //Codigos de los equipos seleccionados
+        var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+        var equiposAFiltrar = [];
+        for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+                equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
+        }
+        var arrayEquipos = Ext.encode(equiposAFiltrar);
+        
         var metodo_codigo = reporgrafmens_metodo_codigo_combobox.getValue();
         var analista_codigo = reporgrafmens_analista_codigo_combobox.getValue();
         
-        var params = '?mes=' + mes + '&anio=' + anio + '&maquina_codigo=' + maquina_codigo + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
+        var params = '?mes=' + mes + '&anio=' + anio + '&cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         //tiempos
         var reporgrafmens_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
         reporgrafmens_tiempos_dispersion.addVariable("path", urlWeb + "flash/amline/");

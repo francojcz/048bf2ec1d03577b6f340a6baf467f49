@@ -27,7 +27,6 @@ class reporte_diarioActions extends sfActions
     {
         $conexion = new Criteria();
         $fecha_dia = $this -> getRequestParameter('fecha');
-        $maquina_codigo = $this -> getRequestParameter('codigo_maquina');
         $metodo_codigo = $this -> getRequestParameter('metodo_codigo');
         $analista_codigo = $this -> getRequestParameter('codigo_usu_operario');
 

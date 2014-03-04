@@ -34,8 +34,8 @@ class MaquinaPeer extends BaseMaquinaPeer {
 				$datos[$fila]['maq_nombre'] = $temporal->getMaqNombre();//.'-'.$temporal->getMaqCodigoInventario();
 				$fila++;
 			}
-			$datos[$fila]['maq_codigo']='';
-			$datos[$fila]['maq_nombre'] ='TODOS';
+//			$datos[$fila]['maq_codigo']='';
+//			$datos[$fila]['maq_nombre'] ='TODOS';
 			$fila++;
 			/*
 			 if($fila>0){
