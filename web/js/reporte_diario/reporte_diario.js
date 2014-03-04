@@ -139,18 +139,14 @@ maquinas_datastore.load();
 //Cambios: 28 de febrero de 2014
 //Interfaz para seleccionar los equipos a filtrar en el reporte
 var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
-        singleSelect:false,	
-        listeners: {
-                rowselect: function(sm, row, rec) {
-                }
-        }
+        singleSelect:false
 });
 
 var maquina_colmodel = new Ext.grid.ColumnModel({
         defaults:{sortable: true, locked: false, resizable: true},
         columns:[
             maquina_selmodel,
-            { header: "Id", width: 30, dataIndex: 'codigo',hidden:true},
+            { header: "Id", width: 30, dataIndex: 'codigo', hidden:true},
             { header: "Nombre del Equipo", width: 430, dataIndex: 'nombre'}
         ]
 });
