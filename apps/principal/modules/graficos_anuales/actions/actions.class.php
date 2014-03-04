@@ -141,68 +141,46 @@ class graficos_anualesActions extends sfActions
 		$reinyeccionesOctubre = 0;
 		$reinyeccionesNoviembre = 0;
 		$reinyeccionesDiciembre = 0;
+                
+                $conexion = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }
 
-		if($codigoMaquina=='-1') {
-			$maquinas = MaquinaPeer::doSelect(new Criteria());
+                $maquinas = MaquinaPeer::doSelect($conexion);
+                foreach($maquinas as $maquina) {
+                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
+                        $inyeccionesObligatoriasEnero += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasFebrero += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasMarzo += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasAbril += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasMayo += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasJunio += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasJulio += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasAgosto += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasSeptiembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasOctubre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasNoviembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $inyeccionesObligatoriasDiciembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
 
-			foreach($maquinas as $maquina) {
-				//                    $maquina = new Maquina();
-				$codigoTemporalMaquina = $maquina->getMaqCodigo();
-
-				$inyeccionesObligatoriasEnero += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasFebrero += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasMarzo += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasAbril += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasMayo += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasJunio += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasJulio += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasAgosto += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasSeptiembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasOctubre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasNoviembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$inyeccionesObligatoriasDiciembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-				$reinyeccionesEnero += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesFebrero += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesMarzo += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesAbril += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesMayo += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesJunio += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesJulio += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesAgosto += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesSeptiembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesOctubre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesNoviembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$reinyeccionesDiciembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-			}
-		}
-		else {
-			$inyeccionesObligatoriasEnero = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasFebrero = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasMarzo = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasAbril = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasMayo = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasJunio = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasJulio = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasAgosto = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasSeptiembre = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasOctubre = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasNoviembre = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$inyeccionesObligatoriasDiciembre = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-			$reinyeccionesEnero = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesFebrero = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesMarzo = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesAbril = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesMayo = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesJunio = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesJulio = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesAgosto = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesSeptiembre = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesOctubre = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesNoviembre = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$reinyeccionesDiciembre = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-		}
+                        $reinyeccionesEnero += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesFebrero += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesMarzo += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesAbril += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesMayo += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesJunio += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesJulio += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesAgosto += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesSeptiembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesOctubre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesNoviembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $reinyeccionesDiciembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
+                }
 		$this->renderText('<graph color="#ffdc44" title="Inyecciones" bullet="round">
           <value xid="0">'.$inyeccionesObligatoriasEnero.'</value>
           <value xid="1">'.$inyeccionesObligatoriasFebrero.'</value>
@@ -375,8 +353,7 @@ class graficos_anualesActions extends sfActions
 		if($request->getParameter('codigo_metodo')!='-1') {
 			$params['codigo_metodo'] = $request->getParameter('codigo_metodo');
 		}
-
-		$codigoMaquina = $request->getParameter('codigo_maquina');
+                
 		$this->renderText('<?xml version="1.0" encoding="UTF-8"?>
     <chart>
       <series>
@@ -419,68 +396,48 @@ class graficos_anualesActions extends sfActions
 		$muestrasReanalizadasOctubre = 0;
 		$muestrasReanalizadasNoviembre = 0;
 		$muestrasReanalizadasDiciembre = 0;
+                
+                $conexion = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }
+                
+                $maquinas = MaquinaPeer::doSelect($conexion);
 
-		if($codigoMaquina=='-1') {
-			$maquinas = MaquinaPeer::doSelect(new Criteria());
+                foreach($maquinas as $maquina) {                    
+                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-			foreach($maquinas as $maquina) {
-				//                    $maquina = new Maquina();
-				$codigoTemporalMaquina = $maquina->getMaqCodigo();
+                        $muestrasAnalizadasEnero += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 1, $anho, $params);
+                        $muestrasAnalizadasFebrero += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 2, $anho, $params);
+                        $muestrasAnalizadasMarzo += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 3, $anho, $params);
+                        $muestrasAnalizadasAbril += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 4, $anho, $params);
+                        $muestrasAnalizadasMayo += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 5, $anho, $params);
+                        $muestrasAnalizadasJunio += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 6, $anho, $params);
+                        $muestrasAnalizadasJulio += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 7, $anho, $params);
+                        $muestrasAnalizadasAgosto += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 8, $anho, $params);
+                        $muestrasAnalizadasSeptiembre += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 9, $anho, $params);
+                        $muestrasAnalizadasOctubre += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 10, $anho, $params);
+                        $muestrasAnalizadasNoviembre += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 11, $anho, $params);
+                        $muestrasAnalizadasDiciembre += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 12, $anho, $params);
 
-				$muestrasAnalizadasEnero += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 1, $anho, $params);
-				$muestrasAnalizadasFebrero += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 2, $anho, $params);
-				$muestrasAnalizadasMarzo += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 3, $anho, $params);
-				$muestrasAnalizadasAbril += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 4, $anho, $params);
-				$muestrasAnalizadasMayo += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 5, $anho, $params);
-				$muestrasAnalizadasJunio += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 6, $anho, $params);
-				$muestrasAnalizadasJulio += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 7, $anho, $params);
-				$muestrasAnalizadasAgosto += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 8, $anho, $params);
-				$muestrasAnalizadasSeptiembre += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 9, $anho, $params);
-				$muestrasAnalizadasOctubre += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 10, $anho, $params);
-				$muestrasAnalizadasNoviembre += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 11, $anho, $params);
-				$muestrasAnalizadasDiciembre += RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoTemporalMaquina, 12, $anho, $params);
-
-				$muestrasReanalizadasEnero += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 1, $anho, $params);
-				$muestrasReanalizadasFebrero += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 2, $anho, $params);
-				$muestrasReanalizadasMarzo += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 3, $anho, $params);
-				$muestrasReanalizadasAbril += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 4, $anho, $params);
-				$muestrasReanalizadasMayo += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 5, $anho, $params);
-				$muestrasReanalizadasJunio += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 6, $anho, $params);
-				$muestrasReanalizadasJulio += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 7, $anho, $params);
-				$muestrasReanalizadasAgosto += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 8, $anho, $params);
-				$muestrasReanalizadasSeptiembre += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 9, $anho, $params);
-				$muestrasReanalizadasOctubre += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 10, $anho, $params);
-				$muestrasReanalizadasNoviembre += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 11, $anho, $params);
-				$muestrasReanalizadasDiciembre += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 12, $anho, $params);
-			}
-		}
-		else {
-			$muestrasAnalizadasEnero = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 1, $anho, $params);
-			$muestrasAnalizadasFebrero = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 2, $anho, $params);
-			$muestrasAnalizadasMarzo = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 3, $anho, $params);
-			$muestrasAnalizadasAbril = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 4, $anho, $params);
-			$muestrasAnalizadasMayo = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 5, $anho, $params);
-			$muestrasAnalizadasJunio = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 6, $anho, $params);
-			$muestrasAnalizadasJulio = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 7, $anho, $params);
-			$muestrasAnalizadasAgosto = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 8, $anho, $params);
-			$muestrasAnalizadasSeptiembre = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 9, $anho, $params);
-			$muestrasAnalizadasOctubre = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 10, $anho, $params);
-			$muestrasAnalizadasNoviembre = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 11, $anho, $params);
-			$muestrasAnalizadasDiciembre = RegistroUsoMaquinaPeer::contarMuestrasAnalizadasMes($codigoMaquina, 12, $anho, $params);
-
-			$muestrasReanalizadasEnero = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 1, $anho, $params);
-			$muestrasReanalizadasFebrero = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 2, $anho, $params);
-			$muestrasReanalizadasMarzo = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 3, $anho, $params);
-			$muestrasReanalizadasAbril = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 4, $anho, $params);
-			$muestrasReanalizadasMayo = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 5, $anho, $params);
-			$muestrasReanalizadasJunio = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 6, $anho, $params);
-			$muestrasReanalizadasJulio = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 7, $anho, $params);
-			$muestrasReanalizadasAgosto = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 8, $anho, $params);
-			$muestrasReanalizadasSeptiembre = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 9, $anho, $params);
-			$muestrasReanalizadasOctubre = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 10, $anho, $params);
-			$muestrasReanalizadasNoviembre = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 11, $anho, $params);
-			$muestrasReanalizadasDiciembre = RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoMaquina, 12, $anho, $params);
-		}
+                        $muestrasReanalizadasEnero += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 1, $anho, $params);
+                        $muestrasReanalizadasFebrero += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 2, $anho, $params);
+                        $muestrasReanalizadasMarzo += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 3, $anho, $params);
+                        $muestrasReanalizadasAbril += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 4, $anho, $params);
+                        $muestrasReanalizadasMayo += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 5, $anho, $params);
+                        $muestrasReanalizadasJunio += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 6, $anho, $params);
+                        $muestrasReanalizadasJulio += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 7, $anho, $params);
+                        $muestrasReanalizadasAgosto += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 8, $anho, $params);
+                        $muestrasReanalizadasSeptiembre += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 9, $anho, $params);
+                        $muestrasReanalizadasOctubre += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 10, $anho, $params);
+                        $muestrasReanalizadasNoviembre += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 11, $anho, $params);
+                        $muestrasReanalizadasDiciembre += RegistroUsoMaquinaPeer::contarMuestrasReanalizadasMes($codigoTemporalMaquina, 12, $anho, $params);
+                }
 		$this->renderText('<graph color="#ffdc44" title="Lotes analizados" bullet="round">
           <value xid="0">'.$muestrasAnalizadasEnero.'</value>
           <value xid="1">'.$muestrasAnalizadasFebrero.'</value>
@@ -650,8 +607,6 @@ class graficos_anualesActions extends sfActions
 	}
 	public function executeGenerarDatosTortaPerdidas(sfWebRequest $request) {
 		$anho = $request->getParameter('anho');
-		$codigoMaquina = $request->getParameter('codigo_maquina');
-
 		$params = array();
 		if($request->getParameter('codigo_operario')!='-1') {
 			$params['codigo_operario'] = $request->getParameter('codigo_operario');
@@ -675,26 +630,26 @@ class graficos_anualesActions extends sfActions
 		$parosMenoresAnual = 0;
 		$retrabajosAnual = 0;
 		$perdidasVelocidadAnual = 0;
+                
+                $conexion = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }                
+                $maquinas = MaquinaPeer::doSelect($conexion);
 
-		if($codigoMaquina=='-1') {
-			$maquinas = MaquinaPeer::doSelect(new Criteria());
+                foreach($maquinas as $maquina) {
+                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-			foreach($maquinas as $maquina) {
-				//                    $maquina = new Maquina();
-				$codigoTemporalMaquina = $maquina->getMaqCodigo();
-
-				$fallasAnual += RegistroUsoMaquinaPeer::contarFallasAñoEnDias($codigoTemporalMaquina, $anho, $params);
-				$parosMenoresAnual += RegistroUsoMaquinaPeer::contarParosMenoresIncluyendoCambioMetodoAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-				$retrabajosAnual += RegistroUsoMaquinaPeer::contarRetrabajosAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-				$perdidasVelocidadAnual += RegistroUsoMaquinaPeer::contarPerdidasVelocidadAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-			}
-		}
-		else {
-			$fallasAnual = RegistroUsoMaquinaPeer::contarFallasAñoEnDias($codigoMaquina, $anho, $params);
-			$parosMenoresAnual = RegistroUsoMaquinaPeer::contarParosMenoresIncluyendoCambioMetodoAñoEnDias($codigoMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-			$retrabajosAnual = RegistroUsoMaquinaPeer::contarRetrabajosAñoEnDias($codigoMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-			$perdidasVelocidadAnual = RegistroUsoMaquinaPeer::contarPerdidasVelocidadAñoEnDias($codigoMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-		}
+                        $fallasAnual += RegistroUsoMaquinaPeer::contarFallasAñoEnDias($codigoTemporalMaquina, $anho, $params);
+                        $parosMenoresAnual += RegistroUsoMaquinaPeer::contarParosMenoresIncluyendoCambioMetodoAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                        $retrabajosAnual += RegistroUsoMaquinaPeer::contarRetrabajosAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                        $perdidasVelocidadAnual += RegistroUsoMaquinaPeer::contarPerdidasVelocidadAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                }
 
 		echo "Fallas;".round($fallasAnual,2)."\n";
 		echo "Paros menores y reajustes;".round($parosMenoresAnual,2)."\n";
@@ -789,7 +744,6 @@ class graficos_anualesActions extends sfActions
 
 		$inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
 
-		$codigoMaquina = $request->getParameter('codigo_maquina');
 		$this->renderText('<?xml version="1.0" encoding="UTF-8"?>
     <chart>
       <series>
@@ -860,119 +814,72 @@ class graficos_anualesActions extends sfActions
 		$perdidasVelocidadNoviembre = 0;
 		$perdidasVelocidadDiciembre = 0;
 
-		if($codigoMaquina=='-1') {
-			$maquinas = MaquinaPeer::doSelect(new Criteria());
+                $conexion = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }                
+                $maquinas = MaquinaPeer::doSelect($conexion);
 
-			foreach($maquinas as $maquina) {
-				//                    $maquina = new Maquina();
-				$codigoTemporalMaquina = $maquina->getMaqCodigo();
+                foreach($maquinas as $maquina) {
+                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-				$fallasEnero += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 1, $anho, $params);
-				$fallasFebrero += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 2, $anho, $params);
-				$fallasMarzo += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 3, $anho, $params);
-				$fallasAbril += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 4, $anho, $params);
-				$fallasMayo += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 5, $anho, $params);
-				$fallasJunio += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 6, $anho, $params);
-				$fallasJulio += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 7, $anho, $params);
-				$fallasAgosto += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 8, $anho, $params);
-				$fallasSeptiembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 9, $anho, $params);
-				$fallasOctubre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 10, $anho, $params);
-				$fallasNoviembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 11, $anho, $params);
-				$fallasDiciembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 12, $anho, $params);
+                        $fallasEnero += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 1, $anho, $params);
+                        $fallasFebrero += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 2, $anho, $params);
+                        $fallasMarzo += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 3, $anho, $params);
+                        $fallasAbril += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 4, $anho, $params);
+                        $fallasMayo += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 5, $anho, $params);
+                        $fallasJunio += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 6, $anho, $params);
+                        $fallasJulio += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 7, $anho, $params);
+                        $fallasAgosto += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 8, $anho, $params);
+                        $fallasSeptiembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 9, $anho, $params);
+                        $fallasOctubre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 10, $anho, $params);
+                        $fallasNoviembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 11, $anho, $params);
+                        $fallasDiciembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 12, $anho, $params);
 
-				$parosMenoresEnero += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresFebrero += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresMarzo += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresAbril += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresMayo += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresJunio += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresJulio += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresAgosto += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresSeptiembre += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresOctubre += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresNoviembre += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$parosMenoresDiciembre += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresEnero += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresFebrero += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresMarzo += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresAbril += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresMayo += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresJunio += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresJulio += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresAgosto += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresSeptiembre += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresOctubre += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresNoviembre += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $parosMenoresDiciembre += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
 
-				$retrabajosEnero += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosFebrero += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosMarzo += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosAbril += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosMayo += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosJunio += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosJulio += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosAgosto += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosSeptiembre += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosOctubre += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosNoviembre += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$retrabajosDiciembre += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosEnero += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosFebrero += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosMarzo += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosAbril += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosMayo += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosJunio += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosJulio += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosAgosto += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosSeptiembre += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosOctubre += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosNoviembre += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $retrabajosDiciembre += RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
 
-				$perdidasVelocidadEnero += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadFebrero += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadMarzo += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadAbril += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadMayo += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadJunio += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadJulio += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadAgosto += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadSeptiembre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadOctubre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadNoviembre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$perdidasVelocidadDiciembre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-			}
-		}
-		else {
-			$fallasEnero = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 1, $anho, $params);
-			$fallasFebrero = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 2, $anho, $params);
-			$fallasMarzo = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 3, $anho, $params);
-			$fallasAbril = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 4, $anho, $params);
-			$fallasMayo = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 5, $anho, $params);
-			$fallasJunio = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 6, $anho, $params);
-			$fallasJulio = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 7, $anho, $params);
-			$fallasAgosto = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 8, $anho, $params);
-			$fallasSeptiembre = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 9, $anho, $params);
-			$fallasOctubre = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 10, $anho, $params);
-			$fallasNoviembre = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 11, $anho, $params);
-			$fallasDiciembre = RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 12, $anho, $params);
-
-			$parosMenoresEnero = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresFebrero = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresMarzo = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresAbril = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresMayo = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresJunio = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresJulio = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresAgosto = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresSeptiembre = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresOctubre = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresNoviembre = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$parosMenoresDiciembre = RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-			$retrabajosEnero = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosFebrero = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosMarzo = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosAbril = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosMayo = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosJunio = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosJulio = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosAgosto = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosSeptiembre = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosOctubre = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosNoviembre = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$retrabajosDiciembre = RegistroUsoMaquinaPeer::contarRetrabajosMesEnDias($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-			$perdidasVelocidadEnero = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadFebrero = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadMarzo = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadAbril = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadMayo = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadJunio = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadJulio = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadAgosto = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadSeptiembre = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadOctubre = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadNoviembre = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$perdidasVelocidadDiciembre = RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-		}
+                        $perdidasVelocidadEnero += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadFebrero += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadMarzo += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadAbril += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadMayo += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadJunio += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadJulio += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadAgosto += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadSeptiembre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadOctubre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadNoviembre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $perdidasVelocidadDiciembre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
+                }
 		$this->renderText('<graph color="#72a8cd" title="Fallas" bullet="round">
           <value xid="0">'.round($fallasEnero, 2).'</value>
           <value xid="1">'.round($fallasFebrero, 2).'</value>
@@ -1151,7 +1058,6 @@ class graficos_anualesActions extends sfActions
 	}
 	public function executeGenerarDatosGraficoIndicadoresColumnas(sfWebRequest $request) {
 		$anho = $request->getParameter('anho');
-		$codigoMaquina = $request->getParameter('codigo_maquina');
 
 		$params = array();
 		if($request->getParameter('codigo_operario')!='-1') {
@@ -1178,41 +1084,34 @@ class graficos_anualesActions extends sfActions
 		$TFAnual = 0;
 		$TOAnual = 0;
 		$TPAnual = 0;
-
-		//		$cantidadHoras = RegistroUsoMaquinaPeer::calcularNumeroDiasDelAño($anho) * 24;
-
+                
 		$tiempoCalendario = 0;
 
 		$numeroInyecciones = 0;
 		$numeroReinyecciones = 0;
 
-		if($codigoMaquina=='-1') {
-			$maquinas = MaquinaPeer::doSelect(new Criteria());
+                $conexion = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }                
+                $maquinas = MaquinaPeer::doSelect($conexion);
 
-			foreach($maquinas as $maquina) {
-				//				                    $maquina = new Maquina();
-				$codigoTemporalMaquina = $maquina->getMaqCodigo();
+                foreach($maquinas as $maquina) {
+                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-				$TNPAnual += RegistroUsoMaquinaPeer::calcularTNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params);
-				$TPPAnual += RegistroUsoMaquinaPeer::calcularTPPAnhoEnHoras($codigoTemporalMaquina, $anho, $params);
-				$TPNPAnual += RegistroUsoMaquinaPeer::calcularTPNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-				$tiempoCalendario += $maquina->calcularNumeroHorasActivasDelAño($anho);
-				$TPAnual += RegistroUsoMaquinaPeer::calcularTPAnhoEnHoras($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-				$numeroInyecciones += RegistroUsoMaquinaPeer::contarNumeroInyeccionesObligatoriasAño($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-				$numeroReinyecciones += RegistroUsoMaquinaPeer::contarNumeroReinyeccionesAño($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-			}
-		}
-		else {
-			$maquina = MaquinaPeer::retrieveByPK($codigoMaquina);
-				
-			$TNPAnual = RegistroUsoMaquinaPeer::calcularTNPAnhoEnHoras($codigoMaquina, $anho, $params);
-			$TPPAnual = RegistroUsoMaquinaPeer::calcularTPPAnhoEnHoras($codigoMaquina, $anho, $params);
-			$TPNPAnual = RegistroUsoMaquinaPeer::calcularTPNPAnhoEnHoras($codigoMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-			$tiempoCalendario = $maquina->calcularNumeroHorasActivasDelAño($anho);
-			$TPAnual = RegistroUsoMaquinaPeer::calcularTPAnhoEnHoras($codigoMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-			$numeroInyecciones = RegistroUsoMaquinaPeer::contarNumeroInyeccionesObligatoriasAño($codigoMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-			$numeroReinyecciones = RegistroUsoMaquinaPeer::contarNumeroReinyeccionesAño($codigoMaquina, $anho, $params, $inyeccionesEstandarPromedio);
-		}
+                        $TNPAnual += RegistroUsoMaquinaPeer::calcularTNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params);
+                        $TPPAnual += RegistroUsoMaquinaPeer::calcularTPPAnhoEnHoras($codigoTemporalMaquina, $anho, $params);
+                        $TPNPAnual += RegistroUsoMaquinaPeer::calcularTPNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                        $tiempoCalendario += $maquina->calcularNumeroHorasActivasDelAño($anho);
+                        $TPAnual += RegistroUsoMaquinaPeer::calcularTPAnhoEnHoras($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                        $numeroInyecciones += RegistroUsoMaquinaPeer::contarNumeroInyeccionesObligatoriasAño($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                        $numeroReinyecciones += RegistroUsoMaquinaPeer::contarNumeroReinyeccionesAño($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                }
 		$TFAnual = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $TPPAnual, $TNPAnual);
 		$TOAnual = RegistroUsoMaquinaPeer::calcularTODiaMesAño($TFAnual, $TPNPAnual);
 
@@ -1355,7 +1254,6 @@ class graficos_anualesActions extends sfActions
 	}
 	public function executeGenerarDatosGraficoIndicadoresLineas(sfWebRequest $request) {
 		$anho = $request->getParameter('anho');
-		$codigoMaquina = $request->getParameter('codigo_maquina');
 
 		$user = $this->getUser();
 		$codigo_usuario = $user->getAttribute('usu_codigo');
@@ -1522,200 +1420,114 @@ class graficos_anualesActions extends sfActions
 		$numeroReinyeccionesOctubre = 0;
 		$numeroReinyeccionesNoviembre = 0;
 		$numeroReinyeccionesDiciembre = 0;
+                
+                $conexion = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }                
+                $maquinas = MaquinaPeer::doSelect($conexion);
 
-		if($codigoMaquina=='-1') {
-			$maquinas = MaquinaPeer::doSelect(new Criteria());
+                foreach($maquinas as $maquina) {
+                        //                    $maquina = new Maquina();
+                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-			foreach($maquinas as $maquina) {
-				//                    $maquina = new Maquina();
-				$codigoTemporalMaquina = $maquina->getMaqCodigo();
+                        $TNPEnero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);
+                        $TNPFebrero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params);
+                        $TNPMarzo += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params);
+                        $TNPAbril += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params);
+                        $TNPMayo += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params);
+                        $TNPJunio += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params);
+                        $TNPJulio += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params);
+                        $TNPAgosto += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params);
+                        $TNPSeptiembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params);
+                        $TNPOctubre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params);
+                        $TNPNoviembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params);
+                        $TNPDiciembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params);
 
-				$TNPEnero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);
-				$TNPFebrero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params);
-				$TNPMarzo += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params);
-				$TNPAbril += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params);
-				$TNPMayo += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params);
-				$TNPJunio += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params);
-				$TNPJulio += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params);
-				$TNPAgosto += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params);
-				$TNPSeptiembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params);
-				$TNPOctubre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params);
-				$TNPNoviembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params);
-				$TNPDiciembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params);
+                        $TPPEnero += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);
+                        $TPPFebrero += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params);
+                        $TPPMarzo += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params);
+                        $TPPAbril += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params);
+                        $TPPMayo += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params);
+                        $TPPJunio += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params);
+                        $TPPJulio += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params);
+                        $TPPAgosto += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params);
+                        $TPPSeptiembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params);
+                        $TPPOctubre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params);
+                        $TPPNoviembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params);
+                        $TPPDiciembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params);
 
-				$TPPEnero += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);
-				$TPPFebrero += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params);
-				$TPPMarzo += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params);
-				$TPPAbril += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params);
-				$TPPMayo += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params);
-				$TPPJunio += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params);
-				$TPPJulio += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params);
-				$TPPAgosto += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params);
-				$TPPSeptiembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params);
-				$TPPOctubre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params);
-				$TPPNoviembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params);
-				$TPPDiciembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params);
+                        $TPNPEnero += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPFebrero += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPMarzo += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPAbril += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPMayo += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPJunio += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPJulio += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPAgosto += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPSeptiembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPOctubre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPNoviembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPDiciembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
 
-				$TPNPEnero += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPFebrero += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPMarzo += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPAbril += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPMayo += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPJunio += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPJulio += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPAgosto += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPSeptiembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPOctubre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPNoviembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPDiciembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPEnero += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPFebrero += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPMarzo += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPAbril += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPMayo += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPJunio += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPJulio += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPAgosto += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPSeptiembre += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPOctubre += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNoviembre += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPDiciembre += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
 
-				$TPEnero += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPFebrero += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPMarzo += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPAbril += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPMayo += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPJunio += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPJulio += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPAgosto += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPSeptiembre += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPOctubre += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNoviembre += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPDiciembre += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesEnero += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesFebrero += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesMarzo += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesAbril += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesMayo += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesJunio += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesJulio += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesAgosto += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesSeptiembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesOctubre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesNoviembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroInyeccionesDiciembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
 
-				$numeroInyeccionesEnero += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesFebrero += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesMarzo += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesAbril += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesMayo += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesJunio += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesJulio += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesAgosto += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesSeptiembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesOctubre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesNoviembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroInyeccionesDiciembre += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesEnero += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesFebrero += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesMarzo += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesAbril += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesMayo += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesJunio += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesJulio += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesAgosto += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesSeptiembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesOctubre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesNoviembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $numeroReinyeccionesDiciembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
 
-				$numeroReinyeccionesEnero += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesFebrero += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesMarzo += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesAbril += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesMayo += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesJunio += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesJulio += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesAgosto += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesSeptiembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesOctubre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesNoviembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$numeroReinyeccionesDiciembre += RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-				$tiempoCalendarioEnero += $maquina->calcularNumeroHorasActivasDelMes(1, $anho);
-				$tiempoCalendarioFebrero += $maquina->calcularNumeroHorasActivasDelMes(2, $anho);
-				$tiempoCalendarioMarzo += $maquina->calcularNumeroHorasActivasDelMes(3, $anho);
-				$tiempoCalendarioAbril += $maquina->calcularNumeroHorasActivasDelMes(4, $anho);
-				$tiempoCalendarioMayo += $maquina->calcularNumeroHorasActivasDelMes(5, $anho);
-				$tiempoCalendarioJunio += $maquina->calcularNumeroHorasActivasDelMes(6, $anho);
-				$tiempoCalendarioJulio += $maquina->calcularNumeroHorasActivasDelMes(7, $anho);
-				$tiempoCalendarioAgosto += $maquina->calcularNumeroHorasActivasDelMes(8, $anho);
-				$tiempoCalendarioSeptiembre += $maquina->calcularNumeroHorasActivasDelMes(9, $anho);
-				$tiempoCalendarioOctubre += $maquina->calcularNumeroHorasActivasDelMes(10, $anho);
-				$tiempoCalendarioNoviembre += $maquina->calcularNumeroHorasActivasDelMes(11, $anho);
-				$tiempoCalendarioDiciembre += $maquina->calcularNumeroHorasActivasDelMes(12, $anho);
-			}
-		}
-		else {
-			$maquina = MaquinaPeer::retrieveByPK($codigoMaquina);
-
-			$TNPEnero = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 1, $anho, $params);
-			$TNPFebrero = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 2, $anho, $params);
-			$TNPMarzo = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 3, $anho, $params);
-			$TNPAbril = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 4, $anho, $params);
-			$TNPMayo = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 5, $anho, $params);
-			$TNPJunio = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 6, $anho, $params);
-			$TNPJulio = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 7, $anho, $params);
-			$TNPAgosto = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 8, $anho, $params);
-			$TNPSeptiembre = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 9, $anho, $params);
-			$TNPOctubre = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 10, $anho, $params);
-			$TNPNoviembre = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 11, $anho, $params);
-			$TNPDiciembre = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 12, $anho, $params);
-
-			$TPPEnero = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 1, $anho, $params);
-			$TPPFebrero = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 2, $anho, $params);
-			$TPPMarzo = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 3, $anho, $params);
-			$TPPAbril = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 4, $anho, $params);
-			$TPPMayo = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 5, $anho, $params);
-			$TPPJunio = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 6, $anho, $params);
-			$TPPJulio = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 7, $anho, $params);
-			$TPPAgosto = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 8, $anho, $params);
-			$TPPSeptiembre = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 9, $anho, $params);
-			$TPPOctubre = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 10, $anho, $params);
-			$TPPNoviembre = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 11, $anho, $params);
-			$TPPDiciembre = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 12, $anho, $params);
-
-			$TPNPEnero = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPFebrero = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPMarzo = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPAbril = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPMayo = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPJunio = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPJulio = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPAgosto = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPSeptiembre = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPOctubre = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPNoviembre = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPDiciembre = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-			$TPEnero = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPFebrero = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPMarzo = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPAbril = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPMayo = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPJunio = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPJulio = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPAgosto = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPSeptiembre = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPOctubre = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNoviembre = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPDiciembre = RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-			$numeroInyeccionesEnero = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesFebrero = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesMarzo = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesAbril = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesMayo = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesJunio = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesJulio = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesAgosto = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesSeptiembre = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesOctubre = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesNoviembre = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroInyeccionesDiciembre = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasMes($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-			$numeroReinyeccionesEnero = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesFebrero = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesMarzo = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesAbril = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesMayo = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesJunio = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesJulio = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesAgosto = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesSeptiembre = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesOctubre = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesNoviembre = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$numeroReinyeccionesDiciembre = RegistroUsoMaquinaPeer::contarReinyeccionesMes($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-			$tiempoCalendarioEnero = $maquina->calcularNumeroHorasActivasDelMes(1, $anho);
-			$tiempoCalendarioFebrero = $maquina->calcularNumeroHorasActivasDelMes(2, $anho);
-			$tiempoCalendarioMarzo = $maquina->calcularNumeroHorasActivasDelMes(3, $anho);
-			$tiempoCalendarioAbril = $maquina->calcularNumeroHorasActivasDelMes(4, $anho);
-			$tiempoCalendarioMayo = $maquina->calcularNumeroHorasActivasDelMes(5, $anho);
-			$tiempoCalendarioJunio = $maquina->calcularNumeroHorasActivasDelMes(6, $anho);
-			$tiempoCalendarioJulio = $maquina->calcularNumeroHorasActivasDelMes(7, $anho);
-			$tiempoCalendarioAgosto = $maquina->calcularNumeroHorasActivasDelMes(8, $anho);
-			$tiempoCalendarioSeptiembre = $maquina->calcularNumeroHorasActivasDelMes(9, $anho);
-			$tiempoCalendarioOctubre = $maquina->calcularNumeroHorasActivasDelMes(10, $anho);
-			$tiempoCalendarioNoviembre = $maquina->calcularNumeroHorasActivasDelMes(11, $anho);
-			$tiempoCalendarioDiciembre = $maquina->calcularNumeroHorasActivasDelMes(12, $anho);
-		}
+                        $tiempoCalendarioEnero += $maquina->calcularNumeroHorasActivasDelMes(1, $anho);
+                        $tiempoCalendarioFebrero += $maquina->calcularNumeroHorasActivasDelMes(2, $anho);
+                        $tiempoCalendarioMarzo += $maquina->calcularNumeroHorasActivasDelMes(3, $anho);
+                        $tiempoCalendarioAbril += $maquina->calcularNumeroHorasActivasDelMes(4, $anho);
+                        $tiempoCalendarioMayo += $maquina->calcularNumeroHorasActivasDelMes(5, $anho);
+                        $tiempoCalendarioJunio += $maquina->calcularNumeroHorasActivasDelMes(6, $anho);
+                        $tiempoCalendarioJulio += $maquina->calcularNumeroHorasActivasDelMes(7, $anho);
+                        $tiempoCalendarioAgosto += $maquina->calcularNumeroHorasActivasDelMes(8, $anho);
+                        $tiempoCalendarioSeptiembre += $maquina->calcularNumeroHorasActivasDelMes(9, $anho);
+                        $tiempoCalendarioOctubre += $maquina->calcularNumeroHorasActivasDelMes(10, $anho);
+                        $tiempoCalendarioNoviembre += $maquina->calcularNumeroHorasActivasDelMes(11, $anho);
+                        $tiempoCalendarioDiciembre += $maquina->calcularNumeroHorasActivasDelMes(12, $anho);
+                }
+                        
 		$TFEnero = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendarioEnero, $TPPEnero, $TNPEnero);
 		$TFFebrero = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendarioFebrero, $TPPFebrero, $TNPFebrero);
 		$TFMarzo = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendarioMarzo, $TPPMarzo, $TNPMarzo);
@@ -2081,7 +1893,6 @@ class graficos_anualesActions extends sfActions
 
 		$inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
 
-		$codigoMaquina = $request->getParameter('codigo_maquina');
 		$this->renderText('<?xml version="1.0" encoding="UTF-8"?>
     <chart>
       <series>
@@ -2190,121 +2001,74 @@ class graficos_anualesActions extends sfActions
 		$tiempoCalendarioNoviembre = 0;
 		$tiempoCalendarioDiciembre = 0;
 
-		if($codigoMaquina=='-1') {
-			$maquinas = MaquinaPeer::doSelect(new Criteria());
+                $conexion = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }                
+                $maquinas = MaquinaPeer::doSelect($conexion);
 
-			foreach($maquinas as $maquina) {
-				//				                    $maquina = new Maquina();
-				$codigoTemporalMaquina = $maquina->getMaqCodigo();
+                foreach($maquinas as $maquina) {
+                        //				                    $maquina = new Maquina();
+                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-				$TNPEnero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);
-				$TNPFebrero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params);
-				$TNPMarzo += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params);
-				$TNPAbril += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params);
-				$TNPMayo += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params);
-				$TNPJunio += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params);
-				$TNPJulio += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params);
-				$TNPAgosto += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params);
-				$TNPSeptiembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params);
-				$TNPOctubre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params);
-				$TNPNoviembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params);
-				$TNPDiciembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params);
+                        $TNPEnero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);
+                        $TNPFebrero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params);
+                        $TNPMarzo += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params);
+                        $TNPAbril += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params);
+                        $TNPMayo += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params);
+                        $TNPJunio += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params);
+                        $TNPJulio += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params);
+                        $TNPAgosto += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params);
+                        $TNPSeptiembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params);
+                        $TNPOctubre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params);
+                        $TNPNoviembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params);
+                        $TNPDiciembre += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params);
 
-				$TPPEnero += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);
-				$TPPFebrero += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params);
-				$TPPMarzo += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params);
-				$TPPAbril += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params);
-				$TPPMayo += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params);
-				$TPPJunio += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params);
-				$TPPJulio += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params);
-				$TPPAgosto += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params);
-				$TPPSeptiembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params);
-				$TPPOctubre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params);
-				$TPPNoviembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params);
-				$TPPDiciembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params);
+                        $TPPEnero += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);
+                        $TPPFebrero += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params);
+                        $TPPMarzo += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params);
+                        $TPPAbril += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params);
+                        $TPPMayo += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params);
+                        $TPPJunio += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params);
+                        $TPPJulio += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params);
+                        $TPPAgosto += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params);
+                        $TPPSeptiembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params);
+                        $TPPOctubre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params);
+                        $TPPNoviembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params);
+                        $TPPDiciembre += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params);
 
-				$TPNPEnero += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPFebrero += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPMarzo += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPAbril += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPMayo += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPJunio += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPJulio += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPAgosto += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPSeptiembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPOctubre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPNoviembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-				$TPNPDiciembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPEnero += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPFebrero += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPMarzo += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPAbril += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPMayo += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPJunio += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPJulio += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPAgosto += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPSeptiembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPOctubre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPNoviembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
+                        $TPNPDiciembre += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
 
-				$tiempoCalendarioEnero += $maquina->calcularNumeroHorasActivasDelMes(1, $anho);
-				$tiempoCalendarioFebrero += $maquina->calcularNumeroHorasActivasDelMes(2, $anho);
-				$tiempoCalendarioMarzo += $maquina->calcularNumeroHorasActivasDelMes(3, $anho);
-				$tiempoCalendarioAbril += $maquina->calcularNumeroHorasActivasDelMes(4, $anho);
-				$tiempoCalendarioMayo += $maquina->calcularNumeroHorasActivasDelMes(5, $anho);
-				$tiempoCalendarioJunio += $maquina->calcularNumeroHorasActivasDelMes(6, $anho);
-				$tiempoCalendarioJulio += $maquina->calcularNumeroHorasActivasDelMes(7, $anho);
-				$tiempoCalendarioAgosto += $maquina->calcularNumeroHorasActivasDelMes(8, $anho);
-				$tiempoCalendarioSeptiembre += $maquina->calcularNumeroHorasActivasDelMes(9, $anho);
-				$tiempoCalendarioOctubre += $maquina->calcularNumeroHorasActivasDelMes(10, $anho);
-				$tiempoCalendarioNoviembre += $maquina->calcularNumeroHorasActivasDelMes(11, $anho);
-				$tiempoCalendarioDiciembre += $maquina->calcularNumeroHorasActivasDelMes(12, $anho);
-			}
-		}
-		else {
-			$maquina = MaquinaPeer::retrieveByPK($codigoMaquina);
-
-			$TNPEnero = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 1, $anho, $params);
-			$TNPFebrero = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 2, $anho, $params);
-			$TNPMarzo = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 3, $anho, $params);
-			$TNPAbril = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 4, $anho, $params);
-			$TNPMayo = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 5, $anho, $params);
-			$TNPJunio = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 6, $anho, $params);
-			$TNPJulio = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 7, $anho, $params);
-			$TNPAgosto = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 8, $anho, $params);
-			$TNPSeptiembre = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 9, $anho, $params);
-			$TNPOctubre = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 10, $anho, $params);
-			$TNPNoviembre = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 11, $anho, $params);
-			$TNPDiciembre = RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoMaquina, 12, $anho, $params);
-
-			$TPPEnero = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 1, $anho, $params);
-			$TPPFebrero = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 2, $anho, $params);
-			$TPPMarzo = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 3, $anho, $params);
-			$TPPAbril = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 4, $anho, $params);
-			$TPPMayo = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 5, $anho, $params);
-			$TPPJunio = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 6, $anho, $params);
-			$TPPJulio = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 7, $anho, $params);
-			$TPPAgosto = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 8, $anho, $params);
-			$TPPSeptiembre = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 9, $anho, $params);
-			$TPPOctubre = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 10, $anho, $params);
-			$TPPNoviembre = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 11, $anho, $params);
-			$TPPDiciembre = RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoMaquina, 12, $anho, $params);
-
-			$TPNPEnero = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPFebrero = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPMarzo = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 3, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPAbril = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 4, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPMayo = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 5, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPJunio = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 6, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPJulio = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 7, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPAgosto = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 8, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPSeptiembre = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 9, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPOctubre = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 10, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPNoviembre = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
-			$TPNPDiciembre = RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
-
-			$tiempoCalendarioEnero = $maquina->calcularNumeroHorasActivasDelMes(1, $anho);
-			$tiempoCalendarioFebrero = $maquina->calcularNumeroHorasActivasDelMes(2, $anho);
-			$tiempoCalendarioMarzo = $maquina->calcularNumeroHorasActivasDelMes(3, $anho);
-			$tiempoCalendarioAbril = $maquina->calcularNumeroHorasActivasDelMes(4, $anho);
-			$tiempoCalendarioMayo = $maquina->calcularNumeroHorasActivasDelMes(5, $anho);
-			$tiempoCalendarioJunio = $maquina->calcularNumeroHorasActivasDelMes(6, $anho);
-			$tiempoCalendarioJulio = $maquina->calcularNumeroHorasActivasDelMes(7, $anho);
-			$tiempoCalendarioAgosto = $maquina->calcularNumeroHorasActivasDelMes(8, $anho);
-			$tiempoCalendarioSeptiembre = $maquina->calcularNumeroHorasActivasDelMes(9, $anho);
-			$tiempoCalendarioOctubre = $maquina->calcularNumeroHorasActivasDelMes(10, $anho);
-			$tiempoCalendarioNoviembre = $maquina->calcularNumeroHorasActivasDelMes(11, $anho);
-			$tiempoCalendarioDiciembre = $maquina->calcularNumeroHorasActivasDelMes(12, $anho);
-		}
+                        $tiempoCalendarioEnero += $maquina->calcularNumeroHorasActivasDelMes(1, $anho);
+                        $tiempoCalendarioFebrero += $maquina->calcularNumeroHorasActivasDelMes(2, $anho);
+                        $tiempoCalendarioMarzo += $maquina->calcularNumeroHorasActivasDelMes(3, $anho);
+                        $tiempoCalendarioAbril += $maquina->calcularNumeroHorasActivasDelMes(4, $anho);
+                        $tiempoCalendarioMayo += $maquina->calcularNumeroHorasActivasDelMes(5, $anho);
+                        $tiempoCalendarioJunio += $maquina->calcularNumeroHorasActivasDelMes(6, $anho);
+                        $tiempoCalendarioJulio += $maquina->calcularNumeroHorasActivasDelMes(7, $anho);
+                        $tiempoCalendarioAgosto += $maquina->calcularNumeroHorasActivasDelMes(8, $anho);
+                        $tiempoCalendarioSeptiembre += $maquina->calcularNumeroHorasActivasDelMes(9, $anho);
+                        $tiempoCalendarioOctubre += $maquina->calcularNumeroHorasActivasDelMes(10, $anho);
+                        $tiempoCalendarioNoviembre += $maquina->calcularNumeroHorasActivasDelMes(11, $anho);
+                        $tiempoCalendarioDiciembre += $maquina->calcularNumeroHorasActivasDelMes(12, $anho);
+                }
+                
 		$TFEnero = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendarioEnero, $TPPEnero, $TNPEnero);
 		$TFFebrero = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendarioFebrero, $TPPFebrero, $TNPFebrero);
 		$TFMarzo = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendarioMarzo, $TPPMarzo, $TNPMarzo);
@@ -2480,7 +2244,6 @@ class graficos_anualesActions extends sfActions
 	}
 	public function executeGenerarDatosTortaTiempos(sfWebRequest $request) {
 		$anho = $request->getParameter('anho');
-		$codigoMaquina = $request->getParameter('codigo_maquina');
 
 		$params = array();
 		if($request->getParameter('codigo_operario')!='-1') {
@@ -2511,27 +2274,27 @@ class graficos_anualesActions extends sfActions
 
 		$tiempoCalendario = 0;
 
-		if($codigoMaquina=='-1') {
-			$maquinas = MaquinaPeer::doSelect(new Criteria());
+                $conexion = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }                
+                $maquinas = MaquinaPeer::doSelect($conexion);
 
-			foreach($maquinas as $maquina) {
-				//				                    $maquina = new Maquina();
-				$codigoTemporalMaquina = $maquina->getMaqCodigo();
+                foreach($maquinas as $maquina) {
+                        //				                    $maquina = new Maquina();
+                        $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-				$TNPAnual += round(RegistroUsoMaquinaPeer::calcularTNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params), 2);
-				$TPPAnual += round(RegistroUsoMaquinaPeer::calcularTPPAnhoEnHoras($codigoTemporalMaquina, $anho, $params), 2);
-				$TPNPAnual += round(RegistroUsoMaquinaPeer::calcularTPNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio), 2);
-				$tiempoCalendario += $maquina->calcularNumeroHorasActivasDelAño($anho);
-			}
-		}
-		else {
-			$maquina = MaquinaPeer::retrieveByPK($codigoMaquina);
-
-			$TNPAnual = round(RegistroUsoMaquinaPeer::calcularTNPAnhoEnHoras($codigoMaquina, $anho, $params), 2);
-			$TPPAnual = round(RegistroUsoMaquinaPeer::calcularTPPAnhoEnHoras($codigoMaquina, $anho, $params), 2);
-			$TPNPAnual = round(RegistroUsoMaquinaPeer::calcularTPNPAnhoEnHoras($codigoMaquina, $anho, $params, $inyeccionesEstandarPromedio), 2);
-			$tiempoCalendario = $maquina->calcularNumeroHorasActivasDelAño($anho);
-		}
+                        $TNPAnual += round(RegistroUsoMaquinaPeer::calcularTNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params), 2);
+                        $TPPAnual += round(RegistroUsoMaquinaPeer::calcularTPPAnhoEnHoras($codigoTemporalMaquina, $anho, $params), 2);
+                        $TPNPAnual += round(RegistroUsoMaquinaPeer::calcularTPNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio), 2);
+                        $tiempoCalendario += $maquina->calcularNumeroHorasActivasDelAño($anho);
+                }
+                
 		$TFAnual = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $TPPAnual, $TNPAnual);
 		$TOAnual = RegistroUsoMaquinaPeer::calcularTODiaMesAño($TFAnual, $TPNPAnual);
 

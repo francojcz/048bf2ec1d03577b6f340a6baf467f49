@@ -1,8 +1,17 @@
 Ext.onReady(function(){
     var renderizarGraficos = function(){
         redirigirSiSesionExpiro();
-        if (campoAnho.getValue() != '' && campoMaquina.getValue() != '') {
-            var params = '?anho=' + campoAnho.getValue() + '&codigo_maquina=' + campoMaquina.getValue() + '&codigo_operario=' + campoOperario.getValue() + '&codigo_metodo=' + campoMetodo.getValue();
+        if (campoAnho.getValue() != '') {
+            
+            //Codigos de los equipos seleccionados
+            var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+            var equiposAFiltrar = [];
+            for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+                    equiposAFiltrar.push(equiposSeleccionados[i].json.codigo);
+            }
+            var arrayEquipos = Ext.encode(equiposAFiltrar);            
+            
+            var params = '?anho=' + campoAnho.getValue() + '&codigo_operario=' + campoOperario.getValue() + '&cods_equipos=' + arrayEquipos + '&codigo_metodo=' + campoMetodo.getValue();
             
             var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "500", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/amline/");
@@ -84,7 +93,7 @@ Ext.onReady(function(){
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
-            root: 'data',
+            root: 'data'
         }, [{
             name: 'codigo',
             type: 'string'
@@ -92,20 +101,60 @@ Ext.onReady(function(){
             name: 'nombre',
             type: 'string'
         }])
-    });
+    });    
+    maquinas_datastore.load();
     
-    maquinas_datastore.load({
-        callback: function(){
-            maquinas_datastore.loadData({
-                data: [{
-                    'codigo': '-1',
-                    'nombre': 'TODOS'
-                }]
-            }, true);
-            campoMaquina.setValue('-1');
-            renderizarGraficos();
+    /**********************************************************************/
+//Cambios: 28 de febrero de 2014
+//Interfaz para seleccionar los equipos a filtrar en el reporte
+var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false
+});
+
+var maquina_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+            maquina_selmodel,
+            { header: "Id", width: 30, dataIndex: 'codigo', hidden:true},
+            { header: "Nombre del Equipo", width: 430, dataIndex: 'nombre'}
+        ]
+});
+
+var maquinas_gridpanel = new Ext.grid.GridPanel({
+        id: 'maquinas_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: maquinas_datastore,
+        cm: maquina_colmodel,
+        sm: maquina_selmodel
+});
+
+var win = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 400,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Equipos',
+    items : maquinas_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win.hide();
         }
-    });
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
+    }
+});
+/**********************************************************************/    
     
     var metodos_datastore = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
@@ -113,7 +162,7 @@ Ext.onReady(function(){
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
-            root: 'data',
+            root: 'data'
         }, [{
             name: 'codigo',
             type: 'string'
@@ -142,7 +191,7 @@ Ext.onReady(function(){
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
-            root: 'data',
+            root: 'data'
         }, [{
             name: 'codigo',
             type: 'string'
@@ -165,10 +214,6 @@ Ext.onReady(function(){
         }
     });
     
-    //    var campoAnho = new Ext.form.NumberField({
-    //        fieldLabel: 'Año'
-    //    });
-    
     var campoAnho = new Ext.ux.form.SpinnerField({
         fieldLabel: 'Año',
         value: (new Date()).getFullYear(),
@@ -176,24 +221,6 @@ Ext.onReady(function(){
         maxValue: 9999,
         incrementValue: 1,
         width: 60
-    });
-    
-    var campoMaquina = new Ext.form.ComboBox({
-        fieldLabel: 'Equipo',
-        store: maquinas_datastore,
-        displayField: 'nombre',
-        valueField: 'codigo',
-        mode: 'local',
-        triggerAction: 'all',
-        forceSelection: true,
-        allowBlank: false,
-        width: 130
-        //        ,
-        //        listeners: {
-        //            select: function(){
-        //                renderizarGraficos();
-        //            }
-        //        }
     });
     
     var campoOperario = new Ext.form.ComboBox({
@@ -230,23 +257,30 @@ Ext.onReady(function(){
             items: [{
                 layout: 'form',
                 labelWidth: 30,
-                bodyStyle: 'padding-right:50px;',
+                bodyStyle: 'padding-right:30px;',
                 items: [campoAnho]
             }, {
                 layout: 'form',
                 labelWidth: 50,
-                bodyStyle: 'padding-right:50px;',
-                items: [campoMaquina]
-            }, {
-                layout: 'form',
-                labelWidth: 50,
-                bodyStyle: 'padding-right:50px;',
+                bodyStyle: 'padding-right:30px;',
                 items: [campoOperario]
             }, {
                 layout: 'form',
                 labelWidth: 50,
-                bodyStyle: 'padding-right:50px;',
+                bodyStyle: 'padding-right:30px;',
                 items: [campoMetodo]
+            }, {
+                layout: 'form',
+                bodyStyle: 'padding-right:30px;',
+                items: [{
+                    xtype: 'button',
+                    text: 'Seleccionar Equipos',
+                    iconCls: 'equipo',
+                    handler: function(){
+                        Ext.getBody().mask();
+                        win.show();
+                    }
+                }]
             }, {
                 layout: 'form',
                 items: [{

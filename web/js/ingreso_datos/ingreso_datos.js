@@ -906,7 +906,7 @@ Ext.onReady(function()
       header : 'Observaciones',
       tooltip : 'Cualquier detalle adicional',
       width : 300,
-      align : 'left',
+      align : 'center',
       editor : new Ext.form.TextField()
     }]
   });
