@@ -26,9 +26,16 @@ class exportacion_datosActions extends sfActions
 		if($request->getParameter('codigo_operario')!='-1') {
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('codigo_operario'));
 		}
-		if($request->getParameter('codigo_maquina')!='-1') {
-			$criteria->add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $request->getParameter('codigo_maquina'));
-		}
+                
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+                    }
+                } 
+                
 		$fechaInferiorCerrada = $request->getParameter('fecha_inicio');
 		$fechaSuperiorCerrada = $request->getParameter('fecha_fin');
 		$criteria->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechaInferiorCerrada, Criteria::GREATER_EQUAL);
@@ -393,9 +400,16 @@ class exportacion_datosActions extends sfActions
 		if($request->getParameter('codigo_operario')!='-1') {
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('codigo_operario'));
 		}
-		if($request->getParameter('codigo_maquina')!='-1') {
-			$criteria->add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $request->getParameter('codigo_maquina'));
-		}
+                
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+                    }
+                } 
+                
 		$fechaInferiorCerrada = $request->getParameter('fecha_inicio');
 		$fechaSuperiorCerrada = $request->getParameter('fecha_fin');
 		$criteria->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechaInferiorCerrada, Criteria::GREATER_EQUAL);

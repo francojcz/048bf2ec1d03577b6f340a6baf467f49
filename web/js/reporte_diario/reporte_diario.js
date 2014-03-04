@@ -10,7 +10,6 @@ var generarRenderer = function(colorFondo, colorFuente){
     }
 }
 
-
 var fechaField = new Ext.form.DateField({
     xtype: 'datefield',
     fieldLabel: 'Fecha',
@@ -28,7 +27,6 @@ var fechaField = new Ext.form.DateField({
     }
 });
 
-
 var metodos_datastore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         url: getAbsoluteUrl('ingreso_datos', 'listarMetodos'),
@@ -44,7 +42,6 @@ var metodos_datastore = new Ext.data.Store({
         type: 'string'
     }])
 });
-
 
 var horaField = new Ext.form.TextField({
     xtype: 'textfield',
