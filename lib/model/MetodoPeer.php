@@ -31,9 +31,9 @@ class MetodoPeer extends BaseMetodoPeer {
 		try{
 			$conexion = new Criteria();
 			$conexion->addAscendingOrderByColumn(MetodoPeer::MET_NOMBRE);
-			$maquinas = MetodoPeer::doSelect($conexion);
+			$metodos = MetodoPeer::doSelect($conexion);
 			
-			foreach($maquinas as $temporal)
+			foreach($metodos as $temporal)
 			{
 					$datos[$fila]['met_codigo'] = $temporal->getMetCodigo();
 					$datos[$fila]['met_nombre'] = $temporal->getMetNombre();		

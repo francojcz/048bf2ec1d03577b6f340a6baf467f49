@@ -1,21 +1,21 @@
-﻿<?php
+<?php
 
 /**
- * reporte_graficomensual actions.
+ * reporte_graficosemanal actions.
  *
  * @package    tpmlabs
- * @subpackage reporte_graficomensual
- * @author     maryit sanchez
+ * @subpackage reporte_graficosemanal
+ * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class reporte_graficomensualActions extends sfActions
+class reporte_graficosemanalActions extends sfActions
 {
-	/**
-	 * Executes index action
-	 *
-	 * @param sfRequest $request A request object
-	 */
-	public function executeIndex(sfWebRequest $request)
+ /**
+  * Executes index action
+  *
+  * @param sfRequest $request A request object
+  */
+  public function executeIndex(sfWebRequest $request)
 	{
 	}
 
@@ -1062,5 +1062,4 @@ class reporte_graficomensualActions extends sfActions
 		}
 		return $this->renderText($salida);
 	}
-
 }

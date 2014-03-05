@@ -29,7 +29,6 @@ Ext.onReady(function(){
         triggerAction: 'all',
         emptyText: 'Seleccione un analista...',
         selectOnFocus: true,
-        //        fieldLabel: 'Analista',
         hideLabel: true
     });
     
@@ -131,14 +130,12 @@ var win = new Ext.Window(
         triggerAction: 'all',
         emptyText: 'Seleccione un método...',
         selectOnFocus: true,
-        //        fieldLabel: 'M&eacute;todo'
         hideLabel: true
     });
     
     var reporgrafmens_fecha = new Date();
     var reporgrafmens_anio = new Ext.form.SpinnerField({
         xtype: 'spinnerfield',
-        //        fieldLabel: 'A&ntilde;o',
         id: 'reporgrafmens_anio',
         name: 'reporgrafmens_anio',
         minValue: reporgrafmens_fecha.getFullYear() - 10,
@@ -186,7 +183,6 @@ var win = new Ext.Window(
         triggerAction: 'all',
         emptyText: 'Seleccione un mes...',
         selectOnFocus: true,
-        //        fieldLabel: 'Mes',
         value: obtenerMesActual(),
         hideLabel: true
     });
@@ -200,7 +196,6 @@ var win = new Ext.Window(
         labelWidth: 100,
         items: [{
             xtype: 'compositefield',
-            //            fieldLabel: 'Periodo',
             hideLabel: true,
             items: [{
                 xtype: 'displayfield',
@@ -310,6 +305,8 @@ var win = new Ext.Window(
         
         var mes = reporgrafmens_mes_combobox.getValue();
         var anio = reporgrafmens_anio.getValue();
+        var metodo_codigo = reporgrafmens_metodo_codigo_combobox.getValue();
+        var analista_codigo = reporgrafmens_analista_codigo_combobox.getValue();
         
         //Codigos de los equipos seleccionados
         var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
@@ -317,12 +314,10 @@ var win = new Ext.Window(
         for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
                 equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
         }
-        var arrayEquipos = Ext.encode(equiposAFiltrar);
-        
-        var metodo_codigo = reporgrafmens_metodo_codigo_combobox.getValue();
-        var analista_codigo = reporgrafmens_analista_codigo_combobox.getValue();
+        var arrayEquipos = Ext.encode(equiposAFiltrar);        
         
         var params = '?mes=' + mes + '&anio=' + anio + '&cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
+        
         //tiempos
         var reporgrafmens_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
         reporgrafmens_tiempos_dispersion.addVariable("path", urlWeb + "flash/amline/");
@@ -347,8 +342,7 @@ var win = new Ext.Window(
         reporgrafmens_indicadores_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/amline_st_grafico_indicadores.php');
         reporgrafmens_indicadores_dispersion.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficomensual', 'generarDatosGraficoIndicadores') + params));
         reporgrafmens_indicadores_dispersion.addVariable("loading_data", "... CARGANDO ...");
-        reporgrafmens_indicadores_dispersion.write("div_reporte_graficomensual_indicadores_dispersion");
-        
+        reporgrafmens_indicadores_dispersion.write("div_reporte_graficomensual_indicadores_dispersion");        
         
         var reporgrafmens_indicadores_barras = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "520", "400", "8", "#FFFFFF");
         reporgrafmens_indicadores_barras.addVariable("path", urlWeb + "flash/amcolumn/");

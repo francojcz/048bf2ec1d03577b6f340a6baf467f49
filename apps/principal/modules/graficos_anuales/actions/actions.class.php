@@ -1723,15 +1723,15 @@ class graficos_anualesActions extends sfActions
 		return $this->renderText('');
 	}
 	public function executeListarMetodos() {
-		$metodos = MetodoPeer::doSelect(new Criteria());
+		$conexion = new Criteria();
+		$conexion->addAscendingOrderByColumn(MetodoPeer::MET_NOMBRE);
+		$metodos = MetodoPeer::doSelect($conexion);
 
 		$result = array();
 		$data = array();
 
 		foreach($metodos as $metodo) {
 			$fields = array();
-
-			//			$metodo = new Metodo();
 
 			$fields['codigo'] = $metodo->getMetCodigo();
 			$fields['nombre'] = $metodo->getMetNombre();
