@@ -116,8 +116,8 @@ var crud_metodo_datastore = new Ext.data.Store({
         method: 'POST'
     }),
     baseParams: {
-        start: 0,
-        limit: 20
+//        start: 0,
+//        limit: 20
     },
     reader: new Ext.data.JsonReader({
         root: 'results',
@@ -1472,13 +1472,13 @@ var crud_metodo_gridpanel = new Ext.grid.GridPanel({
         }
     }),
     height: largo_panel,
-    bbar: new Ext.PagingToolbar({
-        pageSize: 15,
-        store: crud_metodo_datastore,
-        displayInfo: true,
-        displayMsg: 'M&eacute;todos {0} - {1} de {2}',
-        emptyMsg: "No hay m&eacute;todos aun"
-    }),
+//    bbar: new Ext.PagingToolbar({
+////        pageSize: 15,
+//        store: crud_metodo_datastore,
+//        displayInfo: true,
+//        displayMsg: 'M&eacute;todos {0} - {1} de {2}',
+//        emptyMsg: "No hay m&eacute;todos aun"
+//    }),
     tbar: [{
         id: 'crud_metodo_agregar_boton',
         text: 'Agregar',
@@ -1498,8 +1498,8 @@ var crud_metodo_gridpanel = new Ext.grid.GridPanel({
             crud_metodo_datastore.baseParams.met_eliminado = '0';
             crud_metodo_datastore.load({
                 params: {
-                    start: 0,
-                    limit: 20
+//                    start: 0,
+//                    limit: 20
                 }
             });
         }
@@ -1511,8 +1511,8 @@ var crud_metodo_gridpanel = new Ext.grid.GridPanel({
             crud_metodo_datastore.baseParams.met_eliminado = '1';
             crud_metodo_datastore.load({
                 params: {
-                    start: 0,
-                    limit: 20
+//                    start: 0,
+//                    limit: 20
                 }
             });
         }
@@ -1629,8 +1629,8 @@ function crud_metodo_actualizar(text){
         
         }, function(){
         
-            Ext.getCmp('met_codigo').setValue('');
-            Ext.getCmp('met_nombre').setValue('');
+            Ext.getCmp('met_codigo').reset();
+            Ext.getCmp('met_nombre').reset();
             
             Ext.getCmp('crud_metodo_formpanel_info_analisis').getForm().reset();
             //--Ext.getCmp('crud_metodo_formpanel_info_tc').getForm().reset();
@@ -1675,9 +1675,9 @@ function crud_metodo_eliminar(){
 }
 
 function crud_metodo_agregar(btn, ev){
-    //crud_metodo_formpanel.getForm().reset();
-//    Ext.getCmp('met_codigo').setValue('');
-//    Ext.getCmp('met_nombre').setValue('');
+//    crud_metodo_formpanel.getForm().reset();
+    Ext.getCmp('met_codigo').reset();
+    Ext.getCmp('met_nombre').reset();
     
     Ext.getCmp('crud_metodo_formpanel_info_analisis').getForm().reset();
     //--Ext.getCmp('crud_metodo_formpanel_info_tc').getForm().reset();

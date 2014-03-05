@@ -101,7 +101,7 @@ class crud_metodoActions extends sfActions
 
 				$metodo->save();
 
-				$salida = "({success: true, mensaje:'El m&eacute;todo fue actualizado exitosamente'})";
+				$salida = "({success: true, mensaje:'El m&eacute;todo fue registrado exitosamente'})";
 			}
 		}
 		catch (Exception $excepcion)
