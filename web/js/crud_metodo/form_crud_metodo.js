@@ -1676,8 +1676,8 @@ function crud_metodo_eliminar(){
 
 function crud_metodo_agregar(btn, ev){
     //crud_metodo_formpanel.getForm().reset();
-    Ext.getCmp('met_codigo').setValue('');
-    Ext.getCmp('met_nombre').setValue('');
+//    Ext.getCmp('met_codigo').setValue('');
+//    Ext.getCmp('met_nombre').setValue('');
     
     Ext.getCmp('crud_metodo_formpanel_info_analisis').getForm().reset();
     //--Ext.getCmp('crud_metodo_formpanel_info_tc').getForm().reset();
