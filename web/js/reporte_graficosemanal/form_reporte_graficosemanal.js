@@ -50,6 +50,7 @@ Ext.onReady(function(){
     
     
 /**********************************************************************/
+//Cambios: 28 de febrero de 2014
 //Interfaz para seleccionar los equipos a filtrar en el reporte
 var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
         singleSelect:false
@@ -130,93 +131,60 @@ var win = new Ext.Window(
         emptyText: 'Seleccione un método...',
         selectOnFocus: true,
         hideLabel: true
-    });
+    });    
     
-    var reporgrafseman_fecha = new Date();
-    var reporgrafseman_anio = new Ext.form.SpinnerField({
-        xtype: 'spinnerfield',
-        id: 'reporgrafseman_anio',
-        name: 'reporgrafseman_anio',
-        minValue: reporgrafseman_fecha.getFullYear() - 10,
-        maxValue: reporgrafseman_fecha.getFullYear(),
-        value: reporgrafseman_fecha.getFullYear(),
-        width: 80,
-        accelerate: true,
-        listeners: {
-            'spin': function(){
-            }
-        },
-        hideLabel: true
-    });
+/**********************************************************************/
+//Cambios: 6 de marzo de 2014
+//Interfaz reporte semanal
+var fechaInicioField = new Ext.form.DateField({
+    xtype: 'datefield',
+    allowBlank: false,
+    value: new Date(),
+    format: 'Y-m-d'
+});
     
-    
-    var reporgrafseman_mes_data = [['01', 'Enero'], ['02', 'Febrero'], ['03', 'Marzo'], ['04', 'Abril'], ['05', 'Mayo'], ['06', 'Junio'], ['07', 'Julio'], ['08', 'Agosto'], ['09', 'Septiembre'], ['10', 'Octubre'], ['11', 'Noviembre'], ['12', 'Diciembre']];
-    
-    var reporgrafseman_mes_store = new Ext.data.ArrayStore({
-        fields: [{
-            name: 'mes_codigo'
-        }, {
-            name: 'mes_nombre'
-        }]
-    });
-    reporgrafseman_mes_store.loadData(reporgrafseman_mes_data);
-    
-    function obtenerMesActual(){
-        if (reporgrafseman_fecha.getMonth() < 9) {
-            return '0' + (reporgrafseman_fecha.getMonth() + 1)
-        }
-        else {
-            reporgrafseman_fecha.getMonth() + 1
-        }
-    }
-    var reporgrafseman_semana_combobox = new Ext.form.ComboBox({
-        xtype: 'combo',
-        store: reporgrafseman_mes_store,
-        hiddenName: 'mes',
-        name: 'reporgrafseman_semana_combobox',
-        id: 'reporgrafseman_semana_combobox',
-        mode: 'local',
-        valueField: 'mes_codigo',
-        forceSelection: true,
-        displayField: 'mes_nombre',
-        triggerAction: 'all',
-        emptyText: 'Seleccione un mes...',
-        selectOnFocus: true,
-        value: obtenerMesActual(),
-        hideLabel: true
-    });
-    
+var fechaFinField = new Ext.form.DateField({
+    xtype: 'datefield',
+    allowBlank: false,
+    value: new Date(),
+    format: 'Y-m-d'
+});
+/**********************************************************************/
     
     var reporgrafseman_configuracion = new Ext.FormPanel({
-        //        title: 'CONFIGURACI&Oacute;N DE REPORTE SEMANAL',
         layout: 'form',
         frame: true,
         padding: 10,
         labelWidth: 100,
-        items: [{
+        items: [
+            {
+                xtype: 'compositefield',
+                hideLabel: true,
+                items: [
+                {
+                    xtype: 'displayfield',
+                    html: 'Desde'
+                }, fechaInicioField, {
+                    xtype: 'displayfield',
+                    html: 'Hasta',
+                    style: 'padding: 0px 0px 0px 20px'
+                }, fechaFinField ]
+            }, 
+            {
             xtype: 'compositefield',
-            hideLabel: true,
-            items: [{
-                xtype: 'displayfield',
-                html: 'A&ntilde;o'
-            }, reporgrafseman_anio, {
-                xtype: 'displayfield',
-                html: 'Mes'
-            }, reporgrafseman_semana_combobox]
-        }, {
-            xtype: 'compositefield',
-            //            fieldLabel: 'Otra Informaci&oacute;n',
             hideLabel: true,
             items: [{
                 xtype: 'displayfield',
                 value: 'Analista'
             }, reporgrafseman_analista_codigo_combobox, {
                 xtype: 'displayfield',
-                value: 'M&eacute;todo'
+                value: 'M&eacute;todo',
+                style: 'padding: 0px 0px 0px 20px'
             }, reporgrafseman_metodo_codigo_combobox, {
                 text: 'Seleccionar Equipos',
                 xtype: 'button',
                 iconCls: 'equipo',
+                style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     Ext.getBody().mask();
                     win.show();
@@ -225,6 +193,7 @@ var win = new Ext.Window(
                 text: 'Generar gr&aacute;ficos',
                 xtype: 'button',
                 iconCls: 'reload',
+                style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     reporgrafseman_cargardatosreportes();
                 }
@@ -302,8 +271,8 @@ var win = new Ext.Window(
     function reporgrafseman_cargardatosreportes(){
         redirigirSiSesionExpiro();
         
-        var mes = reporgrafseman_semana_combobox.getValue();
-        var anio = reporgrafseman_anio.getValue();
+        var fecha_inicio = fechaInicioField.getRawValue();
+        var fecha_fin = fechaFinField.getRawValue();
         var metodo_codigo = reporgrafseman_metodo_codigo_combobox.getValue();
         var analista_codigo = reporgrafseman_analista_codigo_combobox.getValue();
         
@@ -313,9 +282,9 @@ var win = new Ext.Window(
         for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
                 equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
         }
-        var arrayEquipos = Ext.encode(equiposAFiltrar);        
+        var arrayEquipos = Ext.encode(equiposAFiltrar);
         
-        var params = '?mes=' + mes + '&anio=' + anio + '&cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
+        var params = '?fecha_inicio=' + fecha_inicio + '&fecha_fin=' + fecha_fin + '&cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         
         //tiempos
         var reporgrafseman_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");

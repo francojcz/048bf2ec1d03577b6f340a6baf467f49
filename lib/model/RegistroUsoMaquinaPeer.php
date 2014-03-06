@@ -1191,8 +1191,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $sumatoria = 0;
         foreach ($registros as $registro)
         {
-            //			$registro = new RegistroUsoMaquina();
-
             $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
             $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             $sumatoria += $registro -> getRumFallas();

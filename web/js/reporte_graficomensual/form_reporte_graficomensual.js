@@ -202,22 +202,24 @@ var win = new Ext.Window(
                 html: 'A&ntilde;o'
             }, reporgrafmens_anio, {
                 xtype: 'displayfield',
-                html: 'Mes'
+                html: 'Mes',
+                style: 'padding: 0px 0px 0px 20px'
             }, reporgrafmens_mes_combobox]
         }, {
             xtype: 'compositefield',
-            //            fieldLabel: 'Otra Informaci&oacute;n',
             hideLabel: true,
             items: [{
                 xtype: 'displayfield',
                 value: 'Analista'
             }, reporgrafmens_analista_codigo_combobox, {
                 xtype: 'displayfield',
-                value: 'M&eacute;todo'
+                value: 'M&eacute;todo',
+                style: 'padding: 0px 0px 0px 20px'
             }, reporgrafmens_metodo_codigo_combobox, {
                 text: 'Seleccionar Equipos',
                 xtype: 'button',
                 iconCls: 'equipo',
+                style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     Ext.getBody().mask();
                     win.show();
@@ -226,6 +228,7 @@ var win = new Ext.Window(
                 text: 'Generar gr&aacute;ficos',
                 xtype: 'button',
                 iconCls: 'reload',
+                style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     reporgrafmens_cargardatosreportes();
                 }

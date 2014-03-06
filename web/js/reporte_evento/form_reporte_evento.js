@@ -187,10 +187,12 @@ var win = new Ext.Window(
                 value: 'Desde'
             }, reporevent_desde_fecha_datefield, {
                 xtype: 'displayfield',
-                value: 'Hasta'
+                value: 'Hasta',
+                style: 'padding: 0px 0px 0px 20px'
             }, reporevent_hasta_fecha_datefield, {
                 xtype: 'displayfield',
-                value: 'Categor&iacute;a'
+                value: 'Categor&iacute;a',
+                style: 'padding: 0px 0px 0px 20px'
             }, reporevent_categoriaevento_codigo_combobox]
         }, {
             xtype: 'compositefield',
@@ -201,11 +203,13 @@ var win = new Ext.Window(
                 value: 'Analista'
             }, reporevent_analista_codigo_combobox, {
                 xtype: 'displayfield',
-                value: 'M&eacute;todo'
+                value: 'M&eacute;todo',
+                style: 'padding: 0px 0px 0px 20px'
             }, reporevent_metodo_codigo_combobox, {
                 text: 'Seleccionar Equipos',
                 xtype: 'button',
                 iconCls: 'equipo',
+                style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     Ext.getBody().mask();
                     win.show();
@@ -214,6 +218,7 @@ var win = new Ext.Window(
                 text: 'Buscar',
                 xtype: 'button',
                 iconCls: 'filtrar',
+                style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                 
                     var desde = '';
