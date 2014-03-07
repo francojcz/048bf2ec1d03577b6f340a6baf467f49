@@ -98,7 +98,6 @@ class graficos_anualesActions extends sfActions
 
 		$inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
 
-		$codigoMaquina = $request->getParameter('codigo_maquina');
 		$this->renderText('<?xml version="1.0" encoding="UTF-8"?>
     <chart>
       <series>

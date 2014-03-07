@@ -114,8 +114,6 @@ class reporte_diarioActions extends sfActions
         $registros = RegistroUsoMaquinaPeer::doSelect($criteria);
         foreach ($registros as $registro)
         {
-            // $registro = new RegistroUsoMaquina();
-
             $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
             $tp = $registro -> obtenerTPMetodo($maq_tiempo_inyeccion);
             $tf = $registro -> obtenerTFMetodo();
@@ -160,47 +158,35 @@ class reporte_diarioActions extends sfActions
         $mes = $dateTime -> format('m');
         $año = $dateTime -> format('Y');
 
-        $tpnp_dia = null;
-        $tnp_dia = null;
-        $tpp_dia = null;
-        $tf_dia = null;
-        $to_dia = null;
-        $tp_dia = null;
-
-        if ($maquina_codigo != '-1' && $maquina_codigo != '')
-        {
-            $maquina = MaquinaPeer::retrieveByPK($maquina_codigo);
-
-            $tpnp_dia = RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $tnp_dia = RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $tpp_dia = RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $tf_dia = $maquina -> calcularNumeroHorasActivasDelDia($dia, $mes, $año) - $tpp_dia - $tnp_dia;
-            $to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
-            $tp_dia = RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-        } else
-        {
-            $maquinas = MaquinaPeer::doSelect(new Criteria());
-            $tpnp_dia = 0;
-            $tnp_dia = 0;
-            $tpp_dia = 0;
-            $tf_dia = 0;
-            $to_dia = 0;
-            $tp_dia = 0;
-            foreach ($maquinas as $maquina)
-            {
-                //				                    $maquina = new Maquina();
-
-                $codigoTemporalMaquina = $maquina -> getMaqCodigo();
-
-                $tpnp_dia += RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-                $tnp_dia += RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-                $tpp_dia += RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-                $tf_dia += $maquina -> calcularNumeroHorasActivasDelDia($dia, $mes, $año);
-                $tp_dia += RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+        
+        $conexion = new Criteria();
+        //Codigos de los equipos seleccionados
+        $temp = $this->getRequestParameter('cods_equipos');
+        $cods_equipos = json_decode($temp);
+        if($cods_equipos != ''){
+            foreach ($cods_equipos as $cod_equipo) {
+                $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
             }
-            $tf_dia = $tf_dia - $tpp_dia - $tnp_dia;
-            $to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
         }
+        $maquinas = MaquinaPeer::doSelect($conexion);
+        $tpnp_dia = 0;
+        $tnp_dia = 0;
+        $tpp_dia = 0;
+        $tf_dia = 0;
+        $to_dia = 0;
+        $tp_dia = 0;
+        foreach ($maquinas as $maquina)
+        {
+            $codigoTemporalMaquina = $maquina -> getMaqCodigo();
+
+            $tpnp_dia += RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+            $tnp_dia += RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+            $tpp_dia += RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+            $tf_dia += $maquina -> calcularNumeroHorasActivasDelDia($dia, $mes, $año);
+            $tp_dia += RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+        }
+        $tf_dia = $tf_dia - $tpp_dia - $tnp_dia;
+        $to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
 
         $datos[0]['rdtiemp_TP_dia'] = round($tp_dia, 2);
         $datos[0]['rdtiemp_TPP_dia'] = round($tpp_dia, 2);
@@ -262,7 +248,6 @@ class reporte_diarioActions extends sfActions
         $conexion_dia = $this -> obtenerConexion();
 
         $fecha_dia = $this -> getRequestParameter('fecha');
-        $maquina_codigo = $this -> getRequestParameter('codigo_maquina');
         $metodo_codigo = $this -> getRequestParameter('metodo_codigo');
         $analista_codigo = $this -> getRequestParameter('codigo_usu_operario');
 
@@ -292,43 +277,36 @@ class reporte_diarioActions extends sfActions
 
         $cantidadMaquinas = null;
 
-        if ($maquina_codigo != '-1' && $maquina_codigo != '')
-        {
-            $maquina = MaquinaPeer::retrieveByPK($maquina_codigo);
-
-            $tpnp_dia = RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $tnp_dia = RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $tpp_dia = RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $tf_dia = $maquina -> calcularNumeroHorasActivasDelDia($dia, $mes, $año) - $tpp_dia - $tnp_dia;
-            $to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
-            $tp_dia = RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $numeroInyeccionesDia = RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasDia($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $numeroReinyeccionesDia = RegistroUsoMaquinaPeer::contarReinyeccionesDia($maquina_codigo, $dia, $mes, $año, $params, 8);
-            $cantidadMaquinas = 1;
-        } else
-        {
-            $maquinas = MaquinaPeer::doSelect(new Criteria());
-            $tpp_dia = 0;
-            $tf_dia = 0;
-            $tp_dia = 0;
-            foreach ($maquinas as $maquina)
-            {
-                //                    $maquina = new Maquina();
-
-                $codigoTemporalMaquina = $maquina -> getMaqCodigo();
-
-                $tpnp_dia += RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-                $tnp_dia += RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-                $tpp_dia += RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-                $tf_dia += $maquina -> calcularNumeroHorasActivasDelDia($dia, $mes, $año);
-                $tp_dia += RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-                $numeroInyeccionesDia += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasDia($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
-                $numeroReinyeccionesDia += RegistroUsoMaquinaPeer::contarReinyeccionesDia($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+        $criteria = new Criteria();
+        //Codigos de los equipos seleccionados
+        $temp = $this->getRequestParameter('cods_equipos');
+        $cods_equipos = json_decode($temp);
+        if($cods_equipos != ''){
+            foreach ($cods_equipos as $cod_equipo) {
+                $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
             }
-            $tf_dia = $tf_dia - $tpp_dia - $tnp_dia;
-            $to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
-            $cantidadMaquinas = count($maquinas);
         }
+        $maquinas = MaquinaPeer::doSelect($criteria);
+        $tpp_dia = 0;
+        $tf_dia = 0;
+        $tp_dia = 0;
+        foreach ($maquinas as $maquina)
+        {
+            //                    $maquina = new Maquina();
+
+            $codigoTemporalMaquina = $maquina -> getMaqCodigo();
+
+            $tpnp_dia += RegistroUsoMaquinaPeer::calcularTPNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+            $tnp_dia += RegistroUsoMaquinaPeer::calcularTNPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+            $tpp_dia += RegistroUsoMaquinaPeer::calcularTPPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+            $tf_dia += $maquina -> calcularNumeroHorasActivasDelDia($dia, $mes, $año);
+            $tp_dia += RegistroUsoMaquinaPeer::calcularTPDiaEnHoras($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+            $numeroInyeccionesDia += RegistroUsoMaquinaPeer::contarInyeccionesObligatoriasDia($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+            $numeroReinyeccionesDia += RegistroUsoMaquinaPeer::contarReinyeccionesDia($codigoTemporalMaquina, $dia, $mes, $año, $params, 8);
+        }
+        $tf_dia = $tf_dia - $tpp_dia - $tnp_dia;
+        $to_dia = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_dia, $tpnp_dia);
+        $cantidadMaquinas = count($maquinas);
 
         $cantidadHoras = $cantidadMaquinas * 24;
 
@@ -364,7 +342,6 @@ class reporte_diarioActions extends sfActions
     {
         $user = $this -> getUser();
         $codigo_usuario = $request -> getParameter('codigo_usu_operario');
-        $codigo_maquina = $request -> getParameter('codigo_maquina');
 
         $criteria = new Criteria();
         
@@ -431,7 +408,6 @@ class reporte_diarioActions extends sfActions
     {
         $user = $this -> getUser();
         $codigo_usuario = $request -> getParameter('codigo_usu_operario');
-        $codigo_maquina = $request -> getParameter('codigo_maquina');
 
         $criteria = new Criteria();
         
