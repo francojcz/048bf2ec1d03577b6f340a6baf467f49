@@ -482,8 +482,6 @@ class reporte_graficomensualActions extends sfActions
 
 			foreach($registros_uso_maquinas as $temporal)
 			{
-				//				$temporal = new RegistroUsoMaquina();
-
 				$suma_fallas_dia+= $temporal->getRumFallas();
 				$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
 				$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
