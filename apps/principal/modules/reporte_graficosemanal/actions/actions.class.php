@@ -198,6 +198,36 @@ class reporte_graficosemanalActions extends sfActions
 		}
 		return $datos;
 	}
+        
+        public function calcularInyeccionesDiarias($ano, $mes, $dia)
+	{
+		$datos = array();
+		try{
+			$numeroInyeccionesMes = 0;
+			$numeroReinyeccionesMes = 0;
+                        $suma_numero_inyecciones_dia= 0;
+                        $suma_numero_reinyecciones_dia= 0;
+
+                        $conexion=$this->obtenerConexionDia($ano.'-'.$mes.'-'.$dia);
+                        $registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
+
+                        foreach($registros_uso_maquinas as $temporal)
+                        {
+                                $suma_numero_inyecciones_dia+= $temporal->contarNumeroInyeccionesObligatorias();
+                                $suma_numero_reinyecciones_dia+= $temporal->contarNumeroTotalReinyecciones();
+                        }
+                        $datos['inyecciones'] = $suma_numero_inyecciones_dia;
+                        $numeroInyeccionesMes += $suma_numero_inyecciones_dia;
+                        $datos['reinyecciones'] = $suma_numero_reinyecciones_dia;
+                        $numeroReinyeccionesMes += $suma_numero_reinyecciones_dia;                        
+			$datos['inyeccionesMes'] = $numeroInyeccionesMes;
+			$datos['reinyeccionesMes'] = $numeroReinyeccionesMes;
+		}catch (Exception $excepcion)
+		{
+			echo "(exception: 'Excepci&oacute;n en reporte-calcularInyecciones ',error:'".$excepcion->getMessage()."')";
+		}
+		return $datos;
+	}
 
 	/**************************************Reporte de muestras *******************/
 	public function executeGenerarDatosGraficoMuestras(sfWebRequest $request)
@@ -540,7 +570,7 @@ class reporte_graficosemanalActions extends sfActions
 		return $this->renderText($xml);
 	}
 
-        public function calcularTiemposDiarios($ano,$mes,$dia)
+        public function calcularTiemposDiarios($ano, $mes, $dia)
 	{
             $datos = array();
             try {
@@ -592,6 +622,8 @@ class reporte_graficosemanalActions extends sfActions
             $fecha_inicio = $this->getRequestParameter('fecha_inicio');
             $fecha_fin = $this->getRequestParameter('fecha_fin');
             $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+            
+            //Día de inicio y fin del ranto total de semanas
             $fecha_in = $rango_fechas[0]['fecha_inicio'];
             $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
 
@@ -667,66 +699,244 @@ class reporte_graficosemanalActions extends sfActions
 	/**************************************Reporte de indicadores diarios del mes *******************/
 	public function executeGenerarDatosGraficoIndicadores(sfWebRequest $request)
 	{
-		$user = $this->getUser();
-		$codigo_usuario = $user->getAttribute('usu_codigo');
-		$criteria = new Criteria();
-		$criteria->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
-		$operario = EmpleadoPeer::doSelectOne($criteria);
-		$criteria = new Criteria();
-		$criteria->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
-		$empresa = EmpresaPeer::doSelectOne($criteria);
+            //Calculo de la fecha de inicio y fin de cada semana                
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
 
-		$inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+            //Calculo de indicadores por semana
+            /*Se calculan los indicadores por día pero se van sumando de acuerdo con el rango de cada semana*/
+            $datos = array();
+            for($i=0; $i<sizeof($rango_fechas); $i++) {
+                $fecha_inicio = $rango_fechas[$i]['fecha_inicio'];
+                $fecha_fin = $rango_fechas[$i]['fecha_fin'];
+                $fecha = $this->fecha($fecha_inicio);
+                $temp = $this->calcularIndicadoresDiarios($fecha[0], $fecha[1], $fecha[2]);
+                $datos[$i]['D'] = $temp['D'];
+                $datos[$i]['E'] = $temp['E'];
+                $datos[$i]['C'] = $temp['C'];
+                $datos[$i]['A'] = $temp['A'];
+                $datos[$i]['OEE'] = $temp['OEE'];
+                $datos[$i]['PTEE'] = $temp['PTEE'];
+                while($fecha_inicio < $fecha_fin) {
+                    $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
+                    $fecha = $this->fecha($fecha_inicio);
+                    $temp = $this->calcularIndicadoresDiarios($fecha[0], $fecha[1], $fecha[2]);
+                    $datos[$i]['D'] += $temp['D'];
+                    $datos[$i]['E'] += $temp['E'];
+                    $datos[$i]['C'] += $temp['C'];
+                    $datos[$i]['A'] += $temp['A'];
+                    $datos[$i]['OEE']  += $temp['OEE'];
+                    $datos[$i]['PTEE'] += $temp['PTEE'];
+                }
+            }
+            
+            $indicadores_tiempo = array('D', 'E', 'C', 'A', 'OEE', 'PTEE');
+            $indicadores_colores = array('ff5454','47d552','f0a05f','ffdc44','72a8cd','b97a57');
 
-		$anio='2014';
-		$mes='02';
-//		$anio=$this->getRequestParameter('anio');
-//		$mes=$this->getRequestParameter('mes');
+            $xml='<?xml version="1.0"?>';
+            $xml.='<chart>';
 
-		$cant_dias=$this->obtenerCantidadDiasMes($mes,$anio);
+            $xml.='<series>';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'</value>';
+            }
+            $xml.='</series>';
+            $xml.='<graphs>';
+            for ($indicador=0;$indicador<6;$indicador++) {
+                $xml.='<graph color="#'.$indicadores_colores[$indicador].'" title="'.$indicadores_tiempo[$indicador].'" bullet="round">';
+                for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
+                        $numero_fallas_dia = $datos[$diasmes][$indicadores_tiempo[$indicador]];
+                        $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_fallas_dia.'</value>';
+                }
+                $xml.='</graph>';
+            }
+            $xml.='</graphs>';
+            $xml.='</chart>';
 
-		$datos=$this->calcularIndicadoresDiariosMes($anio,$mes,$cant_dias, $inyeccionesEstandarPromedio);
-		$indicadores_tiempo=array(   'D',     'E',     'C',    'A',   'OEE',   'PTEE');
-		$indicadores_colores=array('ff5454','47d552','f0a05f','ffdc44','72a8cd','b97a57');
-
-		$xml='<?xml version="1.0"?>';
-		$xml.='<chart>';
-
-		$xml.='<series>';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++)
-		{
-			$xml.='<value xid="'.$diasmes.'">'.$diasmes.'</value>';
-		}
-		$xml.='</series>';
-		$xml.='<graphs>';
-		for ($indicador=0;$indicador<6;$indicador++){
-
-			$xml.='<graph color="#'.$indicadores_colores[$indicador].'" title="'.$indicadores_tiempo[$indicador].'" bullet="round">';
-			for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-				$numero_fallas_dia=$datos[$diasmes][$indicadores_tiempo[$indicador]];
-				$xml.='<value xid="'.$diasmes.'">'.$numero_fallas_dia.'</value>';
-			}
-			$xml.='</graph>';
-		}
-		$xml.='</graphs>';
-
-		$xml.='</chart>';
-
-		$this->getRequest()->setRequestFormat('xml');
-		$response = $this->getResponse();
-		$response->setContentType('text/xml');
-		$response->setHttpHeader('Content-length', strlen($xml), true);
-		return $this->renderText($xml);
+            $this->getRequest()->setRequestFormat('xml');
+            $response = $this->getResponse();
+            $response->setContentType('text/xml');
+            $response->setHttpHeader('Content-length', strlen($xml), true);
+            return $this->renderText($xml);
 	}
 
-	public function calcularIndicadoresDiariosMes($anio,$mes,$cant_dias, $inyeccionesEstandarPromedio)
+	public function calcularIndicadoresDiarios($ano, $mes, $dia)
+	{
+            $datos = array();
+
+            try{
+                $datosTiempos = $this->calcularTiemposDiarios($ano, $mes, $dia);
+                $datosInyecciones = $this->calcularInyeccionesDiarias($ano, $mes, $dia);
+
+                $criteria = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temp = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temp);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }                       
+
+                $tf_dia = $datosTiempos['TF'];
+                $to_dia = $datosTiempos['TO'];
+                $tp_dia = $datosTiempos['TP'];
+
+                $numeroInyecciones = $datosInyecciones['inyecciones'];
+                $numeroReinyecciones = $datosInyecciones['reinyecciones'];
+
+                $d_dia = RegistroUsoMaquinaPeer::calcularDisponibilidad($to_dia, $tf_dia);
+                $e_dia = RegistroUsoMaquinaPeer::calcularEficiencia($tp_dia, $to_dia);
+                $c_dia = RegistroUsoMaquinaPeer::calcularCalidad($numeroInyecciones,$numeroReinyecciones);
+                $horasActivas = $datosTiempos['HorasActivas'];
+                $a_dia = RegistroUsoMaquinaPeer::calcularAprovechamiento($tf_dia, $horasActivas);
+                $oee_dia = RegistroUsoMaquinaPeer::calcularEfectividadGlobalEquipo($d_dia, $e_dia, $c_dia);
+                $ptee_dia = RegistroUsoMaquinaPeer::calcularProductividadTotalEfectiva($a_dia,$oee_dia);
+
+                $datos['D'] = round($d_dia,2);
+                $datos['E'] = round($e_dia,2);
+                $datos['C'] = round($c_dia,2);
+                $datos['A'] = round($a_dia,2);
+                $datos['OEE'] = round($oee_dia,2);
+                $datos['PTEE'] = round($ptee_dia,2);                                
+            }catch (Exception $excepcion)
+            {
+                return "(exeption: 'Excepci&oacute;n en reporte-calcularTiemposDiariosMes ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
+	}
+        
+	/**************************************Reporte de indicadores barra del mes *******************/
+	public function executeGenerarDatosGraficoIndicadoresBarras(sfWebRequest $request)
+	{            
+            //Calculo de la fecha de inicio y fin de cada semana                
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+            
+            //Día de inicio y fin del ranto total de semanas
+            $fecha_in = $rango_fechas[0]['fecha_inicio'];
+            $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
+            
+            $fecha_ind = strtotime($fecha_inicio);
+            $ano = date('Y', $fecha_ind);
+
+            $datos=$this->calcularIndicadoresDiariosSemanaBarras($fecha_in, $fecha_fn);
+            $datos_metas=$this->obtenerIndicadoresMetasMesBarras($ano);
+            $indicadores_porcentaje=array(      'D',     'E',     'C',    'A',   'OEE',   'PTEE');
+            $indicadores_descripcion=array('Disponibilidad','Eficiencia','Calidad','Aprovechamiento','Efectividad global','PTEE');
+            $indicadores_colores=array('ff5454','47d552','f0a05f','ffdc44','72a8cd','b97a57');
+
+            $xml='<?xml version="1.0"?>';
+            $xml.='<chart>';
+
+            $xml.='<series>';
+            for($ind=0;$ind<6;$ind++)
+            {
+                    $xml.='<value xid="'.$ind.'" >'.$indicadores_descripcion[$ind].'</value>';
+            }
+            $xml.='</series>';
+            $xml.='<graphs>';
+            $xml.='<graph  title="Resultado Indicador " >';
+            for ($ind=0;$ind<6;$ind++){
+                    $resultado=$datos[$indicadores_porcentaje[$ind]];
+                    $xml.='<value xid="'.$ind.'"  color="'.$indicadores_colores[$ind].'">'.$resultado.'</value>';			
+            }
+            $xml.='</graph>';
+
+            $xml.='<graph  title="Meta Indicador " color="7F8DA9" >';
+            for ($ind=0;$ind<6;$ind++){
+                    $resultado=$datos_metas[$indicadores_porcentaje[$ind]];
+                    $xml.='<value xid="'.$ind.'" color="7F8DA9">'.$resultado.'</value>';
+            }
+            $xml.='</graph>';
+            $xml.='</graphs>';
+            $xml.='</chart>';
+
+            $this->getRequest()->setRequestFormat('xml');
+            $response = $this->getResponse();
+            $response->setContentType('text/xml');
+            $response->setHttpHeader('Content-length', strlen($xml), true);
+            return $this->renderText($xml);
+	}
+
+	public function calcularIndicadoresDiariosSemanaBarras($fecha_inicio, $fecha_fin)
+	{
+            $datos = array();
+            $datosInyecciones = array();
+            
+            try {
+                $criteria = new Criteria();
+                //Codigos de los equipos seleccionados
+                $temporal = $this->getRequestParameter('cods_equipos');
+                $cods_equipos = json_decode($temporal);
+                if($cods_equipos != ''){
+                    foreach ($cods_equipos as $cod_equipo) {
+                        $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }
+                $datosTiempos = $this->calcularTiemposDiariosMesTorta($fecha_inicio, $fecha_fin);
+
+                $tp_mes = $datosTiempos['TP'];
+                $tf_mes = $datosTiempos['TF'];
+                $to_mes = $datosTiempos['TO'];
+                
+                $fecha_in = strtotime($fecha_inicio);
+                $dia = (int) date('d', $fecha_in);
+                $mes = (int) date('m', $fecha_in);
+                $ano = (int) date('Y', $fecha_in);
+                $temp = $this->calcularInyeccionesDiarias($ano, $mes, $dia);
+                $datosInyecciones['inyeccionesMes'] = $temp['inyeccionesMes'];
+                $datosInyecciones['reinyeccionesMes'] = $temp['reinyeccionesMes'];
+                while($fecha_inicio < $fecha_fin) {
+                    $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
+                    $fecha_in = strtotime($fecha_inicio);
+                    $dia = (int) date('d', $fecha_in);
+                    $mes = (int) date('m', $fecha_in);
+                    $ano = (int) date('Y', $fecha_in);
+                    $temp = $this->calcularInyeccionesDiarias($ano, $mes, $dia);
+                    $datosInyecciones['inyeccionesMes'] += $temp['inyeccionesMes'];
+                    $datosInyecciones['reinyeccionesMes'] += $temp['reinyeccionesMes'];
+                }
+
+                $numeroInyeccionesMes = $datosInyecciones['inyeccionesMes'];
+                $numeroReinyeccionesMes = $datosInyecciones['reinyeccionesMes'];
+
+                $d_mes = RegistroUsoMaquinaPeer::calcularDisponibilidad($to_mes, $tf_mes);
+                $e_mes = RegistroUsoMaquinaPeer::calcularEficiencia($tp_mes, $to_mes);
+                $c_mes = RegistroUsoMaquinaPeer::calcularCalidad($numeroInyeccionesMes, $numeroReinyeccionesMes);
+                $cantidadHoras = $datosTiempos['HorasActivas'];
+                $a_mes = RegistroUsoMaquinaPeer::calcularAprovechamiento($tf_mes, $cantidadHoras);
+                $oee_mes = RegistroUsoMaquinaPeer::calcularEfectividadGlobalEquipo($d_mes, $e_mes, $c_mes);
+                $ptee_mes = RegistroUsoMaquinaPeer::calcularProductividadTotalEfectiva($a_mes, $oee_mes);
+
+                $datos['D'] = round($d_mes, 2);
+                $datos['E'] = round($e_mes, 2);
+                $datos['C'] = round($c_mes, 2);
+                $datos['A'] = round($a_mes, 2);
+                $datos['OEE'] = round($oee_mes, 2);
+                $datos['PTEE'] = round($ptee_mes, 2);
+            }catch (Exception $excepcion)
+            {
+                echo "(exeption: 'Excepci&oacute;n en reporte-calcularTiemposDiariosMes ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
+	}
+        
+        public function calcularTiemposDiariosMesTorta1($anio,$mes,$inyeccionesEstandarPromedio)
 	{
 		$datos;
+		$tp_mes = 0;
+		$tnp_mes = 0;
+		$tpnp_mes = 0;
+		$tpp_mes = 0;
+		$to_mes = 0;
+		$tf_mes = 0;
+		$params = array();
+		$tiempoCalendario = 0;
 
 		try{
-			$datosTiempos = $this->calcularTiemposDiariosMes($anio, $mes, $cant_dias, $inyeccionesEstandarPromedio);
-			$datosInyecciones = $this->calcularInyecciones($anio, $mes, $cant_dias);
-                        
                         $criteria = new Criteria();
                         //Codigos de los equipos seleccionados
                         $temp = $this->getRequestParameter('cods_equipos');
@@ -736,169 +946,44 @@ class reporte_graficosemanalActions extends sfActions
                                 $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                             }
                         }
-                        $cantidadMaquinas = MaquinaPeer::doCount($criteria);
-			$cantidadHoras = $cantidadMaquinas * 24;
+                        $maquinas = MaquinaPeer::doSelect($criteria);
+                        $tpp_mes = 0;
+                        $tnp_mes = 0;
+                        $tpnp_mes = 0;
+                        $tf_mes = 0;
+                        $tp_mes = 0;
+                        $tiempoCalendario = 0;
+                        foreach($maquinas as $maquina) {
+                                //                    $maquina = new Maquina();
 
-			for($dia=1;$dia<$cant_dias;$dia++){
-				$tf_dia = $datosTiempos[$dia]['TF'];
-				$to_dia = $datosTiempos[$dia]['TO'];
-				$tp_dia = $datosTiempos[$dia]['TP'];
+                                $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-				$numeroInyecciones = $datosInyecciones[$dia]['inyecciones'];
-				$numeroReinyecciones = $datosInyecciones[$dia]['reinyecciones'];
-
-				$d_dia = RegistroUsoMaquinaPeer::calcularDisponibilidad($to_dia, $tf_dia);
-				$e_dia = RegistroUsoMaquinaPeer::calcularEficiencia($tp_dia, $to_dia);
-				$c_dia = RegistroUsoMaquinaPeer::calcularCalidad($numeroInyecciones,$numeroReinyecciones);
-				$horasActivas = $datosTiempos[$dia]['HorasActivas'];
-				$a_dia = RegistroUsoMaquinaPeer::calcularAprovechamiento($tf_dia, $horasActivas);
-				$oee_dia = RegistroUsoMaquinaPeer::calcularEfectividadGlobalEquipo($d_dia, $e_dia, $c_dia);
-				$ptee_dia = RegistroUsoMaquinaPeer::calcularProductividadTotalEfectiva($a_dia,$oee_dia);
-
-				$datos[$dia]['D'] = round($d_dia,2);
-				$datos[$dia]['E'] = round($e_dia,2);
-				$datos[$dia]['C'] = round($c_dia,2);
-				$datos[$dia]['A'] = round($a_dia,2);
-				$datos[$dia]['OEE'] = round($oee_dia,2);
-				$datos[$dia]['PTEE'] = round($ptee_dia,2);
-			}
-		}catch (Exception $excepcion)
-		{
-			return "(exeption: 'Excepci&oacute;n en reporte-calcularTiemposDiariosMes ',error:'".$excepcion->getMessage()."')";
-		}
-		return $datos;
-	}
-        
-	/**************************************Reporte de indicadores barra del mes *******************/
-	public function executeGenerarDatosGraficoIndicadoresBarras(sfWebRequest $request)
-	{
-		$user = $this->getUser();
-		$codigo_usuario = $user->getAttribute('usu_codigo');
-		$criteria = new Criteria();
-		$criteria->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
-		$operario = EmpleadoPeer::doSelectOne($criteria);
-		$criteria = new Criteria();
-		$criteria->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
-		$empresa = EmpresaPeer::doSelectOne($criteria);
-
-		$inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
-
-		//$anio='2011';
-		//$mes='02';
-		$anio='2014';
-		$mes='02';
-
-		$cant_dias=$this->obtenerCantidadDiasMes($mes,$anio);
-
-		$datos=$this->calcularIndicadoresDiariosMesBarras($anio,$mes,$cant_dias,$inyeccionesEstandarPromedio);
-		$datos_metas=$this->obtenerIndicadoresMetasMesBarras($anio,$mes);
-		$indicadores_porcentaje=array(      'D',     'E',     'C',    'A',   'OEE',   'PTEE');
-		$indicadores_descripcion=array('Disponibilidad','Eficiencia','Calidad','Aprovechamiento','Efectividad global','PTEE');
-		$indicadores_colores=array('ff5454','47d552','f0a05f','ffdc44','72a8cd','b97a57');
-
-		$xml='<?xml version="1.0"?>';
-		$xml.='<chart>';
-
-		$xml.='<series>';
-		for($ind=0;$ind<6;$ind++)
-		{
-			//$xml.='<value xid="'.$ind.'" >'.$indicadores_porcentaje[$ind].'</value>';
-			$xml.='<value xid="'.$ind.'" >'.$indicadores_descripcion[$ind].'</value>';
-		}
-		$xml.='</series>';
-		$xml.='<graphs>';
-		$xml.='<graph  title="Resultado Indicador " >';
-		for ($ind=0;$ind<6;$ind++){
-			$resultado=$datos[$indicadores_porcentaje[$ind]];
-			$xml.='<value xid="'.$ind.'"  color="'.$indicadores_colores[$ind].'">'.$resultado.'</value>';
-			//$xml.='<value xid="'.$ind.'" color="">'.$resultado.'</value>';
-		}
-		$xml.='</graph>';
-
-		$xml.='<graph  title="Meta Indicador " color="7F8DA9" >';
-		for ($ind=0;$ind<6;$ind++){
-			$resultado=$datos_metas[$indicadores_porcentaje[$ind]];
-			//$xml.='<value xid="'.$ind.'" color="'.$indicadores_colores[$ind].',ffffff">'.$resultado.'</value>';
-			$xml.='<value xid="'.$ind.'" color="7F8DA9">'.$resultado.'</value>';
-		}
-		$xml.='</graph>';
-
-		$xml.='</graphs>';
-
-		$xml.='</chart>';
-
-		$this->getRequest()->setRequestFormat('xml');
-		$response = $this->getResponse();
-		$response->setContentType('text/xml');
-		$response->setHttpHeader('Content-length', strlen($xml), true);
-		return $this->renderText($xml);
-	}
-
-	public function calcularIndicadoresDiariosMesBarras($anio,$mes,$cant_dias,$inyeccionesEstandarPromedio)
-	{
-		$datos;
-		$d_mes = 0;
-		$e_mes = 0;
-		$c_mes = 0;
-		$a_mes = 0;
-		$oee_mes = 0;
-		$ptee_mes = 0;
-
-		try{
-			$cant_dias = $this->obtenerCantidadDiasMes($mes,$anio);
-
-			$criteria = new Criteria();
-                        //Codigos de los equipos seleccionados
-                        $temp = $this->getRequestParameter('cods_equipos');
-                        $cods_equipos = json_decode($temp);
-                        if($cods_equipos != ''){
-                            foreach ($cods_equipos as $cod_equipo) {
-                                $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
-                            }
+                                $tpp_mes += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
+                                $tnp_mes += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
+                                $tpnp_mes += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
+                                $tiempoCalendario += $maquina->calcularNumeroHorasActivasDelMes($mes, $anio);
+                                $tp_mes += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
                         }
-                        $cantidadMaquinas = MaquinaPeer::doCount($criteria);
+                        $tf_mes = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $tpp_mes, $tnp_mes);
+                        $to_mes = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_mes, $tpnp_mes);
+			
+			$datos['TP'] = $tp_mes;
+			$datos['TNP'] = $tnp_mes;
+			$datos['TPNP'] = $tpnp_mes;
+			$datos['TPP'] = $tpp_mes;
+			$datos['TO'] = $to_mes;                        
+			$datos['TF'] = $tf_mes;//Linea descomentada
+			$datos['HorasActivas'] = $tiempoCalendario;
 
-			$cantidadDias = RegistroUsoMaquinaPeer::calcularNumeroDiasDelMes($mes, $anio);
-			$cantidadHoras = $cantidadDias * $cantidadMaquinas * 24;
-
-			$datosTiempos = $this->calcularTiemposDiariosMesTorta($anio, $mes);
-
-			$tp_mes = $datosTiempos['TP'];
-			$tpp_mes = $datosTiempos['TPP'];
-			$tnp_mes = $datosTiempos['TNP'];
-			$tpnp_mes = $datosTiempos['TPNP'];
-			$tf_mes = $datosTiempos['TF'];
-			$to_mes = $datosTiempos['TO'];
-
-			$datosInyecciones = $this->calcularInyecciones($anio, $mes, $cant_dias);
-
-			$numeroInyeccionesMes = $datosInyecciones['inyeccionesMes'];
-			$numeroReinyeccionesMes = $datosInyecciones['reinyeccionesMes'];
-
-			$d_mes = RegistroUsoMaquinaPeer::calcularDisponibilidad($to_mes, $tf_mes);
-			$e_mes = RegistroUsoMaquinaPeer::calcularEficiencia($tp_mes, $to_mes);
-			$c_mes = RegistroUsoMaquinaPeer::calcularCalidad($numeroInyeccionesMes, $numeroReinyeccionesMes);
-			$cantidadHoras = $datosTiempos['HorasActivas'];
-			$a_mes = RegistroUsoMaquinaPeer::calcularAprovechamiento($tf_mes, $cantidadHoras);
-			$oee_mes = RegistroUsoMaquinaPeer::calcularEfectividadGlobalEquipo($d_mes, $e_mes, $c_mes);
-			$ptee_mes = RegistroUsoMaquinaPeer::calcularProductividadTotalEfectiva($a_mes, $oee_mes);
-
-			$datos['D'] = round($d_mes, 2);
-			$datos['E'] = round($e_mes, 2);
-			$datos['C'] = round($c_mes, 2);
-			$datos['A'] = round($a_mes, 2);
-			$datos['OEE'] = round($oee_mes, 2);
-			$datos['PTEE'] = round($ptee_mes, 2);
 		}catch (Exception $excepcion)
 		{
 			echo "(exeption: 'Excepci&oacute;n en reporte-calcularTiemposDiariosMes ',error:'".$excepcion->getMessage()."')";
 		}
-
 		return $datos;
 	}
 
 
-	public function obtenerIndicadoresMetasMesBarras($anio,$mes)
+	public function obtenerIndicadoresMetasMesBarras($anio)
 	{
 		$datos;
 		try{

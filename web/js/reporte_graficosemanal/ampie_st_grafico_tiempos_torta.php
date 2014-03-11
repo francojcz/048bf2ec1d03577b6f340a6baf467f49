@@ -71,7 +71,7 @@
       <align>center</align>
       <text_size>13</text_size> 
       <text>
-        <![CDATA[<b>Consolidado semana de tiempos para cálculo OEE</b>]]>
+        <![CDATA[<b>Consolidado de tiempos para cálculo OEE / semana</b>]]>
       </text> 
     </label>
   </labels>

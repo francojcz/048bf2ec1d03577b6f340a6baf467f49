@@ -54,9 +54,10 @@
   <labels> 
     <label lid='0'>
       <x>5</x>
-      <y>20</y>
+      <y>10</y>
       <width>520</width> 
       <align>center</align>
+      <text_size>13</text_size> 
       <text> 
         <![CDATA[<b>Comparativo<br>Indicadores Vs Metas</b>]]>
       </text> 

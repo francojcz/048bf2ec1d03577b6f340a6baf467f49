@@ -44,7 +44,7 @@
       <width>100</width>
       <align>left</align>
       <text>
-        <![CDATA[<b>%</b>]]>
+        <![CDATA[<b>Porcentaje (%)</b>]]>
       </text> 
     </label>
   </labels>
