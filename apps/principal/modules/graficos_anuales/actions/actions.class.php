@@ -2012,7 +2012,6 @@ class graficos_anualesActions extends sfActions
                 $maquinas = MaquinaPeer::doSelect($conexion);
 
                 foreach($maquinas as $maquina) {
-                        //				                    $maquina = new Maquina();
                         $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
                         $TNPEnero += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, 1, $anho, $params);

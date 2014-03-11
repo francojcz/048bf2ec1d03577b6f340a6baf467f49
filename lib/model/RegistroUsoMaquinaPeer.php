@@ -1117,6 +1117,21 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         return ($sumatoria / 60);
     }
+    
+    public static function calcularTPSemanaEnHoras($codigoMaquina, $fecha_inicio, $mes_inicio, $params, $inyeccionesEstandarPromedio)
+    {
+        $registros = RegistroUsoMaquinaPeer::consultarRegistrosSemana($codigoMaquina, $fecha_inicio, $mes_inicio, $params);
+
+        $maquina = MaquinaPeer::retrieveByPK($codigoMaquina);
+
+        $sumatoria = 0;
+        foreach ($registros as $registro)
+        {
+            $sumatoria += $registro -> calcularTPMinutos($inyeccionesEstandarPromedio);
+        }
+
+        return ($sumatoria / 60);
+    }
 
     public static function calcularTPDiaEnHoras($codigoMaquina, $dia, $mes, $año, $params, $inyeccionesEstandarPromedio)
     {
@@ -1174,8 +1189,21 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $sumatoria = 0;
         foreach ($registros as $registro)
         {
-            //			$registro = new RegistroUsoMaquina();
+            $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
+            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            $sumatoria += $registro -> getRumFallas();
+        }
 
+        return ($sumatoria / 60);
+    }
+    
+    public static function calcularTPNPSemanaEnHoras($codigoMaquina, $fecha_inicio, $fecha_fin, $params, $inyeccionesEstandarPromedio = 8)
+    {
+        $registros = RegistroUsoMaquinaPeer::consultarRegistrosSemana($codigoMaquina, $fecha_inicio, $fecha_fin, $params);
+
+        $sumatoria = 0;
+        foreach ($registros as $registro)
+        {
             $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
             $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             $sumatoria += $registro -> getRumFallas();
@@ -1224,6 +1252,19 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
     public static function calcularTPPMesEnHoras($codigoMaquina, $mes, $año, $params)
     {
         $registros = RegistroUsoMaquinaPeer::consultarRegistrosMes($codigoMaquina, $mes, $año, $params);
+
+        $sumatoria = 0;
+        foreach ($registros as $registro)
+        {
+            $sumatoria += $registro -> getRumTiempoCambioModelo();
+        }
+
+        return ($sumatoria / 60);
+    }
+    
+    public static function calcularTPPSemanaEnHoras($codigoMaquina, $fecha_inicio, $fecha_fin, $params)
+    {
+        $registros = RegistroUsoMaquinaPeer::consultarRegistrosSemana($codigoMaquina, $fecha_inicio, $fecha_fin, $params);
 
         $sumatoria = 0;
         foreach ($registros as $registro)
@@ -1303,6 +1344,42 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         return $registros;
     }
+    
+    public static function consultarRegistrosSemana($codigoMaquina, $fecha_inicio, $fecha_fin, $params)
+    {
+        $fecha_in = strtotime($fecha_inicio);
+        $dia_inicio = (int) date('d', $fecha_in);
+        $mes_inicio = (int) date('m', $fecha_in);
+        $ano_inicio = (int) date('Y', $fecha_in);
+        $fecha_fn = strtotime($fecha_fin);
+        $dia_fin = (int) date('d', $fecha_fn);
+        $mes_fin = (int) date('m', $fecha_fn);
+        $ano_fin = (int) date('Y', $fecha_fn);
+        $fecha_i = date_create($ano_inicio.'-'.$mes_inicio.'-'.$dia_inicio)->format('Y-m-d');
+        $fecha_f = date_create($ano_fin.'-'.$mes_fin.'-'.$dia_fin)->format('Y-m-d');        
+
+        $criteria = new Criteria();
+        $criteria -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $codigoMaquina);
+        $criteria -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha_i, Criteria::GREATER_EQUAL);
+        $criteria -> addAnd(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha_f, Criteria::LESS_EQUAL);
+        $criteria -> add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
+        $criteria -> addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_FECHA);
+        $criteria -> addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_TIEMPO_ENTRE_MODELO);
+
+        if (isset($params['codigo_operario']))
+        {
+            $criteria -> add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $params['codigo_operario']);
+        }
+
+        if (isset($params['codigo_metodo']))
+        {
+            $criteria -> add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $params['codigo_metodo']);
+        }
+
+        $registros = RegistroUsoMaquinaPeer::doSelect($criteria);
+
+        return $registros;
+    }
 
     public static function consultarRegistrosDia($codigoMaquina, $dia, $mes, $año, $params)
     {
@@ -1337,10 +1414,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
     public static function calcularTNPMesEnHoras($codigoMaquina, $mes, $año, $params)
     {
-        $sumatoria = 0;
-
         $registros = RegistroUsoMaquinaPeer::consultarRegistrosMes($codigoMaquina, $mes, $año, $params);
-
         $minutosActuales = 0;
         $minutosTiempoNoProgramado = 0;
         $sumatoria = 0;
@@ -1360,11 +1434,34 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $sumatoria += ($minutosActivos - $minutosActuales);
         return ($sumatoria / 60);
     }
+    
+    public static function calcularTNPSemanaEnHoras($codigoMaquina, $fecha_inicio, $fecha_fin, $params)
+    {
+        $registros = RegistroUsoMaquinaPeer::consultarRegistrosSemana($codigoMaquina, $fecha_inicio, $fecha_fin, $params);
+        $minutosActuales = 0;
+        $minutosTiempoNoProgramado = 0;
+        $sumatoria = 0;
+        foreach ($registros as $registro)
+        {
+            $minutosTiempoNoProgramado = RegistroUsoMaquinaPeer::calcularMinutos((int)$registro -> getRumFecha('d'), (int)$registro -> getRumTiempoEntreModelo('H'), (int)$registro -> getRumTiempoEntreModelo('i'), (int)$registro -> getRumTiempoEntreModelo('s'));
+            $minutosTiempoNoProgramado -= $minutosActuales;
+
+            $sumatoria += $minutosTiempoNoProgramado;
+
+            $minutosActuales = RegistroUsoMaquinaPeer::calcularMinutos((int)$registro -> getRumFecha('d'), (int)$registro -> getRumHoraFinTrabajo('H'), (int)$registro -> getRumHoraFinTrabajo('i'), (int)$registro -> getRumHoraFinTrabajo('s'));
+        }
+
+        $maquina = MaquinaPeer::retrieveByPK($codigoMaquina);
+        
+        //Calcular minutos activos del rango de fechas        
+        $minutosActivos = $maquina->calcularNumeroMinutosActivosSemana($fecha_inicio, $fecha_fin);
+                
+        $sumatoria += ($minutosActivos - $minutosActuales);
+        return ($sumatoria / 60);
+    }
 
     public static function calcularTNPDiaEnHoras($codigoMaquina, $dia, $mes, $año, $params)
     {
-        $sumatoria = 0;
-
         $registros = RegistroUsoMaquinaPeer::consultarRegistrosDia($codigoMaquina, $dia, $mes, $año, $params);
 
         $minutosActuales = 0;

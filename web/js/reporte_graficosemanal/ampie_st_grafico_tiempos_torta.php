@@ -66,12 +66,12 @@
   <labels>
     <label lid='0'>
       <x>0</x>
-      <y>10</y> 
+      <y>20</y> 
       <rotate>false</rotate> 
       <align>center</align>
-      <text_size>12</text_size> 
+      <text_size>13</text_size> 
       <text>
-        <![CDATA[<b>Consolidado mes de tiempos para cálculo OEE</b>]]>
+        <![CDATA[<b>Consolidado semana de tiempos para cálculo OEE</b>]]>
       </text> 
     </label>
   </labels>

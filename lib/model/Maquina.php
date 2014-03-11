@@ -26,8 +26,6 @@ class Maquina extends BaseMaquina {
 			$minutosActivos = 24*60;
 		}
 		else {
-			//			$mesEntero = intval($mes);
-			//			$mesEliminacion = intval($this->getMaqFechaActualizacion('m'));
 			$dateTimeDelDia = new DateTime($año.'-'.$mes.'-'.$dia);
 			$timestampDelDia = $dateTimeDelDia->getTimestamp();
 			$dateTimeEliminacion = new DateTime($this->getMaqFechaActualizacion('Y-m-d'));
@@ -86,4 +84,25 @@ class Maquina extends BaseMaquina {
 	public function getNombreCompleto() {
 		return $this->getMaqNombre().'-'.$this->getMaqCodigoInventario();
 	}
+        
+        public function calcularNumeroHorasActivasSemana($fecha_inicio, $fecha_fin) {
+		return ($this->calcularNumeroMinutosActivosSemana($fecha_inicio, $fecha_fin)/60);
+	}        
+        public function calcularNumeroMinutosActivosSemana($fecha_inicio, $fecha_fin) {
+            $minutosActivos = 0;
+            $fecha_in = strtotime($fecha_inicio);
+            $dia = (int) date('d', $fecha_in);
+            $mes = (int) date('m', $fecha_in);
+            $año = (int) date('Y', $fecha_in);
+            $minutosActivos += $this->calcularNumeroMinutosActivosDelDia($dia, $mes, $año);
+            while($fecha_inicio < $fecha_fin) {
+                $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
+                $fecha_in = strtotime($fecha_inicio);
+                $dia = (int) date('d', $fecha_in);
+                $mes = (int) date('m', $fecha_in);
+                $año = (int) date('Y', $fecha_in);
+                $minutosActivos += $this ->calcularNumeroMinutosActivosDelDia($dia, $mes, $año);
+            }
+            return $minutosActivos;
+        }
 } // Maquina
