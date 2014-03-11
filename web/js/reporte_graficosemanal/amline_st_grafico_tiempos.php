@@ -26,12 +26,12 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia tiempos para cálculo OEE / semana</b>]]>
+        <![CDATA[<b>Tendencia tiempos para cálculo OEE / Semana</b>]]>
       </text> 
     </label>
-	<label lid='2'>
+    <label lid='2'>
       <x>91%</x> 
-      <y>310</y>
+      <y>315</y>
       <width>50</width>
       <align>right</align> 
       <text>

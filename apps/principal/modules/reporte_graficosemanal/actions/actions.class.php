@@ -232,8 +232,6 @@ class reporte_graficosemanalActions extends sfActions
 	/**************************************Reporte de muestras *******************/
 	public function executeGenerarDatosGraficoMuestras(sfWebRequest $request)
 	{
-		//$anio='2011';
-		//$mes='02';
 		$anio='2014';
 		$mes='02';
 		$cant_dias=$this->obtenerCantidadDiasMes($mes,$anio);
@@ -332,109 +330,121 @@ class reporte_graficosemanalActions extends sfActions
 	/**************************************Reporte de perdidas diarias del mes *******************/
 	public function executeGenerarDatosGraficoPerdidas(sfWebRequest $request)
 	{
-		$user = $this->getUser();
-		$codigo_usuario = $user->getAttribute('usu_codigo');
-		$criteria = new Criteria();
-		$criteria->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
-		$operario = EmpleadoPeer::doSelectOne($criteria);
-		$criteria = new Criteria();
-		$criteria->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
-		$empresa = EmpresaPeer::doSelectOne($criteria);
+            $user = $this->getUser();
+            $codigo_usuario = $user->getAttribute('usu_codigo');
+            $conexion = new Criteria();
+            $conexion -> add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+            $operario = EmpleadoPeer::doSelectOne($conexion);
+            $criteria = new Criteria();
+            $criteria -> add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+            $empresa = EmpresaPeer::doSelectOne($criteria);
+            $inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
 
-		$inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+            //Calculo de la fecha de inicio y fin de cada semana                
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
 
-		//$anio='2011';
-		//$mes='02';
-		$anio='2014';
-		$mes='02';
-		$cant_dias=$this->obtenerCantidadDiasMes($mes,$anio);
+            //Calculo de indicadores por semana
+            /*Se calculan los indicadores por día pero se van sumando de acuerdo con el rango de cada semana*/
+            $datos = array();
+            for($i=0; $i<sizeof($rango_fechas); $i++) {
+                $fecha_inicio = $rango_fechas[$i]['fecha_inicio'];
+                $fecha_fin = $rango_fechas[$i]['fecha_fin'];
+                $fecha = $this->fecha($fecha_inicio);
+                $temp = $this->calcularPerdidasDiarias($fecha[0], $fecha[1], $fecha[2], $inyeccionesEstandarPromedio);
+                $datos[$i]['fallas'] = $temp['fallas'];
+                $datos[$i]['paros'] = $temp['paros'];
+                $datos[$i]['retrabajos'] = $temp['retrabajos'];
+                $datos[$i]['perdida_rendimiento'] = $temp['perdida_rendimiento'];
+                while($fecha_inicio < $fecha_fin) {
+                    $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
+                    $fecha = $this->fecha($fecha_inicio);
+                    $temp = $this->calcularPerdidasDiarias($fecha[0], $fecha[1], $fecha[2], $inyeccionesEstandarPromedio);
+                    $datos[$i]['fallas'] += $temp['fallas'];
+                    $datos[$i]['paros'] += $temp['paros'];
+                    $datos[$i]['retrabajos'] += $temp['retrabajos'];
+                    $datos[$i]['perdida_rendimiento'] += $temp['perdida_rendimiento'];
+                }
+            }
 
-		$datos=$this->calcularPerdidasDiariasMes($anio,$mes,$cant_dias, $inyeccionesEstandarPromedio);
+            $xml='<?xml version="1.0"?>';
+            $xml.='<chart>';
+            $xml.='<series>';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'</value>';
+            }
+            $xml.='</series>';
 
-		$xml='<?xml version="1.0"?>';
-		$xml.='<chart>';
+            $xml.='<graphs>';
+            $xml.='<graph color="#72a8cd" title="Fallas" bullet="round">';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                    $numero_fallas_dia=$datos[$diasmes]['fallas'];
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_fallas_dia.'</value>';
+            }
+            $xml.='</graph>';
 
-		$xml.='<series>';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++)
-		{
-			$xml.='<value xid="'.$diasmes.'">'.$diasmes.'</value>';
-		}
-		$xml.='</series>';
+            $xml.='<graph color="#ff5454" title="Paros menores y reajustes" bullet="round" >';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                    $numero_paros_dia=$datos[$diasmes]['paros'];
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_paros_dia.'</value>';
+            }
+            $xml.='</graph>';
 
-		$xml.='<graphs>';
-		$xml.='<graph color="#72a8cd" title="Fallas" bullet="round">';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-			$numero_fallas_dia=$datos[$diasmes]['fallas'];
-			$xml.='<value xid="'.$diasmes.'">'.$numero_fallas_dia.'</value>';
-		}
-		$xml.='</graph>';
-
-		$xml.='<graph color="#ff5454" title="Paros menores y reajustes" bullet="round" >';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-			$numero_paros_dia=$datos[$diasmes]['paros'];
-			$xml.='<value xid="'.$diasmes.'">'.$numero_paros_dia.'</value>';
-		}
-		$xml.='</graph>';
-
-		$xml.='<graph color="#47d552" title="Defectos y retrabajos" bullet="round" >';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-			$numero_retrabajos_dia=$datos[$diasmes]['retrabajos'];
-			$xml.='<value xid="'.$diasmes.'">'.$numero_retrabajos_dia.'</value>';
-		}
-		$xml.='</graph>';
+            $xml.='<graph color="#47d552" title="Defectos y retrabajos" bullet="round" >';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
+                    $numero_retrabajos_dia=$datos[$diasmes]['retrabajos'];
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_retrabajos_dia.'</value>';
+            }
+            $xml.='</graph>';
 
 
-		$xml.='<graph color="#47d599" title="Pérdidas de velocidad" bullet="round" >';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-			$numero_retrabajos_dia=$datos[$diasmes]['perdida_rendimiento'];
-			$xml.='<value xid="'.$diasmes.'">'.$numero_retrabajos_dia.'</value>';
-		}
-		$xml.='</graph>';
+            $xml.='<graph color="#47d599" title="Pérdidas de velocidad" bullet="round" >';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
+                    $numero_retrabajos_dia=$datos[$diasmes]['perdida_rendimiento'];
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$rango]['fecha_inicio']).'">'.$numero_retrabajos_dia.'</value>';
+            }
+            $xml.='</graph>';
+            $xml.='</graphs>';
+            $xml.='</chart>';
 
-		$xml.='</graphs>';
-
-		$xml.='</chart>';
-
-		$this->getRequest()->setRequestFormat('xml');
-		$response = $this->getResponse();
-		$response->setContentType('text/xml');
-		$response->setHttpHeader('Content-length', strlen($xml), true);
-		return $this->renderText($xml);
+            $this->getRequest()->setRequestFormat('xml');
+            $response = $this->getResponse();
+            $response->setContentType('text/xml');
+            $response->setHttpHeader('Content-length', strlen($xml), true);
+            return $this->renderText($xml);
 	}
 
-	public function calcularPerdidasDiariasMes($anio,$mes,$cant_dias,$inyeccionesEstandarPromedio)
+	public function calcularPerdidasDiarias($ano,$mes,$dia,$inyeccionesEstandarPromedio)
 	{
-		$datos;
-		try{
-			for($dia=1;$dia<$cant_dias;$dia++){
-				$suma_fallas_dia= 0;
-				$suma_paros_dia= 0;
-				$suma_retrabajos_dia= 0;
-				$suma_perdidarendimiento_dia= 0;
+            $datos = array();
 
-				$conexion=$this->obtenerConexionDia($anio.'-'.$mes.'-'.$dia);
-				$registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
+            try{
+                $suma_fallas_dia= 0;
+                $suma_paros_dia= 0;
+                $suma_retrabajos_dia= 0;
+                $suma_perdidarendimiento_dia= 0;
+                
+                $conexion=$this->obtenerConexionDia($ano.'-'.$mes.'-'.$dia);
+                $registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
 
-				foreach($registros_uso_maquinas as $temporal)
-				{
-					$suma_fallas_dia+= $temporal->getRumFallas();
-					$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
-					$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
-					$suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
-				}
+                foreach($registros_uso_maquinas as $temporal)
+                {
+                        $suma_fallas_dia+= $temporal->getRumFallas();
+                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                        $suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
+                        $suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
+                }
 
-				$datos[$dia]['fallas'] = round($suma_fallas_dia/60,2);
-				$datos[$dia]['paros'] = round($suma_paros_dia/60,2);
-				$datos[$dia]['retrabajos'] = round($suma_retrabajos_dia/60,2);
-				$datos[$dia]['perdida_rendimiento'] = round($suma_perdidarendimiento_dia/60,2);
-
-					
-			}
-		}catch (Exception $excepcion)
-		{
-			return "(exeption: 'Excepci&oacute;n en reporte-calcularFallas ',error:'".$excepcion->getMessage()."')";
-		}
-		return $datos;
+                $datos['fallas'] = round($suma_fallas_dia/60,2);
+                $datos['paros'] = round($suma_paros_dia/60,2);
+                $datos['retrabajos'] = round($suma_retrabajos_dia/60,2);
+                $datos['perdida_rendimiento'] = round($suma_perdidarendimiento_dia/60,2);
+            }catch (Exception $excepcion)
+            {
+                return "(exeption: 'Excepci&oacute;n en reporte-calcularFallas ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
 	}
 
 	/**************************************Reporte de perdidas del mes *******************/
@@ -487,12 +497,10 @@ class reporte_graficosemanalActions extends sfActions
 
 			foreach($registros_uso_maquinas as $temporal)
 			{
-				//				$temporal = new RegistroUsoMaquina();
-
-				$suma_fallas_dia+= $temporal->getRumFallas();
-				$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
-				$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
-				$suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
+                            $suma_fallas_dia+= $temporal->getRumFallas();
+                            $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                            $suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
+                            $suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
 			}
 			$datos['fallas']=round($suma_fallas_dia/60,2);
 			$datos['paros']=round(($suma_paros_dia/60),2);
@@ -923,65 +931,6 @@ class reporte_graficosemanalActions extends sfActions
             }
             return $datos;
 	}
-        
-        public function calcularTiemposDiariosMesTorta1($anio,$mes,$inyeccionesEstandarPromedio)
-	{
-		$datos;
-		$tp_mes = 0;
-		$tnp_mes = 0;
-		$tpnp_mes = 0;
-		$tpp_mes = 0;
-		$to_mes = 0;
-		$tf_mes = 0;
-		$params = array();
-		$tiempoCalendario = 0;
-
-		try{
-                        $criteria = new Criteria();
-                        //Codigos de los equipos seleccionados
-                        $temp = $this->getRequestParameter('cods_equipos');
-                        $cods_equipos = json_decode($temp);
-                        if($cods_equipos != ''){
-                            foreach ($cods_equipos as $cod_equipo) {
-                                $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
-                            }
-                        }
-                        $maquinas = MaquinaPeer::doSelect($criteria);
-                        $tpp_mes = 0;
-                        $tnp_mes = 0;
-                        $tpnp_mes = 0;
-                        $tf_mes = 0;
-                        $tp_mes = 0;
-                        $tiempoCalendario = 0;
-                        foreach($maquinas as $maquina) {
-                                //                    $maquina = new Maquina();
-
-                                $codigoTemporalMaquina = $maquina->getMaqCodigo();
-
-                                $tpp_mes += RegistroUsoMaquinaPeer::calcularTPPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
-                                $tnp_mes += RegistroUsoMaquinaPeer::calcularTNPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
-                                $tpnp_mes += RegistroUsoMaquinaPeer::calcularTPNPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
-                                $tiempoCalendario += $maquina->calcularNumeroHorasActivasDelMes($mes, $anio);
-                                $tp_mes += RegistroUsoMaquinaPeer::calcularTPMesEnHoras($codigoTemporalMaquina, $mes, $anio, $params, 8);
-                        }
-                        $tf_mes = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $tpp_mes, $tnp_mes);
-                        $to_mes = RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_mes, $tpnp_mes);
-			
-			$datos['TP'] = $tp_mes;
-			$datos['TNP'] = $tnp_mes;
-			$datos['TPNP'] = $tpnp_mes;
-			$datos['TPP'] = $tpp_mes;
-			$datos['TO'] = $to_mes;                        
-			$datos['TF'] = $tf_mes;//Linea descomentada
-			$datos['HorasActivas'] = $tiempoCalendario;
-
-		}catch (Exception $excepcion)
-		{
-			echo "(exeption: 'Excepci&oacute;n en reporte-calcularTiemposDiariosMes ',error:'".$excepcion->getMessage()."')";
-		}
-		return $datos;
-	}
-
 
 	public function obtenerIndicadoresMetasMesBarras($anio)
 	{

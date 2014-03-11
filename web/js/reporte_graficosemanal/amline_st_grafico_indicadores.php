@@ -26,12 +26,12 @@
       <text_size>13</text_size>
       <align>center</align>
       <text> 
-        <![CDATA[<b>Tendencia indicadores / semana</b>]]>
+        <![CDATA[<b>Tendencia indicadores / Semana</b>]]>
       </text> 
     </label>
 	<label lid='2'>
       <x>91%</x> 
-      <y>295</y>
+      <y>290</y>
       <width>50</width>
       <align>right</align> 
       <text>
