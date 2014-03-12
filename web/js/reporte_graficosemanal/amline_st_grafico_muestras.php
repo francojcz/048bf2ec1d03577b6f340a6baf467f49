@@ -24,17 +24,18 @@
       <y>20</y> 
       <width>520</width> 
       <align>center</align>
+      <text_size>13</text_size>
       <text>
-        <![CDATA[<b>Lotes analizados / día</b>]]>
+        <![CDATA[<b>Lotes analizados / Semana</b>]]>
       </text> 
     </label>
-	<label lid='2'>
-      <x>90%</x>
-      <y>338</y> 
-      <width>40</width>
-      <align>right</align>
+    <label lid='2'>
+      <x>91%</x> 
+      <y>310</y>
+      <width>50</width>
+      <align>right</align> 
       <text>
-        <![CDATA[<b>Días</b>]]>
+        <![CDATA[<b>Semana</b>]]>
       </text> 
     </label>
 	<label lid='1'>

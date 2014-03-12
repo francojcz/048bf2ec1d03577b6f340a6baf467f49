@@ -118,110 +118,121 @@ class reporte_graficosemanalActions extends sfActions
 		}
 		return $cant_dias+1;
 	}
-	/**************************************Reporte de inyecciones *******************/
+	/**************************************Reporte de inyecciones*******************/
 	public function executeGenerarDatosGraficoInyecciones(sfWebRequest $request)
 	{
-		$anio='2014';
-		$mes='02';
-		$cant_dias=$this->obtenerCantidadDiasMes($mes,$anio);
+            //Calculo de la fecha de inicio y fin de cada semana                
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
 
-		$total_inyecciones_realiza_mes=0;
-		$total_reinyecciones_mes=0;
-		$datos=$this->calcularInyecciones($anio,$mes,$cant_dias);
-		$max_numero_inyecc=0;
+            //Calculo de indicadores por semana
+            /*Se calculan los indicadores por día pero se van sumando de acuerdo con el rango de cada semana*/
+            $datos = array();
+            for($i=0; $i<sizeof($rango_fechas); $i++) {
+                $fecha_inicio = $rango_fechas[$i]['fecha_inicio'];
+                $fecha_fin = $rango_fechas[$i]['fecha_fin'];
+                $fecha = $this->fecha($fecha_inicio);
+                $temp = $this->calcularInyecciones($fecha[0], $fecha[1], $fecha[2]);
+                $datos[$i]['inyecciones'] = $temp['inyecciones'];
+                $datos[$i]['reinyecciones'] = $temp['reinyecciones'];
+                while($fecha_inicio < $fecha_fin) {
+                        $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
+                        $fecha = $this->fecha($fecha_inicio);
+                        $temp = $this->calcularInyecciones($fecha[0], $fecha[1], $fecha[2]);
+                        $datos[$i]['inyecciones'] += $temp['inyecciones'];
+                        $datos[$i]['reinyecciones'] += $temp['reinyecciones'];
+                }
+            }
 
-		$xml='<?xml version="1.0"?>';
-		$xml.='<chart>';
+            $total_inyecciones_realiza_mes=0;
+            $total_reinyecciones_mes=0;
+            $max_numero_inyecc=0;
 
-		$xml.='<series>';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++)
-		{
-			$xml.='<value xid="'.$diasmes.'">'.$diasmes.'</value>';
-		}
-		$xml.='</series>';
-		$xml.='<graphs>';
-		$xml.='<graph color="#72a8cd" title="Número inyecciones realizadas" bullet="round">';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
+            $xml='<?xml version="1.0"?>';
+            $xml.='<chart>';
 
-			$total_inyecciones_realiza=$datos[$diasmes]['inyecciones'];
-			$xml.='<value xid="'.$diasmes.'">'.round($total_inyecciones_realiza, 2).'</value>';
+            $xml.='<series>';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++)
+            {
+                    $xml.='<value xid="'.$diasmes.'">'.$diasmes.'</value>';
+            }
+            $xml.='</series>';
+            $xml.='<graphs>';
+            $xml.='<graph color="#72a8cd" title="Número inyecciones realizadas" bullet="round">';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
 
-			$total_inyecciones_realiza_mes+=$total_inyecciones_realiza ;
+                    $total_inyecciones_realiza=$datos[$diasmes]['inyecciones'];
+                    $xml.='<value xid="'.$diasmes.'">'.round($total_inyecciones_realiza, 2).'</value>';
 
-			if($total_inyecciones_realiza>$max_numero_inyecc){
-				$max_numero_inyecc=$total_inyecciones_realiza;
-			}
-		}
-		$xml.='</graph>';
+                    $total_inyecciones_realiza_mes+=$total_inyecciones_realiza ;
 
-		$xml.='<graph color="#ff5454" title="Número reinyecciones" bullet="round">';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-			$total_reinyecciones=$datos[$diasmes]['reinyecciones'];
-			$xml.='<value xid="'.$diasmes.'">'.round($total_reinyecciones, 2).'</value>';
-			$total_reinyecciones_mes+=$total_reinyecciones ;
+                    if($total_inyecciones_realiza>$max_numero_inyecc){
+                            $max_numero_inyecc=$total_inyecciones_realiza;
+                    }
+            }
+            $xml.='</graph>';
 
-			if($total_reinyecciones>$max_numero_inyecc){
-				$max_numero_inyecc=$total_reinyecciones;
-			}
-		}
-		$xml.='</graph>';
+            $xml.='<graph color="#ff5454" title="Número reinyecciones" bullet="round">';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
+                    $total_reinyecciones=$datos[$diasmes]['reinyecciones'];
+                    $xml.='<value xid="'.$diasmes.'">'.round($total_reinyecciones, 2).'</value>';
+                    $total_reinyecciones_mes+=$total_reinyecciones ;
 
-		$xml.='</graphs>';
-		$xml.='<guides>';
+                    if($total_reinyecciones>$max_numero_inyecc){
+                            $max_numero_inyecc=$total_reinyecciones;
+                    }
+            }
+            $xml.='</graph>';
 
-		$porcen_inyecciones_realizadas=0;
-		$porcen_reinyecciones_realizadas=0;
-		$total_inyecciones=$total_inyecciones_realiza_mes+$total_reinyecciones_mes;
+            $xml.='</graphs>';
+            $xml.='<guides>';
 
-		$unidad_separancion=($max_numero_inyecc/8);
-		$xml.=$this->agregarGuiaGrafica('Total inyecciones : '.$total_inyecciones,$max_numero_inyecc+ ($unidad_separancion*3));
-		if($total_inyecciones!=0){
-			$porcen_inyecciones_realizadas=round((($total_inyecciones_realiza_mes/$total_inyecciones)*100),2);
-			$porcen_reinyecciones_realizadas=round((($total_reinyecciones_mes/$total_inyecciones)*100),2);
-			$xml.=$this->agregarGuiaGrafica('Inyecciones         : '.round($total_inyecciones_realiza_mes,2).' ('.$porcen_inyecciones_realizadas.' %)',$max_numero_inyecc+($unidad_separancion*2));
-			$xml.=$this->agregarGuiaGrafica('Reinyecciones     : '.round($total_reinyecciones_mes,2).' ('.$porcen_reinyecciones_realizadas.' %)',$max_numero_inyecc+($unidad_separancion*1));
-		}
-		$xml.='</guides>';
-		$xml.='</chart>';
+            $porcen_inyecciones_realizadas=0;
+            $porcen_reinyecciones_realizadas=0;
+            $total_inyecciones=$total_inyecciones_realiza_mes+$total_reinyecciones_mes;
 
-		$this->getRequest()->setRequestFormat('xml');
-		$response = $this->getResponse();
-		$response->setContentType('text/xml');
-		$response->setHttpHeader('Content-length', strlen($xml), true);
+            $unidad_separancion=($max_numero_inyecc/8);
+            $xml.=$this->agregarGuiaGrafica('Total inyecciones : '.$total_inyecciones,$max_numero_inyecc+ ($unidad_separancion*3));
+            if($total_inyecciones!=0){
+                    $porcen_inyecciones_realizadas=round((($total_inyecciones_realiza_mes/$total_inyecciones)*100),2);
+                    $porcen_reinyecciones_realizadas=round((($total_reinyecciones_mes/$total_inyecciones)*100),2);
+                    $xml.=$this->agregarGuiaGrafica('Inyecciones         : '.round($total_inyecciones_realiza_mes,2).' ('.$porcen_inyecciones_realizadas.' %)',$max_numero_inyecc+($unidad_separancion*2));
+                    $xml.=$this->agregarGuiaGrafica('Reinyecciones     : '.round($total_reinyecciones_mes,2).' ('.$porcen_reinyecciones_realizadas.' %)',$max_numero_inyecc+($unidad_separancion*1));
+            }
+            $xml.='</guides>';
+            $xml.='</chart>';
 
-		return $this->renderText($xml);
+            $this->getRequest()->setRequestFormat('xml');
+            $response = $this->getResponse();
+            $response->setContentType('text/xml');
+            $response->setHttpHeader('Content-length', strlen($xml), true);
+
+            return $this->renderText($xml);
 	}
 
-	public function calcularInyecciones($anio,$mes,$cant_dias)
+	public function calcularInyecciones($ano, $mes, $dia)
 	{
-		$datos;
-		try{
-			$numeroInyeccionesMes = 0;
-			$numeroReinyeccionesMes = 0;
-			for($dia=1;$dia<$cant_dias;$dia++){
-				$suma_numero_inyecciones_dia= 0;
-				$suma_numero_reinyecciones_dia= 0;
+            $datos = array();
+            try{
+                $suma_numero_inyecciones_dia= 0;
+                $suma_numero_reinyecciones_dia= 0;
 
-				$conexion=$this->obtenerConexionDia($anio.'-'.$mes.'-'.$dia);
-				$registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
+                $conexion=$this->obtenerConexionDia($ano.'-'.$mes.'-'.$dia);
+                $registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
 
-				foreach($registros_uso_maquinas as $temporal)
-				{
-					$suma_numero_inyecciones_dia+= $temporal->contarNumeroInyeccionesObligatorias();
-					$suma_numero_reinyecciones_dia+= $temporal->contarNumeroTotalReinyecciones();
-				}
-				$datos[$dia]['inyecciones'] = $suma_numero_inyecciones_dia;
-				$numeroInyeccionesMes += $suma_numero_inyecciones_dia;
-				$datos[$dia]['reinyecciones'] = $suma_numero_reinyecciones_dia;
-				$numeroReinyeccionesMes += $suma_numero_reinyecciones_dia;
-			}
-			$datos['inyeccionesMes'] = $numeroInyeccionesMes;
-			$datos['reinyeccionesMes'] = $numeroReinyeccionesMes;
-		}catch (Exception $excepcion)
-		{
-			echo "(exception: 'Excepci&oacute;n en reporte-calcularInyecciones ',error:'".$excepcion->getMessage()."')";
-		}
-		return $datos;
+                foreach($registros_uso_maquinas as $temporal)
+                {
+                        $suma_numero_inyecciones_dia += $temporal->contarNumeroInyeccionesObligatorias();
+                        $suma_numero_reinyecciones_dia += $temporal->contarNumeroTotalReinyecciones();
+                }
+                $datos['inyecciones'] = $suma_numero_inyecciones_dia;
+                $datos['reinyecciones'] = $suma_numero_reinyecciones_dia;
+            }catch (Exception $excepcion)
+            {
+                echo "(exception: 'Excepci&oacute;n en reporte-calcularInyecciones ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
 	}
         
         public function calcularInyeccionesDiarias($ano, $mes, $dia)
@@ -254,102 +265,116 @@ class reporte_graficosemanalActions extends sfActions
 		return $datos;
 	}
 
-	/**************************************Reporte de muestras *******************/
+	/**************************************Reporte de lotes*******************/
 	public function executeGenerarDatosGraficoMuestras(sfWebRequest $request)
-	{
-		$anio='2014';
-		$mes='02';
-		$cant_dias=$this->obtenerCantidadDiasMes($mes,$anio);
+	{            
+            //Calculo de la fecha de inicio y fin de cada semana                
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
 
-		$total_muestras_analizadas_mes=0;
-		$total_muestras_reanalizadas_mes=0;
-		$max_numero_muestra=0;
-		$datos=$this->calcularMuestras($anio,$mes,$cant_dias);
+            //Calculo de indicadores por semana
+            /*Se calculan los indicadores por día pero se van sumando de acuerdo con el rango de cada semana*/
+            $datos = array();
+            for($i=0; $i<sizeof($rango_fechas); $i++) {
+                $fecha_inicio = $rango_fechas[$i]['fecha_inicio'];
+                $fecha_fin = $rango_fechas[$i]['fecha_fin'];
+                $fecha = $this->fecha($fecha_inicio);
+                $temp = $this->calcularMuestras($fecha[0], $fecha[1], $fecha[2]);
+                $datos[$i]['analizadas'] = $temp['analizadas'];
+                $datos[$i]['reanalizadas'] = $temp['reanalizadas'];
+                while($fecha_inicio < $fecha_fin) {
+                        $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
+                        $fecha = $this->fecha($fecha_inicio);
+                        $temp = $this->calcularMuestras($fecha[0], $fecha[1], $fecha[2]);
+                        $datos[$i]['analizadas'] += $temp['analizadas'];
+                        $datos[$i]['reanalizadas'] += $temp['reanalizadas'];
+                }
+            }
 
-		$xml='<?xml version="1.0"?>';
-		$xml.='<chart>';
-		$xml.='<series>';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++)
-		{
-			$xml.='<value xid="'.$diasmes.'">'.$diasmes.'</value>';
-		}
-		$xml.='</series>';
-		$xml.='<graphs>';
-		$xml.='<graph color="#ffdc44" title="Número lotes analizados" bullet="round">';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-			$numero_muestras_analizadas_dia=$datos[$diasmes]['analizadas'];
-			$xml.='<value xid="'.$diasmes.'">'.$numero_muestras_analizadas_dia.'</value>';
-			$total_muestras_analizadas_mes+=$numero_muestras_analizadas_dia;
+            $total_muestras_analizadas_mes=0;
+            $total_muestras_reanalizadas_mes=0;
+            $max_numero_muestra=0;
 
-			if($numero_muestras_analizadas_dia>$max_numero_muestra){
-				$max_numero_muestra=$numero_muestras_analizadas_dia;
-			}
-		}
-		$xml.='</graph>';
+            $xml='<?xml version="1.0"?>';
+            $xml.='<chart>';
+            $xml.='<series>';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'</value>';
+            }
+            $xml.='</series>';
+            $xml.='<graphs>';
+            $xml.='<graph color="#ffdc44" title="Número lotes analizados" bullet="round">';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                $numero_muestras_analizadas_dia=$datos[$diasmes]['analizadas'];
+                $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_muestras_analizadas_dia.'</value>';
+                $total_muestras_analizadas_mes+=$numero_muestras_analizadas_dia;
 
-		$xml.='<graph color="#47d552" title="Número lotes reanalizados" bullet="round" >';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-			$numero_muestras_reanalizadas_dia=$datos[$diasmes]['reanalizadas'];
-			$xml.='<value xid="'.$diasmes.'">'.$numero_muestras_reanalizadas_dia.'</value>';
-			$total_muestras_reanalizadas_mes+=$numero_muestras_reanalizadas_dia;
-			if($numero_muestras_reanalizadas_dia>$max_numero_muestra){
-				$max_numero_muestra=$numero_muestras_reanalizadas_dia;
-			}
-		}
-		$xml.='</graph>';
+                if($numero_muestras_analizadas_dia>$max_numero_muestra){
+                        $max_numero_muestra=$numero_muestras_analizadas_dia;
+                }
+            }
+            $xml.='</graph>';
 
-		$xml.='</graphs>';
-		$xml.='<guides>';
+            $xml.='<graph color="#47d552" title="Número lotes reanalizados" bullet="round" >';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                $numero_muestras_reanalizadas_dia=$datos[$diasmes]['reanalizadas'];
+                $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_muestras_reanalizadas_dia.'</value>';
+                $total_muestras_reanalizadas_mes+=$numero_muestras_reanalizadas_dia;
+                if($numero_muestras_reanalizadas_dia>$max_numero_muestra){
+                        $max_numero_muestra=$numero_muestras_reanalizadas_dia;
+                }
+            }
+            $xml.='</graph>';
+            $xml.='</graphs>';
+            $xml.='<guides>';
 
-		$porcen_muestras_analizadas=0;
-		$porcen_muestras_reanalizadas=0;
-		$total_muestras_mes=$total_muestras_analizadas_mes+$total_muestras_reanalizadas_mes;
-		if($total_muestras_mes!=0){
-			$porcen_muestras_analizadas=round((($total_muestras_analizadas_mes/$total_muestras_mes)*100),2);
-			$porcen_muestras_reanalizadas=round((($total_muestras_reanalizadas_mes/$total_muestras_mes)*100),2);
-		}
-		$unidad_separancion=($max_numero_muestra/8);
+            $porcen_muestras_analizadas=0;
+            $porcen_muestras_reanalizadas=0;
+            $total_muestras_mes=$total_muestras_analizadas_mes+$total_muestras_reanalizadas_mes;
+            if($total_muestras_mes!=0) {
+                $porcen_muestras_analizadas=round((($total_muestras_analizadas_mes/$total_muestras_mes)*100),2);
+                $porcen_muestras_reanalizadas=round((($total_muestras_reanalizadas_mes/$total_muestras_mes)*100),2);
+            }
+            $unidad_separancion=($max_numero_muestra/8);          
+            
+            $xml.=$this->agregarGuiaGrafica('Total lotes : '.round($total_muestras_mes,2),$max_numero_muestra+(3*$unidad_separancion));
+            if($total_muestras_mes!=0){
+                    $xml.=$this->agregarGuiaGrafica('Lotes analizados : '.round($total_muestras_analizadas_mes,2).' ('.$porcen_muestras_analizadas .' %)',$max_numero_muestra+(2*$unidad_separancion));
+                    $xml.=$this->agregarGuiaGrafica('Lotes reanalizados : '.round($total_muestras_reanalizadas_mes,2).' ('.$porcen_muestras_reanalizadas.' %)',$max_numero_muestra+(1*$unidad_separancion));
+            }
+            $xml.='</guides>';
+            $xml.='</chart>';
 
-		$xml.=$this->agregarGuiaGrafica('Total lotes               : '.round($total_muestras_mes,2),$max_numero_muestra+(3*$unidad_separancion));
-		if($total_muestras_mes!=0){
-			$xml.=$this->agregarGuiaGrafica('Lotes analizados    : '.round($total_muestras_analizadas_mes,2).' ('.$porcen_muestras_analizadas .' %)',$max_numero_muestra+(2*$unidad_separancion));
-			$xml.=$this->agregarGuiaGrafica('Lotes reanalizados : '.round($total_muestras_reanalizadas_mes,2).' ('.$porcen_muestras_reanalizadas.' %)',$max_numero_muestra+(1*$unidad_separancion));
-		}
-		$xml.='</guides>';
-		$xml.='</chart>';
-
-		$this->getRequest()->setRequestFormat('xml');
-		$response = $this->getResponse();
-		$response->setContentType('text/xml');
-		$response->setHttpHeader('Content-length', strlen($xml), true);
-		return $this->renderText($xml);
+            $this->getRequest()->setRequestFormat('xml');
+            $response = $this->getResponse();
+            $response->setContentType('text/xml');
+            $response->setHttpHeader('Content-length', strlen($xml), true);
+            return $this->renderText($xml);
 	}
 
-	public function calcularMuestras($anio,$mes,$cant_dias)
+	public function calcularMuestras($ano, $mes, $dia)
 	{
-		$datos;
-		try{
+            $datos = array();
+            try {
+                $suma_numero_muestras_analizadas_dia= 0;
+                $suma_numero_muestras_reanalizadas_dia= 0;
 
-			for($dia=0;$dia<$cant_dias;$dia++){
-				$suma_numero_muestras_analizadas_dia= 0;
-				$suma_numero_muestras_reanalizadas_dia= 0;
+                $conexion=$this->obtenerConexionDia($ano.'-'.$mes.'-'.$dia);
+                $registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
 
-				$conexion=$this->obtenerConexionDia($anio.'-'.$mes.'-'.$dia);
-				$registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
-
-				foreach($registros_uso_maquinas as $temporal)
-				{
-					$suma_numero_muestras_analizadas_dia+= $temporal->contarNumeroMuestrasProgramadas();
-					$suma_numero_muestras_reanalizadas_dia+= $temporal->contarNumeroMuestrasReAnalizadas();
-				}
-				$datos[$dia]['analizadas']=round($suma_numero_muestras_analizadas_dia,2);
-				$datos[$dia]['reanalizadas']=round($suma_numero_muestras_reanalizadas_dia,2);
-			}
-		}catch (Exception $excepcion)
-		{
-			return "(exeption: 'Excepci&oacute;n en reporte-calcularMuestras ',error:'".$excepcion->getMessage()."')";
-		}
-		return $datos;
+                foreach($registros_uso_maquinas as $temporal)
+                {
+                    $suma_numero_muestras_analizadas_dia+= $temporal->contarNumeroMuestrasProgramadas();
+                    $suma_numero_muestras_reanalizadas_dia+= $temporal->contarNumeroMuestrasReAnalizadas();
+                }
+                $datos['analizadas'] = round($suma_numero_muestras_analizadas_dia,2);
+                $datos['reanalizadas'] = round($suma_numero_muestras_reanalizadas_dia,2);                
+            }catch (Exception $excepcion)
+            {
+                return "(exeption: 'Excepci&oacute;n en reporte-calcularLotes ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
 	}
 
 	/**************************************Reporte de perdidas diarias del mes *******************/
