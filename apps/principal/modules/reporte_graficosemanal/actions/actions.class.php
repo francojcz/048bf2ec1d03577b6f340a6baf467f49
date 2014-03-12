@@ -16,8 +16,8 @@ class reporte_graficosemanalActions extends sfActions
   * @param sfRequest $request A request object
   */
   public function executeIndex(sfWebRequest $request)
- {
- }
+  {
+  }
 	public function obtenerConexionDia($dia) {
 		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 		$analista_codigo=$this->getRequestParameter('analista_codigo');
@@ -219,6 +219,30 @@ class reporte_graficosemanalActions extends sfActions
                 $suma_numero_reinyecciones_dia= 0;
 
                 $conexion=$this->obtenerConexionDia($ano.'-'.$mes.'-'.$dia);
+                $registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
+
+                foreach($registros_uso_maquinas as $temporal)
+                {
+                        $suma_numero_inyecciones_dia += $temporal->contarNumeroInyeccionesObligatorias();
+                        $suma_numero_reinyecciones_dia += $temporal->contarNumeroTotalReinyecciones();
+                }
+                $datos['inyecciones'] = $suma_numero_inyecciones_dia;
+                $datos['reinyecciones'] = $suma_numero_reinyecciones_dia;
+            }catch (Exception $excepcion)
+            {
+                echo "(exception: 'Excepci&oacute;n en reporte-calcularInyecciones ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
+	}
+        
+        public function calcularInyeccionesSemana($fecha_inicio, $fecha_fin)
+	{
+            $datos = array();
+            try{
+                $suma_numero_inyecciones_dia= 0;
+                $suma_numero_reinyecciones_dia= 0;
+
+                $conexion=$this->obtenerConexionSemana($fecha_inicio, $fecha_fin);
                 $registros_uso_maquinas = RegistroUsoMaquinaPeer::doSelect($conexion);
 
                 foreach($registros_uso_maquinas as $temporal)
@@ -764,33 +788,7 @@ class reporte_graficosemanalActions extends sfActions
             $fecha_inicio = $this->getRequestParameter('fecha_inicio');
             $fecha_fin = $this->getRequestParameter('fecha_fin');
             $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
-
-            //Calculo de indicadores por semana
-            /*Se calculan los indicadores por día pero se van sumando de acuerdo con el rango de cada semana*/
-            $datos = array();
-            for($i=0; $i<sizeof($rango_fechas); $i++) {
-                $fecha_inicio = $rango_fechas[$i]['fecha_inicio'];
-                $fecha_fin = $rango_fechas[$i]['fecha_fin'];
-                $fecha = $this->fecha($fecha_inicio);
-                $temp = $this->calcularIndicadoresDiarios($fecha[0], $fecha[1], $fecha[2]);
-                $datos[$i]['D'] = $temp['D'];
-                $datos[$i]['E'] = $temp['E'];
-                $datos[$i]['C'] = $temp['C'];
-                $datos[$i]['A'] = $temp['A'];
-                $datos[$i]['OEE'] = $temp['OEE'];
-                $datos[$i]['PTEE'] = $temp['PTEE'];
-                while($fecha_inicio < $fecha_fin) {
-                    $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
-                    $fecha = $this->fecha($fecha_inicio);
-                    $temp = $this->calcularIndicadoresDiarios($fecha[0], $fecha[1], $fecha[2]);
-                    $datos[$i]['D'] += $temp['D'];
-                    $datos[$i]['E'] += $temp['E'];
-                    $datos[$i]['C'] += $temp['C'];
-                    $datos[$i]['A'] += $temp['A'];
-                    $datos[$i]['OEE']  += $temp['OEE'];
-                    $datos[$i]['PTEE'] += $temp['PTEE'];
-                }
-            }
+            $datos = $this->calcularIndicadoresDiarios($rango_fechas);
             
             $indicadores_tiempo = array('D', 'E', 'C', 'A', 'OEE', 'PTEE');
             $indicadores_colores = array('ff5454','47d552','f0a05f','ffdc44','72a8cd','b97a57');
@@ -822,45 +820,76 @@ class reporte_graficosemanalActions extends sfActions
             return $this->renderText($xml);
 	}
 
-	public function calcularIndicadoresDiarios($ano, $mes, $dia)
+	public function calcularIndicadoresDiarios($rango_fechas)
 	{
             $datos = array();
+            $datosTiempos = array();
 
-            try{
-                $datosTiempos = $this->calcularTiemposDiarios($ano, $mes, $dia);
-                $datosInyecciones = $this->calcularInyeccionesDiarias($ano, $mes, $dia);
-
-                $criteria = new Criteria();
-                //Codigos de los equipos seleccionados
-                $temp = $this->getRequestParameter('cods_equipos');
-                $cods_equipos = json_decode($temp);
-                if($cods_equipos != ''){
-                    foreach ($cods_equipos as $cod_equipo) {
-                        $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+            try{                
+                //Calculo de indicadores por semana
+                /*Se calculan los indicadores por día pero se van sumando de acuerdo con el rango de cada semana*/                
+                for($i=0; $i<sizeof($rango_fechas); $i++) {
+                    $fecha_inicio = $rango_fechas[$i]['fecha_inicio'];
+                    $fecha_fin = $rango_fechas[$i]['fecha_fin'];
+                    $fecha = $this->fecha($fecha_inicio);
+                    $temp = $this->calcularTiemposDiarios($fecha[0], $fecha[1], $fecha[2]);
+                    $datosTiempos[$i]['TP'] = $temp['TP'];
+                    $datosTiempos[$i]['TNP'] = $temp['TNP'];
+                    $datosTiempos[$i]['TPNP'] = $temp['TPNP'];
+                    $datosTiempos[$i]['TPP'] = $temp['TPP'];
+                    $datosTiempos[$i]['TO'] = $temp['TO'];
+                    $datosTiempos[$i]['TF'] = $temp['TF'];
+                    $datosTiempos[$i]['HorasActivas'] = $temp['HorasActivas'];
+                    while($fecha_inicio < $fecha_fin) {
+                            $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
+                            $fecha = $this->fecha($fecha_inicio);
+                            $temp = $this->calcularTiemposDiarios($fecha[0], $fecha[1], $fecha[2]);
+                            $datosTiempos[$i]['TP'] += $temp['TP'];
+                            $datosTiempos[$i]['TNP'] += $temp['TNP'];
+                            $datosTiempos[$i]['TPNP'] += $temp['TPNP'];
+                            $datosTiempos[$i]['TPP'] += $temp['TPP'];
+                            $datosTiempos[$i]['TO']  += $temp['TO'];
+                            $datosTiempos[$i]['TF'] += $temp['TF'];
+                            $datosTiempos[$i]['HorasActivas'] += $temp['HorasActivas'];
                     }
-                }                       
+                }
+                
+                for($i=0; $i<sizeof($rango_fechas); $i++) {
+                    $fecha_inicio = $rango_fechas[$i]['fecha_inicio'];
+                    $fecha_fin = $rango_fechas[$i]['fecha_fin'];
+                    $datosInyecciones = $this->calcularInyeccionesSemana($fecha_inicio, $fecha_fin);
+                    $criteria = new Criteria();
+                    //Codigos de los equipos seleccionados
+                    $temp = $this->getRequestParameter('cods_equipos');
+                    $cods_equipos = json_decode($temp);
+                    if($cods_equipos != ''){
+                        foreach ($cods_equipos as $cod_equipo) {
+                            $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                        }
+                    }                       
 
-                $tf_dia = $datosTiempos['TF'];
-                $to_dia = $datosTiempos['TO'];
-                $tp_dia = $datosTiempos['TP'];
+                    $tf_dia = $datosTiempos[$i]['TF'];
+                    $to_dia = $datosTiempos[$i]['TO'];
+                    $tp_dia = $datosTiempos[$i]['TP'];
+                                        
+                    $numeroInyecciones = $datosInyecciones['inyecciones'];
+                    $numeroReinyecciones = $datosInyecciones['reinyecciones'];
 
-                $numeroInyecciones = $datosInyecciones['inyecciones'];
-                $numeroReinyecciones = $datosInyecciones['reinyecciones'];
+                    $d_dia = RegistroUsoMaquinaPeer::calcularDisponibilidad($to_dia, $tf_dia);
+                    $e_dia = RegistroUsoMaquinaPeer::calcularEficiencia($tp_dia, $to_dia);
+                    $c_dia = RegistroUsoMaquinaPeer::calcularCalidad($numeroInyecciones, $numeroReinyecciones);
+                    $horasActivas = $datosTiempos[$i]['HorasActivas'];
+                    $a_dia = RegistroUsoMaquinaPeer::calcularAprovechamiento($tf_dia, $horasActivas);
+                    $oee_dia = RegistroUsoMaquinaPeer::calcularEfectividadGlobalEquipo($d_dia, $e_dia, $c_dia);
+                    $ptee_dia = RegistroUsoMaquinaPeer::calcularProductividadTotalEfectiva($a_dia,$oee_dia);
 
-                $d_dia = RegistroUsoMaquinaPeer::calcularDisponibilidad($to_dia, $tf_dia);
-                $e_dia = RegistroUsoMaquinaPeer::calcularEficiencia($tp_dia, $to_dia);
-                $c_dia = RegistroUsoMaquinaPeer::calcularCalidad($numeroInyecciones,$numeroReinyecciones);
-                $horasActivas = $datosTiempos['HorasActivas'];
-                $a_dia = RegistroUsoMaquinaPeer::calcularAprovechamiento($tf_dia, $horasActivas);
-                $oee_dia = RegistroUsoMaquinaPeer::calcularEfectividadGlobalEquipo($d_dia, $e_dia, $c_dia);
-                $ptee_dia = RegistroUsoMaquinaPeer::calcularProductividadTotalEfectiva($a_dia,$oee_dia);
-
-                $datos['D'] = round($d_dia,2);
-                $datos['E'] = round($e_dia,2);
-                $datos['C'] = round($c_dia,2);
-                $datos['A'] = round($a_dia,2);
-                $datos['OEE'] = round($oee_dia,2);
-                $datos['PTEE'] = round($ptee_dia,2);                                
+                    $datos[$i]['D'] = round($d_dia,2);
+                    $datos[$i]['E'] = round($e_dia,2);
+                    $datos[$i]['C'] = round($c_dia,2);
+                    $datos[$i]['A'] = round($a_dia,2);
+                    $datos[$i]['OEE'] = round($oee_dia,2);
+                    $datos[$i]['PTEE'] = round($ptee_dia,2);
+                }                                     
             }catch (Exception $excepcion)
             {
                 return "(exeption: 'Excepci&oacute;n en reporte-calcularTiemposDiariosMes ',error:'".$excepcion->getMessage()."')";

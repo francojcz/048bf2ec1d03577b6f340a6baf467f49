@@ -769,8 +769,7 @@ class reporte_graficomensualActions extends sfActions
 
 	public function calcularIndicadoresDiariosMes($anio,$mes,$cant_dias, $inyeccionesEstandarPromedio)
 	{
-		$datos;
-
+		$datos = array();
 		try{
 			$datosTiempos = $this->calcularTiemposDiariosMes($anio, $mes, $cant_dias, $inyeccionesEstandarPromedio);
 			$datosInyecciones = $this->calcularInyecciones($anio, $mes, $cant_dias);
