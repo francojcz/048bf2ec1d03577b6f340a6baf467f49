@@ -155,15 +155,14 @@ class reporte_graficosemanalActions extends sfActions
             $xml.='<series>';
             for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++)
             {
-                    $xml.='<value xid="'.$diasmes.'">'.$diasmes.'</value>';
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'</value>';
             }
             $xml.='</series>';
             $xml.='<graphs>';
             $xml.='<graph color="#72a8cd" title="Número inyecciones realizadas" bullet="round">';
             for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
-
                     $total_inyecciones_realiza=$datos[$diasmes]['inyecciones'];
-                    $xml.='<value xid="'.$diasmes.'">'.round($total_inyecciones_realiza, 2).'</value>';
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.round($total_inyecciones_realiza, 2).'</value>';
 
                     $total_inyecciones_realiza_mes+=$total_inyecciones_realiza ;
 
@@ -176,7 +175,7 @@ class reporte_graficosemanalActions extends sfActions
             $xml.='<graph color="#ff5454" title="Número reinyecciones" bullet="round">';
             for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
                     $total_reinyecciones=$datos[$diasmes]['reinyecciones'];
-                    $xml.='<value xid="'.$diasmes.'">'.round($total_reinyecciones, 2).'</value>';
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.round($total_reinyecciones, 2).'</value>';
                     $total_reinyecciones_mes+=$total_reinyecciones ;
 
                     if($total_reinyecciones>$max_numero_inyecc){

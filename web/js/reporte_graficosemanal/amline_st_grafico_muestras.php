@@ -31,7 +31,7 @@
     </label>
     <label lid='2'>
       <x>91%</x> 
-      <y>310</y>
+      <y>320</y>
       <width>50</width>
       <align>right</align> 
       <text>

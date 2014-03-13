@@ -54,7 +54,7 @@
   <labels> 
     <label lid='0'>
       <x>5</x>
-      <y>10</y>
+      <y>5</y>
       <width>520</width> 
       <align>center</align>
       <text_size>13</text_size> 
