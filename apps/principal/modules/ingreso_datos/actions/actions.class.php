@@ -1155,8 +1155,7 @@ class ingreso_datosActions extends sfActions
                     $registro -> setRumNumeroInyeccionEstandar6($request -> getParameter('numero_inyecciones_estandar6'));
                     $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumeroInyeccionEstandar6());
                 }
-            }
-            
+            }            
             
             if ($request -> hasParameter('tiempo_corrida_producto'))
             {
@@ -1233,9 +1232,7 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumMuestrasEstabilidad());
             }
-            //			if($request->hasParameter('numero_inyecciones_x_muestra_estabilidad')) {
-            //				$registro->setRumNumInyecXMuestraEstabi($request->getParameter('numero_inyecciones_x_muestra_estabilidad'));
-            //			}
+            
             if ($request -> hasParameter('numero_muestras_materia_prima'))
             {
                 $registroModificacion -> setRemNombreCampo('Número muestras - Materia prima');
@@ -1245,9 +1242,7 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumMuestrasMateriaPrima());
             }
-            //			if($request->hasParameter('numero_inyecciones_x_muestra_materia_prima')) {
-            //				$registro->setRumNumInyecXMuestraMateri($request->getParameter('numero_inyecciones_x_muestra_materia_prima'));
-            //			}
+            
             if ($request -> hasParameter('numero_muestras_pureza'))
             {
                 $registroModificacion -> setRemNombreCampo('Número muestras - Pureza');
@@ -1283,6 +1278,18 @@ class ingreso_datosActions extends sfActions
                 $registro -> setRumHoraInicioTrabajo($request -> getParameter('hora_inicio_corrida'));
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
+                
+                //Cambios: 20 de Febrero de 2014
+                $cod_metodo = $registro->getRumMetCodigo();
+                $metodo = MetodoPeer::retrieveByPK($cod_metodo);
+                if($metodo->getMetMantenimiento() == 1) {
+                    $registroModificacion -> setRemNombreCampo('Hora fin');
+                    $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+
+                    $registro -> setRumHoraFinTrabajo($request -> getParameter('hora_inicio_corrida'));
+
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+                }
             }
             if ($request -> hasParameter('hora_fin_corrida'))
             {
@@ -1330,10 +1337,6 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumTiempoEntreModelo('H:i:s'));
             }
-
-            //			if($request->hasParameter('cambio_metodo_ajuste_perdida')) {
-            //				$registro->setRumTiempoCambioModeloPerdi($request->getParameter('cambio_metodo_ajuste_perdida'));
-            //			}
 
             if ($request -> hasParameter('tiempo_corrida_ss_perdida'))
             {
@@ -1607,7 +1610,20 @@ class ingreso_datosActions extends sfActions
                 $registro -> setRumHoraInicioTrabajo($request -> getParameter('hora_inicio_corrida_perdida'));
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
+                
+                //Cambios: 20 de Febrero de 2014
+                $cod_metodo = $registro->getRumMetCodigo();
+                $metodo = MetodoPeer::retrieveByPK($cod_metodo);
+                if($metodo->getMetMantenimiento() == 1) {
+                    $registroModificacion -> setRemNombreCampo('Hora fin');
+                $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+
+                $registro -> setRumHoraFinTrabajo($request -> getParameter('hora_inicio_corrida_perdida'));
+
+                $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+                }
             }
+            
             if ($request -> hasParameter('hora_fin_corrida_perdida'))
             {
                 $registroModificacion -> setRemNombreCampo('Hora fin');
@@ -1746,6 +1762,7 @@ class ingreso_datosActions extends sfActions
         $registro -> setRumFechaHoraRegSistema(date('Y-m-d H:i:s'));
         $registro -> setRumUsuCodigo($codigo_usuario);
         $registro -> setRumEliminado(false);
+        
         $registro -> save();
         return $this -> renderText('Ok');
     }
