@@ -97,7 +97,9 @@ class crud_metodoActions extends sfActions
 				$metodo->setMetTcPureza($this->getRequestParameter('met_tc_pureza'));
 				$metodo->setMetTcDisolucion($this->getRequestParameter('met_tc_disolucion'));
 				$metodo->setMetTcUniformidad($this->getRequestParameter('met_tc_uniformidad'));
-
+                                                                
+                                //Cambios: 20 de Febrero de 2014
+                                $metodo->setMetMantenimiento($this->getRequestParameter('met_mantenimiento'));
 
 				$metodo->save();
 
@@ -213,6 +215,9 @@ class crud_metodoActions extends sfActions
 				$datos[$fila]['met_tc_uniformidad'] = $temporal->getMetTcUniformidad();
 				//				$datos[$fila]['met_tc_otro'] = $temporal->getMetTcOtro();
 
+                                //Cambios: 20 de Febrero de 2014
+                                $datos[$fila]['met_mantenimiento'] = $temporal->getMetMantenimiento();
+                                
 				$fila++;
 			}
 			if($fila>0){

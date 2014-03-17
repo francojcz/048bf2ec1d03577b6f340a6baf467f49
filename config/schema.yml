@@ -199,6 +199,7 @@ propel:
     met_tc_pureza: { phpName: MetTcPureza, type: DECIMAL, size: '12', scale: '4', required: false }
     met_tc_disolucion: { phpName: MetTcDisolucion, type: DECIMAL, size: '12', scale: '4', required: false }
     met_tc_uniformidad: { phpName: MetTcUniformidad, type: DECIMAL, size: '12', scale: '4', required: false }
+    met_mantenimiento: { phpName: MetMantenimiento, type: SMALLINT, size: '6', required: false }
     _indexes: { FK_reference_27: [met_usu_crea], FK_reference_28: [met_usu_actualiza] }
   perfil:
     _attributes: { phpName: Perfil }

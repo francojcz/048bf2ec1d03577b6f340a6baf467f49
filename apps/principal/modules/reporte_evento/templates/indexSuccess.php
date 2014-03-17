@@ -1,4 +1,3 @@
-
 <?php echo javascript_include_tag('../flash/ampie/swfobject.js') ?>
 <?php echo javascript_include_tag('../flash/amcolumn/swfobject.js') ?>
 <?php echo javascript_include_tag('reporte_evento/form_reporte_evento.js') ?>

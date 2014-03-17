@@ -12,7 +12,14 @@ var form_interfazreporte = function(){
             salida_interfaz_reporte += '</div>';
             
             
-            var interfaz_reporte_data = [['boton_reportediario', 'Reporte diario', 'Reporte diario', 'images/reporte/1.png'], ['boton_reportesemanal', 'Reporte Semanal', 'Reporte Semanal', 'images/reporte/6.png'], ['boton_reportemensual', 'Reporte Mensual', 'Reporte Mensual', 'images/reporte/3.png'], ['boton_reporteanual', 'Reporte anual', 'Reporte Anual', 'images/reporte/4.png'], ['boton_reporteevento', 'Reporte eventos', 'Reporte Eventos', 'images/reporte/5.png'], ['boton_reporteexportar', 'Exportar datos', 'Exportar datos de corrida', 'images/reporte/xls.png']];
+            var interfaz_reporte_data = [
+                ['boton_reportediario', 'Reporte diario', 'Reporte diario', 'images/reporte/1.png'], 
+                ['boton_reportesemanal', 'Reporte Semanal', 'Reporte Semanal', 'images/reporte/6.png'], 
+                ['boton_reportemensual', 'Reporte Mensual', 'Reporte Mensual', 'images/reporte/3.png'],                
+                ['boton_reporteanual', 'Reporte anual', 'Reporte Anual', 'images/reporte/4.png'], 
+                ['boton_reporteevento', 'Reporte eventos', 'Reporte Eventos', 'images/reporte/5.png'], 
+                ['boton_reportecolumnas', 'Reporte Columnas', 'Reporte Columnas', 'images/reporte/2.png'],            
+                ['boton_reporteexportar', 'Exportar datos', 'Exportar datos de corrida', 'images/reporte/xls.png']];
             
             var interfaz_reporte_store = new Ext.data.ArrayStore({
                 fields: [{
@@ -89,8 +96,11 @@ var form_interfazreporte = function(){
                                 break;
                             case 4:
                                 addTab('Reporte Evento', getAbsoluteUrl('reporte_evento', 'index'));
-                                break;
+                                break;                           
                             case 5:
+                                addTab('Reporte Columnas', getAbsoluteUrl('reporte_columnas', 'index'));
+                                break;
+                            case 6:
                                 addTab('Exportar datos', getAbsoluteUrl('exportacion_datos', 'index'));
                                 break;
                         }

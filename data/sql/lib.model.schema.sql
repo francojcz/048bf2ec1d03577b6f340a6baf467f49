@@ -474,6 +474,7 @@ CREATE TABLE `metodo`
 	`met_tc_pureza` DECIMAL(12,4),
 	`met_tc_disolucion` DECIMAL(12,4),
 	`met_tc_uniformidad` DECIMAL(12,4),
+        `met_mantenimiento` SMALLINT(6),
 	PRIMARY KEY (`met_codigo`),
 	KEY `FK_reference_27`(`met_usu_crea`),
 	KEY `FK_reference_28`(`met_usu_actualiza`),

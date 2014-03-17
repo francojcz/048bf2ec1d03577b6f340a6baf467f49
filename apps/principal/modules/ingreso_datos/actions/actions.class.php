@@ -85,7 +85,7 @@ class ingreso_datosActions extends sfActions
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirParosMenores($deficitTiempo, $registro, $registroSegundoDia);
 
         // Después del proceso de división, la hora de fin de corrida del registro original debe corresponder a la medianoche
-        $registro -> setRumHoraFinTrabajo('00:00:00');
+//        $registro -> setRumHoraFinTrabajo('00:00:00');
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirMuestras($deficitTiempo, $registro, $registroSegundoDia, $maquina -> getMaqTiempoInyeccion(), 'RumTcUniformidad', 'RumNumMuestrasUniformidad', 'RumNumInyecXMuestraUnifor');
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirRetrabajosMuestras($deficitTiempo, $registro, $registroSegundoDia, $maquina -> getMaqTiempoInyeccion(), 'RumTcUniformidad', 'RumNumMuestrasUniformidadP', 'RumNumInyecXMuUniforPerd');

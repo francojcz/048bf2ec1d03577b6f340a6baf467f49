@@ -105,6 +105,7 @@ var ayuda_met_tc_materia_prima = 'Tiempo de corrida en muestras de  materia prim
 var ayuda_met_tc_pureza = 'Tiempo de corrida en muestras de pureza';
 var ayuda_met_tc_disolucion = 'Tiempo de corrida en muestras de disolución';
 var ayuda_met_tc_uniformidad = 'Tiempo de corrida en muestras de uniformidad';
+var ayuda_met_mantenimiento = 'Seleccione si el método pertenece a un mantenimiento';
 
 var largo_panel = 500;
 
@@ -114,10 +115,8 @@ var crud_metodo_datastore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         url: getAbsoluteUrl('crud_metodo', 'listarMetodo'),
         method: 'POST'
-    }),
-    baseParams: {
-//        start: 0,
-//        limit: 20
+    }),baseParams: {
+//        met_mantenimiento: '0'
     },
     reader: new Ext.data.JsonReader({
         root: 'results',
@@ -220,6 +219,9 @@ var crud_metodo_datastore = new Ext.data.Store({
     }, {
         name: 'met_tc_uniformidad',
         type: 'float'
+    }, {
+        name: 'met_mantenimiento',
+        type: 'int'
     }, //end
     {
         name: 'met_fecha_registro_sistema',
@@ -755,6 +757,32 @@ var met_tc_uniformidad = new Ext.form.NumberField({
     }
 });
 
+var met_mantenimiento = new Ext.form.RadioGroup({
+    xtype: 'radiogroup',
+    labelStyle: 'text-align:right;',
+    fieldLabel: 'Método de Mantenimiento',
+    id: 'met_mantenimiento',
+    allowBlank: false,
+    //columns: 1,
+    items: [{
+        boxLabel: 'Si',
+        name: 'met_mantenimiento',
+        id: 'met_mantenimiento_si',
+        inputValue: 1        
+    }, {
+        boxLabel: 'No',
+        name: 'met_mantenimiento',
+        id: 'met_mantenimiento_no',
+        inputValue: 0,
+        checked: true
+    }],
+    listeners: {
+        render: function(){
+            ayuda('met_mantenimiento', ayuda_met_mantenimiento);
+        }
+    }
+});
+
 /*
  var met_tiempo_cambio_modelo=new Ext.form.NumberField({
  xtype: 'numberfield',
@@ -1070,19 +1098,7 @@ var crud_metodo_formpanel_info_analisis = new Ext.form.FormPanel({
     defaults: {
         anchor: '100%'
     },
-    items: [    /*eliminado version 1.1
-     {xtype:'label',html:'<b>Prean&aacute;lisis </b>'},
-     met_lavar_equipo_ana_eluente,
-     met_cambiar_puente_x_columna,
-     met_purgar_sistema_con_eluente,
-     met_estabilizar_sis_fase_movil,
-     {xtype:'label',html:'<b>Posan&aacute;lisis </b>'},
-     met_lavar_sistema_fase_movil,
-     met_lavar_sistema_con_eluente,
-     met_purgar_sistema_sln_almacen,
-     met_cambiar_columna_x_puente,
-     met_lavar_equipo_pos_eluente,*/
-    met_tiempo_alistamiento, met_tiempo_acondicionamiento, met_tiempo_estabilizacion, met_tiempo_estandar]
+    items: [met_tiempo_alistamiento, met_tiempo_acondicionamiento, met_tiempo_estabilizacion, met_tiempo_estandar]
 });
 
 /*
@@ -1194,8 +1210,8 @@ var crud_metodo_formpanel = new Ext.Panel({
     defaults: {
         anchor: '98%'
     },
-    labelWidth: 150,
-    items: [met_codigo, met_nombre, {
+    labelWidth: 180,
+    items: [met_codigo, met_nombre, met_mantenimiento, {
         xtype: 'label',
         html: '<br/>'
     }, {
@@ -1208,7 +1224,7 @@ var crud_metodo_formpanel = new Ext.Panel({
         xtype: 'tabpanel',
         activeTab: 0,
         deferredRender: false,
-        height: 340,
+        height: 330,
         items: [crud_metodo_formpanel_info_analisis, //crud_metodo_formpanel_info_tc,
  crud_metodo_formpanel_info_inyec, crud_metodo_formpanel_info_inyec_x_mu]
     }],
@@ -1235,7 +1251,7 @@ var crud_metodo_formpanel = new Ext.Panel({
 var crud_metodo_columnHeaderGroup = new Ext.ux.grid.ColumnHeaderGroup({
     rows: [[{
         header: '<h3>M&eacute;todo</h3>',
-        colspan: 2,
+        colspan: 3,
         align: 'center'
     },    /*{
      header: '<h3>Pre an&aacute;lisis</h3>',
@@ -1300,9 +1316,21 @@ var crud_metodo_colmodel = new Ext.grid.ColumnModel({
         dataIndex: 'met_codigo'
     }, {
         header: "Nombre",
-        width: 110,
+        width: 150,
         dataIndex: 'met_nombre',
         renderer: crud_metodo_renderizar_gris
+    }, {
+        header: "Mantenimiento",
+        width: 80,
+        dataIndex: 'met_mantenimiento',
+        renderer: function(val){
+            if (val == '1') {
+                return 'Si';
+            }
+            else {
+                return 'No';
+            }
+        }
     },    /*	{ header: "Lavar<br/>de equipo<br/>con eluente<br/>(Min.)", width: 70, dataIndex: 'met_lavar_equipo_ana_eluente'},
      { header: "Cambiar<br/>puente<br/> por columna<br/>(Min.)", width: 70, dataIndex: 'met_cambiar_puente_x_columna'},
      { header: "Purgar<br/>sistema<br/>con eluente<br/> (Min.)", width: 70, dataIndex: 'met_purgar_sistema_con_eluente'},
@@ -1460,12 +1488,11 @@ var crud_metodo_gridpanel = new Ext.grid.GridPanel({
                 //Ext.getCmp('crud_metodo_formpanel').getForm().loadRecord(record);
                 Ext.getCmp('met_codigo').setValue(record.data.met_codigo);
                 Ext.getCmp('met_nombre').setValue(record.data.met_nombre);
+                Ext.getCmp('met_mantenimiento').setValue(record.data.met_mantenimiento);
                 Ext.getCmp('crud_metodo_formpanel_info_analisis').getForm().loadRecord(record);
                 //--Ext.getCmp('crud_metodo_formpanel_info_tc').getForm().loadRecord(record);
                 Ext.getCmp('crud_metodo_formpanel_info_inyec').getForm().loadRecord(record);
-                Ext.getCmp('crud_metodo_formpanel_info_inyec_x_mu').getForm().loadRecord(record);
-                
-                
+                Ext.getCmp('crud_metodo_formpanel_info_inyec_x_mu').getForm().loadRecord(record);                
                 
                 Ext.getCmp('crud_metodo_actualizar_boton').setText('Actualizar');
             }
@@ -1582,6 +1609,7 @@ function crud_metodo_actualizar(text){
         subirDatosAjax(getAbsoluteUrl('crud_metodo', 'actualizarMetodo'), {
             met_codigo: met_codigo.getValue(),
             met_nombre: met_nombre.getValue(),
+            met_mantenimiento: met_mantenimiento.getValue().getGroupValue(),
             /*
              met_cambiar_puente_x_columna: met_cambiar_puente_x_columna.getValue(),
              met_purgar_sistema_con_eluente:met_purgar_sistema_con_eluente.getValue(),
@@ -1678,6 +1706,8 @@ function crud_metodo_agregar(btn, ev){
 //    crud_metodo_formpanel.getForm().reset();
     Ext.getCmp('met_codigo').reset();
     Ext.getCmp('met_nombre').reset();
+    Ext.getCmp('met_mantenimiento_si').setValue(false);
+    Ext.getCmp('met_mantenimiento_no').setValue(true);
     
     Ext.getCmp('crud_metodo_formpanel_info_analisis').getForm().reset();
     //--Ext.getCmp('crud_metodo_formpanel_info_tc').getForm().reset();

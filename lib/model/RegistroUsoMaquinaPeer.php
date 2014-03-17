@@ -34,21 +34,20 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
 		
-        $registroPrimerDia -> setRumHoraInicioTrabajo("23:59:59.999");
+//        $registroPrimerDia -> setRumHoraInicioTrabajo("23:59:59.999");
         $timestampHoraFin = $registroPrimerDia -> getRumHoraFinTrabajo('U');
         
-		$registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
+	$registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
 		
         $timestampHoraInicio = $registroSegundoDia -> getRumHoraInicioTrabajo('U');
         $timestampHoraInicio += $tiempoATrasladar;
 		
-		$fecha = new DateTime('2001-01-01');
-		$fecha->setTime(0, 0, 0);
-		$fecha->add(new DateInterval('PT'.$tiempoATrasladar.'S'));
-		$timezone = date_default_timezone_get();
+        $fecha = new DateTime('2001-01-01');
+        $fecha->setTime(0, 0, 0);
+        $fecha->add(new DateInterval('PT'.$tiempoATrasladar.'S'));
+        $timezone = date_default_timezone_get();
         $fecha -> setTimezone(new DateTimeZone($timezone));
-		
-		$registroSegundoDia -> setRumHoraInicioTrabajo( $fecha-> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraInicioTrabajo( $fecha-> format('H:i:s'));
 		
         $timestampHoraFin = $registroSegundoDia -> getRumHoraFinTrabajo('U');
 		
@@ -482,8 +481,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $minutosActuales = 0;
         foreach ($registros as $registro)
         {
-            //						$registro = new RegistroUsoMaquina();
-
             $TNP += round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
             $TNP -= $minutosActuales;
 
