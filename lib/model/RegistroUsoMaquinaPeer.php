@@ -496,18 +496,15 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);
         }
 
-        $TNP = $TNP;
-        $TPP = $TPP;
-        $TPNP = $TPNP;
-        $TO = $TO;
-
         $tiempoDisponible = 1440 - $TNP - $TPP - $TPNP - $TO;
 
         if ($tiempoExcedente || $tiempoDisponible >= 0)
         {
+//            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
             return $tiempoDisponible;
         } else
         {
+//            return array(0, 0, 0, 0, 0);
             return 0;
         }
     }

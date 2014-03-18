@@ -44,7 +44,8 @@ class ingreso_datosActions extends sfActions
         $deficitTiempo = null;
 
         $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
-
+//        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
+//        
         if ($tiempoDisponible < 0)
         {
             $deficitTiempo = 0 - ($tiempoDisponible * 60);
@@ -52,6 +53,7 @@ class ingreso_datosActions extends sfActions
         {
             return $this -> renderText('1');
         }
+//        return $this -> renderText(''.$t[0].' '.$t[1].' '.$t[2].' '.$t[3].' '.$t[4].'');
 
         $registroSegundoDia = new RegistroUsoMaquina();
         $datetimeSegundoDia = new DateTime('@' . ($registro -> getRumFecha('U') + 86400));

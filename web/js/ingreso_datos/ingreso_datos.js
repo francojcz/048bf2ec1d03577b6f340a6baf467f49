@@ -2107,6 +2107,10 @@ iconCls : 'calcular',
                       case '1':
                         mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
                         break;
+//                      default:
+//                      mensaje = result.responseText;
+//                        break;
+                          
                     }
                     recargarDatosMetodos(function()
                     {
