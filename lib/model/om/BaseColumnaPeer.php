@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'computador' table.
+ * Base static class for performing query and update operations on the 'columna' table.
  *
  * 
  *
@@ -11,40 +11,70 @@
  *
  * @package    lib.model.om
  */
-abstract class BaseComputadorPeer {
+abstract class BaseColumnaPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'computador';
+	const TABLE_NAME = 'columna';
 
 	/** the related Propel class for this table */
-	const OM_CLASS = 'Computador';
+	const OM_CLASS = 'Columna';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'lib.model.Computador';
+	const CLASS_DEFAULT = 'lib.model.Columna';
 
 	/** the related TableMap class for this table */
-	const TM_CLASS = 'ComputadorTableMap';
+	const TM_CLASS = 'ColumnaTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 2;
+	const NUM_COLUMNS = 12;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
-	/** the column name for the COM_CERTIFICADO field */
-	const COM_CERTIFICADO = 'computador.COM_CERTIFICADO';
+	/** the column name for the COL_CODIGO field */
+	const COL_CODIGO = 'columna.COL_CODIGO';
 
-	/** the column name for the COM_NOMBRE field */
-	const COM_NOMBRE = 'computador.COM_NOMBRE';
+	/** the column name for the COL_CONSECUTIVO field */
+	const COL_CONSECUTIVO = 'columna.COL_CONSECUTIVO';
+
+	/** the column name for the COL_CONFIGURACION field */
+	const COL_CONFIGURACION = 'columna.COL_CONFIGURACION';
+
+	/** the column name for the COL_MARCA field */
+	const COL_MARCA = 'columna.COL_MARCA';
+
+	/** the column name for the COL_LOTE field */
+	const COL_LOTE = 'columna.COL_LOTE';
+
+	/** the column name for the COL_ELIMINADO field */
+	const COL_ELIMINADO = 'columna.COL_ELIMINADO';
+
+	/** the column name for the COL_FECHA_REGISTRO_SISTEMA field */
+	const COL_FECHA_REGISTRO_SISTEMA = 'columna.COL_FECHA_REGISTRO_SISTEMA';
+
+	/** the column name for the COL_USU_CREA field */
+	const COL_USU_CREA = 'columna.COL_USU_CREA';
+
+	/** the column name for the COL_FECHA_ACTUALIZACION field */
+	const COL_FECHA_ACTUALIZACION = 'columna.COL_FECHA_ACTUALIZACION';
+
+	/** the column name for the COL_USU_ACTUALIZA field */
+	const COL_USU_ACTUALIZA = 'columna.COL_USU_ACTUALIZA';
+
+	/** the column name for the COL_CAUSA_ELIMINACION field */
+	const COL_CAUSA_ELIMINACION = 'columna.COL_CAUSA_ELIMINACION';
+
+	/** the column name for the COL_CAUSA_ACTUALIZACION field */
+	const COL_CAUSA_ACTUALIZACION = 'columna.COL_CAUSA_ACTUALIZACION';
 
 	/**
-	 * An identiy map to hold any loaded instances of Computador objects.
+	 * An identiy map to hold any loaded instances of Columna objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array Computador[]
+	 * @var        array Columna[]
 	 */
 	public static $instances = array();
 
@@ -63,11 +93,11 @@ abstract class BaseComputadorPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('ComCertificado', 'ComNombre', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('comCertificado', 'comNombre', ),
-		BasePeer::TYPE_COLNAME => array (self::COM_CERTIFICADO, self::COM_NOMBRE, ),
-		BasePeer::TYPE_FIELDNAME => array ('com_certificado', 'com_nombre', ),
-		BasePeer::TYPE_NUM => array (0, 1, )
+		BasePeer::TYPE_PHPNAME => array ('ColCodigo', 'ColConsecutivo', 'ColConfiguracion', 'ColMarca', 'ColLote', 'ColEliminado', 'ColFechaRegistroSistema', 'ColUsuCrea', 'ColFechaActualizacion', 'ColUsuActualiza', 'ColCausaEliminacion', 'ColCausaActualizacion', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('colCodigo', 'colConsecutivo', 'colConfiguracion', 'colMarca', 'colLote', 'colEliminado', 'colFechaRegistroSistema', 'colUsuCrea', 'colFechaActualizacion', 'colUsuActualiza', 'colCausaEliminacion', 'colCausaActualizacion', ),
+		BasePeer::TYPE_COLNAME => array (self::COL_CODIGO, self::COL_CONSECUTIVO, self::COL_CONFIGURACION, self::COL_MARCA, self::COL_LOTE, self::COL_ELIMINADO, self::COL_FECHA_REGISTRO_SISTEMA, self::COL_USU_CREA, self::COL_FECHA_ACTUALIZACION, self::COL_USU_ACTUALIZA, self::COL_CAUSA_ELIMINACION, self::COL_CAUSA_ACTUALIZACION, ),
+		BasePeer::TYPE_FIELDNAME => array ('col_codigo', 'col_consecutivo', 'col_configuracion', 'col_marca', 'col_lote', 'col_eliminado', 'col_fecha_registro_sistema', 'col_usu_crea', 'col_fecha_actualizacion', 'col_usu_actualiza', 'col_causa_eliminacion', 'col_causa_actualizacion', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
 	);
 
 	/**
@@ -77,11 +107,11 @@ abstract class BaseComputadorPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('ComCertificado' => 0, 'ComNombre' => 1, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('comCertificado' => 0, 'comNombre' => 1, ),
-		BasePeer::TYPE_COLNAME => array (self::COM_CERTIFICADO => 0, self::COM_NOMBRE => 1, ),
-		BasePeer::TYPE_FIELDNAME => array ('com_certificado' => 0, 'com_nombre' => 1, ),
-		BasePeer::TYPE_NUM => array (0, 1, )
+		BasePeer::TYPE_PHPNAME => array ('ColCodigo' => 0, 'ColConsecutivo' => 1, 'ColConfiguracion' => 2, 'ColMarca' => 3, 'ColLote' => 4, 'ColEliminado' => 5, 'ColFechaRegistroSistema' => 6, 'ColUsuCrea' => 7, 'ColFechaActualizacion' => 8, 'ColUsuActualiza' => 9, 'ColCausaEliminacion' => 10, 'ColCausaActualizacion' => 11, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('colCodigo' => 0, 'colConsecutivo' => 1, 'colConfiguracion' => 2, 'colMarca' => 3, 'colLote' => 4, 'colEliminado' => 5, 'colFechaRegistroSistema' => 6, 'colUsuCrea' => 7, 'colFechaActualizacion' => 8, 'colUsuActualiza' => 9, 'colCausaEliminacion' => 10, 'colCausaActualizacion' => 11, ),
+		BasePeer::TYPE_COLNAME => array (self::COL_CODIGO => 0, self::COL_CONSECUTIVO => 1, self::COL_CONFIGURACION => 2, self::COL_MARCA => 3, self::COL_LOTE => 4, self::COL_ELIMINADO => 5, self::COL_FECHA_REGISTRO_SISTEMA => 6, self::COL_USU_CREA => 7, self::COL_FECHA_ACTUALIZACION => 8, self::COL_USU_ACTUALIZA => 9, self::COL_CAUSA_ELIMINACION => 10, self::COL_CAUSA_ACTUALIZACION => 11, ),
+		BasePeer::TYPE_FIELDNAME => array ('col_codigo' => 0, 'col_consecutivo' => 1, 'col_configuracion' => 2, 'col_marca' => 3, 'col_lote' => 4, 'col_eliminado' => 5, 'col_fecha_registro_sistema' => 6, 'col_usu_crea' => 7, 'col_fecha_actualizacion' => 8, 'col_usu_actualiza' => 9, 'col_causa_eliminacion' => 10, 'col_causa_actualizacion' => 11, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
 	);
 
 	/**
@@ -130,12 +160,12 @@ abstract class BaseComputadorPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. ComputadorPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. ColumnaPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(ComputadorPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(ColumnaPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -151,8 +181,18 @@ abstract class BaseComputadorPeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(ComputadorPeer::COM_CERTIFICADO);
-		$criteria->addSelectColumn(ComputadorPeer::COM_NOMBRE);
+		$criteria->addSelectColumn(ColumnaPeer::COL_CODIGO);
+		$criteria->addSelectColumn(ColumnaPeer::COL_CONSECUTIVO);
+		$criteria->addSelectColumn(ColumnaPeer::COL_CONFIGURACION);
+		$criteria->addSelectColumn(ColumnaPeer::COL_MARCA);
+		$criteria->addSelectColumn(ColumnaPeer::COL_LOTE);
+		$criteria->addSelectColumn(ColumnaPeer::COL_ELIMINADO);
+		$criteria->addSelectColumn(ColumnaPeer::COL_FECHA_REGISTRO_SISTEMA);
+		$criteria->addSelectColumn(ColumnaPeer::COL_USU_CREA);
+		$criteria->addSelectColumn(ColumnaPeer::COL_FECHA_ACTUALIZACION);
+		$criteria->addSelectColumn(ColumnaPeer::COL_USU_ACTUALIZA);
+		$criteria->addSelectColumn(ColumnaPeer::COL_CAUSA_ELIMINACION);
+		$criteria->addSelectColumn(ColumnaPeer::COL_CAUSA_ACTUALIZACION);
 	}
 
 	/**
@@ -171,26 +211,26 @@ abstract class BaseComputadorPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(ComputadorPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(ColumnaPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			ComputadorPeer::addSelectColumns($criteria);
+			ColumnaPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 
 		if ($con === null) {
-			$con = Propel::getConnection(ComputadorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(ColumnaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
 		{
-		  call_user_func($sf_hook, 'BaseComputadorPeer', $criteria, $con);
+		  call_user_func($sf_hook, 'BaseColumnaPeer', $criteria, $con);
 		}
 
 		// BasePeer returns a PDOStatement
@@ -209,7 +249,7 @@ abstract class BaseComputadorPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     Computador
+	 * @return     Columna
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -217,7 +257,7 @@ abstract class BaseComputadorPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = ComputadorPeer::doSelect($critcopy, $con);
+		$objects = ColumnaPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -234,7 +274,7 @@ abstract class BaseComputadorPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{
-		return ComputadorPeer::populateObjects(ComputadorPeer::doSelectStmt($criteria, $con));
+		return ColumnaPeer::populateObjects(ColumnaPeer::doSelectStmt($criteria, $con));
 	}
 	/**
 	 * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -252,12 +292,12 @@ abstract class BaseComputadorPeer {
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(ComputadorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(ColumnaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		if (!$criteria->hasSelectClause()) {
 			$criteria = clone $criteria;
-			ComputadorPeer::addSelectColumns($criteria);
+			ColumnaPeer::addSelectColumns($criteria);
 		}
 
 		// Set the correct dbName
@@ -265,7 +305,7 @@ abstract class BaseComputadorPeer {
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
 		{
-		  call_user_func($sf_hook, 'BaseComputadorPeer', $criteria, $con);
+		  call_user_func($sf_hook, 'BaseColumnaPeer', $criteria, $con);
 		}
 
 
@@ -281,14 +321,14 @@ abstract class BaseComputadorPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      Computador $value A Computador object.
+	 * @param      Columna $value A Columna object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(Computador $obj, $key = null)
+	public static function addInstanceToPool(Columna $obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
-				$key = (string) $obj->getComCertificado();
+				$key = (string) $obj->getColCodigo();
 			} // if key === null
 			self::$instances[$key] = $obj;
 		}
@@ -302,18 +342,18 @@ abstract class BaseComputadorPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A Computador object or a primary key value.
+	 * @param      mixed $value A Columna object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof Computador) {
-				$key = (string) $value->getComCertificado();
+			if (is_object($value) && $value instanceof Columna) {
+				$key = (string) $value->getColCodigo();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Computador object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Columna object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -328,7 +368,7 @@ abstract class BaseComputadorPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     Computador Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     Columna Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -352,7 +392,7 @@ abstract class BaseComputadorPeer {
 	}
 	
 	/**
-	 * Method to invalidate the instance pool of all tables related to computador
+	 * Method to invalidate the instance pool of all tables related to columna
 	 * by a foreign key with ON DELETE CASCADE
 	 */
 	public static function clearRelatedInstancePool()
@@ -390,11 +430,11 @@ abstract class BaseComputadorPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = ComputadorPeer::getOMClass(false);
+		$cls = ColumnaPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = ComputadorPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = ComputadorPeer::getInstanceFromPool($key))) {
+			$key = ColumnaPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = ColumnaPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -403,7 +443,7 @@ abstract class BaseComputadorPeer {
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
-				ComputadorPeer::addInstanceToPool($obj, $key);
+				ColumnaPeer::addInstanceToPool($obj, $key);
 			} // if key exists
 		}
 		$stmt->closeCursor();
@@ -426,10 +466,10 @@ abstract class BaseComputadorPeer {
 	 */
 	public static function buildTableMap()
 	{
-	  $dbMap = Propel::getDatabaseMap(BaseComputadorPeer::DATABASE_NAME);
-	  if (!$dbMap->hasTable(BaseComputadorPeer::TABLE_NAME))
+	  $dbMap = Propel::getDatabaseMap(BaseColumnaPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseColumnaPeer::TABLE_NAME))
 	  {
-	    $dbMap->addTableObject(new ComputadorTableMap());
+	    $dbMap->addTableObject(new ColumnaTableMap());
 	  }
 	}
 
@@ -446,13 +486,13 @@ abstract class BaseComputadorPeer {
 	 */
 	public static function getOMClass($withPrefix = true)
 	{
-		return $withPrefix ? ComputadorPeer::CLASS_DEFAULT : ComputadorPeer::OM_CLASS;
+		return $withPrefix ? ColumnaPeer::CLASS_DEFAULT : ColumnaPeer::OM_CLASS;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a Computador or Criteria object.
+	 * Method perform an INSERT on the database, given a Columna or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or Computador object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or Columna object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -461,22 +501,26 @@ abstract class BaseComputadorPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
     // symfony_behaviors behavior
-    foreach (sfMixer::getCallables('BaseComputadorPeer:doInsert:pre') as $sf_hook)
+    foreach (sfMixer::getCallables('BaseColumnaPeer:doInsert:pre') as $sf_hook)
     {
-      if (false !== $sf_hook_retval = call_user_func($sf_hook, 'BaseComputadorPeer', $values, $con))
+      if (false !== $sf_hook_retval = call_user_func($sf_hook, 'BaseColumnaPeer', $values, $con))
       {
         return $sf_hook_retval;
       }
     }
 
 		if ($con === null) {
-			$con = Propel::getConnection(ComputadorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(ColumnaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from Computador object
+			$criteria = $values->buildCriteria(); // build Criteria from Columna object
+		}
+
+		if ($criteria->containsKey(ColumnaPeer::COL_CODIGO) && $criteria->keyContainsValue(ColumnaPeer::COL_CODIGO) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.ColumnaPeer::COL_CODIGO.')');
 		}
 
 
@@ -495,18 +539,18 @@ abstract class BaseComputadorPeer {
 		}
 
     // symfony_behaviors behavior
-    foreach (sfMixer::getCallables('BaseComputadorPeer:doInsert:post') as $sf_hook)
+    foreach (sfMixer::getCallables('BaseColumnaPeer:doInsert:post') as $sf_hook)
     {
-      call_user_func($sf_hook, 'BaseComputadorPeer', $values, $con, $pk);
+      call_user_func($sf_hook, 'BaseColumnaPeer', $values, $con, $pk);
     }
 
 		return $pk;
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a Computador or Criteria object.
+	 * Method perform an UPDATE on the database, given a Columna or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or Computador object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or Columna object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -515,16 +559,16 @@ abstract class BaseComputadorPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
     // symfony_behaviors behavior
-    foreach (sfMixer::getCallables('BaseComputadorPeer:doUpdate:pre') as $sf_hook)
+    foreach (sfMixer::getCallables('BaseColumnaPeer:doUpdate:pre') as $sf_hook)
     {
-      if (false !== $sf_hook_retval = call_user_func($sf_hook, 'BaseComputadorPeer', $values, $con))
+      if (false !== $sf_hook_retval = call_user_func($sf_hook, 'BaseColumnaPeer', $values, $con))
       {
         return $sf_hook_retval;
       }
     }
 
 		if ($con === null) {
-			$con = Propel::getConnection(ComputadorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(ColumnaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -532,10 +576,10 @@ abstract class BaseComputadorPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(ComputadorPeer::COM_CERTIFICADO);
-			$selectCriteria->add(ComputadorPeer::COM_CERTIFICADO, $criteria->remove(ComputadorPeer::COM_CERTIFICADO), $comparison);
+			$comparison = $criteria->getComparison(ColumnaPeer::COL_CODIGO);
+			$selectCriteria->add(ColumnaPeer::COL_CODIGO, $criteria->remove(ColumnaPeer::COL_CODIGO), $comparison);
 
-		} else { // $values is Computador object
+		} else { // $values is Columna object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -546,35 +590,35 @@ abstract class BaseComputadorPeer {
 		$ret = BasePeer::doUpdate($selectCriteria, $criteria, $con);
 
     // symfony_behaviors behavior
-    foreach (sfMixer::getCallables('BaseComputadorPeer:doUpdate:post') as $sf_hook)
+    foreach (sfMixer::getCallables('BaseColumnaPeer:doUpdate:post') as $sf_hook)
     {
-      call_user_func($sf_hook, 'BaseComputadorPeer', $values, $con, $ret);
+      call_user_func($sf_hook, 'BaseColumnaPeer', $values, $con, $ret);
     }
 
     return $ret;
 	}
 
 	/**
-	 * Method to DELETE all rows from the computador table.
+	 * Method to DELETE all rows from the columna table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(ComputadorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(ColumnaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(ComputadorPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(ColumnaPeer::TABLE_NAME, $con);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
 			// instances get re-added by the select statement contained therein).
-			ComputadorPeer::clearInstancePool();
-			ComputadorPeer::clearRelatedInstancePool();
+			ColumnaPeer::clearInstancePool();
+			ColumnaPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -584,9 +628,9 @@ abstract class BaseComputadorPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a Computador or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a Columna or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or Computador object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or Columna object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -597,27 +641,27 @@ abstract class BaseComputadorPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(ComputadorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(ColumnaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			ComputadorPeer::clearInstancePool();
+			ColumnaPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof Computador) { // it's a model object
+		} elseif ($values instanceof Columna) { // it's a model object
 			// invalidate the cache for this single object
-			ComputadorPeer::removeInstanceFromPool($values);
+			ColumnaPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(ComputadorPeer::COM_CERTIFICADO, (array) $values, Criteria::IN);
+			$criteria->add(ColumnaPeer::COL_CODIGO, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				ComputadorPeer::removeInstanceFromPool($singleval);
+				ColumnaPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -632,7 +676,7 @@ abstract class BaseComputadorPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-			ComputadorPeer::clearRelatedInstancePool();
+			ColumnaPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -642,24 +686,24 @@ abstract class BaseComputadorPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given Computador object.
+	 * Validates all modified columns of given Columna object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      Computador $obj The object to validate.
+	 * @param      Columna $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(Computador $obj, $cols = null)
+	public static function doValidate(Columna $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(ComputadorPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(ComputadorPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(ColumnaPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(ColumnaPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -675,31 +719,31 @@ abstract class BaseComputadorPeer {
 
 		}
 
-		return BasePeer::doValidate(ComputadorPeer::DATABASE_NAME, ComputadorPeer::TABLE_NAME, $columns);
+		return BasePeer::doValidate(ColumnaPeer::DATABASE_NAME, ColumnaPeer::TABLE_NAME, $columns);
 	}
 
 	/**
 	 * Retrieve a single object by pkey.
 	 *
-	 * @param      string $pk the primary key.
+	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     Computador
+	 * @return     Columna
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = ComputadorPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = ColumnaPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(ComputadorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(ColumnaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria = new Criteria(ComputadorPeer::DATABASE_NAME);
-		$criteria->add(ComputadorPeer::COM_CERTIFICADO, $pk);
+		$criteria = new Criteria(ColumnaPeer::DATABASE_NAME);
+		$criteria->add(ColumnaPeer::COL_CODIGO, $pk);
 
-		$v = ComputadorPeer::doSelect($criteria, $con);
+		$v = ColumnaPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -715,16 +759,16 @@ abstract class BaseComputadorPeer {
 	public static function retrieveByPKs($pks, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(ComputadorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(ColumnaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		$objs = null;
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(ComputadorPeer::DATABASE_NAME);
-			$criteria->add(ComputadorPeer::COM_CERTIFICADO, $pks, Criteria::IN);
-			$objs = ComputadorPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(ColumnaPeer::DATABASE_NAME);
+			$criteria->add(ColumnaPeer::COL_CODIGO, $pks, Criteria::IN);
+			$objs = ColumnaPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
@@ -756,15 +800,15 @@ abstract class BaseComputadorPeer {
 	{
 	  if (preg_match('/^do(Select|Count)(Join(All(Except)?)?|Stmt)?/', $method, $match))
 	  {
-	    return sprintf('BaseComputadorPeer:%s:%1$s', 'Count' == $match[1] ? 'doCount' : $match[0]);
+	    return sprintf('BaseColumnaPeer:%s:%1$s', 'Count' == $match[1] ? 'doCount' : $match[0]);
 	  }
 	
 	  throw new LogicException(sprintf('Unrecognized function "%s"', $method));
 	}
 
-} // BaseComputadorPeer
+} // BaseColumnaPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseComputadorPeer::buildTableMap();
+BaseColumnaPeer::buildTableMap();
 

@@ -847,7 +847,7 @@ Ext.onReady(function()
       header : 'Nombre del evento',
       tooltip : 'Nombre del evento',
       width : 300,
-      align : 'left',
+      align : 'center',
       editor : new Ext.form.ComboBox(
       {
         store : eventos_datastore_combo,

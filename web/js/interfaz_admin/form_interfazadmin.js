@@ -123,6 +123,20 @@ var form_interfazdministrador = function(){
                                     scope: this
                                 }
                             }]
+                        }, {
+                            title: 'Columnas',
+                            tabTip: 'Manejo de columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            iconCls: 'x-icon-maestra',
+                            items: [{
+                                frame: true,
+                                autoLoad: {
+                                    url: getAbsoluteUrl('crud_columna', 'index'),
+                                    scripts: true,
+                                    scope: this
+                                }
+                            }]
                         }]
                     }, {
                         expanded: true,

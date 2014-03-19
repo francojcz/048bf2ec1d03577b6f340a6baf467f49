@@ -630,11 +630,17 @@ CREATE TABLE `registro_uso_maquina`
 	`rum_tc_pureza_estandar` DECIMAL(12,4),
 	`rum_tc_disolucion_estandar` DECIMAL(12,4),
 	`rum_tc_uniformidad_estandar` DECIMAL(12,4),
+        `rum_col_codigo` INTEGER(11),
+        `rum_platos_teoricos` DECIMAL(12,4),
+        `rum_tiempo_retencion` DECIMAL(12,4),
+        `rum_resolucion` DECIMAL(12,4),
+        `rum_tailing` DECIMAL(12,4),
 	PRIMARY KEY (`rum_codigo`),
 	KEY `FK_reference_22`(`rum_usu_codigo_elimino`),
 	KEY `FK_reference_6`(`rum_maq_codigo`),
 	KEY `FK_reference_7`(`rum_met_codigo`),
 	KEY `FK_reference_8`(`rum_usu_codigo`),
+        KEY `FK_reference_9`(`rum_col_codigo`),
 	CONSTRAINT `registro_uso_maquina_FK_1`
 		FOREIGN KEY (`rum_maq_codigo`)
 		REFERENCES `maquina` (`maq_codigo`)
@@ -653,6 +659,11 @@ CREATE TABLE `registro_uso_maquina`
 	CONSTRAINT `registro_uso_maquina_FK_4`
 		FOREIGN KEY (`rum_usu_codigo_elimino`)
 		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `registro_uso_maquina_FK_4`
+		FOREIGN KEY (`rum_col_codigo`)
+		REFERENCES `columna` (`col_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
@@ -717,6 +728,44 @@ CREATE TABLE `usuario`
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
+
+#-----------------------------------------------------------------------------
+#-- columna
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `columna`;
+
+
+CREATE TABLE `columna`
+(
+	`col_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
+	`col_consecutivo` VARCHAR(100),
+	`col_configuracion` VARCHAR(100),
+        `col_marca` VARCHAR(100),
+        `col_lote` VARCHAR(100),
+        `col_eliminado` SMALLINT(6),
+        `col_fecha_registro_sistema` DATETIME,
+        `col_usu_crea` INTEGER(11),
+        `col_fecha_actualizacion` DATETIME,
+        `col_usu_actualiza` INTEGER(11),
+        `col_causa_eliminacion` VARCHAR(250),
+	`col_causa_actualizacion` VARCHAR(250),
+	PRIMARY KEY (`col_codigo`),
+        KEY `FK_reference_1`(`col_usu_crea`),
+        KEY `FK_reference_2`(`col_usu_actualiza`),
+        CONSTRAINT `columna_FK_1`
+		FOREIGN KEY (`col_usu_crea`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `columna_FK_2`
+		FOREIGN KEY (`col_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
+
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
