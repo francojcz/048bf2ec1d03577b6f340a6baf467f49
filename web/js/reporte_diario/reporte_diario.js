@@ -296,10 +296,7 @@ var rdtiemp_datastore = new Ext.data.Store({
         name: 'rdtiemp_TO_dia',
         type: 'string'
     }, {
-        name: 'observaciones',
-        type: 'string'
-    }, {
-        name: 'columnas',
+        name: 'lote',
         type: 'string'
     }])
 });
@@ -411,17 +408,11 @@ var rdtiemp_colmodel = new Ext.grid.ColumnModel({
         width: 60,
         renderer: generarRenderer('#f0a05f', '#000000')
     }, {
-        dataIndex: 'observaciones',
+        dataIndex: 'lote',
         header: 'Lote',
         tooltip: 'Lote',
         width: 170,
         renderer: generarRenderer('#d2b48c', '#000000')
-    }, {
-        dataIndex: 'columnas',
-        header: 'Columna',
-        tooltip: 'Columna',
-        width: 170,
-        renderer: generarRenderer('#FFC459', '#000000')
     }]});
 
 var rdtiemp_grid = new Ext.grid.GridPanel({

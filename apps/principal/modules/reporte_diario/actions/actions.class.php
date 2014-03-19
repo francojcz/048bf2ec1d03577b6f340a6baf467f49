@@ -132,8 +132,7 @@ class reporte_diarioActions extends sfActions
             $datos[$fila]['rdtiemp_TPNP_metodo'] = round($registro -> calcularTPNPMinutos(8) / 60, 2);
             $datos[$fila]['rdtiemp_TF_metodo'] = round($tf, 2);
             $datos[$fila]['rdtiemp_TO_metodo'] = round($to, 2);
-            $datos[$fila]['observaciones'] = $registro -> getRumObservaciones();
-            $datos[$fila]['columnas'] = $registro -> getRumColumnas();
+            $datos[$fila]['lote'] = $registro -> getRumLote();
 
             $horasFin = $registro -> getRumHoraFinTrabajo('H');
  

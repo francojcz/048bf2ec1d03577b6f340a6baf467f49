@@ -299,8 +299,7 @@ propel:
     rum_num_inyec_x_mu_disolu_perd: { phpName: RumNumInyecXMuDisoluPerd, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_num_inyec_x_mu_unifor_perd: { phpName: RumNumInyecXMuUniforPerd, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_fallas: { phpName: RumFallas, type: DECIMAL, size: '12', scale: '4', required: false }
-    rum_observaciones: { phpName: RumObservaciones, type: VARCHAR, size: '300', required: false }
-    rum_columnas: { phpName: RumColumnas, type: VARCHAR, size: '300', required: false }
+    rum_lote: { phpName: RumLote, type: VARCHAR, size: '300', required: false }
     rum_fecha: { phpName: RumFecha, type: DATE, required: false }
     rum_fecha_hora_reg_sistema: { phpName: RumFechaHoraRegSistema, type: TIMESTAMP, required: false }
     rum_causa_eliminacion: { phpName: RumCausaEliminacion, type: VARCHAR, size: '300', required: false }

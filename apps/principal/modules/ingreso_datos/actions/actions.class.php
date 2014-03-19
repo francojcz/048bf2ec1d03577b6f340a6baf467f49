@@ -79,8 +79,7 @@ class ingreso_datosActions extends sfActions
         $registroSegundoDia -> setRumTcUniformidadEstandar($registro ->getRumTcUniformidadEstandar());
         
         //Cambios: 24 de Febrero de 2014
-        $registroSegundoDia ->setRumObservaciones($registro ->getRumObservaciones());
-        $registroSegundoDia ->setRumColumnas($registro ->getRumColumnas());
+        $registroSegundoDia ->setRumLote($registro ->getRumLote());
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirFallas($deficitTiempo, $registro, $registroSegundoDia);
 
@@ -1014,14 +1013,10 @@ class ingreso_datosActions extends sfActions
         foreach ($registrosEventos as $registroEvento)
         {
             $fields = array();
-
-            //												$registroEvento = new EventoEnRegistro();
-
             $fields['codigo'] = $registroEvento -> getEvrgCodigo();
             $fields['id_evento'] = $registroEvento -> getEvrgEveCodigo();
             $fields['hora_ocurrio'] = $registroEvento -> getEvrgHoraOcurrio('H:i');
             $fields['evrg_duracion'] = number_format($registroEvento -> getEvrgDuracion(), 2, '.', '');
-
             $fields['observaciones'] = $registroEvento -> getEvrgObservaciones();
 
             $data[] = $fields;
@@ -1221,10 +1216,7 @@ class ingreso_datosActions extends sfActions
                 $registro -> setRumNumMuestrasProducto($request -> getParameter('numero_muestras_producto'));
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumMuestrasProducto());
-            }
-            //			if($request->hasParameter('numero_inyecciones_x_muestra_producto')) {
-            //				$registro->setRumNumInyecXMuestraProduc($request->getParameter('numero_inyecciones_x_muestra_producto'));
-            //			}
+            }            
             if ($request -> hasParameter('numero_muestras_estabilidad'))
             {
                 $registroModificacion -> setRemNombreCampo('Número muestras - Estabilidad');
@@ -1281,7 +1273,7 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
                 
-                //Cambios: 20 de Febrero de 2014
+                //Cambios: 24 de Febrero de 2014
                 $cod_metodo = $registro->getRumMetCodigo();
                 $metodo = MetodoPeer::retrieveByPK($cod_metodo);
                 if($metodo->getMetMantenimiento() == 1) {
@@ -1311,25 +1303,15 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumFallas());
             }            
-            if ($request -> hasParameter('observaciones'))
+            if ($request -> hasParameter('lote'))
             {
-                $registroModificacion -> setRemNombreCampo('Observaciones');
-                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumObservaciones());
+                $registroModificacion -> setRemNombreCampo('Lote');
+                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumLote());
 
-                $registro ->setRumObservaciones($request -> getParameter('observaciones'));
+                $registro ->setRumLote($request -> getParameter('lote'));
                 
-                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumObservaciones());
+                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumLote());
             }
-            if ($request -> hasParameter('columnas'))
-            {
-                $registroModificacion -> setRemNombreCampo('Columnas');
-                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumColumnas());
-
-                $registro ->setRumColumnas($request -> getParameter('columnas'));
-                
-                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumColumnas());
-            }
-
             if ($request -> hasParameter('tiempo_entre_metodos_perdida'))
             {
                 $registroModificacion -> setRemNombreCampo('Tiempo entre métodos');
@@ -1339,7 +1321,6 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumTiempoEntreModelo('H:i:s'));
             }
-
             if ($request -> hasParameter('tiempo_corrida_ss_perdida'))
             {
                 $registroModificacion -> setRemNombreCampo('Tiempo de corrida - System suitability');
@@ -1439,7 +1420,6 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumInyeccionEstandar8Pe());
             }
-
             if ($request -> hasParameter('tiempo_corrida_producto_perdida'))
             {
                 $registroModificacion -> setRemNombreCampo('Tiempo de corrida - Producto');
@@ -1613,7 +1593,7 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
                 
-                //Cambios: 20 de Febrero de 2014
+                //Cambios: 24 de Febrero de 2014
                 $cod_metodo = $registro->getRumMetCodigo();
                 $metodo = MetodoPeer::retrieveByPK($cod_metodo);
                 if($metodo->getMetMantenimiento() == 1) {
@@ -1624,8 +1604,7 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
                 }
-            }
-            
+            }            
             if ($request -> hasParameter('hora_fin_corrida_perdida'))
             {
                 $registroModificacion -> setRemNombreCampo('Hora fin');
@@ -1644,7 +1623,38 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumFallas());
             }
-
+            
+            //Cambios: 24 de Febrero de 2014
+            if ($request -> hasParameter('platos_teoricos'))
+            {
+                $registroModificacion -> setRemNombreCampo('Platos teóricos');
+                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumPlatosTeoricos());
+                $registro ->setRumPlatosTeoricos($request -> getParameter('platos_teoricos'));                
+                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumPlatosTeoricos());
+            } 
+            if ($request -> hasParameter('tiempo_retencion'))
+            {
+                $registroModificacion -> setRemNombreCampo('Tiempo de Retención');
+                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumTiempoRetencion());
+                $registro ->setRumTiempoRetencion($request -> getParameter('tiempo_retencion'));                
+                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumTiempoRetencion());
+            }
+            if ($request -> hasParameter('resolucion'))
+            {
+                $registroModificacion -> setRemNombreCampo('Resolución');
+                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumResolucion());
+                $registro ->setRumResolucion($request -> getParameter('resolucion'));                
+                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumResolucion());
+            }
+            if ($request -> hasParameter('tailing'))
+            {
+                $registroModificacion -> setRemNombreCampo('Tailing');
+                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumTailing());
+                $registro ->setRumTailing($request -> getParameter('tailing'));                
+                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumTailing());
+            }
+            
+            
             if ($registro -> isModified())
             {
                 $causa = '';
@@ -1718,26 +1728,24 @@ class ingreso_datosActions extends sfActions
         $registro -> setRumNumeroInyeccionEstandar($metodo -> getMetNumeroInyeccionEstandar());
         $registro -> setRumTiempoCorridaCurvas($metodo -> getMetTiempoCorridaCurvas());
 
-        // Version 1.1 {
+        // Version 1.1
         $registro -> setRumTcProductoTerminado($metodo -> getMetTcProductoTerminado());
         $registro -> setRumTcEstabilidad($metodo -> getMetTcEstabilidad());
         $registro -> setRumTcMateriaPrima($metodo -> getMetTcMateriaPrima());
         $registro -> setRumTcPureza($metodo -> getMetTcPureza());
         $registro -> setRumTcDisolucion($metodo -> getMetTcDisolucion());
         $registro -> setRumTcUniformidad($metodo -> getMetTcUniformidad());
-        // }
 
         $registro -> setRumTiempoCorridaSistemaEst($metodo -> getMetTiempoCorridaSistema());
         $registro -> setRumTiempoCorridaCurvasEsta($metodo -> getMetTiempoCorridaCurvas());
 
-        // Version 1.1 {
+        // Version 1.1
         $registro -> setRumTcProductoTerminadoEsta($metodo -> getMetTcProductoTerminado());
         $registro -> setRumTcEstabilidadEstandar($metodo -> getMetTcEstabilidad());
         $registro -> setRumTcMateriaPrimaEstandar($metodo -> getMetTcMateriaPrima());
         $registro -> setRumTcPurezaEstandar($metodo -> getMetTcPureza());
         $registro -> setRumTcDisolucionEstandar($metodo -> getMetTcDisolucion());
         $registro -> setRumTcUniformidadEstandar($metodo -> getMetTcUniformidad());
-        // }
 
         $registro -> setRumNumeroInyeccionEstandar1($metodo -> getMetNumInyeccionEstandar1());
         $registro -> setRumNumeroInyeccionEstandar2($metodo -> getMetNumInyeccionEstandar2());
@@ -1751,11 +1759,10 @@ class ingreso_datosActions extends sfActions
         $registro -> setRumNumInyecXMuestraEstabi($metodo -> getMetNumInyecXMuEstabilidad());
         $registro -> setRumNumInyecXMuestraMateri($metodo -> getMetNumInyecXMuMateriaPri());
 
-        // Version 1.1 {
+        // Version 1.1
         $registro -> setRumNumInyecXMuestraPureza($metodo -> getMetNumInyecXMuPureza());
         $registro -> setRumNumInyecXMuestraDisolu($metodo -> getMetNumInyecXMuDisolucion());
         $registro -> setRumNumInyecXMuestraUnifor($metodo -> getMetNumInyecXMuUniformidad());
-        // }
 
         $registro -> setRumMetCodigo($request -> getParameter('id_metodo'));
 
@@ -1764,6 +1771,9 @@ class ingreso_datosActions extends sfActions
         $registro -> setRumFechaHoraRegSistema(date('Y-m-d H:i:s'));
         $registro -> setRumUsuCodigo($codigo_usuario);
         $registro -> setRumEliminado(false);
+        
+        //Cambios: 24 de Febrero de 2014
+        $registro -> setRumColCodigo($request -> getParameter('id_columna'));
         
         $registro -> save();
         return $this -> renderText('Ok');
@@ -1795,9 +1805,7 @@ class ingreso_datosActions extends sfActions
         foreach ($registros as $registro)
         {
             $fields = array();
-
-            //			$registro = new RegistroUsoMaquina();
-
+            
             $fields['id_registro_uso_maquina'] = $registro -> getRumCodigo();
             $fields['id_metodo'] = $registro -> getRumMetCodigo();
             $fields['tiempo_entre_metodos'] = $registro -> getRumTiempoEntreModelo('H:i:s');
@@ -1843,8 +1851,16 @@ class ingreso_datosActions extends sfActions
             $fields['hora_inicio_corrida'] = $registro -> getRumHoraInicioTrabajo('H:i:s');
             $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajo('H:i:s');
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
-            $fields['observaciones'] = $registro -> getRumObservaciones();
-            $fields['columnas'] = $registro -> getRumColumnas();
+            $fields['lote'] = $registro -> getRumLote();
+            
+            //Cambios: 24 de Febrero de 2014
+            $columna = ColumnaPeer::retrieveByPK($registro->getRumColCodigo());
+            $fields['col_consecutivo'] = $columna -> getColConsecutivo();
+            $fields['col_marca'] = $columna -> getColMarca();
+            $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
+            $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
+            $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
+            $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
 
             $data[] = $fields;
 
@@ -1896,9 +1912,16 @@ class ingreso_datosActions extends sfActions
             $fields['hora_inicio_corrida'] = $registro -> getRumHoraInicioTrabajo('H:i:s');
             $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajo('H:i:s');
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
-            $fields['observaciones'] = $registro -> getRumObservaciones();
-            $fields['columnas'] = $registro -> getRumColumnas();
+            $fields['lote'] = $registro -> getRumLote();
 
+            //Cambios: 24 de Febrero de 2014
+            $fields['col_consecutivo'] = $columna -> getColConsecutivo();
+            $fields['col_marca'] = $columna -> getColMarca();            
+            $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
+            $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
+            $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
+            $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
+            
             $horasFin = $registro -> getRumHoraFinTrabajo('H');
             $minutosFin = $registro -> getRumHoraFinTrabajo('i');
             $segundosFin = $registro -> getRumHoraFinTrabajo('s');
@@ -1951,6 +1974,29 @@ class ingreso_datosActions extends sfActions
             $fields = array();
             $fields['codigo'] = $metodo -> getMetCodigo();
             $fields['nombre'] = $metodo -> getMetNombre();
+            $data[] = $fields;
+        }
+
+        $result['data'] = $data;
+        return $this -> renderText(json_encode($result));
+    }
+    
+    //Cambios: Marzo de 2014
+    public function executeListarColumnas()
+    {
+        $conexion = new Criteria();
+        $conexion -> add(ColumnaPeer::COL_ELIMINADO, 0);
+//        $conexion -> addAscendingOrderByColumn(ColumnaPeer::COL_CONSECUTIVO);
+        $columnas = ColumnaPeer::doSelect($conexion);
+        
+        $result = array();
+        $data = array();
+
+        foreach ($columnas as $columna)
+        {
+            $fields = array();
+            $fields['codigo'] = $columna -> getColCodigo();
+            $fields['nombre'] = $columna -> getColConsecutivo().' - '.$columna -> getColMarca();
             $data[] = $fields;
         }
 

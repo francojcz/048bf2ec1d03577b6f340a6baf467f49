@@ -7,154 +7,132 @@ Ext.onReady(function()
   {
     type : 'int',
     name : 'id_registro_uso_maquina'
-  },
-  {
+  }, {
     type : 'string',
     name : 'id_metodo'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_entre_metodos'
-  },
-  {
+  }, {
     type : 'string',
     name : 'cambio_metodo_ajuste'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_corrida_ss'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_ss'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_corrida_cc'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_estandar1'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_estandar2'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_estandar3'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_estandar4'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_estandar5'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_estandar6'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_estandar7'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_estandar8'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_corrida_producto'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_corrida_estabilidad'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_corrida_materia_prima'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_corrida_pureza'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_corrida_disolucion'
-  },
-  {
+  }, {
     type : 'string',
     name : 'tiempo_corrida_uniformidad'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_muestras_producto'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_muestras_estabilidad'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_muestras_materia_prima'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_muestras_pureza'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_muestras_disolucion'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_muestras_uniformidad'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_x_muestra_producto'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_x_muestra_materia_prima'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_x_muestra_estabilidad'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_x_muestra_pureza'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_x_muestra_disolucion'
-  },
-  {
+  }, {
     type : 'string',
     name : 'numero_inyecciones_x_muestra_uniformidad'
-  },
-  {
+  }, {
     type : 'string',
     name : 'hora_inicio_corrida'
-  },
-  {
+  }, {
     type : 'string',
     name : 'hora_fin_corrida'
-  },
-  {
+  }, {
     type : 'string',
     name : 'fallas'
-  },
-  {
+  }, {
     type : 'string',
-    name : 'observaciones'
-  },
-  {
+    name : 'lote'
+  }, {
     type : 'string',
-    name : 'columnas'
+    name : 'col_consecutivo'
+  }, {
+    type : 'string',
+    name : 'col_marca'
+  }, {
+    type : 'string',
+    name : 'platos_teoricos'
+  }, {
+    type : 'string',
+    name : 'tiempo_retencion'
+  }, {
+    type : 'string',
+    name : 'resolucion'
+  }, {
+    type : 'string',
+    name : 'tailing'
   }];
 
   var columnHeaderGroup = new Ext.ux.grid.ColumnHeaderGroup(
@@ -196,8 +174,8 @@ Ext.onReady(function()
       align : 'center'
     },
     {
-      header : '',
-      colspan : 1,
+      header : '<h3>Informaci&oacute;n de Columnas</h3>',
+      colspan : 6,
       align : 'center'
     }]]
   });
@@ -279,6 +257,29 @@ Ext.onReady(function()
       type : 'string'
     }])
   });
+  
+  //Cambios: 24 de Febrero de 2014
+  var columnas_datastore = new Ext.data.Store(
+  {
+    proxy : new Ext.data.HttpProxy(
+    {
+      url : getAbsoluteUrl('ingreso_datos', 'listarColumnas'),
+      method : 'POST'
+    }),
+    reader : new Ext.data.JsonReader(
+    {
+      root : 'data'
+    }, [
+    {
+      name : 'codigo',
+      type : 'integer'
+    },
+    {
+      name : 'nombre',
+      type : 'string'
+    }])
+  });
+  columnas_datastore.load();
   
 
   var datastore = new Ext.data.Store(
@@ -404,6 +405,7 @@ Ext.onReady(function()
           }
         }
       });
+      
       metodos_datastore.load(
       {
         callback : function()
@@ -1226,16 +1228,6 @@ Ext.onReady(function()
         return '';
       }
     }
-    // ,
-    // editor: new Ext.form.ComboBox({
-    // store: metodosinorden_datastore,
-    // displayField: 'nombre',
-    // valueField: 'codigo',
-    // mode: 'local',
-    // triggerAction: 'all',
-    // forceSelection: true,
-    // allowBlank: false
-    // })
   },
   {
     dataIndex : 'tiempo_entre_metodos',
@@ -1636,10 +1628,10 @@ Ext.onReady(function()
     renderer : generarRenderer('#ff5454', '#000000', '#ff5454', '#000000')
   },
   {
-    dataIndex : 'observaciones',
+    dataIndex : 'lote',
     header : 'Lote',
     tooltip : 'Lote',
-    width : 150,
+    width : 120,
     align : 'center',
     editor :
     {
@@ -1648,20 +1640,79 @@ Ext.onReady(function()
     renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
   },
   {
-    dataIndex : 'columnas',
-    header : 'Columna',
-    tooltip : 'Columna',
-    width : 150,
+    dataIndex : 'col_consecutivo',
+    header : 'Consecutivo',
+    tooltip : 'Consecutivo',
+    columnWidth : 80,
+    align : 'center',
+    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+  },
+  {
+    dataIndex : 'col_marca',
+    header : 'Marca',
+    tooltip : 'Marca',
+    columnWidth : 80,
+    align : 'center',
+    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+  },
+  {
+    dataIndex : 'platos_teoricos',
+    header : 'Platos<br>Te&oacute;ricos<br>(N)',
+    tooltip : 'Platos Te&oacute;ricos',
+    width : 80,
     align : 'center',
     editor :
     {
-      xtype : 'textfield'
+      xtype : 'numberfield',
+      allowNegative : false,
+      maxValue : 10000000
     },
-    renderer : generarRenderer('#FFC459', '#000000', '#FFC459', '#000000')
+    renderer : generarRenderer('#72a8cd', '#000000', '#72a8cd', '#000000')
+  },
+  {
+    dataIndex : 'tiempo_retencion',
+    header : 'Tiempo de<br>Retenci&oacute;n<br>(min)',
+    tooltip : 'Tiempo de Retenci&oacute;n (min)',
+    width : 80,
+    align : 'center',
+    editor :
+    {
+      xtype : 'numberfield',
+      allowNegative : false,
+      maxValue : 100000
+    },
+    renderer : generarRenderer('#72a8cd', '#000000', '#72a8cd', '#000000')
+  },
+  {
+    dataIndex : 'resolucion',
+    header : 'Resoluci&oacute;n<br>(R)',
+    tooltip : 'Resoluci&oacute;n (R)',
+    width : 80,
+    align : 'center',
+    editor :
+    {
+      xtype : 'numberfield',
+      allowNegative : false,
+      maxValue : 10000000
+    },
+    renderer : generarRenderer('#72a8cd', '#000000', '#72a8cd', '#000000')
+  },
+  {
+    dataIndex : 'tailing',
+    header : 'Tailing<br>(T)',
+    tooltip : 'Tailing (T)',
+    width : 80,
+    align : 'center',
+    editor :
+    {
+      xtype : 'numberfield',
+      allowNegative : false,
+      maxValue : 10000000
+    },
+    renderer : generarRenderer('#72a8cd', '#000000', '#72a8cd', '#000000')
   });
 
-  var metodo_para_agregar_combobox = new Ext.form.ComboBox(
-  {
+  var metodo_para_agregar_combobox = new Ext.form.ComboBox({
     store : metodos_datastore,
     emptyText : 'Seleccione un método',
     displayField : 'nombre',
@@ -1670,17 +1721,40 @@ Ext.onReady(function()
     triggerAction : 'all',
     forceSelection : true,
     allowBlank : false,
-    width : 140,
+    width : 150,
     allQuery: 'nombre',
     listeners: {
-     'keyup': function() {
-           this.store.filter('nombre', this.getRawValue(), true, false);
-     },
-     'beforequery': function(queryEvent) {
-           queryEvent.combo.onLoad();
-           return false; 
-     }
- }
+         'keyup': function() {
+               this.store.filter('nombre', this.getRawValue(), true, false);
+         },
+         'beforequery': function(queryEvent) {
+               queryEvent.combo.onLoad();
+               return false; 
+         }
+    }
+  });
+  
+  //Cambios: 24 de Febrero de 2014
+  var columna_para_agregar_combobox = new Ext.form.ComboBox({
+    store : columnas_datastore,
+    emptyText : 'Seleccione una columna',
+    displayField : 'nombre',
+    valueField : 'codigo',
+    mode : 'local',
+    triggerAction : 'all',
+    forceSelection : true,
+    allowBlank : false,
+    width : 150,
+    allQuery: 'nombre',
+    listeners: {
+         'keyup': function() {
+               this.store.filter('nombre', this.getRawValue(), true, false);
+         },
+         'beforequery': function(queryEvent) {
+               queryEvent.combo.onLoad();
+               return false; 
+         }
+    }
   });
 
   var crearRegistroUsoMaquina = function(params)
@@ -1799,15 +1873,15 @@ Ext.onReady(function()
       dataIndex : 'username',
       header : 'Nombre de usuario',
       tooltip : 'Nombre de usuario',
-      width : 120,
-      align : 'left'
+      width : 150,
+      align : 'center'
     },
     {
       dataIndex : 'nombre_campo',
       header : 'Nombre del campo',
       tooltip : 'Nombre del campo',
       width : 140,
-      align : 'left'
+      align : 'center'
     },
     {
       dataIndex : 'valor_antiguo',
@@ -1827,14 +1901,14 @@ Ext.onReady(function()
       dataIndex : 'fecha',
       header : 'Fecha',
       tooltip : 'Fecha',
-      width : 70,
+      width : 80,
       align : 'center'
     },
     {
       dataIndex : 'hora',
       header : 'Hora',
       tooltip : 'Hora',
-      width : 70,
+      width : 80,
       align : 'center'
     },
     {
@@ -1842,7 +1916,7 @@ Ext.onReady(function()
       header : 'Causa',
       tooltip : 'Causa',
       width : 140,
-      align : 'left'
+      align : 'center'
     }]
   });
 
@@ -1955,22 +2029,30 @@ Ext.onReady(function()
       msg : 'Cargando...'
     },
     plugins : columnHeaderGroup,
-    tbar : [metodo_para_agregar_combobox,
+    tbar : [metodo_para_agregar_combobox, columna_para_agregar_combobox,
     {
       text : 'Agregar registro',
       iconCls : 'agregar',
       handler : function()
       {
         var codigo_metodo = metodo_para_agregar_combobox.getValue();
-        if(codigo_metodo == '')
-        {
-          alert('Primero debe seleccionar un método');
-          metodo_para_agregar_combobox.focus();
+        var codigo_columna = columna_para_agregar_combobox.getValue();
+        if(codigo_metodo == '' || codigo_columna == '') {
+            if(codigo_metodo == '') {
+                metodo_para_agregar_combobox.focus();
+                alert('Primero debe seleccionar un método');
+            }
+            if(codigo_columna == '') {
+                columna_para_agregar_combobox.focus();
+                alert('Primero debe seleccionar una columna');
+            }
+          
         } else
         {
           var params =
           {
             'id_metodo' : codigo_metodo,
+            'id_columna' : codigo_columna,
             'codigo_maquina' : maquina_combobox.getValue(),
             'fecha' : fechaField.getValue()
           };

@@ -111,10 +111,7 @@ Ext.onReady(function(){
         name: 'fallas'
     }, {
         type: 'string',
-        name: 'observaciones'
-    }, {
-        type: 'string',
-        name: 'columnas'
+        name: 'lote'
     }];
     
     var columnHeaderGroup = new Ext.ux.grid.ColumnHeaderGroup({
@@ -137,10 +134,6 @@ Ext.onReady(function(){
         }, {
             header: '<h3>Informaci&oacute;n<br>de corrida<br>anal&iacute;tica</h3>',
             colspan: 2,
-            align: 'center'
-        }, {
-            header: '',
-            colspan: 1,
             align: 'center'
         }, {
             header: '',
@@ -844,7 +837,7 @@ var win = new Ext.Window(
         },
         renderer: generarRenderer('#ff5454', '#000000', '#ff5454', '#000000')
     }, {
-        dataIndex: 'observaciones',
+        dataIndex: 'lote',
         header: 'Lote',
         tooltip: 'Lote',
         width: 150,
@@ -855,18 +848,6 @@ var win = new Ext.Window(
             maxValue: 100000
         },
         renderer: generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
-    }, {
-        dataIndex: 'columnas',
-        header: 'Columna',
-        tooltip: 'Columna',
-        width: 150,
-        align: 'center',
-        editor: {
-            xtype: 'numberfield',
-            allowNegative: false,
-            maxValue: 100000
-        },
-        renderer: generarRenderer('#FFC459', '#000000', '#FFC459', '#000000')
     });
     
     var grid = new Ext.grid.GridPanel({
