@@ -74,10 +74,10 @@
   <labels>
     <label lid='0'>
       <x>0</x>
-      <y>10</y> 
+      <y>21</y> 
       <rotate>false</rotate> 
       <align>center</align>
-      <text_size>12</text_size> 
+      <text_size>13</text_size> 
       <text>
         <![CDATA[<b>Consolidado pérdidas por mes (TPNP)</b>]]>
       </text> 

@@ -2,9 +2,9 @@ Ext.onReady(function(){
     Ext.BLANK_IMAGE_URL = urlPrefix + '../css/extjs/resources/images/default/s.gif';
     
     fields = [{
-		type:'string',
-		name:'fecha_metodo'
-	}, {
+        type:'string',
+        name:'fecha_metodo'
+    }, {
         type: 'string',
         name: 'nombre_metodo'
     }, {
@@ -159,6 +159,7 @@ Ext.onReady(function(){
     var fechaInicioField = new Ext.form.DateField({
         xtype: 'datefield',
         fieldLabel: 'Desde',
+        format: 'Y-m-d',
         allowBlank: false,
         value: new Date(),
         listeners: {
@@ -176,6 +177,7 @@ Ext.onReady(function(){
     var fechaFinField = new Ext.form.DateField({
         xtype: 'datefield',
         fieldLabel: 'Hasta',
+        format: 'Y-m-d',
         allowBlank: false,
         value: new Date(),
         listeners: {

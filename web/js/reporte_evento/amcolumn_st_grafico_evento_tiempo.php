@@ -64,8 +64,9 @@
       <y>20</y>
       <width>520</width> 
       <align>center</align>
+      <text_size>13</text_size> 
       <text> 
-        <![CDATA[<b>Eventos  /  Tiempo</b>]]>
+        <![CDATA[<b>Eventos / Tiempo</b>]]>
       </text> 
     </label>
     <label lid='2'>

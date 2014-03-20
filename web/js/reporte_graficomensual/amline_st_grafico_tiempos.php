@@ -24,6 +24,7 @@
       <y>20</y>
       <width>520</width> 
       <align>center</align>
+      <text_size>13</text_size>
       <text> 
         <![CDATA[<b>Tendencia tiempos para cálculo OEE / día</b>]]>
       </text> 

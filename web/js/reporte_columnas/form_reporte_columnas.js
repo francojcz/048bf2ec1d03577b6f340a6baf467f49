@@ -99,13 +99,15 @@ var win = new Ext.Window(
           
     var reporcol_desde_fecha_datefield = new Ext.form.DateField({
         xtype: 'datefield',
-        format: 'Y-m-d'
+        format: 'Y-m-d',
+        value: new Date()
     });
     
     var reporcol_hasta_fecha_datefield = new Ext.form.DateField({
         xtype: 'datefield',
-        format: 'Y-m-d'
-    });    
+        format: 'Y-m-d',
+        value: new Date()
+    }); 
     
     var reporcol_configuracion = new Ext.FormPanel({
         title: 'CONFIGURACI&Oacute;N DE REPORTE COLUMNAS',
@@ -304,7 +306,7 @@ var win = new Ext.Window(
             items: [{
                 xtype: 'panel',
                 title: 'Platos Teóricos',
-                contentEl: 'div_reporte_columnas_barra'
+                contentEl: 'div_reporte_columnas_platos_teoricos'
             }, {
                 xtype: 'panel',
                 title: 'Tiempo Retención',
@@ -345,13 +347,14 @@ var win = new Ext.Window(
         var params = '?cods_equipos=' + arrayEquipos + '&analista_codigo=' + analista_codigo;
         params += '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
         
-        //Cantidad
-        var reporcol_cantidad_barra = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "730", "400", "8", "#FFFFFF");
-        reporcol_cantidad_barra.addVariable("path", urlWeb + "flash/amcolumn/");
-        reporcol_cantidad_barra.addParam("wmode", "opaque");
-        reporcol_cantidad_barra.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amcolumn_st_grafico_evento_barras.php');
-        reporcol_cantidad_barra.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosOcurrenciaEventosBarra') + params));
-        reporcol_cantidad_barra.write("div_reporte_columnas_barra");   
+        //Platos Teóricos
+        var reporcol_platos_teoricos = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
+        reporcol_platos_teoricos.addVariable("path", urlWeb + "flash/amline/");
+        reporcol_platos_teoricos.addParam("wmode", "opaque");
+        reporcol_platos_teoricos.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_platos_teoricos.php');
+        reporcol_platos_teoricos.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosPlatosTeoricos') + params));
+        reporcol_platos_teoricos.addVariable("loading_data", "... CARGANDO ...");
+        reporcol_platos_teoricos.write("div_reporte_columnas_platos_teoricos");  
         
         //Tiempo
         var reporcol_tiempo_barra = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "ampie", "520", "400", "8", "#FFFFFF");
@@ -359,9 +362,7 @@ var win = new Ext.Window(
         reporcol_tiempo_barra.addParam("wmode", "opaque");
         reporcol_tiempo_barra.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amcolumn_st_grafico_evento_tiempo.php');
         reporcol_tiempo_barra.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosOcurrenciaEventosTiempo') + params));
-        reporcol_tiempo_barra.write("div_reporte_columnas_torta");        
-        
-             
+        reporcol_tiempo_barra.write("div_reporte_columnas_torta");
     }
     
     reporcol_cargardatosreportes();    

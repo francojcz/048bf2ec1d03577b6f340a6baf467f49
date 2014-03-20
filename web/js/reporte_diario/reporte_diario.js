@@ -13,6 +13,7 @@ var generarRenderer = function(colorFondo, colorFuente){
 var fechaField = new Ext.form.DateField({
     xtype: 'datefield',
     fieldLabel: 'Fecha',
+    format: 'Y-m-d',
     allowBlank: false,
     value: new Date(),
     listeners: {
