@@ -24,18 +24,19 @@ class reporte_columnasActions extends sfActions
 
 		$desde_fecha=$this->getRequestParameter('desde_fecha');
 		$hasta_fecha=$this->getRequestParameter('hasta_fecha');
-		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 		$analista_codigo=$this->getRequestParameter('analista_codigo');
-		$categoriaevento_codigo=$this->getRequestParameter('categoria_codigo');
 
 		$conexion = new Criteria();
-		$conexion->addJoin(EventoEnRegistroPeer::EVRG_RUM_CODIGO,RegistroUsoMaquinaPeer::RUM_CODIGO);
-		if($desde_fecha!='')
-                    {$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$desde_fecha,CRITERIA::GREATER_EQUAL);
+		if($desde_fecha!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$desde_fecha,CRITERIA::GREATER_EQUAL);
                 }
-		if($hasta_fecha!=''){
-			if($desde_fecha!=''){$conexion->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA,$hasta_fecha,CRITERIA::LESS_EQUAL);}
-			else{$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$hasta_fecha,CRITERIA::LESS_EQUAL);}
+		if($hasta_fecha!='') {
+			if($desde_fecha!='') {
+                            $conexion->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA,$hasta_fecha,CRITERIA::LESS_EQUAL);
+                        }
+			else {
+                            $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$hasta_fecha,CRITERIA::LESS_EQUAL);
+                        }
 		}
                               
                 //Codigos de los equipos seleccionados
@@ -47,61 +48,47 @@ class reporte_columnasActions extends sfActions
                     }
                 } 
                 
-		if($metodo_codigo!='') {
-                    $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
-                }
 		if($analista_codigo!='') {
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);
                 }
 
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
-		if($categoriaevento_codigo!=''){
-			$conexion->addJoin(EventoEnRegistroPeer::EVRG_EVE_CODIGO,EventoPorCategoriaPeer::EVCA_EVE_CODIGO);
-			$conexion->add(EventoPorCategoriaPeer::EVCA_CAT_CODIGO,$categoriaevento_codigo,CRITERIA::EQUAL );
-		}
+                
 		return $conexion;
 	}
 
 	/**
 	 *@author:maryit sanchez
 	 *@date:21 de enero de 2010
-	 *Esta funcion retorna  un listado de los metodos por indicador
+	 *Esta funcion retorna un listado de los eventos por indicador
 	 */
-	public function executeListarReporteEventoEnRegistro(sfWebRequest $request)
+	public function executeListarReporteColumnasUtilizadas(sfWebRequest $request)
 	{
-		$salida='({"total":"0", "results":""})';
-		$fila=0;
-		$datos;
+		$salida = '({"total":"0", "results":""})';
+		$fila = 0;
+		$datos = array();
 
 		try{
-			$conexion=$this->obtenerConexion();
-			$evento_en_registro = EventoEnRegistroPeer::doSelect($conexion);
+			$conexion = $this->obtenerConexion();
+			$datos_columnas = RegistroUsoMaquinaPeer::doSelect($conexion);
 
-			foreach($evento_en_registro as $temporal)
+			foreach($datos_columnas as $temporal)
 			{
-				$rum_codigo = $temporal->getEvrgRumCodigo();
-				$registro_uso_maquinas  = RegistroUsoMaquinaPeer::retrieveByPk($rum_codigo);
+                                $datos[$fila]['rum_col_maquina'] = $temporal->obtenerMaquina();
+                                $datos[$fila]['rum_col_analista'] = $temporal->obtenerAnalista();
+                                $datos[$fila]['rum_col_fecha'] = $temporal->getRumFecha();				
 
-				if($registro_uso_maquinas){
-					$datos[$fila]['evrg_maquina'] = $registro_uso_maquinas->obtenerMaquina();
-					$datos[$fila]['evrg_analista'] = $registro_uso_maquinas->obtenerAnalista();
-					$datos[$fila]['evrg_metodo'] =  $registro_uso_maquinas->obtenerMetodo();
-					$datos[$fila]['evrg_fecha'] = $registro_uso_maquinas->getRumFecha();
+				$col_codigo = $temporal -> getRumColCodigo();
+				$columna  = ColumnaPeer::retrieveByPk($col_codigo);
+				if($columna){
+					$datos[$fila]['rum_col_nombre'] = $columna->getColConsecutivo();
 				}
 
-				$eve_codigo = $temporal->getEvrgEveCodigo();
-				$evento  = EventoPeer::retrieveByPk($eve_codigo);
-				if($evento){
-					$datos[$fila]['evrg_eve_nombre'] = $evento->getEveNombre();
-				}
-
-				$datos[$fila]['evrg_codigo'] = $temporal->getEvrgCodigo();
-				$datos[$fila]['evrg_duracion'] = $temporal->getEvrgDuracion();
-				$datos[$fila]['evrg_observaciones'] = $temporal->getEvrgObservaciones();
-				$datos[$fila]['evrg_hora_ocurrio'] = $temporal->getEvrgHoraOcurrio();
-					
-				$datos[$fila]['evrg_hora_registro'] = $temporal->getEvrgHoraRegistro();
-
+				$datos[$fila]['rum_col_platos_teoricos'] = number_format($temporal->getRumPlatosTeoricos(), 2, '.', '');
+				$datos[$fila]['rum_col_tiempo_retencion'] = number_format($temporal->getRumTiempoRetencion(), 2, '.', '');
+				$datos[$fila]['rum_col_resolucion'] = number_format($temporal->getRumResolucion(), 2, '.', '');
+				$datos[$fila]['rum_col_tailing'] = number_format($temporal->getRumTailing(), 2, '.', '');
+                                
 				$fila++;
 			}
 
@@ -112,7 +99,7 @@ class reporte_columnasActions extends sfActions
 		}
 		catch (Exception $excepcion)
 		{
-			return "({success: false, errors: { reason: 'Excepci&oacute;n  en registro de eventos ocurridos ',error:'".$excepcion->getMessage()."'}})";
+			return "({success: false, errors: { reason: 'Excepci&oacute;n  en registro columnas utilizadas ',error:'".$excepcion->getMessage()."'}})";
 		}
 		return $this->renderText($salida);
 	}
@@ -137,11 +124,6 @@ class reporte_columnasActions extends sfActions
 			$criteria->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA, $request->getParameter('hasta_fecha'), Criteria::LESS_EQUAL);
 		}
 
-		if($request->getParameter('categoria_codigo')!='') {                        
-			$criteria->addJoin(EventoPeer::EVE_CODIGO, EventoPorCategoriaPeer::EVCA_EVE_CODIGO);
-			$criteria->add(EventoPorCategoriaPeer::EVCA_CAT_CODIGO, $request->getParameter('categoria_codigo'));                        
-		}
-
 		if($request->getParameter('analista_codigo')!='') {
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('analista_codigo'));
 		}
@@ -153,11 +135,7 @@ class reporte_columnasActions extends sfActions
                     foreach ($cods_equipos as $cod_equipo) {
                         $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
                     }
-                }   
-
-		if($request->getParameter('metodo_codigo')!='') {
-			$criteria->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $request->getParameter('metodo_codigo'));
-		}
+                }
 
 		$statement = EventoPeer::doSelectStmt($criteria);
 		$eventos = $statement->fetchAll(PDO::FETCH_NUM);
@@ -219,11 +197,6 @@ class reporte_columnasActions extends sfActions
 			$criteria->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA, $request->getParameter('hasta_fecha'), Criteria::LESS_EQUAL);
 		}
 
-		if($request->getParameter('categoria_codigo')!='') {
-			$criteria->addJoin(EventoPeer::EVE_CODIGO, EventoPorCategoriaPeer::EVCA_EVE_CODIGO);
-			$criteria->add(EventoPorCategoriaPeer::EVCA_CAT_CODIGO, $request->getParameter('categoria_codigo'));
-		}
-
 		if($request->getParameter('analista_codigo')!='') {
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('analista_codigo'));
 		}
@@ -235,11 +208,7 @@ class reporte_columnasActions extends sfActions
                     foreach ($cods_equipos as $cod_equipo) {
                         $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
                     }
-                }   
-
-		if($request->getParameter('metodo_codigo')!='') {
-			$criteria->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $request->getParameter('metodo_codigo'));
-		}
+                }
 
 		$statement = EventoPeer::doSelectStmt($criteria);
 		$eventos = $statement->fetchAll(PDO::FETCH_NUM);
@@ -307,8 +276,7 @@ class reporte_columnasActions extends sfActions
 				$cant_eventoenregistro = EventoEnRegistroPeer::doCount($conexion_evento);
 
 				$datos[$fila]['codigo']=$evento->getEveCodigo();
-				$datos[$fila]['nombre']=$evento->getEveNombre();
-				//echo($categoria->getEveNombre());
+				$datos[$fila]['nombre']=$evento->getEveNombre();                                
 				$datos[$fila]['ocurrecias']=$cant_eventoenregistro;
 				$fila++;
 			}
@@ -319,47 +287,6 @@ class reporte_columnasActions extends sfActions
 		}
 		return $datos;
 	}
-
-
-	/**
-	 *@author:maryit sanchez
-	 *@date:21 de enero de 2010
-	 *Esta funcion retorna  arreglo con los datos totales de ocurrencias por categoria de eventos
-	 */
-	public function obtenerDatosTotalEventosPorCategoria()
-	{
-		$fila=0;
-		$datos;
-
-		try{
-
-			$conexion_eventoenregistro=$this->obtenerConexion();
-
-			$conexion = new Criteria();
-			$categorias_eventos = CategoriaEventoPeer::doSelect($conexion);
-
-			foreach($categorias_eventos as $categoria){
-
-				$conexion_evento=$conexion_eventoenregistro;
-				$conexion_eventoenregistro->addJoin(EventoEnRegistroPeer::EVRG_EVE_CODIGO,EventoPorCategoriaPeer::EVCA_EVE_CODIGO);//ojo cambiar evrg_evr por evrg_eve
-				$conexion_eventoenregistro->add(EventoPorCategoriaPeer::EVCA_CAT_CODIGO,$categoria->getCatCodigo() ,CRITERIA::EQUAL);
-				$conexion_eventoenregistro->setDistinct();
-				$cant_eventoenregistro = EventoEnRegistroPeer::doCount($conexion_evento);
-
-				$datos[$fila]['codigo']=$categoria->getCatCodigo();
-				$datos[$fila]['nombre']=$categoria->getCatNombre();
-				//echo($categoria->getCatNombre());
-				$datos[$fila]['ocurrecias']=$cant_eventoenregistro;
-				$fila++;
-			}
-		}
-		catch (Exception $excepcion)
-		{
-			return "({success: false, errors: { reason: 'Excepci&oacute;n  en registro de eventos ocurridos ',error:'".$excepcion->getMessage()."'}})";
-		}
-		return $datos;
-	}
-
 
 	/**
 	 *@author:maryit sanchez
@@ -369,27 +296,18 @@ class reporte_columnasActions extends sfActions
 	public function obtenerDatosTotalMinutosPorEvento()
 	{
 		$fila=0;
-		$datos;
+		$datos = array();
 
 		try{
 			$desde_fecha=$this->getRequestParameter('desde_fecha');
 			$hasta_fecha=$this->getRequestParameter('hasta_fecha');
-			$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 			$analista_codigo=$this->getRequestParameter('analista_codigo');
-			$categoriaevento_codigo=$this->getRequestParameter('categoria_codigo');
 
 			$consulta="SELECT evrg_eve_codigo, ";
 			$consulta.=" sum(evrg_duracion) ";
 			$consulta.=" FROM evento_en_registro , registro_uso_maquina ";
-			if($categoriaevento_codigo!=''){
-				$consulta.=" ,evento_por_categoria ";
-			}
 
 			$consulta.=" WHERE evrg_rum_codigo=rum_codigo ";
-			if($categoriaevento_codigo!=''){
-				$consulta.=" and evrg_eve_codigo=evca_eve_codigo ";
-				$consulta.=" and evca_cat_codigo='".$categoriaevento_codigo."'";
-			}
 
 			if($desde_fecha!=''){$consulta.=" and rum_fecha>='".$desde_fecha."' "; }
 			if($hasta_fecha!=''){$consulta.=" and rum_fecha<='".$hasta_fecha."' "; }
@@ -402,7 +320,6 @@ class reporte_columnasActions extends sfActions
                                 $consulta.=" or rum_maq_codigo='".$cod_equipo."' ";
                             }
                         }                        
-			if($metodo_codigo!=''){$consulta.=" and rum_met_codigo='".$metodo_codigo."' ";}
 			if($analista_codigo!=''){$consulta.=" and rum_usu_codigo='".$analista_codigo."' ";}
 			if($hasta_fecha!=''){$consulta.=" and rum_eliminado=false"; }
 			if($hasta_fecha!=''){$consulta.=" group by (evrg_eve_codigo) "; }
@@ -470,63 +387,6 @@ class reporte_columnasActions extends sfActions
 			if (count($datos)>0){
 				$jsonresult = json_encode($datos);
 				$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-			}
-			return $this->renderText($salida);
-		}
-
-
-		/**
-		 *@author:maryit sanchez
-		 *@date:6 de enero de 2011
-		 *Esta funcion retorna  un listado de los metodos
-		 */
-		public function executeListarMetodos(sfWebRequest $request)
-		{
-			$salida='({"total":"0", "results":""})';
-			$datos=MetodoPeer::listarMetodosActivos();
-			$cant=count($datos);
-			if ($cant>0){
-				$jsonresult = json_encode($datos);
-				$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-			}
-			return $this->renderText($salida);
-		}
-
-
-		/**
-		 *@author:maryit sanchez
-		 *@date:22 de enero de 2011
-		 *Esta funcion retorna  un listado de las categorias de eventos
-		 */
-		public function executeListarCategoriaEventos(sfWebRequest $request)
-		{
-			$salida='({"total":"0", "results":""})';
-			$fila=0;
-			$datos;
-			try{
-				$conexion = new Criteria();
-                                $conexion->add(CategoriaEventoPeer::CAT_ELIMINADO,0);
-				$conexion->addAscendingOrderByColumn(CategoriaEventoPeer::CAT_NOMBRE);
-				$categorias = CategoriaEventoPeer::doSelect($conexion);
-					
-				foreach($categorias as $temporal)
-				{
-					$datos[$fila]['cat_codigo'] = $temporal->getCatCodigo();
-					$datos[$fila]['cat_nombre'] = $temporal->getCatNombre();
-					$fila++;
-				}
-				$datos[$fila]['cat_codigo']='';
-				$datos[$fila]['cat_nombre'] ='TODAS';
-				$fila++;
-					
-				if($fila>0){
-					$jsonresult = json_encode($datos);
-					$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
-				}
-			}
-			catch (Exception $excepcion)
-			{
-				//	return "({success: false, errors: { reason: 'Hubo una excepci&oacute;n en listar categorias ',error:'".$excepcion->getMessage()."'}})";
 			}
 			return $this->renderText($salida);
 		}

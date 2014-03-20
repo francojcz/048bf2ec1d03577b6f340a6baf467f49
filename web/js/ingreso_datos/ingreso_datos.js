@@ -258,7 +258,7 @@ Ext.onReady(function()
     }])
   });
   
-  //Cambios: 24 de Febrero de 2014
+  //Cambios: 28 de febrero de 2014
   var columnas_datastore = new Ext.data.Store(
   {
     proxy : new Ext.data.HttpProxy(
@@ -1659,7 +1659,7 @@ Ext.onReady(function()
     dataIndex : 'platos_teoricos',
     header : 'Platos<br>Te&oacute;ricos<br>(N)',
     tooltip : 'Platos Te&oacute;ricos',
-    width : 80,
+    columnWidth : 80,
     align : 'center',
     editor :
     {
@@ -1673,7 +1673,7 @@ Ext.onReady(function()
     dataIndex : 'tiempo_retencion',
     header : 'Tiempo de<br>Retenci&oacute;n<br>(min)',
     tooltip : 'Tiempo de Retenci&oacute;n (min)',
-    width : 80,
+    columnWidth : 80,
     align : 'center',
     editor :
     {
@@ -1687,7 +1687,7 @@ Ext.onReady(function()
     dataIndex : 'resolucion',
     header : 'Resoluci&oacute;n<br>(R)',
     tooltip : 'Resoluci&oacute;n (R)',
-    width : 80,
+    columnWidth : 80,
     align : 'center',
     editor :
     {
@@ -1701,7 +1701,7 @@ Ext.onReady(function()
     dataIndex : 'tailing',
     header : 'Tailing<br>(T)',
     tooltip : 'Tailing (T)',
-    width : 80,
+    columnWidth : 80,
     align : 'center',
     editor :
     {
@@ -1734,7 +1734,7 @@ Ext.onReady(function()
     }
   });
   
-  //Cambios: 24 de Febrero de 2014
+  //Cambios: 28 de febrero de 2014
   var columna_para_agregar_combobox = new Ext.form.ComboBox({
     store : columnas_datastore,
     emptyText : 'Seleccione una columna',

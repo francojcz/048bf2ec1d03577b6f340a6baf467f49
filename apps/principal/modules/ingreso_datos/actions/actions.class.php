@@ -78,7 +78,7 @@ class ingreso_datosActions extends sfActions
         $registroSegundoDia -> setRumTcDisolucionEstandar($registro ->getRumTcDisolucionEstandar());
         $registroSegundoDia -> setRumTcUniformidadEstandar($registro ->getRumTcUniformidadEstandar());
         
-        //Cambios: 24 de Febrero de 2014
+        //Cambios: 28 de febrero de 2014
         $registroSegundoDia ->setRumLote($registro ->getRumLote());
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirFallas($deficitTiempo, $registro, $registroSegundoDia);
@@ -1273,7 +1273,7 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
                 
-                //Cambios: 24 de Febrero de 2014
+                //Cambios: 28 de febrero de 2014
                 $cod_metodo = $registro->getRumMetCodigo();
                 $metodo = MetodoPeer::retrieveByPK($cod_metodo);
                 if($metodo->getMetMantenimiento() == 1) {
@@ -1593,7 +1593,7 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
                 
-                //Cambios: 24 de Febrero de 2014
+                //Cambios: 28 de febrero de 2014
                 $cod_metodo = $registro->getRumMetCodigo();
                 $metodo = MetodoPeer::retrieveByPK($cod_metodo);
                 if($metodo->getMetMantenimiento() == 1) {
@@ -1624,7 +1624,7 @@ class ingreso_datosActions extends sfActions
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumFallas());
             }
             
-            //Cambios: 24 de Febrero de 2014
+            //Cambios: 28 de febrero de 2014
             if ($request -> hasParameter('platos_teoricos'))
             {
                 $registroModificacion -> setRemNombreCampo('Platos teóricos');
@@ -1772,7 +1772,7 @@ class ingreso_datosActions extends sfActions
         $registro -> setRumUsuCodigo($codigo_usuario);
         $registro -> setRumEliminado(false);
         
-        //Cambios: 24 de Febrero de 2014
+        //Cambios: 28 de febrero de 2014
         $registro -> setRumColCodigo($request -> getParameter('id_columna'));
         
         $registro -> save();
@@ -1853,7 +1853,7 @@ class ingreso_datosActions extends sfActions
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
             
-            //Cambios: 24 de Febrero de 2014
+            //Cambios: 28 de febrero de 2014
             $columna = ColumnaPeer::retrieveByPK($registro->getRumColCodigo());
             $fields['col_consecutivo'] = $columna -> getColConsecutivo();
             $fields['col_marca'] = $columna -> getColMarca();
@@ -1914,7 +1914,7 @@ class ingreso_datosActions extends sfActions
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
 
-            //Cambios: 24 de Febrero de 2014
+            //Cambios: 28 de febrero de 2014
             $fields['col_consecutivo'] = $columna -> getColConsecutivo();
             $fields['col_marca'] = $columna -> getColMarca();            
             $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');

@@ -1,7 +1,6 @@
 Ext.onReady(function(){
-
-    var reporevent_analista_codigo_datastore = new Ext.data.JsonStore({
-        id: 'reporevent_analista_codigo_datastore',
+    var reporcol_analista_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_analista_codigo_datastore',
         url: getAbsoluteUrl('reporte_columnas', 'listarAnalistas'),
         root: 'results',
         totalProperty: 'total',
@@ -13,15 +12,14 @@ Ext.onReady(function(){
             type: 'string'
         }, ]
     });
-    reporevent_analista_codigo_datastore.load();
+    reporcol_analista_codigo_datastore.load();    
     
-    
-    var reporevent_analista_codigo_combobox = new Ext.form.ComboBox({
+    var reporcol_analista_codigo_combobox = new Ext.form.ComboBox({
         xtype: 'combo',
-        store: reporevent_analista_codigo_datastore,
+        store: reporcol_analista_codigo_datastore,
         hiddenName: 'analista_codigo',
-        name: 'reporevent_analista_codigo_combobox',
-        id: 'reporevent_analista_codigo_combobox',
+        name: 'reporcol_analista_codigo_combobox',
+        id: 'reporcol_analista_codigo_combobox',
         mode: 'local',
         valueField: 'empl_usu_codigo',
         forceSelection: true,
@@ -32,8 +30,8 @@ Ext.onReady(function(){
     });
     
     
-    var reporevent_maquina_codigo_datastore = new Ext.data.JsonStore({
-        id: 'reporevent_maquina_codigo_datastore',
+    var reporcol_maquina_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_maquina_codigo_datastore',
         url: getAbsoluteUrl('reporte_columnas', 'listarEquiposActivos'),
         root: 'results',
         totalProperty: 'total',
@@ -45,9 +43,9 @@ Ext.onReady(function(){
             type: 'string'
         }, ]
     });
-    reporevent_maquina_codigo_datastore.load();
+    reporcol_maquina_codigo_datastore.load();
     
-    /**********************************************************************/
+/**********************************************************************/
 //Cambios: 28 de febrero de 2014
 //Interfaz para seleccionar los equipos a filtrar en el reporte
 var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
@@ -67,7 +65,7 @@ var maquinas_gridpanel = new Ext.grid.GridPanel({
         id: 'maquinas_gridpanel',
         stripeRows:true,
         frame: true,
-        ds: reporevent_maquina_codigo_datastore,
+        ds: reporcol_maquina_codigo_datastore,
         cm: maquina_colmodel,
         sm: maquina_selmodel
 });
@@ -98,81 +96,19 @@ var win = new Ext.Window(
     }
 });
 /**********************************************************************/  
-    
-    var reporevent_metodo_codigo_datastore = new Ext.data.JsonStore({
-        id: 'reporevent_metodo_codigo_datastore',
-        url: getAbsoluteUrl('reporte_columnas', 'listarMetodos'),
-        root: 'results',
-        totalProperty: 'total',
-        fields: [{
-            name: 'met_codigo',
-            type: 'string'
-        }, {
-            name: 'met_nombre',
-            type: 'string'
-        }, ]
-    });
-    reporevent_metodo_codigo_datastore.load();
-    
-    
-    var reporevent_metodo_codigo_combobox = new Ext.form.ComboBox({
-        xtype: 'combo',
-        store: reporevent_metodo_codigo_datastore,
-        hiddenName: 'metodo_codigo',
-        name: 'reporevent_metodo_codigo_combobox',
-        id: 'reporevent_metodo_codigo_combobox',
-        mode: 'local',
-        valueField: 'met_codigo',
-        forceSelection: true,
-        displayField: 'met_nombre',
-        triggerAction: 'all',
-        emptyText: 'Seleccione un método...',
-        selectOnFocus: true
-    });
-    
-    
-    var reporevent_categoriaevento_codigo_datastore = new Ext.data.JsonStore({
-        url: getAbsoluteUrl('reporte_columnas', 'listarCategoriaEventos'),
-        root: 'results',
-        totalProperty: 'total',
-        fields: [{
-            name: 'cat_codigo',
-            type: 'string'
-        }, {
-            name: 'cat_nombre',
-            type: 'string'
-        }, ]
-    });
-    reporevent_categoriaevento_codigo_datastore.load();
-    
-    
-    var reporevent_categoriaevento_codigo_combobox = new Ext.form.ComboBox({
-        xtype: 'combo',
-        store: reporevent_categoriaevento_codigo_datastore,
-        hiddenName: 'categoriaevento_codigo',
-        name: 'reporevent_categoriaevento_codigo_combobox',
-        id: 'reporevent_categoriaevento_codigo_combobox',
-        mode: 'local',
-        valueField: 'cat_codigo',
-        forceSelection: true,
-        displayField: 'cat_nombre',
-        triggerAction: 'all',
-        emptyText: 'Seleccione un categoría...',
-        selectOnFocus: true
-    });
-    
-    var reporevent_desde_fecha_datefield = new Ext.form.DateField({
+          
+    var reporcol_desde_fecha_datefield = new Ext.form.DateField({
         xtype: 'datefield',
         format: 'Y-m-d'
     });
     
-    var reporevent_hasta_fecha_datefield = new Ext.form.DateField({
+    var reporcol_hasta_fecha_datefield = new Ext.form.DateField({
         xtype: 'datefield',
         format: 'Y-m-d'
-    });
+    });    
     
-    var reporevent_configuracion = new Ext.FormPanel({
-        title: 'CONFIGURACI&Oacute;N DE REPORTE EVENTO',
+    var reporcol_configuracion = new Ext.FormPanel({
+        title: 'CONFIGURACI&Oacute;N DE REPORTE COLUMNAS',
         layout: 'form',
         monitorResize: true,
         frame: true,
@@ -185,15 +121,18 @@ var win = new Ext.Window(
             items: [{
                 xtype: 'displayfield',
                 value: 'Desde'
-            }, reporevent_desde_fecha_datefield, {
+            }, reporcol_desde_fecha_datefield, {
                 xtype: 'displayfield',
                 value: 'Hasta',
                 style: 'padding: 0px 0px 0px 20px'
-            }, reporevent_hasta_fecha_datefield, {
-                xtype: 'displayfield',
-                value: 'Categor&iacute;a',
-                style: 'padding: 0px 0px 0px 20px'
-            }, reporevent_categoriaevento_codigo_combobox]
+            }, reporcol_hasta_fecha_datefield, {
+                xtype: 'button',
+                style: 'padding: 0px 0px 0px 20px',
+                iconCls: 'exportar_excel',
+                text: 'Guardar en formato Excel',
+                handler: function(){                        
+                }
+            }]
         }, {
             xtype: 'compositefield',
             fieldLabel: '',
@@ -201,11 +140,7 @@ var win = new Ext.Window(
             items: [{
                 xtype: 'displayfield',
                 value: 'Analista'
-            }, reporevent_analista_codigo_combobox, {
-                xtype: 'displayfield',
-                value: 'M&eacute;todo',
-                style: 'padding: 0px 0px 0px 20px'
-            }, reporevent_metodo_codigo_combobox, {
+            }, reporcol_analista_codigo_combobox, {
                 text: 'Seleccionar Equipos',
                 xtype: 'button',
                 iconCls: 'equipo',
@@ -222,13 +157,14 @@ var win = new Ext.Window(
                 handler: function(){
                 
                     var desde = '';
-                    if (reporevent_desde_fecha_datefield.getValue() != '') {
-                        desde = reporevent_desde_fecha_datefield.getValue().format('Y-m-d');
+                    if (reporcol_desde_fecha_datefield.getValue() != '') {
+                        desde = reporcol_desde_fecha_datefield.getValue().format('Y-m-d');
                     }
                     var hasta = '';
-                    if (reporevent_hasta_fecha_datefield.getValue() != '') {
-                        hasta = reporevent_hasta_fecha_datefield.getValue().format('Y-m-d');
+                    if (reporcol_hasta_fecha_datefield.getValue() != '') {
+                        hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
                     }
+                    
                     //Codigos de los equipos seleccionados
                     var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
                     var equiposAFiltrar = [];
@@ -237,29 +173,25 @@ var win = new Ext.Window(
                     }
                     var arrayEquipos = Ext.encode(equiposAFiltrar);
                     
-                    reporevent_datastore.reload({
+                    reporcol_datastore.reload({
                         params: {
                             cods_equipos: arrayEquipos,
-                            metodo_codigo: reporevent_metodo_codigo_combobox.getValue(),
-                            analista_codigo: reporevent_analista_codigo_combobox.getValue(),
-                            categoria_codigo: reporevent_categoriaevento_codigo_combobox.getValue(),
+                            analista_codigo: reporcol_analista_codigo_combobox.getValue(),
                             desde_fecha: desde,
                             hasta_fecha: hasta
                         }
                     });
                     
-                    reporevent_cargardatosreportes();
+                    reporcol_cargardatosreportes();
                 }
             }]
         }],
         renderTo: 'div_form_reporte_columnas'
-    });
+    });    
     
-    
-    
-    var reporevent_datastore = new Ext.data.Store({
+    var reporcol_datastore = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
-            url: getAbsoluteUrl('reporte_columnas', 'listarReporteEventoEnRegistro'),
+            url: getAbsoluteUrl('reporte_columnas', 'listarReporteColumnasUtilizadas'),
             method: 'POST'
         }),
         baseParams: {},
@@ -267,38 +199,35 @@ var win = new Ext.Window(
             root: 'results',
             totalProperty: 'total'
         }, [{
-            name: 'evrg_maquina',
+            name: 'rum_col_maquina',
             type: 'string'
         }, {
-            name: 'evrg_analista',
+            name: 'rum_col_analista',
             type: 'string'
         }, {
-            name: 'evrg_metodo',
+            name: 'rum_col_fecha',
             type: 'string'
         }, {
-            name: 'evrg_fecha',
+            name: 'rum_col_nombre',
             type: 'string'
         }, {
-            name: 'evrg_eve_nombre',
+            name: 'rum_col_platos_teoricos',
             type: 'string'
         }, {
-            name: 'evrg_duracion',
+            name: 'rum_col_tiempo_retencion',
             type: 'string'
         }, {
-            name: 'evrg_observaciones',
+            name: 'rum_col_resolucion',
             type: 'string'
         }, {
-            name: 'evrg_hora_ocurrio',
-            type: 'string'
-        }, {
-            name: 'evrg_hora_registro',
+            name: 'rum_col_tailing',
             type: 'string'
         }])
     });
-    reporevent_datastore.load();
+    reporcol_datastore.load();
     
     
-    var reporevent_colmodel = new Ext.grid.ColumnModel({
+    var reporcol_colmodel = new Ext.grid.ColumnModel({
         defaults: {
             sortable: true,
             locked: false,
@@ -306,69 +235,63 @@ var win = new Ext.Window(
         },
         columns: [{
             header: "M&aacute;quina",
-            width: 110,
+            width: 130,
             align : 'center',
-            dataIndex: 'evrg_maquina'
+            dataIndex: 'rum_col_maquina'
         }, {
             header: "Analista",
-            width: 110,
+            width: 130,
             align : 'center',
-            dataIndex: 'evrg_analista'
-        }, {
-            header: "M&eacute;todo",
-            width: 100,
-            align : 'center',
-            dataIndex: 'evrg_metodo'
+            dataIndex: 'rum_col_analista'
         }, {
             header: "Fecha",
-            width: 70,
+            width: 80,
             align : 'center',
-            dataIndex: 'evrg_fecha'
+            dataIndex: 'rum_col_fecha'
         }, {
-            header: "Evento",
-            width: 100,
+            header: "Columna",
+            width: 140,
             align : 'center',
-            dataIndex: 'evrg_eve_nombre'
+            dataIndex: 'rum_col_nombre'
         },{
-            header: "Hora",
-            width: 70,
+            header: "Platos Te&oacute;ricos (N)",
+            width: 120,
             align : 'center',
-            dataIndex: 'evrg_hora_ocurrio'
+            dataIndex: 'rum_col_platos_teoricos'
         },{
-            header: "Duraci&oacute;n (min.)",
-            width: 100,
+            header: "Tiempo Retenci&oacute;n (min)",
+            width: 130,
             align : 'center',
-            dataIndex: 'evrg_duracion'
+            dataIndex: 'rum_col_tiempo_retencion'
         },{
-            header: "Hora registro",
-            width: 90,
+            header: "Resoluci&oacute;n (R)",
+            width: 120,
             align : 'center',
-            dataIndex: 'evrg_hora_registro'
+            dataIndex: 'rum_col_resolucion'
         },{
-            header: "Observaci&oacute;n",
-            width: 250,
+            header: "Tailing (T)",
+            width: 120,
             align : 'center',
-            dataIndex: 'evrg_observaciones'
+            dataIndex: 'rum_col_tailing'
         }]
     });
     
-    var reporevent_gridpanel = new Ext.grid.GridPanel({
-        title: 'Eventos Ocurridos',
+    var reporcol_gridpanel = new Ext.grid.GridPanel({
+        title: 'Columnas Utilizadas',
         columnWidth: '.6',
         region: 'center',
         stripeRows: true,
         frame: true,
-        ds: reporevent_datastore,
-        cm: reporevent_colmodel,
+        ds: reporcol_datastore,
+        cm: reporcol_colmodel,
         height: 400
     });
     
-    var reporevent_panel = new Ext.Panel({
+    var reporcol_panel = new Ext.Panel({
         frame: true,
         monitorResize: true,
         layout: 'border',
-        monitorResize: true,
-        items: [reporevent_gridpanel, {
+        items: [reporcol_gridpanel, {
             xtype: 'tabpanel',
             activeTab: 0,
             title: 'Gr&aacute;ficos estadisticos',
@@ -380,11 +303,11 @@ var win = new Ext.Window(
             deferredRender: false,
             items: [{
                 xtype: 'panel',
-                title: 'Eventos / Cantidad',
+                title: 'Platos Teóricos',
                 contentEl: 'div_reporte_columnas_barra'
             }, {
                 xtype: 'panel',
-                title: 'Eventos / Tiempo',
+                title: 'Tiempo Retención',
                 contentEl: 'div_reporte_columnas_torta'
             }],
             listeners: {
@@ -397,7 +320,7 @@ var win = new Ext.Window(
         renderTo: 'div_form_reporte_columnas'
     });
     
-    function reporevent_cargardatosreportes(){
+    function reporcol_cargardatosreportes(){
         redirigirSiSesionExpiro();
         
         //Codigos de los equipos seleccionados
@@ -408,44 +331,40 @@ var win = new Ext.Window(
         }
         var arrayEquipos = Ext.encode(equiposAFiltrar);
         
-        var metodo_codigo = reporevent_metodo_codigo_combobox.getValue();
-        var analista_codigo = reporevent_analista_codigo_combobox.getValue();
-        var categoria_codigo = reporevent_categoriaevento_codigo_combobox.getValue();
-        
+        var analista_codigo = reporcol_analista_codigo_combobox.getValue();        
         
         var desde = '';
-        if (reporevent_desde_fecha_datefield.getValue() != '') {
-            desde = reporevent_desde_fecha_datefield.getValue().format('Y-m-d');
+        if (reporcol_desde_fecha_datefield.getValue() != '') {
+            desde = reporcol_desde_fecha_datefield.getValue().format('Y-m-d');
         }
         var hasta = '';
-        if (reporevent_hasta_fecha_datefield.getValue() != '') {
-            hasta = reporevent_hasta_fecha_datefield.getValue().format('Y-m-d');
+        if (reporcol_hasta_fecha_datefield.getValue() != '') {
+            hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
         }
         
-        var params = '?cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
-        params += '&desde_fecha=' + desde + '&hasta_fecha=' + hasta + '&categoria_codigo=' + categoria_codigo;
+        var params = '?cods_equipos=' + arrayEquipos + '&analista_codigo=' + analista_codigo;
+        params += '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
         
-        //tiempos
+        //Cantidad
+        var reporcol_cantidad_barra = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "730", "400", "8", "#FFFFFF");
+        reporcol_cantidad_barra.addVariable("path", urlWeb + "flash/amcolumn/");
+        reporcol_cantidad_barra.addParam("wmode", "opaque");
+        reporcol_cantidad_barra.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amcolumn_st_grafico_evento_barras.php');
+        reporcol_cantidad_barra.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosOcurrenciaEventosBarra') + params));
+        reporcol_cantidad_barra.write("div_reporte_columnas_barra");   
         
-        var reporevent_tiempo_torta = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "ampie", "520", "400", "8", "#FFFFFF");
-        reporevent_tiempo_torta.addVariable("path", urlWeb + "flash/amcolumn/");
-        reporevent_tiempo_torta.addParam("wmode", "opaque");
-        reporevent_tiempo_torta.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amcolumn_st_grafico_evento_tiempo.php');
-        reporevent_tiempo_torta.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosOcurrenciaEventosTiempo') + params));
-        reporevent_tiempo_torta.write("div_reporte_columnas_torta");
+        //Tiempo
+        var reporcol_tiempo_barra = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "ampie", "520", "400", "8", "#FFFFFF");
+        reporcol_tiempo_barra.addVariable("path", urlWeb + "flash/amcolumn/");
+        reporcol_tiempo_barra.addParam("wmode", "opaque");
+        reporcol_tiempo_barra.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amcolumn_st_grafico_evento_tiempo.php');
+        reporcol_tiempo_barra.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosOcurrenciaEventosTiempo') + params));
+        reporcol_tiempo_barra.write("div_reporte_columnas_torta");        
         
-        
-        var reporevent_tiempo_barra = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "730", "400", "8", "#FFFFFF");
-        reporevent_tiempo_barra.addVariable("path", urlWeb + "flash/amcolumn/");
-        reporevent_tiempo_barra.addParam("wmode", "opaque");
-        reporevent_tiempo_barra.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amcolumn_st_grafico_evento_barras.php');
-        reporevent_tiempo_barra.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosOcurrenciaEventosBarra') + params));
-        reporevent_tiempo_barra.write("div_reporte_columnas_barra");
-        
+             
     }
     
-    reporevent_cargardatosreportes();
-    
+    reporcol_cargardatosreportes();    
     
     function obtenerAncho(cmp, v_default){
         var ancho = cmp.getWidth();
@@ -459,14 +378,13 @@ var win = new Ext.Window(
     }
     
     function reporevent_ajustarTamano(){
-        var anchor1 = obtenerAncho(reporevent_panel, 800);
+        var anchor1 = obtenerAncho(reporcol_panel, 800);
         if (anchor1 == 800) {
-            reporevent_panel.setWidth(anchor1);
-            reporevent_panel.doLayout();
-            reporevent_configuracion.setWidth(anchor1);
-            reporevent_configuracion.doLayout();
+            reporcol_panel.setWidth(anchor1);
+            reporcol_panel.doLayout();
+            reporcol_configuracion.setWidth(anchor1);
+            reporcol_configuracion.doLayout();
         }
     }
-    reporevent_ajustarTamano();
-    
+    reporevent_ajustarTamano();    
 });

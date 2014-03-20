@@ -220,7 +220,7 @@ Ext.onReady(function(){
     });
     
     var operarios_combobox = new Ext.form.ComboBox({
-        fieldLabel: 'Operario',
+        fieldLabel: 'Analista',
         store: operarios_datastore,
         displayField: 'nombre',
         valueField: 'codigo',
