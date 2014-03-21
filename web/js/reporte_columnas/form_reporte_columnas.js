@@ -310,7 +310,15 @@ var win = new Ext.Window(
             }, {
                 xtype: 'panel',
                 title: 'Tiempo Retención',
-                contentEl: 'div_reporte_columnas_torta'
+                contentEl: 'div_reporte_columnas_tiempo_retencion'
+            }, {
+                xtype: 'panel',
+                title: 'Resolución',
+                contentEl: 'div_reporte_columnas_resolucion'
+            }, {
+                xtype: 'panel',
+                title: 'Tailing',
+                contentEl: 'div_reporte_columnas_tailing'
             }],
             listeners: {
                 tabchange: function(){
@@ -356,13 +364,32 @@ var win = new Ext.Window(
         reporcol_platos_teoricos.addVariable("loading_data", "... CARGANDO ...");
         reporcol_platos_teoricos.write("div_reporte_columnas_platos_teoricos");  
         
-        //Tiempo
-        var reporcol_tiempo_barra = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "ampie", "520", "400", "8", "#FFFFFF");
-        reporcol_tiempo_barra.addVariable("path", urlWeb + "flash/amcolumn/");
-        reporcol_tiempo_barra.addParam("wmode", "opaque");
-        reporcol_tiempo_barra.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amcolumn_st_grafico_evento_tiempo.php');
-        reporcol_tiempo_barra.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosOcurrenciaEventosTiempo') + params));
-        reporcol_tiempo_barra.write("div_reporte_columnas_torta");
+        //Tiempo de Retención
+        var reporcol_tiempo_retencion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
+        reporcol_tiempo_retencion.addVariable("path", urlWeb + "flash/amline/");
+        reporcol_tiempo_retencion.addParam("wmode", "opaque");
+        reporcol_tiempo_retencion.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_tiempo_retencion.php');
+        reporcol_tiempo_retencion.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosTiempoRetencion') + params));
+        reporcol_tiempo_retencion.addVariable("loading_data", "... CARGANDO ...");
+        reporcol_tiempo_retencion.write("div_reporte_columnas_tiempo_retencion");
+        
+        //Resolución
+        var reporcol_resolucion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
+        reporcol_resolucion.addVariable("path", urlWeb + "flash/amline/");
+        reporcol_resolucion.addParam("wmode", "opaque");
+        reporcol_resolucion.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_resolucion.php');
+        reporcol_resolucion.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosResolucion') + params));
+        reporcol_resolucion.addVariable("loading_data", "... CARGANDO ...");
+        reporcol_resolucion.write("div_reporte_columnas_resolucion");
+        
+        //Tailing
+        var reporcol_tailing = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
+        reporcol_tailing.addVariable("path", urlWeb + "flash/amline/");
+        reporcol_tailing.addParam("wmode", "opaque");
+        reporcol_tailing.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_tailing.php');
+        reporcol_tailing.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosTailing') + params));
+        reporcol_tailing.addVariable("loading_data", "... CARGANDO ...");
+        reporcol_tailing.write("div_reporte_columnas_tailing");
     }
     
     reporcol_cargardatosreportes();    

@@ -13,3 +13,6 @@ div.fondo_reporte_naranja{
 <div id="div_form_reporte_columnas" class="fondo_reporte_naranja"></div>
 <div id="div_reporte_columnas_torta"  class="fondo_reporte_naranja" ></div>
 <div id="div_reporte_columnas_platos_teoricos"></div>
+<div id="div_reporte_columnas_tiempo_retencion"></div>
+<div id="div_reporte_columnas_resolucion"></div>
+<div id="div_reporte_columnas_tailing"></div>

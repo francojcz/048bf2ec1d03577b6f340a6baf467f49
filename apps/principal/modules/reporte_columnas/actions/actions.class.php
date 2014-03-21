@@ -107,9 +107,9 @@ class reporte_columnasActions extends sfActions
 		return $this->renderText($salida);
 	}
 
-        //Grafico de Platos Teóricos
+        //Grafico Platos Teóricos
 	public function executeGenerarDatosPlatosTeoricos(sfWebRequest $request)
-	{   
+	{
             $desde_fecha = $this->getRequestParameter('desde_fecha');
             $hasta_fecha = $this->getRequestParameter('hasta_fecha');
             $fechas = array();
@@ -144,180 +144,124 @@ class reporte_columnasActions extends sfActions
 
             return $this->renderText($xml);
 	}
-
-	public function executeGenerarDatosOcurrenciaEventosTiempo(sfWebRequest $request)
+        
+        //Grafico Tiempo de Retención
+	public function executeGenerarDatosTiempoRetencion(sfWebRequest $request)
 	{
-		$criteria = new Criteria();
-		$criteria->addJoin(EventoPeer::EVE_CODIGO, EventoEnRegistroPeer::EVRG_EVE_CODIGO);
-		$criteria->addJoin(EventoEnRegistroPeer::EVRG_RUM_CODIGO, RegistroUsoMaquinaPeer::RUM_CODIGO);
-		$criteria->clearSelectColumns();
-		$criteria->addSelectColumn(EventoPeer::EVE_NOMBRE);
-		$criteria->addSelectColumn('SUM('.EventoEnRegistroPeer::EVRG_DURACION.')');
-		$criteria->addGroupByColumn(EventoPeer::EVE_CODIGO);
-		$criteria->addDescendingOrderByColumn('SUM('.EventoEnRegistroPeer::EVRG_DURACION.')');
-		$criteria->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
+            $desde_fecha = $this->getRequestParameter('desde_fecha');
+            $hasta_fecha = $this->getRequestParameter('hasta_fecha');
+            $fechas = array();
+            $fechas[] = $this->mes($desde_fecha);
+            
+            while($desde_fecha < $hasta_fecha) {
+                $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
+                $fechas[] = $this->mes($desde_fecha);
+            }
+                
+            $indicador = array('Tiempo de Retención');
+            $colores = array('ff5454');
 
-		if($request->getParameter('desde_fecha')!='') {
-			$criteria->add(RegistroUsoMaquinaPeer::RUM_FECHA, $request->getParameter('desde_fecha'), Criteria::GREATER_EQUAL);
-		}
-
-		if($request->getParameter('hasta_fecha')!='') {
-			$criteria->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA, $request->getParameter('hasta_fecha'), Criteria::LESS_EQUAL);
-		}
-
-		if($request->getParameter('analista_codigo')!='') {
-			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('analista_codigo'));
-		}
-
-		//Codigos de los equipos seleccionados
-                $temp = $this->getRequestParameter('cods_equipos');
-                $cods_equipos = json_decode($temp);
-                if($cods_equipos != ''){
-                    foreach ($cods_equipos as $cod_equipo) {
-                        $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
-                    }
+            $xml = '<?xml version="1.0"?>';
+            $xml .= '<chart>';
+            $xml .= '<series>';
+            for($dias = 0; $dias < sizeof($fechas); $dias++) {
+                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas[$dias].'</value>';
+            }
+            $xml .= '</series>';
+            $xml .= '<graphs>';
+            for($ind = 0; $ind < sizeof($indicador); $ind++) {
+                $xml .= '<graph color="#'.$colores[$ind].'" title="'.$indicador[$ind].'" bullet="round">';
+                for($dias = 0; $dias < sizeof($fechas); $dias++) {
+                    $cantidad = 50;
+                    $xml .= '<value xid="'.$fechas[$dias].'">'.round($cantidad, 2).'</value>';
                 }
+                $xml.='</graph>';
+            }
+            $xml.='</graphs>';
+            $xml.='</chart>';
 
-		$statement = EventoPeer::doSelectStmt($criteria);
-		$eventos = $statement->fetchAll(PDO::FETCH_NUM);
-
-		$xml='<?xml version="1.0"?>';
-		$xml.='<chart>';
-
-		$colores = array();
-		$colores[] = 'FF6600';
-		$colores[] = 'FCD202';
-		$colores[] = 'B0DE09';
-		$colores[] = '0D8ECF';
-		$colores[] = '2A0CD0';
-		$colores[] = 'CD0D74';
-		$colores[] = 'CC0000';
-		$colores[] = '00CC00';
-		$colores[] = '0000CC';
-
-		$cantidadColores = count($colores);
-
-		$xmlSeries = '<series>';
-		$xmlGraphs = '<graphs><graph  title="Tiempo total de eventos ">';
-
-		$i = 0;
-		foreach($eventos as $evento) {
-                        //Valor del eje x                    
-			$xmlSeries .= '<value xid="'.$i.'" >'.$evento[0].' : '.((int)$evento[1]).' (minutos)</value>';
-			$xmlGraphs .= '<value xid="'.$i.'" color="'.$colores[($i%$cantidadColores)].'">'.$evento[1].'</value>';
-			$i++;
-		}
-
-		$xmlSeries .= '</series>';
-		$xmlGraphs .= '</graph></graphs>';
-
-		$xml .= $xmlSeries;
-		$xml .= $xmlGraphs;
-		$xml .= '</chart>';
-
-		return $this->renderText($xml);
+            return $this->renderText($xml);
 	}
-
-
-	/**
-	 *@author:maryit sanchez
-	 *@date:21 de enero de 2010
-	 *Esta funcion retorna  arreglo con los datos totales de ocurrencias por evento
-	 */
-	public function obtenerDatosTotalEventos()
+        
+        //Grafico Resolución
+	public function executeGenerarDatosResolucion(sfWebRequest $request)
 	{
-		$fila=0;
-		$datos;
+            $desde_fecha = $this->getRequestParameter('desde_fecha');
+            $hasta_fecha = $this->getRequestParameter('hasta_fecha');
+            $fechas = array();
+            $fechas[] = $this->mes($desde_fecha);
+            
+            while($desde_fecha < $hasta_fecha) {
+                $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
+                $fechas[] = $this->mes($desde_fecha);
+            }
+                
+            $indicador = array('Resolución');
+            $colores = array('ffdc44');
 
-		try{
+            $xml = '<?xml version="1.0"?>';
+            $xml .= '<chart>';
+            $xml .= '<series>';
+            for($dias = 0; $dias < sizeof($fechas); $dias++) {
+                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas[$dias].'</value>';
+            }
+            $xml .= '</series>';
+            $xml .= '<graphs>';
+            for($ind = 0; $ind < sizeof($indicador); $ind++) {
+                $xml .= '<graph color="#'.$colores[$ind].'" title="'.$indicador[$ind].'" bullet="round">';
+                for($dias = 0; $dias < sizeof($fechas); $dias++) {
+                    $cantidad = 50;
+                    $xml .= '<value xid="'.$fechas[$dias].'">'.round($cantidad, 2).'</value>';
+                }
+                $xml.='</graph>';
+            }
+            $xml.='</graphs>';
+            $xml.='</chart>';
 
-			$conexion_eventoenregistro=$this->obtenerConexion();
-
-			$conexion = new Criteria();
-			$eventos = EventoPeer::doSelect($conexion);
-
-			foreach($eventos as $evento){
-
-				$conexion_evento=$conexion_eventoenregistro;
-				$conexion_eventoenregistro->add(EventoEnRegistroPeer::EVRG_EVE_CODIGO,$evento->getEveCodigo());
-				$conexion_eventoenregistro->setDistinct();
-				$cant_eventoenregistro = EventoEnRegistroPeer::doCount($conexion_evento);
-
-				$datos[$fila]['codigo']=$evento->getEveCodigo();
-				$datos[$fila]['nombre']=$evento->getEveNombre();                                
-				$datos[$fila]['ocurrecias']=$cant_eventoenregistro;
-				$fila++;
-			}
-		}
-		catch (Exception $excepcion)
-		{
-			return "({success: false, errors: { reason: 'Excepci&oacute;n  en registro de eventos ocurridos ',error:'".$excepcion->getMessage()."'}})";
-		}
-		return $datos;
+            return $this->renderText($xml);
 	}
-
-	/**
-	 *@author:maryit sanchez
-	 *@date:22 de marzo de 2011
-	 *Esta funcion retorna arreglo con los datos totales de tiempos por tipos de eventos
-	 */
-	public function obtenerDatosTotalMinutosPorEvento()
+        
+        //Grafico Tailing
+	public function executeGenerarDatosTailing(sfWebRequest $request)
 	{
-		$fila=0;
-		$datos = array();
+            $desde_fecha = $this->getRequestParameter('desde_fecha');
+            $hasta_fecha = $this->getRequestParameter('hasta_fecha');
+            $fechas = array();
+            $fechas[] = $this->mes($desde_fecha);
+            
+            while($desde_fecha < $hasta_fecha) {
+                $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
+                $fechas[] = $this->mes($desde_fecha);
+            }
+                
+            $indicador = array('Tailing');
+            $colores = array('72a8cd');
 
-		try{
-			$desde_fecha=$this->getRequestParameter('desde_fecha');
-			$hasta_fecha=$this->getRequestParameter('hasta_fecha');
-			$analista_codigo=$this->getRequestParameter('analista_codigo');
+            $xml = '<?xml version="1.0"?>';
+            $xml .= '<chart>';
+            $xml .= '<series>';
+            for($dias = 0; $dias < sizeof($fechas); $dias++) {
+                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas[$dias].'</value>';
+            }
+            $xml .= '</series>';
+            $xml .= '<graphs>';
+            for($ind = 0; $ind < sizeof($indicador); $ind++) {
+                $xml .= '<graph color="#'.$colores[$ind].'" title="'.$indicador[$ind].'" bullet="round">';
+                for($dias = 0; $dias < sizeof($fechas); $dias++) {
+                    $cantidad = 50;
+                    $xml .= '<value xid="'.$fechas[$dias].'">'.round($cantidad, 2).'</value>';
+                }
+                $xml.='</graph>';
+            }
+            $xml.='</graphs>';
+            $xml.='</chart>';
 
-			$consulta="SELECT evrg_eve_codigo, ";
-			$consulta.=" sum(evrg_duracion) ";
-			$consulta.=" FROM evento_en_registro , registro_uso_maquina ";
-
-			$consulta.=" WHERE evrg_rum_codigo=rum_codigo ";
-
-			if($desde_fecha!=''){$consulta.=" and rum_fecha>='".$desde_fecha."' "; }
-			if($hasta_fecha!=''){$consulta.=" and rum_fecha<='".$hasta_fecha."' "; }
-                        
-                        //Codigos de los equipos seleccionados
-                        $temp = $this->getRequestParameter('cods_equipos');
-                        $cods_equipos = json_decode($temp);
-                        if($cods_equipos != ''){
-                            foreach ($cods_equipos as $cod_equipo) {                                
-                                $consulta.=" or rum_maq_codigo='".$cod_equipo."' ";
-                            }
-                        }                        
-			if($analista_codigo!=''){$consulta.=" and rum_usu_codigo='".$analista_codigo."' ";}
-			if($hasta_fecha!=''){$consulta.=" and rum_eliminado=false"; }
-			if($hasta_fecha!=''){$consulta.=" group by (evrg_eve_codigo) "; }
-
-			$con = Propel::getConnection();
-			$stmt = $con->prepare($consulta);
-			$stmt->execute();
-			while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-					
-				$datos[$fila]['evento'] = $row[0];//evento codigo
-				$datos[$fila]['cantidad'] = $row[1];//cantidad minutos
-				//echo($row[0].'-'.$row[1]);
-				$fila++;
-			}
-
-		}
-		catch (Exception $excepcion)
-		{
-			return "({success: false, errors: { reason: 'Excepci&oacute;n en reporte de eventos tiempo vs evento ',error:'".$excepcion->getMessage()."'}})";
-		}
-		return $datos;
+            return $this->renderText($xml);
 	}
 
-
-
 	/**
-	 *@author:maryit sanchez
-	 *@date:6 de enero de 2011
-	 *Esta funcion retorna  un listado de los analistas
-	 */
+	 *Esta funcion retorna un listado de los analistas
+	*/
 	public function executeListarAnalistas(sfWebRequest $request)
 	{
 
@@ -328,55 +272,41 @@ class reporte_columnasActions extends sfActions
 			$jsonresult = json_encode($datos);
 			$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
 		}
-		return $this->renderText($salida);	}
+		return $this->renderText($salida);	
+        }
 
-		public function executeListarEquiposActivos(sfWebRequest $request)
-		{
-			$salida = '({"total":"0", "results":""})';
-			$datos = MaquinaPeer::listarEquiposActivos();
-			$cant = count($datos);
-			if (count($datos)>0){
-				$jsonresult = json_encode($datos);
-				$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-			}
-			return $this->renderText($salida);
-		}
-
-		/**
-		 *@author:maryit sanchez
-		 *@date:6 de enero de 2011
-		 *Esta funcion retorna  un listado de los maquinas
-		 */
-		public function executeListarMaquinas(sfWebRequest $request)
-		{
-			$salida='({"total":"0", "results":""})';
-			$datos=MaquinaPeer::listarMaquinasBuenas();
-			$cant=count($datos);
-			if (count($datos)>0){
-				$jsonresult = json_encode($datos);
-				$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-			}
-			return $this->renderText($salida);
-		}
-                
-                
-                //Reemplaza el número del mes por el nombre
-                public function mes($fecha_original) {
-                    $fecha = strtotime($fecha_original);
-                    $dia = (int) date('d', $fecha);
-                    $mes = (int) date('m', $fecha);
-                    $ano = (int) date('Y', $fecha);
-                    if($mes == 1) { return ($dia.'-Ene-'.$ano); }
-                    if($mes == 2) { return ($dia.'-Feb-'.$ano); }
-                    if($mes == 3) { return ($dia.'-Mar-'.$ano); }
-                    if($mes == 4) { return ($dia.'-Abr-'.$ano); }
-                    if($mes == 5) { return ($dia.'-May-'.$ano); }
-                    if($mes == 6) { return ($dia.'-Jun-'.$ano); }
-                    if($mes == 7) { return ($dia.'-Jul-'.$ano); }
-                    if($mes == 8) { return ($dia.'-Ago-'.$ano); }
-                    if($mes == 9) { return ($dia.'-Sep-'.$ano); }
-                    if($mes == 10) { return ($dia.'-Oct-'.$ano); }
-                    if($mes == 11) { return ($dia.'-Nov-'.$ano); }
-                    if($mes == 12) { return ($dia.'-Dic-'.$ano); }
+        /**
+	 *Esta funcion retorna un listado con los equipos activos
+	*/
+        public function executeListarEquiposActivos(sfWebRequest $request)
+        {
+                $salida = '({"total":"0", "results":""})';
+                $datos = MaquinaPeer::listarEquiposActivos();
+                $cant = count($datos);
+                if (count($datos)>0){
+                        $jsonresult = json_encode($datos);
+                        $salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
                 }
+                return $this->renderText($salida);
+        }        
+                
+        //Reemplaza el número del mes por el nombre
+        public function mes($fecha_original) {
+            $fecha = strtotime($fecha_original);
+            $dia = (int) date('d', $fecha);
+            $mes = (int) date('m', $fecha);
+            $ano = (int) date('Y', $fecha);
+            if($mes == 1) { return ($dia.'-Ene-'.$ano); }
+            if($mes == 2) { return ($dia.'-Feb-'.$ano); }
+            if($mes == 3) { return ($dia.'-Mar-'.$ano); }
+            if($mes == 4) { return ($dia.'-Abr-'.$ano); }
+            if($mes == 5) { return ($dia.'-May-'.$ano); }
+            if($mes == 6) { return ($dia.'-Jun-'.$ano); }
+            if($mes == 7) { return ($dia.'-Jul-'.$ano); }
+            if($mes == 8) { return ($dia.'-Ago-'.$ano); }
+            if($mes == 9) { return ($dia.'-Sep-'.$ano); }
+            if($mes == 10) { return ($dia.'-Oct-'.$ano); }
+            if($mes == 11) { return ($dia.'-Nov-'.$ano); }
+            if($mes == 12) { return ($dia.'-Dic-'.$ano); }
+        }
 }
