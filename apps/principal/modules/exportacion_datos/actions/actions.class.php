@@ -11,7 +11,7 @@
 class exportacion_datosActions extends sfActions
 {
 	public function executeExportar(sfWebRequest $request) {
-
+            
 		// Send Header
 		header("Pragma: public");
 		header("Expires: 0");

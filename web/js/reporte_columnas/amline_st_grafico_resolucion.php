@@ -26,7 +26,7 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia Resolución Columna / Día</b>]]>
+        <![CDATA[<b>Tendencia Resolución Columna / día</b>]]>
       </text> 
     </label>
 	<label lid='2'>

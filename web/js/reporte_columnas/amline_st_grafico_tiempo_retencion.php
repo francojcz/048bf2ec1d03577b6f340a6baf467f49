@@ -26,7 +26,7 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia Tiempos de Retención Columna / Día</b>]]>
+        <![CDATA[<b>Tendencia Tiempo de Retención Columna / día</b>]]>
       </text> 
     </label>
 	<label lid='2'>

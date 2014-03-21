@@ -59,12 +59,197 @@ class reporte_columnasActions extends sfActions
                 
 		return $conexion;
 	}
+        
+        
+        /**
+	 *Esta funcion exporta en formato excel un listado con información de las columnas utilizadas
+	*/
+        public function executeExportar(sfWebRequest $request) {
+                // Send Header
+		header("Pragma: public");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Content-Type: application/force-download");
+		header("Content-Type: application/octet-stream");
+		header("Content-Type: application/download");
+		header("Content-Disposition: attachment;filename=datos.xls ");
+		header("Content-Transfer-Encoding: binary ");
+                
+                $conexion = $this->obtenerConexion();
+                $registros = RegistroUsoMaquinaPeer::doSelect($conexion);
+                
+                $this->renderText('<?xml version="1.0"?>
+            <?mso-application progid="Excel.Sheet"?>
+            <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+             xmlns:o="urn:schemas-microsoft-com:office:office"
+             xmlns:x="urn:schemas-microsoft-com:office:excel"
+             xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+             xmlns:html="http://www.w3.org/TR/REC-html40">
+             <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+              <Created>2006-09-16T00:00:00Z</Created>
+              <LastSaved>2011-02-01T00:11:48Z</LastSaved>
+              <Version>14.00</Version>
+             </DocumentProperties>
+             <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+              <AllowPNG/>
+              <RemovePersonalInformation/>
+             </OfficeDocumentSettings>
+             <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+              <WindowHeight>8010</WindowHeight>
+              <WindowWidth>14805</WindowWidth>
+              <WindowTopX>240</WindowTopX>
+              <WindowTopY>105</WindowTopY>
+              <ProtectStructure>False</ProtectStructure>
+              <ProtectWindows>False</ProtectWindows>
+             </ExcelWorkbook>
+             <Styles>
+              <Style ss:ID="Default" ss:Name="Normal">
+               <Alignment ss:Vertical="Bottom"/>
+               <Borders/>
+               <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="8" ss:Color="#000000"/>
+               <Interior/>
+               <NumberFormat/>
+               <Protection/>
+              </Style>
+              <Style ss:ID="s62">
+               <NumberFormat ss:Format="Fixed"/>
+              </Style>
+              <Style ss:ID="s65">
+               <Alignment ss:Horizontal="Center"/>
+               <Interior ss:Color="#FFDF4C" ss:Pattern="Solid"/>
+              </Style>
+              <Style ss:ID="s64">
+               <Alignment ss:Horizontal="Left"/>
+               <Interior ss:Color="#DDD9C4" ss:Pattern="Solid"/>
+              </Style>
+              <Style ss:ID="s66">
+               <Interior ss:Color="#4CD774" ss:Pattern="Solid"/>
+               <NumberFormat ss:Format="Fixed"/>
+              </Style>
+              <Style ss:ID="s68">
+               <Interior ss:Color="#71A7CD" ss:Pattern="Solid"/>
+               <NumberFormat ss:Format="Fixed"/>
+              </Style>
+              <Style ss:ID="s70">
+               <Interior ss:Color="#4F81BD" ss:Pattern="Solid"/>
+              </Style>
+              <Style ss:ID="s69">
+               <Interior ss:Color="#FF4C4C" ss:Pattern="Solid"/>
+               <NumberFormat ss:Format="Fixed"/>
+              </Style>
+              <Style ss:ID="s71">
+               <Interior ss:Color="#FF4C4C" ss:Pattern="Solid"/>
+              </Style>
+              <Style ss:ID="s72">
+               <Interior ss:Color="#71A7CD" ss:Pattern="Solid"/>
+              </Style>
+              <Style ss:ID="s73">
+               <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+               <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="8" ss:Color="#000000"
+                ss:Bold="1"/>
+               <Interior ss:Color="#4F81BD" ss:Pattern="Solid"/>
+              </Style>
+              <Style ss:ID="s74">
+               <Alignment ss:Horizontal="Center"/>
+               <Interior ss:Color="#f0a05f" ss:Pattern="Solid"/>
+              </Style>
+             </Styles>
+             <Worksheet ss:Name="Hoja1"> 
+              <Table ss:ExpandedColumnCount="38" ss:ExpandedRowCount="'.((count($registros)*2)+1).'" x:FullColumns="1"
+               x:FullRows="1" ss:DefaultRowHeight="15">');
+                $this->renderText('
+                <Column ss:AutoFitWidth="0" ss:Width="100"/>
+                <Column ss:AutoFitWidth="0" ss:Width="120"/>
+                <Column ss:AutoFitWidth="0" ss:Width="70"/>
+                <Column ss:AutoFitWidth="0" ss:Width="130"/>
+                <Column ss:AutoFitWidth="0" ss:Width="90"/>
+                <Column ss:AutoFitWidth="0" ss:Width="100"/>
+                <Column ss:AutoFitWidth="0" ss:Width="90"/>
+                <Column ss:AutoFitWidth="0" ss:Width="90"/>
+                <Row ss:AutoFitHeight="0" ss:Height="40">
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Máquina</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Analista</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Fecha</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Columna</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Platos Teóricos (N)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Tiempo de Retención (min)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Resolución (R)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Tailing (T)</Data></Cell>
+               </Row>');
+                
+                foreach($registros as $registro) {
+                        $col_codigo = $registro -> getRumColCodigo();
+                        $columna  = ColumnaPeer::retrieveByPk($col_codigo);
+                        
+			$this->renderText('<Row>			
+			<Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>
+                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerAnalista().'</Data></Cell>
+                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumFecha('d-m-Y').'</Data></Cell>
+			<Cell ss:StyleID="s64"><Data ss:Type="String">'.$columna->getColConsecutivo().' - '.$columna->getColMarca().'</Data></Cell>
+			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumPlatosTeoricos(), 2, '.', '').'</Data></Cell>
+			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTiempoRetencion(), 2, '.', '').'</Data></Cell>
+			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumResolucion(), 2, '.', '').'</Data></Cell>
+			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTailing(), 2, '.', '').'</Data></Cell>			
+			</Row>');			
+		}
+                
+                $this->renderText('</Table>
+			<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+			<PageSetup>
+			<Header x:Margin="0.3"/>
+			<Footer x:Margin="0.3"/>
+			<PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+			</PageSetup>
+			<Selected/>
+			<Panes>
+			<Pane>
+			<Number>3</Number>
+			<ActiveRow>3</ActiveRow>
+			<ActiveCol>5</ActiveCol>
+			</Pane>
+			</Panes>
+			<ProtectObjects>False</ProtectObjects>
+			<ProtectScenarios>False</ProtectScenarios>
+			</WorksheetOptions>
+			</Worksheet>
+			<Worksheet ss:Name="Hoja2">
+			<Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+			x:FullRows="1" ss:DefaultRowHeight="15">
+			</Table>
+			<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+			<PageSetup>
+			<Header x:Margin="0.3"/>
+			<Footer x:Margin="0.3"/>
+			<PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+			</PageSetup>
+			<ProtectObjects>False</ProtectObjects>
+			<ProtectScenarios>False</ProtectScenarios>
+			</WorksheetOptions>
+			</Worksheet>
+			<Worksheet ss:Name="Hoja3">
+			<Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+			x:FullRows="1" ss:DefaultRowHeight="15">
+			</Table>
+			<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+			<PageSetup>
+			<Header x:Margin="0.3"/>
+			<Footer x:Margin="0.3"/>
+			<PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+			</PageSetup>
+			<ProtectObjects>False</ProtectObjects>
+			<ProtectScenarios>False</ProtectScenarios>
+			</WorksheetOptions>
+			</Worksheet>
+			</Workbook>
+                ');
+
+		return $this->renderText('');
+        }
+        
 
 	/**
-	 *@author:maryit sanchez
-	 *@date:21 de enero de 2010
-	 *Esta funcion retorna un listado de los eventos por indicador
-	 */
+	 *Esta funcion retorna un listado con información de las columnas utilizadas
+	*/
 	public function executeListarReporteColumnasUtilizadas(sfWebRequest $request)
 	{
 		$salida = '({"total":"0", "results":""})';
@@ -84,7 +269,7 @@ class reporte_columnasActions extends sfActions
 				$col_codigo = $temporal -> getRumColCodigo();
 				$columna  = ColumnaPeer::retrieveByPk($col_codigo);
 				if($columna){
-					$datos[$fila]['rum_col_nombre'] = $columna->getColConsecutivo();
+					$datos[$fila]['rum_col_nombre'] = $columna->getColConsecutivo().' - '.$columna->getColMarca();
 				}
 
 				$datos[$fila]['rum_col_platos_teoricos'] = number_format($temporal->getRumPlatosTeoricos(), 2, '.', '');

@@ -26,7 +26,7 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia Platos Teóricos Columna / Día</b>]]>
+        <![CDATA[<b>Tendencia Platos Teóricos Columna / día</b>]]>
       </text> 
     </label>
 	<label lid='2'>

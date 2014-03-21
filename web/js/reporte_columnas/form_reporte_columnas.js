@@ -132,7 +132,30 @@ var win = new Ext.Window(
                 style: 'padding: 0px 0px 0px 20px',
                 iconCls: 'exportar_excel',
                 text: 'Guardar en formato Excel',
-                handler: function(){                        
+                handler: function(){
+                    redirigirSiSesionExpiro();
+                    
+                    //Codigos de los equipos seleccionados
+                    var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+                    var equiposAFiltrar = [];
+                    for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+                            equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
+                    }
+                    var arrayEquipos = Ext.encode(equiposAFiltrar);
+
+                    var analista_codigo = reporcol_analista_codigo_combobox.getValue();        
+
+                    var desde = '';
+                    if (reporcol_desde_fecha_datefield.getValue() != '') {
+                        desde = reporcol_desde_fecha_datefield.getValue().format('Y-m-d');
+                    }
+                    var hasta = '';
+                    if (reporcol_hasta_fecha_datefield.getValue() != '') {
+                        hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
+                    }
+
+                    var params = 'cods_equipos=' + arrayEquipos + '&analista_codigo=' + analista_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
+                    window.location = getAbsoluteUrl('reporte_columnas', 'exportar') + '?' + params;                   
                 }
             }]
         }, {
@@ -156,8 +179,7 @@ var win = new Ext.Window(
                 xtype: 'button',
                 iconCls: 'filtrar',
                 style: 'padding: 0px 0px 0px 20px',
-                handler: function(){
-                
+                handler: function(){                
                     var desde = '';
                     if (reporcol_desde_fecha_datefield.getValue() != '') {
                         desde = reporcol_desde_fecha_datefield.getValue().format('Y-m-d');
@@ -352,8 +374,7 @@ var win = new Ext.Window(
             hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
         }
         
-        var params = '?cods_equipos=' + arrayEquipos + '&analista_codigo=' + analista_codigo;
-        params += '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
+        var params = '?cods_equipos=' + arrayEquipos + '&analista_codigo=' + analista_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
         
         //Platos Teóricos
         var reporcol_platos_teoricos = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
