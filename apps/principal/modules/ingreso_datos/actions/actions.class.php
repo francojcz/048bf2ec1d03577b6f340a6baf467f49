@@ -80,6 +80,11 @@ class ingreso_datosActions extends sfActions
         
         //Cambios: 28 de febrero de 2014
         $registroSegundoDia ->setRumLote($registro ->getRumLote());
+        $registroSegundoDia ->setRumColCodigo($registro ->getRumColCodigo());
+        $registroSegundoDia ->setRumPlatosTeoricos($registro ->getRumPlatosTeoricos());
+        $registroSegundoDia ->setRumTiempoRetencion($registro ->getRumTiempoRetencion());
+        $registroSegundoDia ->setRumResolucion($registro ->getRumResolucion());
+        $registroSegundoDia ->setRumTailing($registro ->getRumTailing());
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirFallas($deficitTiempo, $registro, $registroSegundoDia);
 
