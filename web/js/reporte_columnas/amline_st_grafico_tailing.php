@@ -26,7 +26,7 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia Factor de Cola Columna / día</b>]]>
+        <![CDATA[<b>Tendencia Tailing Columna / día</b>]]>
       </text> 
     </label>
 	<label lid='2'>
@@ -40,12 +40,12 @@
     </label>
 	<label lid='1'>
       <x>15</x> 
-      <y>55%</y>
+      <y>50%</y>
       <rotate>true</rotate> 
       <width>100</width>
       <align>left</align>
       <text>
-        <![CDATA[<b>Factor de Cola (T)</b>]]>
+        <![CDATA[<b>Tailing (T)</b>]]>
       </text> 
     </label>
   </labels>

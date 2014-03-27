@@ -1699,8 +1699,8 @@ Ext.onReady(function()
   },
   {
     dataIndex : 'tailing',
-    header : 'Factor de Cola<br>(T)',
-    tooltip : 'Factor de Cola (T)',
+    header : 'Tailing<br>(T)',
+    tooltip : 'Tailing (T)',
     columnWidth : 80,
     align : 'center',
     editor :

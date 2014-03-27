@@ -189,7 +189,7 @@ Ext.onReady(function(){
             align : 'center',
             dataIndex: 'rum_col_resolucion'
         }, {
-            header: "Factor de Cola (T)",
+            header: "Tailing (T)",
             width: 120,
             align : 'center',
             dataIndex: 'rum_col_tailing'
@@ -245,7 +245,7 @@ Ext.onReady(function(){
                 contentEl: 'div_reporte_columnas_resolucion'
             }, {
                 xtype: 'panel',
-                title: 'Factor de Cola',
+                title: 'Tailing',
                 contentEl: 'div_reporte_columnas_tailing'
             }],
             listeners: {

@@ -123,6 +123,28 @@ var form_interfazdministrador = function(){
                                     scope: this
                                 }
                             }]
+                        }]
+                    }, {
+                        expanded: true,
+                        items: [{
+                            title: 'Columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            html: '<div style="text-align:center;"> <font face="arial" size=6 color=#4E79B2><br/><br/>Informaci&oacute;n de Columnas</font><br/><br/><img height=128 width=128  src="' + urlPrefix + '../images/iconos/columna_128.jpg" alt="datos"/></div>'
+                        }, {
+                            title: 'Marca',
+                            tabTip: 'Marca de Columna, utilice esto para registrar las marcas de las columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            iconCls: 'x-icon-maestra',
+                            items: [{
+                                frame: true,
+                                autoLoad: {
+                                    url: getAbsoluteUrl('maestra_marca', 'index'),
+                                    scripts: true,
+                                    scope: this
+                                }
+                            }]
                         }, {
                             title: 'Columnas',
                             tabTip: 'Manejo de columnas',
@@ -137,14 +159,6 @@ var form_interfazdministrador = function(){
                                     scope: this
                                 }
                             }]
-                        }]
-                    }, {
-                        expanded: true,
-                        items: [{
-                            title: 'Columnas',
-                            border: false,
-                            style: 'padding: 10px;',
-                            html: '<div style="text-align:center;"> <font face="arial" size=6 color=#4E79B2><br/><br/>Manejo de informaci&oacute;n </font><br/><br/><img height=128 width=128  src="' + urlPrefix + '../images/iconos/data_128.png" alt="datos"/></div>'
                         }]
                     }, {
                         expanded: true,
