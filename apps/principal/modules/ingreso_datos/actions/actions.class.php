@@ -1991,7 +1991,7 @@ class ingreso_datosActions extends sfActions
     {
         $conexion = new Criteria();
         $conexion -> add(ColumnaPeer::COL_ELIMINADO, 0);
-//        $conexion -> addAscendingOrderByColumn(ColumnaPeer::COL_CONSECUTIVO);
+        $conexion -> addAscendingOrderByColumn(ColumnaPeer::COL_CONSECUTIVO);
         $columnas = ColumnaPeer::doSelect($conexion);
         
         $result = array();
@@ -2001,7 +2001,7 @@ class ingreso_datosActions extends sfActions
         {
             $fields = array();
             $fields['codigo'] = $columna -> getColCodigo();
-            $fields['nombre'] = $columna -> getColConsecutivo().' - '.$columna -> getColMarca();
+            $fields['nombre'] = $columna -> getColConsecutivo();
             $data[] = $fields;
         }
 

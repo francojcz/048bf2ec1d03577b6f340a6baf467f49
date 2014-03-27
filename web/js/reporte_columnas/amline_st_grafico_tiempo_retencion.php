@@ -40,12 +40,12 @@
     </label>
 	<label lid='1'>
       <x>15</x> 
-      <y>50%</y>
+      <y>60%</y>
       <rotate>true</rotate> 
       <width>100</width>
       <align>left</align>
       <text>
-        <![CDATA[<b>Minutos</b>]]>
+        <![CDATA[<b>Tiempo de Retención (min)</b>]]>
       </text> 
     </label>
   </labels>

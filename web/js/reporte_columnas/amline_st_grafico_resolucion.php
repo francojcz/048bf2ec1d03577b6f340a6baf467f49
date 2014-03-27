@@ -40,12 +40,12 @@
     </label>
 	<label lid='1'>
       <x>15</x> 
-      <y>50%</y>
+      <y>55%</y>
       <rotate>true</rotate> 
       <width>100</width>
       <align>left</align>
       <text>
-        <![CDATA[<b>Cantidad</b>]]>
+        <![CDATA[<b>Resolución (R)</b>]]>
       </text> 
     </label>
   </labels>

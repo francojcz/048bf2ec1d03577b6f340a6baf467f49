@@ -141,6 +141,14 @@ var form_interfazdministrador = function(){
                     }, {
                         expanded: true,
                         items: [{
+                            title: 'Columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            html: '<div style="text-align:center;"> <font face="arial" size=6 color=#4E79B2><br/><br/>Manejo de informaci&oacute;n </font><br/><br/><img height=128 width=128  src="' + urlPrefix + '../images/iconos/data_128.png" alt="datos"/></div>'
+                        }]
+                    }, {
+                        expanded: true,
+                        items: [{
                             title: 'Tipo de <br/>identificaci&oacute;n',
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',

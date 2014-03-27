@@ -1629,9 +1629,9 @@ Ext.onReady(function()
   },
   {
     dataIndex : 'lote',
-    header : 'Lote',
+    header : 'Lote de Muestra',
     tooltip : 'Lote',
-    width : 120,
+    width : 130,
     align : 'center',
     editor :
     {
@@ -1699,8 +1699,8 @@ Ext.onReady(function()
   },
   {
     dataIndex : 'tailing',
-    header : 'Tailing<br>(T)',
-    tooltip : 'Tailing (T)',
+    header : 'Factor de Cola<br>(T)',
+    tooltip : 'Factor de Cola (T)',
     columnWidth : 80,
     align : 'center',
     editor :

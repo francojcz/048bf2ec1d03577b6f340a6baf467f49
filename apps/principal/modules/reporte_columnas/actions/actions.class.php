@@ -23,7 +23,7 @@ class reporte_columnasActions extends sfActions
       public function obtenerConexion(){
 		$desde_fecha = $this->getRequestParameter('desde_fecha');
 		$hasta_fecha = $this->getRequestParameter('hasta_fecha');
-		$analista_codigo=$this->getRequestParameter('analista_codigo');
+		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
 
 		$conexion = new Criteria();
                 if($desde_fecha=='' && $hasta_fecha=='') {
@@ -41,28 +41,18 @@ class reporte_columnasActions extends sfActions
                             $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$hasta_fecha,CRITERIA::LESS_EQUAL);
                         }
 		}
-                              
-                //Codigos de los equipos seleccionados
-                $temp = $this->getRequestParameter('cods_equipos');
-                $cods_equipos = json_decode($temp);
-                if($cods_equipos != ''){
-                    foreach ($cods_equipos as $cod_equipo) {
-                        $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
-                    }
-                } 
                 
-		if($analista_codigo!='') {
-                    $conexion->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO,$analista_codigo,CRITERIA::EQUAL);
+		if($metodo_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
                 }
 
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
                 
 		return $conexion;
-	}
-        
+	}        
         
         /**
-	 *Esta funcion exporta en formato excel un listado con información de las columnas utilizadas
+	 * Esta funcion exporta en formato excel un listado con información de las columnas utilizadas
 	*/
         public function executeExportar(sfWebRequest $request) {
                 // Send Header
@@ -157,24 +147,24 @@ class reporte_columnasActions extends sfActions
              <Worksheet ss:Name="Hoja1"> 
               <Table ss:ExpandedColumnCount="38" ss:ExpandedRowCount="'.((count($registros)*2)+1).'" x:FullColumns="1"
                x:FullRows="1" ss:DefaultRowHeight="15">');
-                $this->renderText('
-                <Column ss:AutoFitWidth="0" ss:Width="100"/>
-                <Column ss:AutoFitWidth="0" ss:Width="120"/>
+                $this->renderText('                
                 <Column ss:AutoFitWidth="0" ss:Width="70"/>
                 <Column ss:AutoFitWidth="0" ss:Width="130"/>
                 <Column ss:AutoFitWidth="0" ss:Width="90"/>
                 <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Column ss:AutoFitWidth="0" ss:Width="90"/>
                 <Column ss:AutoFitWidth="0" ss:Width="90"/>
-                <Row ss:AutoFitHeight="0" ss:Height="40">
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Máquina</Data></Cell>
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Analista</Data></Cell>
+                <Column ss:AutoFitWidth="0" ss:Width="100"/>
+                <Column ss:AutoFitWidth="0" ss:Width="140"/>
+                <Row ss:AutoFitHeight="0" ss:Height="40">                
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Fecha</Data></Cell>
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Columna</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Cód. Interno Columna</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Platos Teóricos (N)</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Tiempo de Retención (min)</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Resolución (R)</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Tailing (T)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Equipo</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Método</Data></Cell>
                </Row>');
                 
                 foreach($registros as $registro) {
@@ -182,14 +172,14 @@ class reporte_columnasActions extends sfActions
                         $columna  = ColumnaPeer::retrieveByPk($col_codigo);
                         
 			$this->renderText('<Row>			
-			<Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>
-                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerAnalista().'</Data></Cell>
                         <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumFecha('d-m-Y').'</Data></Cell>
-			<Cell ss:StyleID="s64"><Data ss:Type="String">'.$columna->getColConsecutivo().' - '.$columna->getColMarca().'</Data></Cell>
+			<Cell ss:StyleID="s64"><Data ss:Type="String">'.$columna->getColConsecutivo().'</Data></Cell>
 			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumPlatosTeoricos(), 2, '.', '').'</Data></Cell>
 			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTiempoRetencion(), 2, '.', '').'</Data></Cell>
 			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumResolucion(), 2, '.', '').'</Data></Cell>
-			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTailing(), 2, '.', '').'</Data></Cell>			
+			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTailing(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>
+                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMetodo().'</Data></Cell>
 			</Row>');			
 		}
                 
@@ -248,7 +238,7 @@ class reporte_columnasActions extends sfActions
         
 
 	/**
-	 *Esta funcion retorna un listado con información de las columnas utilizadas
+	 * Esta funcion retorna un listado con información de las columnas utilizadas
 	*/
 	public function executeListarReporteColumnasUtilizadas(sfWebRequest $request)
 	{
@@ -263,13 +253,13 @@ class reporte_columnasActions extends sfActions
 			foreach($datos_columnas as $temporal)
 			{
                                 $datos[$fila]['rum_col_maquina'] = $temporal->obtenerMaquina();
-                                $datos[$fila]['rum_col_analista'] = $temporal->obtenerAnalista();
+                                $datos[$fila]['rum_col_metodo'] = $temporal->obtenerMetodo();
                                 $datos[$fila]['rum_col_fecha'] = $temporal->getRumFecha();				
 
 				$col_codigo = $temporal -> getRumColCodigo();
 				$columna  = ColumnaPeer::retrieveByPk($col_codigo);
 				if($columna){
-					$datos[$fila]['rum_col_nombre'] = $columna->getColConsecutivo().' - '.$columna->getColMarca();
+					$datos[$fila]['rum_col_nombre'] = $columna->getColConsecutivo();
 				}
 
 				$datos[$fila]['rum_col_platos_teoricos'] = number_format($temporal->getRumPlatosTeoricos(), 2, '.', '');
@@ -329,6 +319,11 @@ class reporte_columnasActions extends sfActions
 
             return $this->renderText($xml);
 	}
+        
+        //Consultar Platos Teóricos por Columna
+        public function consultarPlatosTeoricos() {
+            
+        }
         
         //Grafico Tiempo de Retención
 	public function executeGenerarDatosTiempoRetencion(sfWebRequest $request)
@@ -445,13 +440,13 @@ class reporte_columnasActions extends sfActions
 	}
 
 	/**
-	 *Esta funcion retorna un listado de los analistas
+	 * Esta funcion retorna un listado de los metodos
 	*/
-	public function executeListarAnalistas(sfWebRequest $request)
+	public function executeListarMetodos(sfWebRequest $request)
 	{
 
 		$salida='({"total":"0", "results":""})';
-		$datos=EmpleadoPeer::listarAnalistas();
+		$datos=  MetodoPeer::listarMetodosActivos();
 		$cant=count($datos);
 		if (count($datos)>0){
 			$jsonresult = json_encode($datos);
@@ -459,21 +454,6 @@ class reporte_columnasActions extends sfActions
 		}
 		return $this->renderText($salida);	
         }
-
-        /**
-	 *Esta funcion retorna un listado con los equipos activos
-	*/
-        public function executeListarEquiposActivos(sfWebRequest $request)
-        {
-                $salida = '({"total":"0", "results":""})';
-                $datos = MaquinaPeer::listarEquiposActivos();
-                $cant = count($datos);
-                if (count($datos)>0){
-                        $jsonresult = json_encode($datos);
-                        $salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-                }
-                return $this->renderText($salida);
-        }        
                 
         //Reemplaza el número del mes por el nombre
         public function mes($fecha_original) {

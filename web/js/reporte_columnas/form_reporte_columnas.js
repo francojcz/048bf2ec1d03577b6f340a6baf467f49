@@ -1,102 +1,34 @@
 Ext.onReady(function(){
-    var reporcol_analista_codigo_datastore = new Ext.data.JsonStore({
-        id: 'reporcol_analista_codigo_datastore',
-        url: getAbsoluteUrl('reporte_columnas', 'listarAnalistas'),
+    var reporcol_metodo_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_metodo_codigo_datastore',
+        url: getAbsoluteUrl('reporte_columnas', 'listarMetodos'),
         root: 'results',
         totalProperty: 'total',
         fields: [{
-            name: 'empl_usu_codigo',
+            name: 'met_codigo',
             type: 'string'
         }, {
-            name: 'empl_nombre_completo',
+            name: 'met_nombre',
             type: 'string'
         }, ]
     });
-    reporcol_analista_codigo_datastore.load();    
+    reporcol_metodo_codigo_datastore.load();    
     
-    var reporcol_analista_codigo_combobox = new Ext.form.ComboBox({
+    var reporcol_metodo_codigo_combobox = new Ext.form.ComboBox({
         xtype: 'combo',
-        store: reporcol_analista_codigo_datastore,
-        hiddenName: 'analista_codigo',
-        name: 'reporcol_analista_codigo_combobox',
-        id: 'reporcol_analista_codigo_combobox',
+        store: reporcol_metodo_codigo_datastore,
+        hiddenName: 'metodo_codigo',
+        name: 'reporcol_metodo_codigo_combobox',
+        id: 'reporcol_metodo_codigo_combobox',
         mode: 'local',
-        valueField: 'empl_usu_codigo',
+        valueField: 'met_codigo',
         forceSelection: true,
-        displayField: 'empl_nombre_completo',
+        displayField: 'met_nombre',
         triggerAction: 'all',
-        emptyText: 'Seleccione un analista...',
+        emptyText: 'Seleccione un método...',
         selectOnFocus: true
     });
     
-    
-    var reporcol_maquina_codigo_datastore = new Ext.data.JsonStore({
-        id: 'reporcol_maquina_codigo_datastore',
-        url: getAbsoluteUrl('reporte_columnas', 'listarEquiposActivos'),
-        root: 'results',
-        totalProperty: 'total',
-        fields: [{
-            name: 'maq_codigo',
-            type: 'string'
-        }, {
-            name: 'maq_nombre',
-            type: 'string'
-        }, ]
-    });
-    reporcol_maquina_codigo_datastore.load();
-    
-/**********************************************************************/
-//Cambios: 28 de febrero de 2014
-//Interfaz para seleccionar los equipos a filtrar en el reporte
-var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
-        singleSelect:false
-});
-
-var maquina_colmodel = new Ext.grid.ColumnModel({
-        defaults:{sortable: true, locked: false, resizable: true},
-        columns:[
-            maquina_selmodel,
-            { header: "Id", width: 30, dataIndex: 'maq_codigo', hidden:true},
-            { header: "Nombre del Equipo", width: 430, dataIndex: 'maq_nombre'}
-        ]
-});
-
-var maquinas_gridpanel = new Ext.grid.GridPanel({
-        id: 'maquinas_gridpanel',
-        stripeRows:true,
-        frame: true,
-        ds: reporcol_maquina_codigo_datastore,
-        cm: maquina_colmodel,
-        sm: maquina_selmodel
-});
-
-var win = new Ext.Window(
-{
-    layout : 'fit',
-    width : 500,
-    height : 400,
-    closeAction : 'hide',
-    plain : true,
-    title : 'Equipos',
-    items : maquinas_gridpanel,
-    buttons : [
-    {
-          text : 'Aceptar',
-          handler : function()
-          {
-            win.hide();
-        }
-    }],
-    listeners :
-    {
-          hide : function()
-          {
-            Ext.getBody().unmask();
-          }
-    }
-});
-/**********************************************************************/  
-          
     var reporcol_desde_fecha_datefield = new Ext.form.DateField({
         xtype: 'datefield',
         format: 'Y-m-d',
@@ -127,23 +59,23 @@ var win = new Ext.Window(
                 xtype: 'displayfield',
                 value: 'Hasta',
                 style: 'padding: 0px 0px 0px 20px'
-            }, reporcol_hasta_fecha_datefield, {
+            }, reporcol_hasta_fecha_datefield]
+        }, {
+            xtype: 'compositefield',
+            fieldLabel: '',
+            hideLabel: true,
+            items: [{
+                xtype: 'displayfield',
+                value: 'Método'
+            }, reporcol_metodo_codigo_combobox, {
                 xtype: 'button',
                 style: 'padding: 0px 0px 0px 20px',
                 iconCls: 'exportar_excel',
                 text: 'Guardar en formato Excel',
                 handler: function(){
                     redirigirSiSesionExpiro();
-                    
-                    //Codigos de los equipos seleccionados
-                    var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
-                    var equiposAFiltrar = [];
-                    for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
-                            equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
-                    }
-                    var arrayEquipos = Ext.encode(equiposAFiltrar);
 
-                    var analista_codigo = reporcol_analista_codigo_combobox.getValue();        
+                    var metodo_codigo = reporcol_metodo_codigo_combobox.getValue();        
 
                     var desde = '';
                     if (reporcol_desde_fecha_datefield.getValue() != '') {
@@ -154,25 +86,8 @@ var win = new Ext.Window(
                         hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
                     }
 
-                    var params = 'cods_equipos=' + arrayEquipos + '&analista_codigo=' + analista_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
+                    var params = 'metodo_codigo=' + metodo_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
                     window.location = getAbsoluteUrl('reporte_columnas', 'exportar') + '?' + params;                   
-                }
-            }]
-        }, {
-            xtype: 'compositefield',
-            fieldLabel: '',
-            hideLabel: true,
-            items: [{
-                xtype: 'displayfield',
-                value: 'Analista'
-            }, reporcol_analista_codigo_combobox, {
-                text: 'Seleccionar Equipos',
-                xtype: 'button',
-                iconCls: 'equipo',
-                style: 'padding: 0px 0px 0px 20px',
-                handler: function(){
-                    Ext.getBody().mask();
-                    win.show();
                 }
             }, {
                 text: 'Buscar',
@@ -189,18 +104,9 @@ var win = new Ext.Window(
                         hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
                     }
                     
-                    //Codigos de los equipos seleccionados
-                    var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
-                    var equiposAFiltrar = [];
-                    for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
-                            equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
-                    }
-                    var arrayEquipos = Ext.encode(equiposAFiltrar);
-                    
                     reporcol_datastore.reload({
                         params: {
-                            cods_equipos: arrayEquipos,
-                            analista_codigo: reporcol_analista_codigo_combobox.getValue(),
+                            metodo_codigo: reporcol_metodo_codigo_combobox.getValue(),
                             desde_fecha: desde,
                             hasta_fecha: hasta
                         }
@@ -226,7 +132,7 @@ var win = new Ext.Window(
             name: 'rum_col_maquina',
             type: 'string'
         }, {
-            name: 'rum_col_analista',
+            name: 'rum_col_metodo',
             type: 'string'
         }, {
             name: 'rum_col_fecha',
@@ -258,45 +164,45 @@ var win = new Ext.Window(
             resizable: true
         },
         columns: [{
-            header: "M&aacute;quina",
-            width: 130,
-            align : 'center',
-            dataIndex: 'rum_col_maquina'
-        }, {
-            header: "Analista",
-            width: 130,
-            align : 'center',
-            dataIndex: 'rum_col_analista'
-        }, {
             header: "Fecha",
-            width: 80,
+            width: 90,
             align : 'center',
             dataIndex: 'rum_col_fecha'
         }, {
-            header: "Columna",
-            width: 140,
+            header: "Cód. Interno Columna",
+            width: 120,
             align : 'center',
             dataIndex: 'rum_col_nombre'
-        },{
+        }, {
             header: "Platos Te&oacute;ricos (N)",
             width: 120,
             align : 'center',
             dataIndex: 'rum_col_platos_teoricos'
-        },{
+        }, {
             header: "Tiempo Retenci&oacute;n (min)",
             width: 130,
             align : 'center',
             dataIndex: 'rum_col_tiempo_retencion'
-        },{
+        }, {
             header: "Resoluci&oacute;n (R)",
             width: 120,
             align : 'center',
             dataIndex: 'rum_col_resolucion'
-        },{
-            header: "Tailing (T)",
+        }, {
+            header: "Factor de Cola (T)",
             width: 120,
             align : 'center',
             dataIndex: 'rum_col_tailing'
+        }, {
+            header: "Equipo",
+            width: 150,
+            align : 'center',
+            dataIndex: 'rum_col_maquina'
+        }, {
+            header: "Método",
+            width: 160,
+            align : 'center',
+            dataIndex: 'rum_col_metodo'
         }]
     });
     
@@ -331,7 +237,7 @@ var win = new Ext.Window(
                 contentEl: 'div_reporte_columnas_platos_teoricos'
             }, {
                 xtype: 'panel',
-                title: 'Tiempo Retención',
+                title: 'Tiempo de Retención',
                 contentEl: 'div_reporte_columnas_tiempo_retencion'
             }, {
                 xtype: 'panel',
@@ -339,7 +245,7 @@ var win = new Ext.Window(
                 contentEl: 'div_reporte_columnas_resolucion'
             }, {
                 xtype: 'panel',
-                title: 'Tailing',
+                title: 'Factor de Cola',
                 contentEl: 'div_reporte_columnas_tailing'
             }],
             listeners: {
@@ -355,15 +261,7 @@ var win = new Ext.Window(
     function reporcol_cargardatosreportes(){
         redirigirSiSesionExpiro();
         
-        //Codigos de los equipos seleccionados
-        var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
-        var equiposAFiltrar = [];
-        for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
-                equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
-        }
-        var arrayEquipos = Ext.encode(equiposAFiltrar);
-        
-        var analista_codigo = reporcol_analista_codigo_combobox.getValue();        
+        var metodo_codigo = reporcol_metodo_codigo_combobox.getValue();        
         
         var desde = '';
         if (reporcol_desde_fecha_datefield.getValue() != '') {
@@ -374,7 +272,7 @@ var win = new Ext.Window(
             hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
         }
         
-        var params = '?cods_equipos=' + arrayEquipos + '&analista_codigo=' + analista_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
+        var params = '?metodo_codigo=' + metodo_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
         
         //Platos Teóricos
         var reporcol_platos_teoricos = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
