@@ -23,6 +23,15 @@ var crud_modelo_datastore = new Ext.data.Store({
         name: 'mod_nombre',
         type: 'string'
     }, {
+        name: 'mod_marca',
+        type: 'int'
+    }, {
+        name: 'mod_marca_nombre',
+        type: 'string'
+    }, {
+        name: 'mod_eliminado',
+        type: 'string'
+    }, {
         name: 'mod_fecha_registro_sistema',
         type: 'string'
     }, {
@@ -95,12 +104,13 @@ var mod_marca = new Ext.form.ComboBox({
     store: crud_marca_datastore,
     hiddenName: 'mod_marca',
     name: 'mod_marca',
+    id: 'mod_marca',
     mode: 'local',
     valueField: 'mar_codigo',
     forceSelection: true,
     displayField: 'mar_nombre',
     triggerAction: 'all',
-    emptyText: 'Seleccione una marca',
+    emptyText: 'Seleccione ...',
     selectOnFocus: true,
     listeners: {
             focus : function(){
@@ -193,9 +203,13 @@ var crud_modelo_colmodel = new Ext.grid.ColumnModel({
         width: 30,
         dataIndex: 'mod_codigo'
     }, {
-        header: "Nombre",
+        header: "Nombre Modelo",
         width: 150,
         dataIndex: 'mod_nombre'
+    }, {
+        header: "Nombre Marca",
+        width: 120,
+        dataIndex: 'mod_marca_nombre'
     }, {
         header: "Creado por",
         width: 120,

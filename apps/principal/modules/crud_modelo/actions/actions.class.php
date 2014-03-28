@@ -98,7 +98,11 @@ class crud_modeloActions extends sfActions
 			foreach($modelo as $temporal)
 			{
 				$datos[$fila]['mod_codigo']=$temporal->getModCodigo();
-				$datos[$fila]['mod_nombre'] = $temporal->getModNombre();                                
+				$datos[$fila]['mod_nombre'] = $temporal->getModNombre();
+                                $datos[$fila]['mod_marca'] = $temporal->getModMarCodigo();
+                                
+                                $marca = MarcaPeer::retrieveByPK($temporal->getModMarCodigo());
+                                $datos[$fila]['mod_marca_nombre'] = $marca->getMarNombre();                               
 				
 				$datos[$fila]['mod_fecha_registro_sistema'] = $temporal->getModFechaRegistroSistema();
 				$datos[$fila]['mod_fecha_actualizacion'] = $temporal->getModFechaActualizacion();				
