@@ -804,6 +804,46 @@ CREATE TABLE `modelo`
 );
 
 #-----------------------------------------------------------------------------
+#-- fase_ligada
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `fase_ligada`;
+
+
+CREATE TABLE `fase_ligada`
+(
+	`fase_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
+	`fase_nombre` VARCHAR(200),
+        `fase_eliminado` SMALLINT(6),
+        `fase_fecha_registro_sistema` DATETIME,
+        `fase_usu_crea` INTEGER(11),
+        `fase_fecha_actualizacion` DATETIME,
+        `fase_usu_actualiza` INTEGER(11),
+        `fase_causa_eliminacion` VARCHAR(250),
+	`fase_causa_actualizacion` VARCHAR(250),
+        `fase_mod_codigo` INTEGER(11),
+	PRIMARY KEY (`fase_codigo`),
+        KEY `FK_reference_1`(`fase_usu_crea`),
+        KEY `FK_reference_2`(`fase_usu_actualiza`),
+        KEY `FK_reference_3`(`fase_mod_codigo`),
+        CONSTRAINT `fase_ligada_FK_1`
+		FOREIGN KEY (`fase_usu_crea`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `fase_ligada_FK_2`
+		FOREIGN KEY (`fase_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `fase_ligada_FK_3`
+		FOREIGN KEY (`fase_mod_codigo`)
+		REFERENCES `modelo` (`mod_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
+#-----------------------------------------------------------------------------
 #-- columna
 #-----------------------------------------------------------------------------
 

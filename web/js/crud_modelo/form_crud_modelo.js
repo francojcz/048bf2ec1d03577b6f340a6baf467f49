@@ -157,7 +157,7 @@ var crud_modelo_formpanel = new Ext.FormPanel({
     height: 470,
     layout: 'form',
     bodyStyle: 'padding:10px;',
-    labelWidth: 120,
+    labelWidth: 140,
     defaults: {
         anchor: '98%'
     },
@@ -393,7 +393,6 @@ function crud_modelo_eliminar(){
 function crud_modelo_agregar(btn, ev){
     crud_modelo_formpanel.getForm().reset();
     Ext.getCmp('crud_modelo_actualizar_boton').setText('Guardar');
-    
 }
 
 

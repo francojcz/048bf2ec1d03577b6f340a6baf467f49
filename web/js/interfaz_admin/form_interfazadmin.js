@@ -160,6 +160,20 @@ var form_interfazdministrador = function(){
                                 }
                             }]
                         }, {
+                            title: 'Fase Ligada',
+                            tabTip: 'Fase Ligada, utilice esto para registrar las fases ligadas de las columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            iconCls: 'x-icon-maestra',
+                            items: [{
+                                frame: true,
+                                autoLoad: {
+                                    url: getAbsoluteUrl('crud_faseligada', 'index'),
+                                    scripts: true,
+                                    scope: this
+                                }
+                            }]
+                        }, {
                             title: 'Columnas',
                             tabTip: 'Manejo de columnas',
                             border: false,
