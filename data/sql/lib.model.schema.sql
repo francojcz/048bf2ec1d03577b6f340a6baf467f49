@@ -728,6 +728,81 @@ CREATE TABLE `usuario`
 		ON DELETE RESTRICT
 );
 
+#Cambios: 24 de febrero de 2014
+
+#-----------------------------------------------------------------------------
+#-- marca
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `marca`;
+
+
+CREATE TABLE `marca`
+(
+	`mar_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
+	`mar_nombre` VARCHAR(200),
+	`mar_fecha_registro_sistema` DATETIME,
+	`mar_usu_crea` INTEGER(11),
+	`mar_usu_actualiza` INTEGER(11),
+	`mar_fecha_actualizacion` DATETIME,
+	`mar_eliminado` SMALLINT(6),
+	`mar_causa_eliminacion` VARCHAR(250),
+	`mar_causa_actualizacion` VARCHAR(250),
+	PRIMARY KEY (`mar_codigo`),
+	KEY `FK_reference_1`(`mar_usu_crea`),
+	KEY `FK_reference_2`(`mar_usu_actualiza`),
+	CONSTRAINT `marca_FK_1`
+		FOREIGN KEY (`mar_usu_crea`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+	CONSTRAINT `marca_FK_2`
+		FOREIGN KEY (`mar_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
+#-----------------------------------------------------------------------------
+#-- modelo
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `modelo`;
+
+
+CREATE TABLE `modelo`
+(
+	`mod_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
+	`mod_nombre` VARCHAR(200),
+        `mod_eliminado` SMALLINT(6),
+        `mod_fecha_registro_sistema` DATETIME,
+        `mod_usu_crea` INTEGER(11),
+        `mod_fecha_actualizacion` DATETIME,
+        `mod_usu_actualiza` INTEGER(11),
+        `mod_causa_eliminacion` VARCHAR(250),
+	`mod_causa_actualizacion` VARCHAR(250),
+        `mod_mar_codigo` INTEGER(11),
+	PRIMARY KEY (`mod_codigo`),
+        KEY `FK_reference_1`(`mod_usu_crea`),
+        KEY `FK_reference_2`(`mod_usu_actualiza`),
+        KEY `FK_reference_3`(`mod_mar_codigo`),
+        CONSTRAINT `modelo_FK_1`
+		FOREIGN KEY (`mod_usu_crea`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `modelo_FK_2`
+		FOREIGN KEY (`mod_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `modelo_FK_3`
+		FOREIGN KEY (`mod_mar_codigo`)
+		REFERENCES `marca` (`mar_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
 #-----------------------------------------------------------------------------
 #-- columna
 #-----------------------------------------------------------------------------
@@ -759,39 +834,6 @@ CREATE TABLE `columna`
 		ON DELETE RESTRICT,
         CONSTRAINT `columna_FK_2`
 		FOREIGN KEY (`col_usu_actualiza`)
-		REFERENCES `usuario` (`usu_codigo`)
-		ON UPDATE RESTRICT
-		ON DELETE RESTRICT
-);
-
-#-----------------------------------------------------------------------------
-#-- marca
-#-----------------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `marca`;
-
-
-CREATE TABLE `marca`
-(
-	`mar_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
-	`mar_nombre` VARCHAR(200),
-	`mar_fecha_registro_sistema` DATETIME,
-	`mar_usu_crea` INTEGER(11),
-	`mar_usu_actualiza` INTEGER(11),
-	`mar_fecha_actualizacion` DATETIME,
-	`mar_eliminado` SMALLINT(6),
-	`mar_causa_eliminacion` VARCHAR(250),
-	`mar_causa_actualizacion` VARCHAR(250),
-	PRIMARY KEY (`mar_codigo`),
-	KEY `FK_reference_1`(`mar_usu_crea`),
-	KEY `FK_reference_2`(`mar_usu_actualiza`),
-	CONSTRAINT `marca_FK_1`
-		FOREIGN KEY (`mar_usu_crea`)
-		REFERENCES `usuario` (`usu_codigo`)
-		ON UPDATE RESTRICT
-		ON DELETE RESTRICT,
-	CONSTRAINT `marca_FK_2`
-		FOREIGN KEY (`mar_usu_actualiza`)
 		REFERENCES `usuario` (`usu_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT

@@ -21,7 +21,7 @@ class crud_columnaActions extends sfActions
   }
   
          /**
-	 *Esta funcion que crear y actualizar una columna
+	 *Esta funcion permite crear y actualizar una columna
 	 */
 	public function executeActualizarColumna(sfWebRequest $request)
 	{
@@ -69,6 +69,9 @@ class crud_columnaActions extends sfActions
 		return $this->renderText($salida);
 	}        
         
+        /**
+	 *Esta funcion permite listar las columnas registradas en el sistema
+	*/        
         public function executeListarColumna(sfWebRequest $request)
 	{
 		$salida='({"total":"0", "results":""})';
@@ -125,6 +128,9 @@ class crud_columnaActions extends sfActions
 		return $this->renderText($salida);
 	}
         
+        /**
+	 *Esta funcion permite eliminar una columna
+	*/
         public function executeEliminarColumna(sfWebRequest $request)
 	{
 		$salida = '';
@@ -160,6 +166,9 @@ class crud_columnaActions extends sfActions
 		return $this->renderText($salida);
 	}
         
+        /**
+	 *Esta funcion permite restablecer una columna eliminado
+	*/
         public function executeRestablecerColumna()
 	{
 		$salida = "({success: false, errors: { reason: 'No se pudo restablecer la columna'}})";

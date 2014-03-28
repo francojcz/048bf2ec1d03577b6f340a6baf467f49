@@ -146,6 +146,20 @@ var form_interfazdministrador = function(){
                                 }
                             }]
                         }, {
+                            title: 'Modelo',
+                            tabTip: 'Modelo de Columna, utilice esto para registrar los modelos de las columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            iconCls: 'x-icon-maestra',
+                            items: [{
+                                frame: true,
+                                autoLoad: {
+                                    url: getAbsoluteUrl('crud_modelo', 'index'),
+                                    scripts: true,
+                                    scope: this
+                                }
+                            }]
+                        }, {
                             title: 'Columnas',
                             tabTip: 'Manejo de columnas',
                             border: false,

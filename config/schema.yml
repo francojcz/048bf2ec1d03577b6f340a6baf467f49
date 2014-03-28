@@ -240,6 +240,19 @@ propel:
     met_tc_uniformidad: { phpName: MetTcUniformidad, type: DECIMAL, size: '12', scale: '4', required: false }
     met_mantenimiento: { phpName: MetMantenimiento, type: SMALLINT, size: '6', required: false }
     _indexes: { FK_reference_27: [met_usu_crea], FK_reference_28: [met_usu_actualiza] }
+  modelo:
+    _attributes: { phpName: Modelo }
+    mod_codigo: { phpName: ModCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    mod_nombre: { phpName: ModNombre, type: VARCHAR, size: '200', required: false }
+    mod_eliminado: { phpName: ModEliminado, type: SMALLINT, size: '6', required: false }
+    mod_fecha_registro_sistema: { phpName: ModFechaRegistroSistema, type: TIMESTAMP, required: false }
+    mod_usu_crea: { phpName: ModUsuCrea, type: INTEGER, size: '11', required: false }
+    mod_fecha_actualizacion: { phpName: ModFechaActualizacion, type: TIMESTAMP, required: false }
+    mod_usu_actualiza: { phpName: ModUsuActualiza, type: INTEGER, size: '11', required: false }
+    mod_causa_eliminacion: { phpName: ModCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    mod_causa_actualizacion: { phpName: ModCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    mod_mar_codigo: { phpName: ModMarCodigo, type: INTEGER, size: '11', required: false }
+    _indexes: { FK_reference_1: [mod_usu_crea], FK_reference_2: [mod_usu_actualiza], FK_reference_3: [mod_mar_codigo] }
   perfil:
     _attributes: { phpName: Perfil }
     per_codigo: { phpName: PerCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
