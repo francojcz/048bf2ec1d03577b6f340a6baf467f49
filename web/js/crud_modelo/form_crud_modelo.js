@@ -329,6 +329,16 @@ var crud_modelo_gridpanel = new Ext.grid.GridPanel({
             }
         }
     }
+    ], plugins:[
+        new Ext.ux.grid.Search({
+                    mode:          'local',
+                    position:      top,
+                    searchText:    'Filtrar',
+                    iconCls:       'filtrar',
+                    selectAllText: 'Seleccionar todos',
+                    searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
+                    width:         120
+            })
     ]
 });
 

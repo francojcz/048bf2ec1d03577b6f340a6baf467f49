@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'empleado' table.
+ * Base static class for performing query and update operations on the 'dimension' table.
  *
  * 
  *
@@ -11,79 +11,64 @@
  *
  * @package    lib.model.om
  */
-abstract class BaseEmpleadoPeer {
+abstract class BaseDimensionPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'empleado';
+	const TABLE_NAME = 'dimension';
 
 	/** the related Propel class for this table */
-	const OM_CLASS = 'Empleado';
+	const OM_CLASS = 'Dimension';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'lib.model.Empleado';
+	const CLASS_DEFAULT = 'lib.model.Dimension';
 
 	/** the related TableMap class for this table */
-	const TM_CLASS = 'EmpleadoTableMap';
+	const TM_CLASS = 'DimensionTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 15;
+	const NUM_COLUMNS = 10;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
-	/** the column name for the EMPL_CODIGO field */
-	const EMPL_CODIGO = 'empleado.EMPL_CODIGO';
+	/** the column name for the DIM_CODIGO field */
+	const DIM_CODIGO = 'dimension.DIM_CODIGO';
 
-	/** the column name for the EMPL_EMP_CODIGO field */
-	const EMPL_EMP_CODIGO = 'empleado.EMPL_EMP_CODIGO';
+	/** the column name for the DIM_NOMBRE field */
+	const DIM_NOMBRE = 'dimension.DIM_NOMBRE';
 
-	/** the column name for the EMPL_TID_CODIGO field */
-	const EMPL_TID_CODIGO = 'empleado.EMPL_TID_CODIGO';
+	/** the column name for the DIM_ELIMINADO field */
+	const DIM_ELIMINADO = 'dimension.DIM_ELIMINADO';
 
-	/** the column name for the EMPL_USU_CODIGO field */
-	const EMPL_USU_CODIGO = 'empleado.EMPL_USU_CODIGO';
+	/** the column name for the DIM_FECHA_REGISTRO_SISTEMA field */
+	const DIM_FECHA_REGISTRO_SISTEMA = 'dimension.DIM_FECHA_REGISTRO_SISTEMA';
 
-	/** the column name for the EMPL_NOMBRES field */
-	const EMPL_NOMBRES = 'empleado.EMPL_NOMBRES';
+	/** the column name for the DIM_USU_CREA field */
+	const DIM_USU_CREA = 'dimension.DIM_USU_CREA';
 
-	/** the column name for the EMPL_APELLIDOS field */
-	const EMPL_APELLIDOS = 'empleado.EMPL_APELLIDOS';
+	/** the column name for the DIM_FECHA_ACTUALIZACION field */
+	const DIM_FECHA_ACTUALIZACION = 'dimension.DIM_FECHA_ACTUALIZACION';
 
-	/** the column name for the EMPL_NUMERO_IDENTIFICACION field */
-	const EMPL_NUMERO_IDENTIFICACION = 'empleado.EMPL_NUMERO_IDENTIFICACION';
+	/** the column name for the DIM_USU_ACTUALIZA field */
+	const DIM_USU_ACTUALIZA = 'dimension.DIM_USU_ACTUALIZA';
 
-	/** the column name for the EMPL_URL_FOTO field */
-	const EMPL_URL_FOTO = 'empleado.EMPL_URL_FOTO';
+	/** the column name for the DIM_CAUSA_ELIMINACION field */
+	const DIM_CAUSA_ELIMINACION = 'dimension.DIM_CAUSA_ELIMINACION';
 
-	/** the column name for the EMPL_FECHA_REGISTRO_SISTEMA field */
-	const EMPL_FECHA_REGISTRO_SISTEMA = 'empleado.EMPL_FECHA_REGISTRO_SISTEMA';
+	/** the column name for the DIM_CAUSA_ACTUALIZACION field */
+	const DIM_CAUSA_ACTUALIZACION = 'dimension.DIM_CAUSA_ACTUALIZACION';
 
-	/** the column name for the EMPL_USU_CREA field */
-	const EMPL_USU_CREA = 'empleado.EMPL_USU_CREA';
-
-	/** the column name for the EMPL_USU_ACTUALIZA field */
-	const EMPL_USU_ACTUALIZA = 'empleado.EMPL_USU_ACTUALIZA';
-
-	/** the column name for the EMPL_FECHA_ACTUALIZACION field */
-	const EMPL_FECHA_ACTUALIZACION = 'empleado.EMPL_FECHA_ACTUALIZACION';
-
-	/** the column name for the EMPL_ELIMINADO field */
-	const EMPL_ELIMINADO = 'empleado.EMPL_ELIMINADO';
-
-	/** the column name for the EMPL_CAUSA_ELIMINACION field */
-	const EMPL_CAUSA_ELIMINACION = 'empleado.EMPL_CAUSA_ELIMINACION';
-
-	/** the column name for the EMPL_CAUSA_ACTUALIZACION field */
-	const EMPL_CAUSA_ACTUALIZACION = 'empleado.EMPL_CAUSA_ACTUALIZACION';
+	/** the column name for the DIM_FASE_CODIGO field */
+	const DIM_FASE_CODIGO = 'dimension.DIM_FASE_CODIGO';
 
 	/**
-	 * An identiy map to hold any loaded instances of Empleado objects.
+	 * An identiy map to hold any loaded instances of Dimension objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array Empleado[]
+	 * @var        array Dimension[]
 	 */
 	public static $instances = array();
 
@@ -102,11 +87,11 @@ abstract class BaseEmpleadoPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('EmplCodigo', 'EmplEmpCodigo', 'EmplTidCodigo', 'EmplUsuCodigo', 'EmplNombres', 'EmplApellidos', 'EmplNumeroIdentificacion', 'EmplUrlFoto', 'EmplFechaRegistroSistema', 'EmplUsuCrea', 'EmplUsuActualiza', 'EmplFechaActualizacion', 'EmplEliminado', 'EmplCausaEliminacion', 'EmplCausaActualizacion', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('emplCodigo', 'emplEmpCodigo', 'emplTidCodigo', 'emplUsuCodigo', 'emplNombres', 'emplApellidos', 'emplNumeroIdentificacion', 'emplUrlFoto', 'emplFechaRegistroSistema', 'emplUsuCrea', 'emplUsuActualiza', 'emplFechaActualizacion', 'emplEliminado', 'emplCausaEliminacion', 'emplCausaActualizacion', ),
-		BasePeer::TYPE_COLNAME => array (self::EMPL_CODIGO, self::EMPL_EMP_CODIGO, self::EMPL_TID_CODIGO, self::EMPL_USU_CODIGO, self::EMPL_NOMBRES, self::EMPL_APELLIDOS, self::EMPL_NUMERO_IDENTIFICACION, self::EMPL_URL_FOTO, self::EMPL_FECHA_REGISTRO_SISTEMA, self::EMPL_USU_CREA, self::EMPL_USU_ACTUALIZA, self::EMPL_FECHA_ACTUALIZACION, self::EMPL_ELIMINADO, self::EMPL_CAUSA_ELIMINACION, self::EMPL_CAUSA_ACTUALIZACION, ),
-		BasePeer::TYPE_FIELDNAME => array ('empl_codigo', 'empl_emp_codigo', 'empl_tid_codigo', 'empl_usu_codigo', 'empl_nombres', 'empl_apellidos', 'empl_numero_identificacion', 'empl_url_foto', 'empl_fecha_registro_sistema', 'empl_usu_crea', 'empl_usu_actualiza', 'empl_fecha_actualizacion', 'empl_eliminado', 'empl_causa_eliminacion', 'empl_causa_actualizacion', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('DimCodigo', 'DimNombre', 'DimEliminado', 'DimFechaRegistroSistema', 'DimUsuCrea', 'DimFechaActualizacion', 'DimUsuActualiza', 'DimCausaEliminacion', 'DimCausaActualizacion', 'DimFaseCodigo', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('dimCodigo', 'dimNombre', 'dimEliminado', 'dimFechaRegistroSistema', 'dimUsuCrea', 'dimFechaActualizacion', 'dimUsuActualiza', 'dimCausaEliminacion', 'dimCausaActualizacion', 'dimFaseCodigo', ),
+		BasePeer::TYPE_COLNAME => array (self::DIM_CODIGO, self::DIM_NOMBRE, self::DIM_ELIMINADO, self::DIM_FECHA_REGISTRO_SISTEMA, self::DIM_USU_CREA, self::DIM_FECHA_ACTUALIZACION, self::DIM_USU_ACTUALIZA, self::DIM_CAUSA_ELIMINACION, self::DIM_CAUSA_ACTUALIZACION, self::DIM_FASE_CODIGO, ),
+		BasePeer::TYPE_FIELDNAME => array ('dim_codigo', 'dim_nombre', 'dim_eliminado', 'dim_fecha_registro_sistema', 'dim_usu_crea', 'dim_fecha_actualizacion', 'dim_usu_actualiza', 'dim_causa_eliminacion', 'dim_causa_actualizacion', 'dim_fase_codigo', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
 	);
 
 	/**
@@ -116,11 +101,11 @@ abstract class BaseEmpleadoPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('EmplCodigo' => 0, 'EmplEmpCodigo' => 1, 'EmplTidCodigo' => 2, 'EmplUsuCodigo' => 3, 'EmplNombres' => 4, 'EmplApellidos' => 5, 'EmplNumeroIdentificacion' => 6, 'EmplUrlFoto' => 7, 'EmplFechaRegistroSistema' => 8, 'EmplUsuCrea' => 9, 'EmplUsuActualiza' => 10, 'EmplFechaActualizacion' => 11, 'EmplEliminado' => 12, 'EmplCausaEliminacion' => 13, 'EmplCausaActualizacion' => 14, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('emplCodigo' => 0, 'emplEmpCodigo' => 1, 'emplTidCodigo' => 2, 'emplUsuCodigo' => 3, 'emplNombres' => 4, 'emplApellidos' => 5, 'emplNumeroIdentificacion' => 6, 'emplUrlFoto' => 7, 'emplFechaRegistroSistema' => 8, 'emplUsuCrea' => 9, 'emplUsuActualiza' => 10, 'emplFechaActualizacion' => 11, 'emplEliminado' => 12, 'emplCausaEliminacion' => 13, 'emplCausaActualizacion' => 14, ),
-		BasePeer::TYPE_COLNAME => array (self::EMPL_CODIGO => 0, self::EMPL_EMP_CODIGO => 1, self::EMPL_TID_CODIGO => 2, self::EMPL_USU_CODIGO => 3, self::EMPL_NOMBRES => 4, self::EMPL_APELLIDOS => 5, self::EMPL_NUMERO_IDENTIFICACION => 6, self::EMPL_URL_FOTO => 7, self::EMPL_FECHA_REGISTRO_SISTEMA => 8, self::EMPL_USU_CREA => 9, self::EMPL_USU_ACTUALIZA => 10, self::EMPL_FECHA_ACTUALIZACION => 11, self::EMPL_ELIMINADO => 12, self::EMPL_CAUSA_ELIMINACION => 13, self::EMPL_CAUSA_ACTUALIZACION => 14, ),
-		BasePeer::TYPE_FIELDNAME => array ('empl_codigo' => 0, 'empl_emp_codigo' => 1, 'empl_tid_codigo' => 2, 'empl_usu_codigo' => 3, 'empl_nombres' => 4, 'empl_apellidos' => 5, 'empl_numero_identificacion' => 6, 'empl_url_foto' => 7, 'empl_fecha_registro_sistema' => 8, 'empl_usu_crea' => 9, 'empl_usu_actualiza' => 10, 'empl_fecha_actualizacion' => 11, 'empl_eliminado' => 12, 'empl_causa_eliminacion' => 13, 'empl_causa_actualizacion' => 14, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('DimCodigo' => 0, 'DimNombre' => 1, 'DimEliminado' => 2, 'DimFechaRegistroSistema' => 3, 'DimUsuCrea' => 4, 'DimFechaActualizacion' => 5, 'DimUsuActualiza' => 6, 'DimCausaEliminacion' => 7, 'DimCausaActualizacion' => 8, 'DimFaseCodigo' => 9, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('dimCodigo' => 0, 'dimNombre' => 1, 'dimEliminado' => 2, 'dimFechaRegistroSistema' => 3, 'dimUsuCrea' => 4, 'dimFechaActualizacion' => 5, 'dimUsuActualiza' => 6, 'dimCausaEliminacion' => 7, 'dimCausaActualizacion' => 8, 'dimFaseCodigo' => 9, ),
+		BasePeer::TYPE_COLNAME => array (self::DIM_CODIGO => 0, self::DIM_NOMBRE => 1, self::DIM_ELIMINADO => 2, self::DIM_FECHA_REGISTRO_SISTEMA => 3, self::DIM_USU_CREA => 4, self::DIM_FECHA_ACTUALIZACION => 5, self::DIM_USU_ACTUALIZA => 6, self::DIM_CAUSA_ELIMINACION => 7, self::DIM_CAUSA_ACTUALIZACION => 8, self::DIM_FASE_CODIGO => 9, ),
+		BasePeer::TYPE_FIELDNAME => array ('dim_codigo' => 0, 'dim_nombre' => 1, 'dim_eliminado' => 2, 'dim_fecha_registro_sistema' => 3, 'dim_usu_crea' => 4, 'dim_fecha_actualizacion' => 5, 'dim_usu_actualiza' => 6, 'dim_causa_eliminacion' => 7, 'dim_causa_actualizacion' => 8, 'dim_fase_codigo' => 9, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
 	);
 
 	/**
@@ -169,12 +154,12 @@ abstract class BaseEmpleadoPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. EmpleadoPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. DimensionPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(EmpleadoPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(DimensionPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -190,21 +175,16 @@ abstract class BaseEmpleadoPeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_CODIGO);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_EMP_CODIGO);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_TID_CODIGO);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_USU_CODIGO);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_NOMBRES);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_APELLIDOS);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_NUMERO_IDENTIFICACION);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_URL_FOTO);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_FECHA_REGISTRO_SISTEMA);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_USU_CREA);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_USU_ACTUALIZA);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_FECHA_ACTUALIZACION);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_ELIMINADO);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_CAUSA_ELIMINACION);
-		$criteria->addSelectColumn(EmpleadoPeer::EMPL_CAUSA_ACTUALIZACION);
+		$criteria->addSelectColumn(DimensionPeer::DIM_CODIGO);
+		$criteria->addSelectColumn(DimensionPeer::DIM_NOMBRE);
+		$criteria->addSelectColumn(DimensionPeer::DIM_ELIMINADO);
+		$criteria->addSelectColumn(DimensionPeer::DIM_FECHA_REGISTRO_SISTEMA);
+		$criteria->addSelectColumn(DimensionPeer::DIM_USU_CREA);
+		$criteria->addSelectColumn(DimensionPeer::DIM_FECHA_ACTUALIZACION);
+		$criteria->addSelectColumn(DimensionPeer::DIM_USU_ACTUALIZA);
+		$criteria->addSelectColumn(DimensionPeer::DIM_CAUSA_ELIMINACION);
+		$criteria->addSelectColumn(DimensionPeer::DIM_CAUSA_ACTUALIZACION);
+		$criteria->addSelectColumn(DimensionPeer::DIM_FASE_CODIGO);
 	}
 
 	/**
@@ -223,26 +203,26 @@ abstract class BaseEmpleadoPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(EmpleadoPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(DimensionPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			EmpleadoPeer::addSelectColumns($criteria);
+			DimensionPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 
 		if ($con === null) {
-			$con = Propel::getConnection(EmpleadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DimensionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
 		{
-		  call_user_func($sf_hook, 'BaseEmpleadoPeer', $criteria, $con);
+		  call_user_func($sf_hook, 'BaseDimensionPeer', $criteria, $con);
 		}
 
 		// BasePeer returns a PDOStatement
@@ -261,7 +241,7 @@ abstract class BaseEmpleadoPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     Empleado
+	 * @return     Dimension
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -269,7 +249,7 @@ abstract class BaseEmpleadoPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = EmpleadoPeer::doSelect($critcopy, $con);
+		$objects = DimensionPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -286,7 +266,7 @@ abstract class BaseEmpleadoPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{
-		return EmpleadoPeer::populateObjects(EmpleadoPeer::doSelectStmt($criteria, $con));
+		return DimensionPeer::populateObjects(DimensionPeer::doSelectStmt($criteria, $con));
 	}
 	/**
 	 * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -304,12 +284,12 @@ abstract class BaseEmpleadoPeer {
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(EmpleadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DimensionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		if (!$criteria->hasSelectClause()) {
 			$criteria = clone $criteria;
-			EmpleadoPeer::addSelectColumns($criteria);
+			DimensionPeer::addSelectColumns($criteria);
 		}
 
 		// Set the correct dbName
@@ -317,7 +297,7 @@ abstract class BaseEmpleadoPeer {
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
 		{
-		  call_user_func($sf_hook, 'BaseEmpleadoPeer', $criteria, $con);
+		  call_user_func($sf_hook, 'BaseDimensionPeer', $criteria, $con);
 		}
 
 
@@ -333,14 +313,14 @@ abstract class BaseEmpleadoPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      Empleado $value A Empleado object.
+	 * @param      Dimension $value A Dimension object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(Empleado $obj, $key = null)
+	public static function addInstanceToPool(Dimension $obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
-				$key = (string) $obj->getEmplCodigo();
+				$key = (string) $obj->getDimCodigo();
 			} // if key === null
 			self::$instances[$key] = $obj;
 		}
@@ -354,18 +334,18 @@ abstract class BaseEmpleadoPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A Empleado object or a primary key value.
+	 * @param      mixed $value A Dimension object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof Empleado) {
-				$key = (string) $value->getEmplCodigo();
+			if (is_object($value) && $value instanceof Dimension) {
+				$key = (string) $value->getDimCodigo();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Empleado object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Dimension object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -380,7 +360,7 @@ abstract class BaseEmpleadoPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     Empleado Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     Dimension Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -404,7 +384,7 @@ abstract class BaseEmpleadoPeer {
 	}
 	
 	/**
-	 * Method to invalidate the instance pool of all tables related to empleado
+	 * Method to invalidate the instance pool of all tables related to dimension
 	 * by a foreign key with ON DELETE CASCADE
 	 */
 	public static function clearRelatedInstancePool()
@@ -442,11 +422,11 @@ abstract class BaseEmpleadoPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = EmpleadoPeer::getOMClass(false);
+		$cls = DimensionPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = EmpleadoPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = EmpleadoPeer::getInstanceFromPool($key))) {
+			$key = DimensionPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = DimensionPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -455,7 +435,7 @@ abstract class BaseEmpleadoPeer {
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
-				EmpleadoPeer::addInstanceToPool($obj, $key);
+				DimensionPeer::addInstanceToPool($obj, $key);
 			} // if key exists
 		}
 		$stmt->closeCursor();
@@ -478,10 +458,10 @@ abstract class BaseEmpleadoPeer {
 	 */
 	public static function buildTableMap()
 	{
-	  $dbMap = Propel::getDatabaseMap(BaseEmpleadoPeer::DATABASE_NAME);
-	  if (!$dbMap->hasTable(BaseEmpleadoPeer::TABLE_NAME))
+	  $dbMap = Propel::getDatabaseMap(BaseDimensionPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseDimensionPeer::TABLE_NAME))
 	  {
-	    $dbMap->addTableObject(new EmpleadoTableMap());
+	    $dbMap->addTableObject(new DimensionTableMap());
 	  }
 	}
 
@@ -498,13 +478,13 @@ abstract class BaseEmpleadoPeer {
 	 */
 	public static function getOMClass($withPrefix = true)
 	{
-		return $withPrefix ? EmpleadoPeer::CLASS_DEFAULT : EmpleadoPeer::OM_CLASS;
+		return $withPrefix ? DimensionPeer::CLASS_DEFAULT : DimensionPeer::OM_CLASS;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a Empleado or Criteria object.
+	 * Method perform an INSERT on the database, given a Dimension or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or Empleado object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or Dimension object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -513,26 +493,26 @@ abstract class BaseEmpleadoPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
     // symfony_behaviors behavior
-    foreach (sfMixer::getCallables('BaseEmpleadoPeer:doInsert:pre') as $sf_hook)
+    foreach (sfMixer::getCallables('BaseDimensionPeer:doInsert:pre') as $sf_hook)
     {
-      if (false !== $sf_hook_retval = call_user_func($sf_hook, 'BaseEmpleadoPeer', $values, $con))
+      if (false !== $sf_hook_retval = call_user_func($sf_hook, 'BaseDimensionPeer', $values, $con))
       {
         return $sf_hook_retval;
       }
     }
 
 		if ($con === null) {
-			$con = Propel::getConnection(EmpleadoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DimensionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from Empleado object
+			$criteria = $values->buildCriteria(); // build Criteria from Dimension object
 		}
 
-		if ($criteria->containsKey(EmpleadoPeer::EMPL_CODIGO) && $criteria->keyContainsValue(EmpleadoPeer::EMPL_CODIGO) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.EmpleadoPeer::EMPL_CODIGO.')');
+		if ($criteria->containsKey(DimensionPeer::DIM_CODIGO) && $criteria->keyContainsValue(DimensionPeer::DIM_CODIGO) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.DimensionPeer::DIM_CODIGO.')');
 		}
 
 
@@ -551,18 +531,18 @@ abstract class BaseEmpleadoPeer {
 		}
 
     // symfony_behaviors behavior
-    foreach (sfMixer::getCallables('BaseEmpleadoPeer:doInsert:post') as $sf_hook)
+    foreach (sfMixer::getCallables('BaseDimensionPeer:doInsert:post') as $sf_hook)
     {
-      call_user_func($sf_hook, 'BaseEmpleadoPeer', $values, $con, $pk);
+      call_user_func($sf_hook, 'BaseDimensionPeer', $values, $con, $pk);
     }
 
 		return $pk;
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a Empleado or Criteria object.
+	 * Method perform an UPDATE on the database, given a Dimension or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or Empleado object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or Dimension object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -571,16 +551,16 @@ abstract class BaseEmpleadoPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
     // symfony_behaviors behavior
-    foreach (sfMixer::getCallables('BaseEmpleadoPeer:doUpdate:pre') as $sf_hook)
+    foreach (sfMixer::getCallables('BaseDimensionPeer:doUpdate:pre') as $sf_hook)
     {
-      if (false !== $sf_hook_retval = call_user_func($sf_hook, 'BaseEmpleadoPeer', $values, $con))
+      if (false !== $sf_hook_retval = call_user_func($sf_hook, 'BaseDimensionPeer', $values, $con))
       {
         return $sf_hook_retval;
       }
     }
 
 		if ($con === null) {
-			$con = Propel::getConnection(EmpleadoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DimensionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -588,10 +568,10 @@ abstract class BaseEmpleadoPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(EmpleadoPeer::EMPL_CODIGO);
-			$selectCriteria->add(EmpleadoPeer::EMPL_CODIGO, $criteria->remove(EmpleadoPeer::EMPL_CODIGO), $comparison);
+			$comparison = $criteria->getComparison(DimensionPeer::DIM_CODIGO);
+			$selectCriteria->add(DimensionPeer::DIM_CODIGO, $criteria->remove(DimensionPeer::DIM_CODIGO), $comparison);
 
-		} else { // $values is Empleado object
+		} else { // $values is Dimension object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -602,35 +582,35 @@ abstract class BaseEmpleadoPeer {
 		$ret = BasePeer::doUpdate($selectCriteria, $criteria, $con);
 
     // symfony_behaviors behavior
-    foreach (sfMixer::getCallables('BaseEmpleadoPeer:doUpdate:post') as $sf_hook)
+    foreach (sfMixer::getCallables('BaseDimensionPeer:doUpdate:post') as $sf_hook)
     {
-      call_user_func($sf_hook, 'BaseEmpleadoPeer', $values, $con, $ret);
+      call_user_func($sf_hook, 'BaseDimensionPeer', $values, $con, $ret);
     }
 
     return $ret;
 	}
 
 	/**
-	 * Method to DELETE all rows from the empleado table.
+	 * Method to DELETE all rows from the dimension table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(EmpleadoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DimensionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(EmpleadoPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(DimensionPeer::TABLE_NAME, $con);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
 			// instances get re-added by the select statement contained therein).
-			EmpleadoPeer::clearInstancePool();
-			EmpleadoPeer::clearRelatedInstancePool();
+			DimensionPeer::clearInstancePool();
+			DimensionPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -640,9 +620,9 @@ abstract class BaseEmpleadoPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a Empleado or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a Dimension or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or Empleado object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or Dimension object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -653,27 +633,27 @@ abstract class BaseEmpleadoPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(EmpleadoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DimensionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			EmpleadoPeer::clearInstancePool();
+			DimensionPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof Empleado) { // it's a model object
+		} elseif ($values instanceof Dimension) { // it's a model object
 			// invalidate the cache for this single object
-			EmpleadoPeer::removeInstanceFromPool($values);
+			DimensionPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(EmpleadoPeer::EMPL_CODIGO, (array) $values, Criteria::IN);
+			$criteria->add(DimensionPeer::DIM_CODIGO, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				EmpleadoPeer::removeInstanceFromPool($singleval);
+				DimensionPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -688,7 +668,7 @@ abstract class BaseEmpleadoPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-			EmpleadoPeer::clearRelatedInstancePool();
+			DimensionPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -698,24 +678,24 @@ abstract class BaseEmpleadoPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given Empleado object.
+	 * Validates all modified columns of given Dimension object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      Empleado $obj The object to validate.
+	 * @param      Dimension $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(Empleado $obj, $cols = null)
+	public static function doValidate(Dimension $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(EmpleadoPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(EmpleadoPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(DimensionPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(DimensionPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -731,7 +711,7 @@ abstract class BaseEmpleadoPeer {
 
 		}
 
-		return BasePeer::doValidate(EmpleadoPeer::DATABASE_NAME, EmpleadoPeer::TABLE_NAME, $columns);
+		return BasePeer::doValidate(DimensionPeer::DATABASE_NAME, DimensionPeer::TABLE_NAME, $columns);
 	}
 
 	/**
@@ -739,23 +719,23 @@ abstract class BaseEmpleadoPeer {
 	 *
 	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     Empleado
+	 * @return     Dimension
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = EmpleadoPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = DimensionPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(EmpleadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DimensionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria = new Criteria(EmpleadoPeer::DATABASE_NAME);
-		$criteria->add(EmpleadoPeer::EMPL_CODIGO, $pk);
+		$criteria = new Criteria(DimensionPeer::DATABASE_NAME);
+		$criteria->add(DimensionPeer::DIM_CODIGO, $pk);
 
-		$v = EmpleadoPeer::doSelect($criteria, $con);
+		$v = DimensionPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -771,16 +751,16 @@ abstract class BaseEmpleadoPeer {
 	public static function retrieveByPKs($pks, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(EmpleadoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DimensionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		$objs = null;
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(EmpleadoPeer::DATABASE_NAME);
-			$criteria->add(EmpleadoPeer::EMPL_CODIGO, $pks, Criteria::IN);
-			$objs = EmpleadoPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(DimensionPeer::DATABASE_NAME);
+			$criteria->add(DimensionPeer::DIM_CODIGO, $pks, Criteria::IN);
+			$objs = DimensionPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
@@ -812,15 +792,15 @@ abstract class BaseEmpleadoPeer {
 	{
 	  if (preg_match('/^do(Select|Count)(Join(All(Except)?)?|Stmt)?/', $method, $match))
 	  {
-	    return sprintf('BaseEmpleadoPeer:%s:%1$s', 'Count' == $match[1] ? 'doCount' : $match[0]);
+	    return sprintf('BaseDimensionPeer:%s:%1$s', 'Count' == $match[1] ? 'doCount' : $match[0]);
 	  }
 	
 	  throw new LogicException(sprintf('Unrecognized function "%s"', $method));
 	}
 
-} // BaseEmpleadoPeer
+} // BaseDimensionPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseEmpleadoPeer::buildTableMap();
+BaseDimensionPeer::buildTableMap();
 

@@ -257,10 +257,7 @@ class ingreso_datosActions extends sfActions
 
     public function executeGenerarConfiguracionGrafico(sfWebRequest $request)
     {
-        $user = $this -> getUser();
-        $codigo_usuario = $user -> getAttribute('usu_codigo');
         $criteria = new Criteria();
-        //		$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $codigo_usuario);
         $criteria -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $request -> getParameter('codigo_maquina'));
         $criteria -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $request -> getParameter('fecha'));
         $criteria -> add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
@@ -287,28 +284,28 @@ class ingreso_datosActions extends sfActions
 		</column>');
         $this -> renderText('<background><border_alpha>15</border_alpha></background>');
         $this -> renderText('<plot_area>
-		<margins>
-			<left>14</left>
-	    <top>40</top>
-	    <right>25</right>
-	    <bottom>0</bottom>
-    </margins>
-    </plot_area>');
+                                <margins>
+                                    <left>14</left>
+                                    <top>40</top>
+                                    <right>25</right>
+                                    <bottom>0</bottom>
+                                </margins>
+                            </plot_area>');
         $this -> renderText('<grid>
-			<category>
-			 <alpha>5</alpha>
-			</category>
-			<value>
-			 <alpha>15</alpha>
-			 <approx_count>15</approx_count>
-			</value>
-		</grid>');
+                                <category>
+                                 <alpha>5</alpha>
+                                </category>
+                                <value>
+                                 <alpha>15</alpha>
+                                 <approx_count>15</approx_count>
+                                </value>
+                            </grid>');
         $this -> renderText('<values>
-			<value>
-				<min>0</min>
-				<max>1440</max>
-			</value>
-		</values>');
+                                <value>
+                                    <min>0</min>
+                                    <max>1440</max>
+                                </value>
+                            </values>');
         $this -> renderText('<axes>
 		<category>
 		  <width>1</width>
@@ -329,17 +326,16 @@ class ingreso_datosActions extends sfActions
         $this -> renderText('<legend><width>1024</width>
 		<max_columns>4</max_columns><spacing>5</spacing></legend>');
 
-        require_once (dirname(__FILE__) . '/../../../../../config/variablesGenerales.php');
-        $this -> renderText('<export_as_image>
+    require_once (dirname(__FILE__) . '/../../../../../config/variablesGenerales.php');
+    $this -> renderText('<export_as_image>
     <file>' . $urlWeb . 'flash/amcolumn/export.php</file>     
     <color>#CC0000</color>                      
     <alpha>50</alpha>                           
     </export_as_image>');
 
-        $this -> renderText('<graphs>');
-
-        $this -> renderText('<graph>
-			<type>column</type>
+      $this -> renderText('<graphs>');
+      $this -> renderText('<graph>
+      <type>column</type>
       <title>TNP</title>
       <color>#ffdc44</color>
       </graph>');
@@ -360,10 +356,6 @@ class ingreso_datosActions extends sfActions
       <color>#ff5454</color>
       <visible_in_legend>false</visible_in_legend>
       </graph>');
-        //			$this->renderText('<graph>
-        //      <title>Tiempo de funcionamiento</title>
-        //      <color>#f0a05f</color>
-        //      </graph>');
         if (count($registros) > 0)
         {
             unset($registros[0]);
@@ -382,28 +374,23 @@ class ingreso_datosActions extends sfActions
 			<visible_in_legend>false</visible_in_legend>
 			</graph>');
             $this -> renderText('<graph>
-      <title>Tiempo de parada no programada</title>
-      <color>#ff5454</color>
-      <visible_in_legend>false</visible_in_legend>
-      </graph>');
+                      <title>Tiempo de parada no programada</title>
+                      <color>#ff5454</color>
+                      <visible_in_legend>false</visible_in_legend>
+                      </graph>');
             $this -> renderText('<graph>
-      <title>Tiempo programado</title>
-      <color>#72a8cd</color>
-			<visible_in_legend>false</visible_in_legend>
-      </graph>');
+                      <title>Tiempo programado</title>
+                      <color>#72a8cd</color>
+		      <visible_in_legend>false</visible_in_legend>
+                      </graph>');
             $this -> renderText('<graph>
-      <title>Tiempo de parada no programada</title>
-      <color>#ff5454</color>
-			<visible_in_legend>false</visible_in_legend>
-      </graph>');
-            //			$this->renderText('<graph>
-            //      <title>Tiempo de funcionamiento</title>
-            //      <color>#f0a05f</color>
-            //			<visible_in_legend>false</visible_in_legend>
-            //      </graph>');
+                      <title>Tiempo de parada no programada</title>
+                      <color>#ff5454</color>
+		      <visible_in_legend>false</visible_in_legend>
+                      </graph>');
         }
 
-        $this -> renderText('<graph>
+      $this -> renderText('<graph>
       <title>TNP</title>
       <color>#ffdc44</color>
       <visible_in_legend>false</visible_in_legend>
@@ -641,11 +628,19 @@ class ingreso_datosActions extends sfActions
 
         $minutosActuales = 0;
         foreach ($registros as $registro)
-        {
-            //									$registro = new RegistroUsoMaquina();
-
+        {   
+            //Cambios: 24 de febrero de 2014
+            //Calculo de duración de eventos por registro para sumarlos a los TPNP
+            $criteria = new Criteria();
+            $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $registro->getRumCodigo());
+            $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
+            $duracion_evento = 0;
+            foreach ($eventos_rum as $evento_rum) {
+                $duracion_evento += $evento_rum->getEvrgDuracion();
+            }
+            
             $minutosTiempoNoProgramado = round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
-            $minutosTiempoNoProgramado -= $minutosActuales;
+            $minutosTiempoNoProgramado -= $minutosActuales;            
             $this -> renderText(';' . round($minutosTiempoNoProgramado, 2));
 
             $minutosTiempoParadaProgramada = $registro -> getRumTiempoCambioModelo();
@@ -824,8 +819,6 @@ class ingreso_datosActions extends sfActions
         {
             $fields = array();
 
-            //            $maquina = new Maquina();
-
             $fields['codigo'] = $maquina -> getMaqCodigo();
             $fields['nombre'] = $maquina -> getMaqNombre();
             $fields['codigo_inventario'] = $maquina -> getMaqCodigoInventario();
@@ -853,9 +846,7 @@ class ingreso_datosActions extends sfActions
         foreach ($maquinas as $maquina)
         {
             $fields = array();
-
-            //						$maquina = new Maquina();
-
+            
             $fields['codigo'] = $maquina -> getMaqCodigo();
             $fields['nombre'] = $maquina -> getMaqNombre();
             $fields['codigo_inventario'] = $maquina -> getMaqCodigoInventario();
@@ -905,8 +896,6 @@ class ingreso_datosActions extends sfActions
         foreach ($categorias as $categoria)
         {
             $fields = array();
-
-            //			$categoria = new CategoriaEvento();
 
             $fields['codigo'] = $categoria -> getCatCodigo();
             $fields['nombre'] = $categoria -> getCatNombre();
@@ -968,7 +957,6 @@ class ingreso_datosActions extends sfActions
     {
         $user = $this -> getUser();
         $codigo_perfil_usuario = $user -> getAttribute('usu_per_codigo');
-        //		if($request->hasParameter('codigo')) {
         $registro = RegistroUsoMaquinaPeer::retrieveByPK($request -> getParameter('codigo_rum'));
 
         $dateTimeFechaUso = new DateTime($registro -> getRumFecha('Y-m-d'));
@@ -994,12 +982,30 @@ class ingreso_datosActions extends sfActions
         }
 
         $registroEvento -> setEvrgEveCodigo($request -> getParameter('id_evento'));
-        $registroEvento -> setEvrgHoraOcurrio($request -> getParameter('hora_ocurrio'));
-        $registroEvento -> setEvrgDuracion($request -> getParameter('evrg_duracion'));
+        $registroEvento -> setEvrgHoraInicio($request -> getParameter('hora_inicio'));
+        $registroEvento -> setEvrgHoraFin($request -> getParameter('hora_fin'));
+        
+        //Cambios: 24 de febrero de 2014
+        //Calculo de la duración del evento
+        $horaInicio = $request -> getParameter('hora_inicio');
+        $horaFin = $request -> getParameter('hora_fin');
+        $horas1 = date('H', strtotime($horaInicio));
+        $horas2 = date('H', strtotime($horaFin));
+        $minutos1 = date('i', strtotime($horaInicio));
+        $minutos2 = date('i', strtotime($horaFin));
+        $duracion = 0;
+        //Tienen la misma hora pero pueden tener diferentes minutos
+        if(($horas2 - $horas1) == 0) {
+            $duracion = $minutos2 - $minutos1;
+        }
+        //Tienen diferente hora
+        else {
+            $duracion = ((60 - $minutos1)+$minutos2)+((($horas2-$horas1)-1)*60);
+        }
+        $registroEvento -> setEvrgDuracion($duracion);
+        
         $registroEvento -> setEvrgObservaciones($request -> getParameter('observaciones'));
-
         $registroEvento -> save();
-        //		}
         return $this -> renderText('Ok');
     }
 
@@ -1020,7 +1026,8 @@ class ingreso_datosActions extends sfActions
             $fields = array();
             $fields['codigo'] = $registroEvento -> getEvrgCodigo();
             $fields['id_evento'] = $registroEvento -> getEvrgEveCodigo();
-            $fields['hora_ocurrio'] = $registroEvento -> getEvrgHoraOcurrio('H:i');
+            $fields['hora_inicio'] = $registroEvento -> getEvrgHoraInicio('H:i');
+            $fields['hora_fin'] = $registroEvento -> getEvrgHoraFin('H:i');
             $fields['evrg_duracion'] = number_format($registroEvento -> getEvrgDuracion(), 2, '.', '');
             $fields['observaciones'] = $registroEvento -> getEvrgObservaciones();
 
@@ -1777,9 +1784,6 @@ class ingreso_datosActions extends sfActions
         $registro -> setRumUsuCodigo($codigo_usuario);
         $registro -> setRumEliminado(false);
         
-        //Cambios: 28 de febrero de 2014
-        $registro -> setRumColCodigo($request -> getParameter('id_columna'));
-        
         $registro -> save();
         return $this -> renderText('Ok');
     }
@@ -1861,7 +1865,6 @@ class ingreso_datosActions extends sfActions
             //Cambios: 28 de febrero de 2014
             $columna = ColumnaPeer::retrieveByPK($registro->getRumColCodigo());
             $fields['col_consecutivo'] = $columna -> getColConsecutivo();
-            $fields['col_marca'] = $columna -> getColMarca();
             $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
             $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
@@ -1921,7 +1924,6 @@ class ingreso_datosActions extends sfActions
 
             //Cambios: 28 de febrero de 2014
             $fields['col_consecutivo'] = $columna -> getColConsecutivo();
-            $fields['col_marca'] = $columna -> getColMarca();            
             $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
             $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');

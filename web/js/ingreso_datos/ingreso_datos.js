@@ -120,9 +120,6 @@ Ext.onReady(function()
     name : 'col_consecutivo'
   }, {
     type : 'string',
-    name : 'col_marca'
-  }, {
-    type : 'string',
     name : 'platos_teoricos'
   }, {
     type : 'string',
@@ -175,7 +172,7 @@ Ext.onReady(function()
     },
     {
       header : '<h3>Informaci&oacute;n de Columnas</h3>',
-      colspan : 6,
+      colspan : 5,
       align : 'center'
     }]]
   });
@@ -429,6 +426,7 @@ Ext.onReady(function()
           }
         }
       });
+      
       var flashContent = document.getElementById("flashcontent");
       if(flashContent)
       {
@@ -452,6 +450,7 @@ Ext.onReady(function()
         so1.addVariable("preloader_color", "#999999");
         so1.write("flashcontent1");
       }
+      
       Ext.Ajax.request(
       {
         url : getAbsoluteUrl('ingreso_datos', 'calcularTiempoDisponibleDia'),
@@ -532,7 +531,11 @@ Ext.onReady(function()
       type : 'string'
     },
     {
-      name : 'hora_ocurrio',
+      name : 'hora_inicio',
+      type : 'string'
+    },
+    {
+      name : 'hora_fin',
       type : 'string'
     },
     {
@@ -586,7 +589,8 @@ Ext.onReady(function()
           {
             'codigo' : record.get('codigo'),
             'id_evento' : record.get('id_evento'),
-            'hora_ocurrio' : record.get('hora_ocurrio'),
+            'hora_inicio' : record.get('hora_inicio'),
+            'hora_fin' : record.get('hora_fin'),
             'observaciones' : record.get('observaciones'),
             'evrg_duracion' : record.get('evrg_duracion'),
             'codigo_rum' : registro.get('id_registro_uso_maquina')
@@ -874,9 +878,23 @@ Ext.onReady(function()
       }
     },
     {
-      dataIndex : 'hora_ocurrio',
-      header : 'Hora',
-      tooltip : 'Hora en la cual ocurrió el evento',
+      dataIndex : 'hora_inicio',
+      header : 'Hora<br>inicio',
+      tooltip : 'Hora en la cual inició el evento',
+      width : 70,
+      align : 'center',
+      editor : new Ext.form.TimeField(
+      {
+        format : 'H:i',
+        minValue : '00:00',
+        maxValue : '23:59',
+        increment : 30
+      })
+    },
+    {
+      dataIndex : 'hora_fin',
+      header : 'Hora<br>fin',
+      tooltip : 'Hora en la cual finalizó el evento',
       width : 70,
       align : 'center',
       editor : new Ext.form.TimeField(
@@ -892,22 +910,13 @@ Ext.onReady(function()
       header : 'Duración<br>(min.)',
       tooltip : 'Duración del evento (min.)',
       width : 70,
-      align : 'center',
-      editor : new Ext.form.NumberField(
-      {
-        xtype : 'numberfield',
-        allowDecimals : true,
-        allowNegative : false,
-        maxValue : '1000000000',
-        maxLength : '9',
-        value : '0'
-      })
+      align : 'center'
     },
     {
       dataIndex : 'observaciones',
       header : 'Observaciones',
       tooltip : 'Cualquier detalle adicional',
-      width : 300,
+      width : 250,
       align : 'center',
       editor : new Ext.form.TextField()
     }]
@@ -1648,14 +1657,6 @@ Ext.onReady(function()
     renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
   },
   {
-    dataIndex : 'col_marca',
-    header : 'Marca',
-    tooltip : 'Marca',
-    columnWidth : 80,
-    align : 'center',
-    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
-  },
-  {
     dataIndex : 'platos_teoricos',
     header : 'Platos<br>Te&oacute;ricos<br>(N)',
     tooltip : 'Platos Te&oacute;ricos',
@@ -1715,29 +1716,6 @@ Ext.onReady(function()
   var metodo_para_agregar_combobox = new Ext.form.ComboBox({
     store : metodos_datastore,
     emptyText : 'Seleccione un método',
-    displayField : 'nombre',
-    valueField : 'codigo',
-    mode : 'local',
-    triggerAction : 'all',
-    forceSelection : true,
-    allowBlank : false,
-    width : 150,
-    allQuery: 'nombre',
-    listeners: {
-         'keyup': function() {
-               this.store.filter('nombre', this.getRawValue(), true, false);
-         },
-         'beforequery': function(queryEvent) {
-               queryEvent.combo.onLoad();
-               return false; 
-         }
-    }
-  });
-  
-  //Cambios: 28 de febrero de 2014
-  var columna_para_agregar_combobox = new Ext.form.ComboBox({
-    store : columnas_datastore,
-    emptyText : 'Seleccione una columna',
     displayField : 'nombre',
     valueField : 'codigo',
     mode : 'local',
@@ -2029,22 +2007,17 @@ Ext.onReady(function()
       msg : 'Cargando...'
     },
     plugins : columnHeaderGroup,
-    tbar : [metodo_para_agregar_combobox, columna_para_agregar_combobox,
+    tbar : [metodo_para_agregar_combobox,
     {
       text : 'Agregar registro',
       iconCls : 'agregar',
       handler : function()
       {
-        var codigo_metodo = metodo_para_agregar_combobox.getValue();
-        var codigo_columna = columna_para_agregar_combobox.getValue();
-        if(codigo_metodo == '' || codigo_columna == '') {
+        var codigo_metodo = metodo_para_agregar_combobox.getValue();        
+        if(codigo_metodo == '') {
             if(codigo_metodo == '') {
                 metodo_para_agregar_combobox.focus();
                 alert('Primero debe seleccionar un método');
-            }
-            if(codigo_columna == '') {
-                columna_para_agregar_combobox.focus();
-                alert('Primero debe seleccionar una columna');
             }
           
         } else
@@ -2052,7 +2025,6 @@ Ext.onReady(function()
           var params =
           {
             'id_metodo' : codigo_metodo,
-            'id_columna' : codigo_columna,
             'codigo_maquina' : maquina_combobox.getValue(),
             'fecha' : fechaField.getValue()
           };

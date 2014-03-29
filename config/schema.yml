@@ -44,6 +44,19 @@ propel:
     com_proximo_mantenimiento: { phpName: ComProximoMantenimiento, type: TIMESTAMP, required: false }
     com_fecha_registro_sistema: { phpName: ComFechaRegistroSistema, type: TIMESTAMP, required: false }
     _indexes: { FK_reference_17: [com_maq_codigo] }
+  dimension:
+    _attributes: { phpName: Dimension }
+    dim_codigo: { phpName: DimCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    dim_nombre: { phpName: DimNombre, type: VARCHAR, size: '200', required: false }
+    dim_eliminado: { phpName: DimEliminado, type: SMALLINT, size: '6', required: false }
+    dim_fecha_registro_sistema: { phpName: DimFechaRegistroSistema, type: TIMESTAMP, required: false }
+    dim_usu_crea: { phpName: DimUsuCrea, type: INTEGER, size: '11', required: false }
+    dim_fecha_actualizacion: { phpName: DimFechaActualizacion, type: TIMESTAMP, required: false }
+    dim_usu_actualiza: { phpName: DimUsuActualiza, type: INTEGER, size: '11', required: false }
+    dim_causa_eliminacion: { phpName: DimCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    dim_causa_actualizacion: { phpName: DimCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    dim_fase_codigo: { phpName: DimFaseCodigo, type: INTEGER, size: '11', required: false }
+    _indexes: { FK_reference_1: [dim_usu_crea], FK_reference_2: [dim_usu_actualiza], FK_reference_3: [dim_fase_codigo] }
   empleado:
     _attributes: { phpName: Empleado }
     empl_codigo: { phpName: EmplCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -110,7 +123,8 @@ propel:
     evrg_rum_codigo: { phpName: EvrgRumCodigo, type: INTEGER, size: '11', required: false }
     evrg_eve_codigo: { phpName: EvrgEveCodigo, type: INTEGER, size: '11', required: false }
     evrg_observaciones: { phpName: EvrgObservaciones, type: VARCHAR, size: '200', required: false }
-    evrg_hora_ocurrio: { phpName: EvrgHoraOcurrio, type: TIME, required: false }
+    evrg_hora_inicio: { phpName: EvrgHoraInicio, type: TIME, required: false }
+    evrg_hora_fin: { phpName: EvrgHoraFin, type: TIME, required: false }
     evrg_hora_registro: { phpName: EvrgHoraRegistro, type: TIME, required: false }
     evrg_fecha_registro_sistema: { phpName: EvrgFechaRegistroSistema, type: TIMESTAMP, required: false }
     evrg_usu_crea: { phpName: EvrgUsuCrea, type: INTEGER, size: '11', required: false }

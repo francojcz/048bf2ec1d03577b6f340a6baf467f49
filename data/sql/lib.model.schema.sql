@@ -225,7 +225,8 @@ CREATE TABLE `evento_en_registro`
 	`evrg_rum_codigo` INTEGER(11),
 	`evrg_eve_codigo` INTEGER(11),
 	`evrg_observaciones` VARCHAR(200),
-	`evrg_hora_ocurrio` TIME,
+	`evrg_hora_inicio` TIME,
+        `evrg_hora_fin` TIME,
 	`evrg_hora_registro` TIME,
 	`evrg_fecha_registro_sistema` DATETIME,
 	`evrg_usu_crea` INTEGER(11),
@@ -839,6 +840,46 @@ CREATE TABLE `fase_ligada`
         CONSTRAINT `fase_ligada_FK_3`
 		FOREIGN KEY (`fase_mod_codigo`)
 		REFERENCES `modelo` (`mod_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
+#-----------------------------------------------------------------------------
+#-- dimension
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `dimension`;
+
+
+CREATE TABLE `dimension`
+(
+	`dim_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
+	`dim_nombre` VARCHAR(200),
+        `dim_eliminado` SMALLINT(6),
+        `dim_fecha_registro_sistema` DATETIME,
+        `dim_usu_crea` INTEGER(11),
+        `dim_fecha_actualizacion` DATETIME,
+        `dim_usu_actualiza` INTEGER(11),
+        `dim_causa_eliminacion` VARCHAR(250),
+	`dim_causa_actualizacion` VARCHAR(250),
+        `dim_fase_codigo` INTEGER(11),
+	PRIMARY KEY (`dim_codigo`),
+        KEY `FK_reference_1`(`dim_usu_crea`),
+        KEY `FK_reference_2`(`dim_usu_actualiza`),
+        KEY `FK_reference_3`(`dim_fase_codigo`),
+        CONSTRAINT `dimension_FK_1`
+		FOREIGN KEY (`dim_usu_crea`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `dimension_FK_2`
+		FOREIGN KEY (`dim_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `dimension_FK_3`
+		FOREIGN KEY (`dim_fase_codigo`)
+		REFERENCES `fase_ligada` (`fase_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
