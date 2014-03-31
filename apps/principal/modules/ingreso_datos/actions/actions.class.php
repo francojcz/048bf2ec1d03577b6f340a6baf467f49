@@ -333,20 +333,22 @@ class ingreso_datosActions extends sfActions
     <alpha>50</alpha>                           
     </export_as_image>');
 
-      $this -> renderText('<graphs>');
-      $this -> renderText('<graph>
+    //Cambios: 24 de febrero de 2014
+    //Modificaciones para que la gráfica incluya los TPNP registrados en eventos
+        $this -> renderText('<graphs>');        
+        $this -> renderText('<graph>
       <type>column</type>
       <title>TNP</title>
       <color>#ffdc44</color>
-      </graph>');
-      $this -> renderText('<graph>
+      </graph>');        
+        $this -> renderText('<graph>
       <title>TPP</title>
       <color>#47d552</color>
       </graph>');
         $this -> renderText('<graph>
       <title>TPNP</title>
       <color>#ff5454</color>
-      </graph>');
+      </graph>');        
         $this -> renderText('<graph>
       <title>TO</title>
       <color>#72a8cd</color>
@@ -356,6 +358,8 @@ class ingreso_datosActions extends sfActions
       <color>#ff5454</color>
       <visible_in_legend>false</visible_in_legend>
       </graph>');
+         
+        
         if (count($registros) > 0)
         {
             unset($registros[0]);
@@ -374,20 +378,20 @@ class ingreso_datosActions extends sfActions
 			<visible_in_legend>false</visible_in_legend>
 			</graph>');
             $this -> renderText('<graph>
-                      <title>Tiempo de parada no programada</title>
-                      <color>#ff5454</color>
-                      <visible_in_legend>false</visible_in_legend>
-                      </graph>');
+                        <title>Tiempo de parada no programada</title>
+                        <color>#ff5454</color>
+                        <visible_in_legend>false</visible_in_legend>
+                        </graph>');
             $this -> renderText('<graph>
-                      <title>Tiempo programado</title>
-                      <color>#72a8cd</color>
-		      <visible_in_legend>false</visible_in_legend>
-                      </graph>');
+                        <title>Tiempo programado</title>
+                        <color>#72a8cd</color>
+		        <visible_in_legend>false</visible_in_legend>
+                        </graph>');
             $this -> renderText('<graph>
-                      <title>Tiempo de parada no programada</title>
-                      <color>#ff5454</color>
-		      <visible_in_legend>false</visible_in_legend>
-                      </graph>');
+                        <title>Tiempo de parada no programada</title>
+                        <color>#ff5454</color>
+		        <visible_in_legend>false</visible_in_legend>
+                        </graph>');
         }
 
       $this -> renderText('<graph>

@@ -104,7 +104,7 @@ var ayuda_maestra_mar_nombre='Nombre marca';
         //CREACION DE LA GRILLA
 	var maestra_marca_gridpanel = new Ext.grid.GridPanel({
 		id: 'maestra_marca_gridpanel',
-		title:'Marca de Columnas',
+		title:'Marcas de Columna',
 		stripeRows:true,
 		frame: true,
 		ds: maestra_marca_datastore,
@@ -119,8 +119,8 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 			pageSize: 20,
 			store: maestra_marca_datastore,
 			displayInfo: true,
-			displayMsg: 'Marcas de Columnas {0} - {1} de {2}',
-			emptyMsg: "No hay marcas de columnas aun"
+			displayMsg: 'Marcas de Columna {0} - {1} de {2}',
+			emptyMsg: "No hay marcas de columna aun"
 		}),
 		tbar:
 		[
@@ -207,7 +207,7 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 				iconCls:  'filtrar',
 				selectAllText: 'Seleccionar todos',
 				searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
-				width:         120
+				width:         150
 			})
 		]
     });

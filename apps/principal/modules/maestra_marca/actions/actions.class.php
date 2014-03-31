@@ -78,7 +78,7 @@ class maestra_marcaActions extends sfActions
 			}
 			$conexion = new Criteria();
 			$conexion->add(MarcaPeer::MAR_ELIMINADO,$mar_eliminado);
-			$cantidad_evento = MarcaPeer::doCount($conexion);
+			$cantidad_marca = MarcaPeer::doCount($conexion);
 			$conexion->setOffset($this->getRequestParameter('start'));
 			$conexion->setLimit($this->getRequestParameter('limit'));
 			$marca = MarcaPeer::doSelect($conexion);
@@ -100,7 +100,7 @@ class maestra_marcaActions extends sfActions
 			}
 			if($fila>0){
 				$jsonresult = json_encode($datos);
-				$salida= '({"total":"'.$cantidad_evento.'","results":'.$jsonresult.'})';
+				$salida= '({"total":"'.$cantidad_marca.'","results":'.$jsonresult.'})';
 			}
 		}
 		catch (Exception $excepcion)
@@ -148,13 +148,13 @@ class maestra_marcaActions extends sfActions
 	*/
 	public function executeRestablecerMarca()
 	{
-		$salida = "({success: false, errors: { reason: 'No se pudo restablecer la marcaa'}})";
+		$salida = "({success: false, errors: { reason: 'No se pudo restablecer la marca'}})";
 		try{
 			$mar_codigo = $this->getRequestParameter('maestra_mar_codigo');
 			$causa_reestablece= $this->getRequestParameter('maestra_mar_causa_restablece');
 				
 				
-			$marca  = MarcaPeer::retrieveByPk($mar_codigo);
+			$marca = MarcaPeer::retrieveByPk($mar_codigo);
 
 			if($marca)
 			{

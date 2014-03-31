@@ -154,7 +154,7 @@ var form_interfazdministrador = function(){
                             items: [{
                                 frame: true,
                                 autoLoad: {
-                                    url: getAbsoluteUrl('crud_modelo', 'index'),
+                                    url: getAbsoluteUrl('maestra_modelo', 'index'),
                                     scripts: true,
                                     scope: this
                                 }
@@ -168,7 +168,7 @@ var form_interfazdministrador = function(){
                             items: [{
                                 frame: true,
                                 autoLoad: {
-                                    url: getAbsoluteUrl('crud_faseligada', 'index'),
+                                    url: getAbsoluteUrl('maestra_faseligada', 'index'),
                                     scripts: true,
                                     scope: this
                                 }

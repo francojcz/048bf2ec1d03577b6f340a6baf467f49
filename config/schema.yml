@@ -55,8 +55,7 @@ propel:
     dim_usu_actualiza: { phpName: DimUsuActualiza, type: INTEGER, size: '11', required: false }
     dim_causa_eliminacion: { phpName: DimCausaEliminacion, type: VARCHAR, size: '250', required: false }
     dim_causa_actualizacion: { phpName: DimCausaActualizacion, type: VARCHAR, size: '250', required: false }
-    dim_fase_codigo: { phpName: DimFaseCodigo, type: INTEGER, size: '11', required: false }
-    _indexes: { FK_reference_1: [dim_usu_crea], FK_reference_2: [dim_usu_actualiza], FK_reference_3: [dim_fase_codigo] }
+    _indexes: { FK_reference_1: [dim_usu_crea], FK_reference_2: [dim_usu_actualiza] }
   empleado:
     _attributes: { phpName: Empleado }
     empl_codigo: { phpName: EmplCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -153,8 +152,7 @@ propel:
     fase_usu_actualiza: { phpName: FaseUsuActualiza, type: INTEGER, size: '11', required: false }
     fase_causa_eliminacion: { phpName: FaseCausaEliminacion, type: VARCHAR, size: '250', required: false }
     fase_causa_actualizacion: { phpName: FaseCausaActualizacion, type: VARCHAR, size: '250', required: false }
-    fase_mod_codigo: { phpName: FaseModCodigo, type: INTEGER, size: '11', required: false }
-    _indexes: { FK_reference_1: [fase_usu_crea], FK_reference_2: [fase_usu_actualiza], FK_reference_3: [fase_mod_codigo] }
+    _indexes: { FK_reference_1: [fase_usu_crea], FK_reference_2: [fase_usu_actualiza] }
   indicador:
     _attributes: { phpName: Indicador }
     ind_codigo: { phpName: IndCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -266,8 +264,7 @@ propel:
     mod_usu_actualiza: { phpName: ModUsuActualiza, type: INTEGER, size: '11', required: false }
     mod_causa_eliminacion: { phpName: ModCausaEliminacion, type: VARCHAR, size: '250', required: false }
     mod_causa_actualizacion: { phpName: ModCausaActualizacion, type: VARCHAR, size: '250', required: false }
-    mod_mar_codigo: { phpName: ModMarCodigo, type: INTEGER, size: '11', required: false }
-    _indexes: { FK_reference_1: [mod_usu_crea], FK_reference_2: [mod_usu_actualiza], FK_reference_3: [mod_mar_codigo] }
+    _indexes: { FK_reference_1: [mod_usu_crea], FK_reference_2: [mod_usu_actualiza] }
   perfil:
     _attributes: { phpName: Perfil }
     per_codigo: { phpName: PerCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }

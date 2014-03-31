@@ -782,11 +782,9 @@ CREATE TABLE `modelo`
         `mod_usu_actualiza` INTEGER(11),
         `mod_causa_eliminacion` VARCHAR(250),
 	`mod_causa_actualizacion` VARCHAR(250),
-        `mod_mar_codigo` INTEGER(11),
 	PRIMARY KEY (`mod_codigo`),
         KEY `FK_reference_1`(`mod_usu_crea`),
         KEY `FK_reference_2`(`mod_usu_actualiza`),
-        KEY `FK_reference_3`(`mod_mar_codigo`),
         CONSTRAINT `modelo_FK_1`
 		FOREIGN KEY (`mod_usu_crea`)
 		REFERENCES `usuario` (`usu_codigo`)
@@ -795,11 +793,6 @@ CREATE TABLE `modelo`
         CONSTRAINT `modelo_FK_2`
 		FOREIGN KEY (`mod_usu_actualiza`)
 		REFERENCES `usuario` (`usu_codigo`)
-		ON UPDATE RESTRICT
-		ON DELETE RESTRICT,
-        CONSTRAINT `modelo_FK_3`
-		FOREIGN KEY (`mod_mar_codigo`)
-		REFERENCES `marca` (`mar_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
@@ -822,11 +815,9 @@ CREATE TABLE `fase_ligada`
         `fase_usu_actualiza` INTEGER(11),
         `fase_causa_eliminacion` VARCHAR(250),
 	`fase_causa_actualizacion` VARCHAR(250),
-        `fase_mod_codigo` INTEGER(11),
 	PRIMARY KEY (`fase_codigo`),
         KEY `FK_reference_1`(`fase_usu_crea`),
         KEY `FK_reference_2`(`fase_usu_actualiza`),
-        KEY `FK_reference_3`(`fase_mod_codigo`),
         CONSTRAINT `fase_ligada_FK_1`
 		FOREIGN KEY (`fase_usu_crea`)
 		REFERENCES `usuario` (`usu_codigo`)
@@ -835,11 +826,6 @@ CREATE TABLE `fase_ligada`
         CONSTRAINT `fase_ligada_FK_2`
 		FOREIGN KEY (`fase_usu_actualiza`)
 		REFERENCES `usuario` (`usu_codigo`)
-		ON UPDATE RESTRICT
-		ON DELETE RESTRICT,
-        CONSTRAINT `fase_ligada_FK_3`
-		FOREIGN KEY (`fase_mod_codigo`)
-		REFERENCES `modelo` (`mod_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
@@ -862,11 +848,9 @@ CREATE TABLE `dimension`
         `dim_usu_actualiza` INTEGER(11),
         `dim_causa_eliminacion` VARCHAR(250),
 	`dim_causa_actualizacion` VARCHAR(250),
-        `dim_fase_codigo` INTEGER(11),
 	PRIMARY KEY (`dim_codigo`),
         KEY `FK_reference_1`(`dim_usu_crea`),
         KEY `FK_reference_2`(`dim_usu_actualiza`),
-        KEY `FK_reference_3`(`dim_fase_codigo`),
         CONSTRAINT `dimension_FK_1`
 		FOREIGN KEY (`dim_usu_crea`)
 		REFERENCES `usuario` (`usu_codigo`)
@@ -875,11 +859,6 @@ CREATE TABLE `dimension`
         CONSTRAINT `dimension_FK_2`
 		FOREIGN KEY (`dim_usu_actualiza`)
 		REFERENCES `usuario` (`usu_codigo`)
-		ON UPDATE RESTRICT
-		ON DELETE RESTRICT,
-        CONSTRAINT `dimension_FK_3`
-		FOREIGN KEY (`dim_fase_codigo`)
-		REFERENCES `fase_ligada` (`fase_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
