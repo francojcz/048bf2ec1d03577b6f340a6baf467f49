@@ -48,10 +48,11 @@ class crud_columnaActions extends sfActions
 
 			if($columna)
 			{
-				$columna->setColConsecutivo($this->getRequestParameter('col_consecutivo'));				
-                                $columna->setColConfiguracion($this->getRequestParameter('col_configuracion'));
-                                $columna->setColMarca($this->getRequestParameter('col_marca'));
+				$columna->setColCodigoInterno($this->getRequestParameter('col_codigo_interno'));                                
                                 $columna->setColLote($this->getRequestParameter('col_lote'));
+                                $columna->setColMarCodigo($this->getRequestParameter('col_mar_codigo'));
+                                $columna->setColModCodigo($this->getRequestParameter('col_mod_codigo'));
+                                
 				$columna->setColFechaActualizacion(time());
 				$columna->setColUsuActualiza($this->getUser()->getAttribute('usu_codigo'));
 				$columna->setColCausaActualizacion($this->getRequestParameter('col_causa_actualizacion'));
@@ -101,10 +102,18 @@ class crud_columnaActions extends sfActions
 			{
 
 				$datos[$fila]['col_codigo']=$temporal->getColCodigo();
-				$datos[$fila]['col_consecutivo'] = $temporal->getColConsecutivo();
-                                $datos[$fila]['col_configuracion'] = $temporal->getColConfiguracion();
-                                $datos[$fila]['col_marca'] = $temporal->getColMarca();
+				$datos[$fila]['col_codigo_interno'] = $temporal->getColCodigoInterno();
                                 $datos[$fila]['col_lote'] = $temporal->getColLote();
+                                
+                                //Información de la Marca
+                                $datos[$fila]['col_mar_codigo'] = $temporal->getColMarCodigo();
+                                $marca = MarcaPeer::retrieveByPK($temporal->getColMarCodigo());
+                                $datos[$fila]['col_mar_nombre'] = $marca->getMarNombre();
+                                
+                                //Información del Modelo
+                                $datos[$fila]['col_mod_codigo'] = $temporal->getColModCodigo();
+                                $modelo = ModeloPeer::retrieveByPK($temporal->getColModCodigo());
+                                $datos[$fila]['col_mod_nombre'] = $modelo->getModNombre();
 				
 				$datos[$fila]['col_fecha_registro_sistema'] = $temporal->getColFechaRegistroSistema();
 				$datos[$fila]['col_fecha_actualizacion'] = $temporal->getColFechaActualizacion();				
@@ -192,6 +201,72 @@ class crud_columnaActions extends sfActions
 		catch (Exception $excepcion)
 		{
 			$salida= "({success: false, errors: { reason: 'Hubo una excepci&oacute;n',error:'".$excepcion->getMessage()."'}})";
+		}
+		return $this->renderText($salida);
+	}        
+        
+        /**
+	 *Esta funcion lista las marcas de columna
+	*/
+	public function executeListarMarcas(sfWebRequest $request)
+	{
+		$salida='({"total":"0", "results":""})';
+		$fila=0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->addAscendingOrderByColumn(MarcaPeer::MAR_NOMBRE);
+			$marcas = MarcaPeer::doSelect($conexion);
+
+			foreach($marcas As $temporal)
+			{
+				$datos[$fila]['mar_codigo'] = $temporal->getMarCodigo();
+				$datos[$fila]['mar_nombre'] = $temporal->getMarNombre();
+				$fila++;
+			}
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Exception en listar Marcas';
+		}
+		return $this->renderText($salida);
+	}
+        
+        /**
+	 *Esta funcion lista los modelos de columna
+	*/
+	public function executeListarModelos(sfWebRequest $request)
+	{
+		$salida='({"total":"0", "results":""})';
+		$fila=0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->addAscendingOrderByColumn(ModeloPeer::MOD_NOMBRE);
+			$modelos = ModeloPeer::doSelect($conexion);
+
+			foreach($modelos As $temporal)
+			{
+				$datos[$fila]['mod_codigo'] = $temporal->getModCodigo();
+				$datos[$fila]['mod_nombre'] = $temporal->getModNombre();
+				$fila++;
+			}
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Exception en listar Modelos';
 		}
 		return $this->renderText($salida);
 	}

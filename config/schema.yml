@@ -2,6 +2,18 @@ propel:
   _attributes:
     package: lib.model
     defaultIdMethod: native
+  categoria_equipo:
+    _attributes: { phpName: CategoriaEquipo }
+    cat_codigo: { phpName: CatCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    cat_nombre: { phpName: CatNombre, type: VARCHAR, size: '200', required: false }
+    cat_fecha_registro_sistema: { phpName: CatFechaRegistroSistema, type: TIMESTAMP, required: false }
+    cat_usu_crea: { phpName: CatUsuCrea, type: INTEGER, size: '11', required: false }
+    cat_usu_actualiza: { phpName: CatUsuActualiza, type: INTEGER, size: '11', required: false }
+    cat_fecha_actualizacion: { phpName: CatFechaActualizacion, type: TIMESTAMP, required: false }
+    cat_eliminado: { phpName: CatEliminado, type: SMALLINT, size: '6', required: false }
+    cat_causa_eliminacion: { phpName: CatCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    cat_causa_actualizacion: { phpName: CatCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    _indexes: { FK_reference_31: [cat_usu_crea], FK_reference_32: [cat_usu_actualiza] }
   categoria_evento:
     _attributes: { phpName: CategoriaEvento }
     cat_codigo: { phpName: CatCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -17,9 +29,7 @@ propel:
   columna:
     _attributes: { phpName: Columna }
     col_codigo: { phpName: ColCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    col_consecutivo: { phpName: ColConsecutivo, type: VARCHAR, size: '100', required: false }
-    col_configuracion: { phpName: ColConfiguracion, type: VARCHAR, size: '100', required: false }
-    col_marca: { phpName: ColMarca, type: VARCHAR, size: '100', required: false }
+    col_codigo_interno: { phpName: ColCodigoInterno, type: INTEGER, size: '11', required: false }
     col_lote: { phpName: ColLote, type: VARCHAR, size: '100', required: false }
     col_eliminado: { phpName: ColEliminado, type: SMALLINT, size: '6', required: false }
     col_fecha_registro_sistema: { phpName: ColFechaRegistroSistema, type: TIMESTAMP, required: false }
@@ -28,7 +38,9 @@ propel:
     col_usu_actualiza: { phpName: ColUsuActualiza, type: INTEGER, size: '11', required: false }
     col_causa_eliminacion: { phpName: ColCausaEliminacion, type: VARCHAR, size: '250', required: false }
     col_causa_actualizacion: { phpName: ColCausaActualizacion, type: VARCHAR, size: '250', required: false }
-    _indexes: { FK_reference_1: [col_usu_crea], FK_reference_2: [col_usu_actualiza] }
+    col_mar_codigo: { phpName: ColMarCodigo, type: INTEGER, size: '11', required: false }
+    col_mod_codigo: { phpName: ColModCodigo, type: INTEGER, size: '11', required: false }
+    _indexes: { FK_reference_1: [col_usu_crea], FK_reference_2: [col_usu_actualiza], FK_reference_3: [col_mar_codigo], FK_reference_4: [col_mod_codigo] }
   computador:
     _attributes: { phpName: Computador }
     com_certificado: { phpName: ComCertificado, type: VARCHAR, size: '40', primaryKey: true, required: true }
@@ -36,7 +48,7 @@ propel:
   consumible_maquina:
     _attributes: { phpName: ConsumibleMaquina }
     com_codigo: { phpName: ComCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    com_maq_codigo: { phpName: ComMaqCodigo, type: INTEGER, size: '11', required: false, foreignTable: maquina, foreignReference: maq_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
+    com_maq_codigo: { phpName: ComMaqCodigo, type: INTEGER, size: '11', required: false }
     com_fecha_cambio: { phpName: ComFechaCambio, type: TIMESTAMP, required: false }
     com_item: { phpName: ComItem, type: VARCHAR, size: '200', required: false }
     com_numero_parte: { phpName: ComNumeroParte, type: VARCHAR, size: '200', required: false }
@@ -276,6 +288,27 @@ propel:
     per_causa_actualizacion: { phpName: PerCausaActualizacion, type: VARCHAR, size: '250', required: false }
     per_usu_crea: { phpName: PerUsuCrea, type: VARCHAR, size: '20', required: false }
     per_usu_actualiza: { phpName: PerUsuActualiza, type: VARCHAR, size: '20', required: false }
+  periodo_mantenimiento:
+    _attributes: { phpName: PeriodoMantenimiento }
+    pmto_codigo: { phpName: PmtoCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    pmto_periodo: { phpName: PmtoPeriodo, type: INTEGER, size: '11', required: false }
+    pmto_tipo: { phpName: PmtoTipo, type: INTEGER, size: '11', required: false }
+    pmto_fecha_registro_sistema: { phpName: PmtoFechaRegistroSistema, type: TIMESTAMP, required: false }
+    pmto_usu_crea: { phpName: PmtoUsuCrea, type: INTEGER, size: '11', required: false }
+    pmto_usu_actualiza: { phpName: PmtoUsuActualiza, type: INTEGER, size: '11', required: false }
+    pmto_fecha_actualizacion: { phpName: PmtoFechaActualizacion, type: TIMESTAMP, required: false }
+    pmto_eliminado: { phpName: PmtoEliminado, type: SMALLINT, size: '6', required: false }
+    pmto_causa_eliminacion: { phpName: PmtoCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    pmto_causa_actualizacion: { phpName: PmtoCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    _indexes: { FK_reference_43: [pmto_usu_crea], FK_reference_44: [pmto_usu_actualiza], FK_reference_49: [pmto_tipo] }
+  proximos_estado:
+    _attributes: { phpName: ProximosEstado }
+    pre_codigo: { phpName: PreCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    pre_estado: { phpName: PreEstado, type: VARCHAR, size: '50', required: false }
+    pre_observacion: { phpName: PreObservacion, type: VARCHAR, size: '200', required: false }
+    pre_prox_codigo: { phpName: PreProxCodigo, type: INTEGER, size: '11', required: false }
+    pre_usu_registra: { phpName: PreUsuRegistra, type: INTEGER, size: '11', required: false }
+    _indexes: { FK_reference_59: [pre_usu_registra], FK_reference_10: [pre_prox_codigo] }
   registro_modificacion:
     _attributes: { phpName: RegistroModificacion }
     rem_id: { phpName: RemId, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -287,6 +320,29 @@ propel:
     rem_valor_nuevo: { phpName: RemValorNuevo, type: VARCHAR, size: '255', required: false }
     rem_causa: { phpName: RemCausa, type: VARCHAR, size: '255', required: false }
     _indexes: { FK_reference_25: [rem_rum_codigo], FK_reference_26: [rem_usu_codigo] }
+  registro_pmto_maquina:
+    _attributes: { phpName: RegistroPmtoMaquina }
+    rpm_codigo: { phpName: RpmCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    rpm_maq_codigo: { phpName: RpmMaqCodigo, type: INTEGER, size: '11', required: false }
+    rpm_pmto_codigo: { phpName: RpmPmtoCodigo, type: INTEGER, size: '11', required: false }
+    rpm_fecha_inicio: { phpName: RpmFechaInicio, type: DATE, required: false }
+    rpm_usu_registra: { phpName: RpmUsuRegistra, type: INTEGER, size: '11', required: false }
+    rpm_fecha_registro: { phpName: RpmFechaRegistro, type: DATE, required: false }
+    _indexes: { FK_reference_55: [rpm_usu_registra], FK_reference_44: [rpm_pmto_codigo], FK_reference_10: [rpm_maq_codigo] }
+  registro_rep_maquina:
+    _attributes: { phpName: RegistroRepMaquina }
+    rrm_codigo: { phpName: RrmCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    rrm_maq_codigo: { phpName: RrmMaqCodigo, type: INTEGER, size: '11', required: false }
+    rrm_rep_codigo: { phpName: RrmRepCodigo, type: INTEGER, size: '11', required: false }
+    rrm_consumo: { phpName: RrmConsumo, type: INTEGER, size: '11', required: false }
+    rrm_fecha_cambio: { phpName: RrmFechaCambio, type: DATE, required: false }
+    rrm_fecha_prox_cambio: { phpName: RrmFechaProxCambio, type: DATE, required: false }
+    rrm_observaciones: { phpName: RrmObservaciones, type: VARCHAR, size: '300', required: false }
+    rrm_usu_registra: { phpName: RrmUsuRegistra, type: INTEGER, size: '11', required: false }
+    rrm_fecha_registro: { phpName: RrmFechaRegistro, type: DATE, required: false }
+    rrm_usu_actualiza: { phpName: RrmUsuActualiza, type: INTEGER, size: '11', required: false }
+    rrm_fecha_actualizacion: { phpName: RrmFechaActualizacion, type: DATE, required: false }
+    _indexes: { FK_reference_29: [rrm_usu_actualiza], FK_reference_21: [rrm_usu_registra], FK_reference_44: [rrm_rep_codigo], FK_reference_10: [rrm_maq_codigo] }
   registro_uso_maquina:
     _attributes: { phpName: RegistroUsoMaquina }
     rum_codigo: { phpName: RumCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -372,6 +428,43 @@ propel:
     rum_resolucion: { phpName: RumResolucion, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_tailing: { phpName: RumTailing, type: DECIMAL, size: '12', scale: '4', required: false }
     _indexes: { FK_reference_22: [rum_usu_codigo_elimino], FK_reference_6: [rum_maq_codigo], FK_reference_7: [rum_met_codigo], FK_reference_8: [rum_usu_codigo], FK_reference_9: [rum_col_codigo] }
+  repuesto:
+    _attributes: { phpName: Repuesto }
+    rep_codigo: { phpName: RepCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    rep_numero: { phpName: RepNumero, type: VARCHAR, size: '20', required: false }
+    rep_nombre: { phpName: RepNombre, type: VARCHAR, size: '200', required: false }
+    rep_cantidad: { phpName: RepCantidad, type: INTEGER, size: '11', required: false }
+    rep_periodicidad: { phpName: RepPeriodicidad, type: INTEGER, size: '11', required: false }
+    rep_fecha_registro_sistema: { phpName: RepFechaRegistroSistema, type: TIMESTAMP, required: false }
+    rep_usu_crea: { phpName: RepUsuCrea, type: INTEGER, size: '11', required: false }
+    rep_usu_actualiza: { phpName: RepUsuActualiza, type: INTEGER, size: '11', required: false }
+    rep_fecha_actualizacion: { phpName: RepFechaActualizacion, type: TIMESTAMP, required: false }
+    rep_eliminado: { phpName: RepEliminado, type: SMALLINT, size: '6', required: false }
+    rep_causa_eliminacion: { phpName: RepCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    rep_causa_actualizacion: { phpName: RepCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    rep_cat_codigo: { phpName: RepCatCodigo, type: INTEGER, size: '11', required: false }
+    _indexes: { FK_reference_43: [rep_usu_crea], FK_reference_44: [rep_usu_actualiza], FK_reference_11: [rep_cat_codigo] }
+  seguimiento:
+    _attributes: { phpName: Seguimiento }
+    seg_codigo: { phpName: SegCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    seg_maq_codigo: { phpName: SegMaqCodigo, type: INTEGER, size: '11', required: false }
+    seg_fecha: { phpName: SegFecha, type: DATE, required: false }
+    seg_estado: { phpName: SegEstado, type: VARCHAR, size: '50', required: false }
+    seg_observacion: { phpName: SegObservacion, type: VARCHAR, size: '200', required: false }
+    seg_usu_registra: { phpName: SegUsuRegistra, type: INTEGER, size: '11', required: false }
+    _indexes: { FK_reference_57: [seg_usu_registra], FK_reference_1: [seg_maq_codigo] }
+  tamano_particula:
+    _attributes: { phpName: TamanoParticula }
+    tam_codigo: { phpName: TamCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    tam_nombre: { phpName: TamNombre, type: VARCHAR, size: '200', required: false }
+    tam_eliminado: { phpName: TamEliminado, type: SMALLINT, size: '6', required: false }
+    tam_fecha_registro_sistema: { phpName: TamFechaRegistroSistema, type: TIMESTAMP, required: false }
+    tam_usu_crea: { phpName: TamUsuCrea, type: INTEGER, size: '11', required: false }
+    tam_fecha_actualizacion: { phpName: TamFechaActualizacion, type: TIMESTAMP, required: false }
+    tam_usu_actualiza: { phpName: TamUsuActualiza, type: INTEGER, size: '11', required: false }
+    tam_causa_eliminacion: { phpName: TamCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    tam_causa_actualizacion: { phpName: TamCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    _indexes: { FK_reference_1: [tam_usu_crea], FK_reference_2: [tam_usu_actualiza] }
   tipo_identificacion:
     _attributes: { phpName: TipoIdentificacion }
     tid_codigo: { phpName: TidCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -384,6 +477,18 @@ propel:
     tid_causa_eliminacion: { phpName: TidCausaEliminacion, type: VARCHAR, size: '250', required: false }
     tid_causa_actualizacion: { phpName: TidCausaActualizacion, type: VARCHAR, size: '250', required: false }
     _indexes: { FK_reference_33: [tid_usu_crea], FK_reference_34: [tid_usu_actualiza] }
+  tipo_periodo:
+    _attributes: { phpName: TipoPeriodo }
+    tp_codigo: { phpName: TpCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    tp_nombre: { phpName: TpNombre, type: VARCHAR, size: '200', required: false }
+    tp_fecha_registro_sistema: { phpName: TpFechaRegistroSistema, type: TIMESTAMP, required: false }
+    tp_usu_crea: { phpName: TpUsuCrea, type: INTEGER, size: '11', required: false }
+    tp_usu_actualiza: { phpName: TpUsuActualiza, type: INTEGER, size: '11', required: false }
+    tp_fecha_actualizacion: { phpName: TpFechaActualizacion, type: TIMESTAMP, required: false }
+    tp_eliminado: { phpName: TpEliminado, type: SMALLINT, size: '6', required: false }
+    tp_causa_eliminacion: { phpName: TpCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    tp_causa_actualizacion: { phpName: TpCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    _indexes: { FK_reference_41: [tp_usu_crea], FK_reference_42: [tp_usu_actualiza] }
   usuario:
     _attributes: { phpName: Usuario }
     usu_codigo: { phpName: UsuCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }

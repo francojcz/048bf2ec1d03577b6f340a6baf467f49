@@ -864,6 +864,39 @@ CREATE TABLE `dimension`
 );
 
 #-----------------------------------------------------------------------------
+#-- tamano_particula
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tamano_particula`;
+
+
+CREATE TABLE `tamano_particula`
+(
+	`tam_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
+	`tam_nombre` VARCHAR(200),
+        `tam_eliminado` SMALLINT(6),
+        `tam_fecha_registro_sistema` DATETIME,
+        `tam_usu_crea` INTEGER(11),
+        `tam_fecha_actualizacion` DATETIME,
+        `tam_usu_actualiza` INTEGER(11),
+        `tam_causa_eliminacion` VARCHAR(250),
+	`tam_causa_actualizacion` VARCHAR(250),
+	PRIMARY KEY (`tam_codigo`),
+        KEY `FK_reference_1`(`tam_usu_crea`),
+        KEY `FK_reference_2`(`tam_usu_actualiza`),
+        CONSTRAINT `tamano_particula_FK_1`
+		FOREIGN KEY (`tam_usu_crea`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `tamano_particula_FK_2`
+		FOREIGN KEY (`tam_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
+#-----------------------------------------------------------------------------
 #-- columna
 #-----------------------------------------------------------------------------
 
@@ -872,10 +905,8 @@ DROP TABLE IF EXISTS `columna`;
 
 CREATE TABLE `columna`
 (
-	`col_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
-	`col_consecutivo` VARCHAR(100),
-	`col_configuracion` VARCHAR(100),
-        `col_marca` VARCHAR(100),
+	`col_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,        
+        `col_codigo_interno` INTEGER(11),
         `col_lote` VARCHAR(100),
         `col_eliminado` SMALLINT(6),
         `col_fecha_registro_sistema` DATETIME,
@@ -884,9 +915,13 @@ CREATE TABLE `columna`
         `col_usu_actualiza` INTEGER(11),
         `col_causa_eliminacion` VARCHAR(250),
 	`col_causa_actualizacion` VARCHAR(250),
+        `col_mar_codigo` INTEGER(11),
+        `col_mod_codigo` INTEGER(11),
 	PRIMARY KEY (`col_codigo`),
         KEY `FK_reference_1`(`col_usu_crea`),
         KEY `FK_reference_2`(`col_usu_actualiza`),
+        KEY `FK_reference_3`(`col_mar_codigo`),
+        KEY `FK_reference_4`(`col_mod_codigo`),
         CONSTRAINT `columna_FK_1`
 		FOREIGN KEY (`col_usu_crea`)
 		REFERENCES `usuario` (`usu_codigo`)
@@ -895,6 +930,16 @@ CREATE TABLE `columna`
         CONSTRAINT `columna_FK_2`
 		FOREIGN KEY (`col_usu_actualiza`)
 		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `columna_FK_3`
+		FOREIGN KEY (`col_mar_codigo`)
+		REFERENCES `marca` (`mar_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `columna_FK_4`
+		FOREIGN KEY (`col_mod_codigo`)
+		REFERENCES `modelo` (`od_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );

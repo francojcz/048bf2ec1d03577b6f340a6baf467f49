@@ -1,11 +1,11 @@
 //ayudas
-var ayuda_maestra_mar_codigo='C&oacute;digo identificador en el sistema';
-var ayuda_maestra_mar_nombre='Nombre marca';
+var ayuda_maestra_dim_codigo='C&oacute;digo identificador en el sistema';
+var ayuda_maestra_dim_nombre='Dimensi&oacute;n (mm)';
 	
-	var maestra_marca_datastore = new Ext.data.Store({
-        id: 'maestra_marca_datastore',
+	var maestra_dimension_datastore = new Ext.data.Store({
+        id: 'maestra_dimension_datastore',
         proxy: new Ext.data.HttpProxy({
-                url: getAbsoluteUrl('maestra_marca','listarMarca'),
+                url: getAbsoluteUrl('maestra_dimension','listarDimension'),
                 method: 'POST'
         }),
         baseParams:{start:0, limit:20}, 
@@ -14,65 +14,65 @@ var ayuda_maestra_mar_nombre='Nombre marca';
                 totalProperty: 'total',
                 id: 'id'
                 },[ 
-			{name: 'maestra_mar_codigo', type: 'int'},
-			{name: 'maestra_mar_nombre', type: 'string'},
-			{name: 'maestra_mar_fecha_registro_sistema', type: 'string'},
-			{name: 'maestra_mar_fecha_actualizacion',type: 'string'},
-			{name: 'maestra_mar_usu_crea_nombre',type: 'string'},
-			{name: 'maestra_mar_usu_actualiza_nombre',type: 'string'},
-			{name: 'maestra_mar_causa_eliminacion',type: 'string'},
-			{name: 'maestra_mar_causa_actualizacion',type: 'string'}
+			{name: 'maestra_dim_codigo', type: 'int'},
+			{name: 'maestra_dim_nombre', type: 'string'},
+			{name: 'maestra_dim_fecha_registro_sistema', type: 'string'},
+			{name: 'maestra_dim_fecha_actualizacion',type: 'string'},
+			{name: 'maestra_dim_usu_crea_nombre',type: 'string'},
+			{name: 'maestra_dim_usu_actualiza_nombre',type: 'string'},
+			{name: 'maestra_dim_causa_eliminacion',type: 'string'},
+			{name: 'maestra_dim_causa_actualizacion',type: 'string'}
 			])
         });
-    maestra_marca_datastore.load();
+    maestra_dimension_datastore.load();
 	
 
-	var maestra_mar_codigo=new Ext.form.NumberField({
+	var maestra_dim_codigo=new Ext.form.NumberField({
 	   xtype: 'numberfield',
 	   maxLength : 100,
-	   name: 'maestra_mar_codigo',
-	   id: 'maestra_mar_codigo',
+	   name: 'maestra_dim_codigo',
+	   id: 'maestra_dim_codigo',
 	   fieldLabel: 'C&ooacute;digo evento',
 	   listeners:
 	   {
 			'render': function() {
-					ayuda('maestra_mar_codigo', ayuda_maestra_mar_codigo);
+					ayuda('maestra_dim_codigo', ayuda_maestra_dim_codigo);
 					}
 	   }
 	});
 	
 
-	var maestra_mar_nombre=new Ext.form.TextField({
+	var maestra_dim_nombre=new Ext.form.TextField({
 	   xtype: 'textfield',
 	   maxLength : 100,
-	   name: 'maestra_mar_nombre',
-	   id: 'maestra_mar_nombre',
-	   fieldLabel: 'Nombre marca',
+	   name: 'maestra_dim_nombre',
+	   id: 'maestra_dim_nombre',
+	   fieldLabel: 'Dimensión (mm)',
 	   allowBlank: false,
 	   listeners:
 	   {
 			'render': function() {
-					ayuda('maestra_mar_nombre', ayuda_maestra_mar_nombre);
+					ayuda('maestra_dim_nombre', ayuda_maestra_dim_nombre);
 					}
 	   }
 	});
 
-	var maestra_marca_colmodel = new Ext.grid.ColumnModel({
+	var maestra_dimension_colmodel = new Ext.grid.ColumnModel({
 		defaults:{sortable: true, locked: false, resizable: true},
 		columns:[
-			{id: 'maestra_mar_codigo_column', header: "Id", width: 30, dataIndex: 'maestra_mar_codigo'},
-			{ id: 'maestra_mar_nombre_column', header: "Nombre", width: 100, dataIndex: 'maestra_mar_nombre', editor:maestra_mar_nombre},
-			{ header: "Creado por", width: 120, dataIndex: 'maestra_mar_usu_crea_nombre'},
-			{ header: "Fecha de creaci&oacute;n", width: 120, dataIndex: 'maestra_mar_fecha_registro_sistema'},
-			{ header: "Actualizado por", width: 120, dataIndex: 'maestra_mar_usu_actualiza_nombre'},
-			{ header: "Fecha de actualizaci&oacute;n", width: 120, dataIndex: 'maestra_mar_fecha_actualizacion'},
-			{ header: "Causa actualizaci&oacute;n", width: 120, dataIndex: 'maestra_mar_causa_actualizacion'},
-			{ header: "Causa eliminaci&oacute;n", width: 120, dataIndex: 'maestra_mar_causa_eliminacion'}
+			{id: 'maestra_dim_codigo_column', header: "Id", width: 30, dataIndex: 'maestra_dim_codigo'},
+			{ id: 'maestra_dim_nombre_column', header: "Dimensi&oacute;n (mm)", width: 100, dataIndex: 'maestra_dim_nombre', editor:maestra_dim_nombre},
+			{ header: "Creado por", width: 120, dataIndex: 'maestra_dim_usu_crea_nombre'},
+			{ header: "Fecha de creaci&oacute;n", width: 120, dataIndex: 'maestra_dim_fecha_registro_sistema'},
+			{ header: "Actualizado por", width: 120, dataIndex: 'maestra_dim_usu_actualiza_nombre'},
+			{ header: "Fecha de actualizaci&oacute;n", width: 120, dataIndex: 'maestra_dim_fecha_actualizacion'},
+			{ header: "Causa actualizaci&oacute;n", width: 120, dataIndex: 'maestra_dim_causa_actualizacion'},
+			{ header: "Causa eliminaci&oacute;n", width: 120, dataIndex: 'maestra_dim_causa_eliminacion'}
 		]
 	});
 	
 
-	var maestra_marca_roweditor = new Ext.ux.grid.RowEditor({
+	var maestra_dimension_roweditor = new Ext.ux.grid.RowEditor({
 		saveText: 'Guardar',
 		cancelText: 'Cancelar',
 		showTooltip: function(msg){},
@@ -80,20 +80,20 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 		{
 			'afteredit': function(gr,obj,record,num){
 				
-				if(record.get('maestra_mar_codigo')!=''){
+				if(record.get('maestra_dim_codigo')!=''){
 				
 					Ext.Msg.prompt(
-					'Marca',
-					'Digite la causa de la actualizaci&oacute;n de esta marca',
+					'Dimensión',
+					'Digite la causa de la actualizaci&oacute;n de esta dimensión',
 					function(btn, text,op){
 							if (btn == 'ok') {
-							maestra_marca_actualizar(record,text);
+							maestra_dimension_actualizar(record,text);
 							}
 						}
 					);
 				}
 				else{
-					maestra_marca_actualizar(record,'');
+					maestra_dimension_actualizar(record,'');
 				}
 			},
 			'canceledit': function(){}
@@ -102,47 +102,47 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 
                 
         //CREACION DE LA GRILLA
-	var maestra_marca_gridpanel = new Ext.grid.GridPanel({
-		id: 'maestra_marca_gridpanel',
-		title:'Marcas de Columna',
+	var maestra_dimension_gridpanel = new Ext.grid.GridPanel({
+		id: 'maestra_dimension_gridpanel',
+		title:'Dimensiones de Columna',
 		stripeRows:true,
 		frame: true,
-		ds: maestra_marca_datastore,
-		cm: maestra_marca_colmodel,
+		ds: maestra_dimension_datastore,
+		cm: maestra_dimension_colmodel,
 		selModel: new Ext.grid.RowSelectionModel({
 			singleSelect:true,	
 			moveEditorOnEnter :false
 		}),
-		autoExpandColumn: 'maestra_mar_nombre_column',
+		autoExpandColumn: 'maestra_dim_nombre_column',
 		height: largo_panel,
 		bbar: new Ext.PagingToolbar({
 			pageSize: 20,
-			store: maestra_marca_datastore,
+			store: maestra_dimension_datastore,
 			displayInfo: true,
-			displayMsg: 'Marcas de Columna {0} - {1} de {2}',
-			emptyMsg: "No hay marcas de columna aun"
+			displayMsg: 'Dimensiones de Columna {0} - {1} de {2}',
+			emptyMsg: "No hay dimensiones de columna aun"
 		}),
 		tbar:
 		[
 			{	
-				id:'maestra_marca_agregar_boton',
+				id:'maestra_dimension_agregar_boton',
 				text:'Agregar',
 				tooltip:'Agregar',
 				iconCls:'agregar',
-				handler:maestra_marca_agregar
+				handler:maestra_dimension_agregar
 			},'-',
 			{
 				text:'Eliminar',
 				tooltip:'Eliminar',
 				iconCls:'eliminar',
-				handler:maestra_marca_eliminar
+				handler:maestra_dimension_eliminar
 			},'-',{
 				text:'',
 				iconCls:'activos',
-				tooltip:'Marcas activas',
+				tooltip:'Dimensinoes activas',
 				handler:function(){
-					maestra_marca_datastore.baseParams.mar_eliminado = '0';
-					maestra_marca_datastore.load({
+					maestra_dimension_datastore.baseParams.dim_eliminado = '0';
+					maestra_dimension_datastore.load({
 						params: {
 							start: 0,
 							limit: 20
@@ -152,10 +152,10 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 			},{
 				text:'',
 				iconCls:'eliminados',
-				tooltip:'Marcas eliminadas',
+				tooltip:'Dimensiones eliminadas',
 				handler:function(){
-					maestra_marca_datastore.baseParams.mar_eliminado = '1';
-					maestra_marca_datastore.load({
+					maestra_dimension_datastore.baseParams.dim_eliminado = '1';
+					maestra_dimension_datastore.load({
 						params: {
 							start: 0,
 							limit: 20
@@ -165,26 +165,26 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 			},'-',{
 				text:'Restablecer',
 				iconCls:'restablece',
-				tooltip:'Restablecer una marca eliminada',
+				tooltip:'Restablecer una dimensión eliminada',
 				handler:function(){
-					 var cant_record = maestra_marca_gridpanel.getSelectionModel().getCount();
+					 var cant_record = maestra_dimension_gridpanel.getSelectionModel().getCount();
 			
 					if(cant_record > 0){
-					var record = maestra_marca_gridpanel.getSelectionModel().getSelected();
-						if (record.get('maestra_mar_codigo') != '') {
+					var record = maestra_dimension_gridpanel.getSelectionModel().getSelected();
+						if (record.get('maestra_dim_codigo') != '') {
 					
-							Ext.Msg.prompt('Restablecer marcas', 
+							Ext.Msg.prompt('Restablecer dimensiones', 
 								'Digite la causa de restablecimiento', 
 								function(btn, text){
 									if (btn == 'ok')  {
 										subirDatosAjax( 
-											getAbsoluteUrl('maestra_marca', 'restablecerMarca'), 
+											getAbsoluteUrl('maestra_dimension', 'restablecerDimension'), 
 											{
-											maestra_mar_codigo:record.get('maestra_mar_codigo'),
-											maestra_mar_causa_restablece:text
+											maestra_dim_codigo:record.get('maestra_dim_codigo'),
+											maestra_dim_causa_restablece:text
 											}, 
 											function(){
-												maestra_marca_datastore.reload();
+												maestra_dimension_datastore.reload();
 											}, 
 											function(){}
 										);
@@ -194,12 +194,12 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 						}
 					}
 					else {
-						mostrarMensajeConfirmacion('Error', "Seleccione una marca de columna eliminada");
+						mostrarMensajeConfirmacion('Error', "Seleccione una dimensi&oacute;n de columna eliminada");
 					}
 				}
 			}
 		],
-		plugins:[maestra_marca_roweditor,
+		plugins:[maestra_dimension_roweditor,
 		    new Ext.ux.grid.Search({
 				mode:          'local',
 				position:      top,
@@ -214,60 +214,60 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 	
 
 	/*INTEGRACION AL CONTENEDOR*/
-	var maestra_marca_contenedor_panel = new Ext.Panel({
-		id: 'maestra_marca_contenedor_panel',
+	var maestra_dimension_contenedor_panel = new Ext.Panel({
+		id: 'maestra_dimension_contenedor_panel',
 		height: largo_panel,
 		autoWidth: true,
 		border: false,
-		tabTip :'Aqu&iacute puede ver, agregar, eliminar y restablecer marcas de columnas',
+		tabTip :'Aqu&iacute puede ver, agregar, eliminar y restablecer dimensiones de columnas',
 		monitorResize:true,
 		items: 
 		[
-			maestra_marca_gridpanel
+			maestra_dimension_gridpanel
 		],
-		renderTo:'div_form_maestra_marca'
+		renderTo:'div_form_maestra_dimension'
 	});
 	
 
-	function maestra_marca_actualizar(record,text){
-	//	var record = maestra_marca_gridpanel.getSelectionModel().getSelected();
+	function maestra_dimension_actualizar(record,text){
+	//	var record = maestra_dimension_gridpanel.getSelectionModel().getSelected();
 
 		subirDatosAjax(
-			getAbsoluteUrl('maestra_marca','actualizarMarca'),
+			getAbsoluteUrl('maestra_dimension','actualizarDimension'),
 			{
-				maestra_mar_codigo: record.get('maestra_mar_codigo'),
-				maestra_mar_nombre: record.get('maestra_mar_nombre'),
-				maestra_mar_causa_actualizacion: text
+				maestra_dim_codigo: record.get('maestra_dim_codigo'),
+				maestra_dim_nombre: record.get('maestra_dim_nombre'),
+				maestra_dim_causa_actualizacion: text
 			},
 			function(){
-				maestra_marca_datastore.reload(); 
+				maestra_dimension_datastore.reload(); 
 			}
 		);
 	}
         
-	function maestra_marca_eliminar()
+	function maestra_dimension_eliminar()
 	{
-		var cant_record = maestra_marca_gridpanel.getSelectionModel().getCount();
+		var cant_record = maestra_dimension_gridpanel.getSelectionModel().getCount();
 		
 		if(cant_record > 0){
-			var record = maestra_marca_gridpanel.getSelectionModel().getSelected();
-			if(record.get('maestra_mar_codigo')!='')
+			var record = maestra_dimension_gridpanel.getSelectionModel().getSelected();
+			if(record.get('maestra_dim_codigo')!='')
 			{
-				Ext.Msg.confirm('Eliminar marca', "Realmente desea eliminar esta marca?", function(btn){
+				Ext.Msg.confirm('Eliminar dimensión', "Realmente desea eliminar esta dimensión?", function(btn){
 					if (btn == 'yes') {
 					
-						Ext.Msg.prompt('Eliminar marca', 
-							'Digite la causa de la eliminaci&oacute;n de esta marca', 
+						Ext.Msg.prompt('Eliminar dimensión', 
+							'Digite la causa de la eliminaci&oacute;n de esta dimensión', 
 							function(btn2, text){
 								if (btn2 == 'ok') {
 									subirDatosAjax(
-										getAbsoluteUrl('maestra_marca','eliminarMarca'),
+										getAbsoluteUrl('maestra_dimension','eliminarDimension'),
 										{
-										maestra_mar_codigo:record.get('maestra_mar_codigo'),
-										maestra_mar_causa_eliminacion:text
+										maestra_dim_codigo:record.get('maestra_dim_codigo'),
+										maestra_dim_causa_eliminacion:text
 										},
 										function(){
-										maestra_marca_datastore.reload(); 
+										maestra_dimension_datastore.reload(); 
 										}
 									);
 								}
@@ -278,20 +278,20 @@ var ayuda_maestra_mar_nombre='Nombre marca';
 			}
 		}
 		else{
-			mostrarMensajeConfirmacion('Error',"Seleccione una marca de columna a eliminar");
+			mostrarMensajeConfirmacion('Error',"Seleccione una dimensi&oacute;n de columna a eliminar");
 		}
 	}
 
-	function maestra_marca_agregar(btn, ev) {
-		var row = new maestra_marca_gridpanel.store.recordType({
-			maestra_mar_codigo : '',
-			maestra_mar_nombre: ''
+	function maestra_dimension_agregar(btn, ev) {
+		var row = new maestra_dimension_gridpanel.store.recordType({
+			maestra_dim_codigo : '',
+			maestra_dim_nombre: ''
 		});
 
-		maestra_marca_gridpanel.getSelectionModel().clearSelections();
-		maestra_marca_roweditor.stopEditing();
-		maestra_marca_gridpanel.store.insert(0, row);
-		maestra_marca_gridpanel.getSelectionModel().selectRow(0);
-		maestra_marca_roweditor.startEditing(0);
+		maestra_dimension_gridpanel.getSelectionModel().clearSelections();
+		maestra_dimension_roweditor.stopEditing();
+		maestra_dimension_gridpanel.store.insert(0, row);
+		maestra_dimension_gridpanel.getSelectionModel().selectRow(0);
+		maestra_dimension_roweditor.startEditing(0);
 	}
 	

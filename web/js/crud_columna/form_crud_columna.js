@@ -1,8 +1,8 @@
 var ayuda_col_codigo = '';
-var ayuda_col_consecutivo = 'Escriba el consecutivo de la columna';
-var ayuda_col_configuracion = 'Escriba la configuración de la columna';
-var ayuda_col_marca = 'Escriba la marca de la columna';
-var ayuda_col_lote = 'Escriba la marca de la lote';
+var ayuda_col_codigo_interno = 'Escriba el c&oacute;digo interno de la columna';
+var ayuda_col_lote = 'Escriba el lote de la columna';
+var ayuda_col_mar_nombre = 'Seleccione la marca de la columna';
+var ayuda_col_mod_nombre = 'Seleccione el modelo de la columna';
 
 var largo_panel = 500;
 
@@ -24,13 +24,7 @@ var crud_columna_datastore = new Ext.data.Store({
         name: 'col_codigo',
         type: 'int'
     }, {
-        name: 'col_consecutivo',
-        type: 'string'
-    }, {
-        name: 'col_configuracion',
-        type: 'string'
-    }, {
-        name: 'col_marca',
+        name: 'col_codigo_interno',
         type: 'string'
     }, {
         name: 'col_lote',
@@ -56,9 +50,59 @@ var crud_columna_datastore = new Ext.data.Store({
     }, {
         name: 'col_eliminado',
         type: 'string'
+    }, {
+        name: 'col_mar_codigo',
+        type: 'int'
+    }, {
+        name: 'col_mar_nombre',
+        type: 'string'
+    }, {
+        name: 'col_mod_codigo',
+        type: 'int'
+    }, {
+        name: 'col_mod_nombre',
+        type: 'string'
     }])
 });
 crud_columna_datastore.load();
+
+var crud_columna_marca_datastore = new Ext.data.Store({
+    id: 'crud_columna_marca_datastore',
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('crud_columna', 'listarMarcas'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total',
+        id: 'id'
+    }, [{
+        name: 'mar_codigo'
+    }, {
+        name: 'mar_nombre'
+    }])
+});
+crud_columna_marca_datastore.load();
+
+var crud_columna_modelo_datastore = new Ext.data.Store({
+    id: 'crud_columna_modelo_datastore',
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('crud_columna', 'listarModelos'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total',
+        id: 'id'
+    }, [{
+        name: 'mod_codigo'
+    }, {
+        name: 'mod_nombre'
+    }])
+});
+crud_columna_modelo_datastore.load();
 
 var col_eliminado = new Ext.form.NumberField({
     xtype: 'numberfield',
@@ -85,47 +129,17 @@ var col_codigo = new Ext.form.NumberField({
     }
 });
 
-var col_consecutivo = new Ext.form.TextField({
+var col_codigo_interno = new Ext.form.TextField({
     xtype: 'textfield',
     labelStyle: 'text-align:right;',
-    name: 'col_consecutivo',
-    id: 'col_consecutivo',
-    fieldLabel: 'Consecutivo',
+    name: 'col_codigo_interno',
+    id: 'col_codigo_interno',
+    fieldLabel: 'C&oacute;digo Interno',
     allowBlank: false,
     maxLength: 100,
     listeners: {
         'render': function(){
-            ayuda('col_consecutivo', ayuda_col_consecutivo);
-        }
-    }
-});
-
-var col_configuracion = new Ext.form.TextField({
-    xtype: 'textfield',
-    labelStyle: 'text-align:right;',
-    name: 'col_configuracion',
-    id: 'col_configuracion',
-    fieldLabel: 'Configuraci&oacute;n',
-    allowBlank: false,
-    maxLength: 100,
-    listeners: {
-        'render': function(){
-            ayuda('col_configuracion', ayuda_col_configuracion);
-        }
-    }
-});
-
-var col_marca = new Ext.form.TextField({
-    xtype: 'textfield',
-    labelStyle: 'text-align:right;',
-    name: 'col_marca',
-    id: 'col_marca',
-    fieldLabel: 'Marca',
-    allowBlank: false,
-    maxLength: 100,
-    listeners: {
-        'render': function(){
-            ayuda('col_marca', ayuda_col_marca);
+            ayuda('col_codigo_interno', ayuda_col_codigo_interno);
         }
     }
 });
@@ -141,6 +155,56 @@ var col_lote = new Ext.form.TextField({
     listeners: {
         'render': function(){
             ayuda('col_lote', ayuda_col_lote);
+        }
+    }
+});
+
+var col_mar_codigo = new Ext.form.ComboBox({
+    xtype: 'combobox',
+    labelStyle: 'text-align:right;',
+    id: 'col_mar_nombre',
+    hiddenName: 'col_mar_codigo',
+    name: 'col_mar_codigo',
+    fieldLabel: 'Marca de Columna',
+    store: crud_columna_marca_datastore,
+    mode: 'local',
+    emptyText: 'Seleccione ...',
+    displayField: 'mar_nombre',
+    valueField: 'mar_codigo',
+    triggerAction: 'all',
+    forceSelection: true,
+    allowBlank: false,
+    listeners: {
+        'render': function(){
+            ayuda('col_mar_nombre', ayuda_col_mar_nombre);
+        },
+        focus: function(){
+            crud_columna_marca_datastore.reload();
+        }
+    }
+});
+
+var col_mod_codigo = new Ext.form.ComboBox({
+    xtype: 'combobox',
+    labelStyle: 'text-align:right;',
+    id: 'col_mod_nombre',
+    hiddenName: 'col_mod_codigo',
+    name: 'col_mod_codigo',
+    fieldLabel: 'Modelo de Columna',
+    store: crud_columna_modelo_datastore,
+    mode: 'local',
+    emptyText: 'Seleccione ...',
+    displayField: 'mod_nombre',
+    valueField: 'mod_codigo',
+    triggerAction: 'all',
+    forceSelection: true,
+    allowBlank: false,
+    listeners: {
+        'render': function(){
+            ayuda('col_mod_nombre', ayuda_col_mod_nombre);
+        },
+        focus: function(){
+            crud_columna_modelo_datastore.reload();
         }
     }
 });
@@ -172,7 +236,7 @@ var crud_columna_formpanel = new Ext.FormPanel({
     defaults: {
         anchor: '98%'
     },
-    items: [col_eliminado, col_codigo, col_consecutivo, col_configuracion, col_marca, col_lote, col_fecha_registro_sistema],
+    items: [col_eliminado, col_codigo, col_codigo_interno, col_lote, col_mar_codigo, col_mod_codigo, col_fecha_registro_sistema],
     buttons: [{
         text: 'Guardar',
         iconCls: 'guardar',
@@ -214,21 +278,21 @@ var crud_columna_colmodel = new Ext.grid.ColumnModel({
         width: 30,
         dataIndex: 'col_codigo'
     }, {
-        header: "Consecutivo",
-        width: 150,
-        dataIndex: 'col_consecutivo'
-    }, {
-        header: "Configuraci&oacute;n",
-        width: 150,
-        dataIndex: 'col_configuracion'
-    }, {
-        header: "Marca",
-        width: 150,
-        dataIndex: 'col_marca'
+        header: "C&oacute;digo Interno",
+        width: 100,
+        dataIndex: 'col_codigo_interno'
     }, {
         header: "Lote",
-        width: 150,
+        width: 100,
         dataIndex: 'col_lote'
+    }, {
+        header: "Marca",
+        width: 120,
+        dataIndex: 'col_mar_nombre'        
+    }, {
+        header: "Modelo",
+        width: 120,
+        dataIndex: 'col_mod_nombre'        
     }, {
         header: "Creado por",
         width: 120,

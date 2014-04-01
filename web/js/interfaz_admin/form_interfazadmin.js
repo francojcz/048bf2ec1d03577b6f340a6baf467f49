@@ -174,6 +174,34 @@ var form_interfazdministrador = function(){
                                 }
                             }]
                         }, {
+                            title: 'Dimensi&oacute;n',
+                            tabTip: 'Dimensi&oacute;n, utilice esto para registrar las dimensiones de las columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            iconCls: 'x-icon-maestra',
+                            items: [{
+                                frame: true,
+                                autoLoad: {
+                                    url: getAbsoluteUrl('maestra_dimension', 'index'),
+                                    scripts: true,
+                                    scope: this
+                                }
+                            }]
+                        }, {
+                            title: 'Tama&ntilde;o de Part&iacute;cula',
+                            tabTip: 'Dimensi&oacute;n, utilice esto para registrar los tama&ntilde;o de part&iacute;cula de las columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            iconCls: 'x-icon-maestra',
+                            items: [{
+                                frame: true,
+                                autoLoad: {
+                                    url: getAbsoluteUrl('maestra_tamano', 'index'),
+                                    scripts: true,
+                                    scope: this
+                                }
+                            }]
+                        }, {
                             title: 'Columnas',
                             tabTip: 'Manejo de columnas',
                             border: false,
