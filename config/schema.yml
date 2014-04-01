@@ -107,6 +107,18 @@ propel:
     est_causa_eliminacion: { phpName: EstCausaEliminacion, type: VARCHAR, size: '250', required: false }
     est_causa_actualizacion: { phpName: EstCausaActualizacion, type: VARCHAR, size: '250', required: false }
     _indexes: { FK_reference_41: [est_usu_crea], FK_reference_42: [est_usu_actualiza] }
+  etapa:
+    _attributes: { phpName: Etapa }
+    eta_codigo: { phpName: EtaCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    eta_nombre: { phpName: EtaNombre, type: VARCHAR, size: '200', required: false }
+    eta_eliminado: { phpName: EtaEliminado, type: SMALLINT, size: '6', required: false }
+    eta_fecha_registro_sistema: { phpName: EtaFechaRegistroSistema, type: TIMESTAMP, required: false }
+    eta_usu_crea: { phpName: EtaUsuCrea, type: INTEGER, size: '11', required: false }
+    eta_fecha_actualizacion: { phpName: EtaFechaActualizacion, type: TIMESTAMP, required: false }
+    eta_usu_actualiza: { phpName: EtaUsuActualiza, type: INTEGER, size: '11', required: false }
+    eta_causa_eliminacion: { phpName: EtaCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    eta_causa_actualizacion: { phpName: EtaCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    _indexes: { FK_reference_1: [eta_usu_crea], FK_reference_2: [eta_usu_actualiza] }
   evento:
     _attributes: { phpName: Evento }
     eve_codigo: { phpName: EveCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -374,7 +386,7 @@ propel:
     rum_tiempo_retencion: { phpName: RumTiempoRetencion, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_resolucion: { phpName: RumResolucion, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_tailing: { phpName: RumTailing, type: DECIMAL, size: '12', scale: '4', required: false }
-    _indexes: { FK_reference_22: [rum_usu_codigo_elimino], FK_reference_6: [rum_maq_codigo], FK_reference_7: [rum_met_codigo], FK_reference_8: [rum_usu_codigo], FK_reference_9: [rum_col_codigo] }
+    _indexes: { FK_reference_1: [rum_usu_codigo_elimino], FK_reference_2: [rum_maq_codigo], FK_reference_3: [rum_met_codigo], FK_reference_4: [rum_usu_codigo], FK_reference_5: [rum_col_codigo] }
   tamano_particula:
     _attributes: { phpName: TamanoParticula }
     tam_codigo: { phpName: TamCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }

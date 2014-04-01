@@ -1867,8 +1867,12 @@ class ingreso_datosActions extends sfActions
             $fields['lote'] = $registro -> getRumLote();
             
             //Cambios: 28 de febrero de 2014
-            $columna = ColumnaPeer::retrieveByPK($registro->getRumColCodigo());
-            $fields['col_consecutivo'] = $columna -> getColConsecutivo();
+            if($registro->getRumColCodigo() == '') {
+                $fields['col_codigo_interno'] = '';
+            } else {
+                $columna = ColumnaPeer::retrieveByPK($registro->getRumColCodigo());
+                $fields['col_codigo_interno'] = $columna -> getColCodigoInterno();
+            }            
             $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
             $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
@@ -1927,7 +1931,11 @@ class ingreso_datosActions extends sfActions
             $fields['lote'] = $registro -> getRumLote();
 
             //Cambios: 28 de febrero de 2014
-            $fields['col_consecutivo'] = $columna -> getColConsecutivo();
+            if($registro->getRumColCodigo() == '') {
+                $fields['col_codigo_interno'] = '';
+            } else {
+                $fields['col_codigo_interno'] = $columna -> getColCodigoInterno();
+            } 
             $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
             $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
@@ -1997,7 +2005,7 @@ class ingreso_datosActions extends sfActions
     {
         $conexion = new Criteria();
         $conexion -> add(ColumnaPeer::COL_ELIMINADO, 0);
-        $conexion -> addAscendingOrderByColumn(ColumnaPeer::COL_CONSECUTIVO);
+        $conexion -> addAscendingOrderByColumn(ColumnaPeer::COL_CODIGO_INTERNO);
         $columnas = ColumnaPeer::doSelect($conexion);
         
         $result = array();
@@ -2007,7 +2015,7 @@ class ingreso_datosActions extends sfActions
         {
             $fields = array();
             $fields['codigo'] = $columna -> getColCodigo();
-            $fields['nombre'] = $columna -> getColConsecutivo();
+            $fields['nombre'] = $columna -> getColCodigoInterno();
             $data[] = $fields;
         }
 

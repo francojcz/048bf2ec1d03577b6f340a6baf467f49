@@ -117,7 +117,7 @@ Ext.onReady(function()
     name : 'lote'
   }, {
     type : 'string',
-    name : 'col_consecutivo'
+    name : 'col_codigo_interno'
   }, {
     type : 'string',
     name : 'platos_teoricos'
@@ -1649,9 +1649,9 @@ Ext.onReady(function()
     renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
   },
   {
-    dataIndex : 'col_consecutivo',
-    header : 'Consecutivo',
-    tooltip : 'Consecutivo',
+    dataIndex : 'col_codigo_interno',
+    header : 'C&oacute;digo<br>Interno',
+    tooltip : 'C&oacute;digo Interno',
     columnWidth : 80,
     align : 'center',
     renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')

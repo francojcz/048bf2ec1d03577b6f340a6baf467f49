@@ -202,8 +202,8 @@ var form_interfazdministrador = function(){
                                 }
                             }]
                         }, {
-                            title: 'Columnas',
-                            tabTip: 'Manejo de columnas',
+                            title: 'Columna',
+                            tabTip: 'Columna, utilice esto para registra la informaci&oacute;n de columnas',
                             border: false,
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',
@@ -211,6 +211,20 @@ var form_interfazdministrador = function(){
                                 frame: true,
                                 autoLoad: {
                                     url: getAbsoluteUrl('crud_columna', 'index'),
+                                    scripts: true,
+                                    scope: this
+                                }
+                            }]
+                        }, {
+                            title: 'Etapa',
+                            tabTip: 'Etapa, utilice esto para registrar las etapas de las columnas',
+                            border: false,
+                            style: 'padding: 10px;',
+                            iconCls: 'x-icon-maestra',
+                            items: [{
+                                frame: true,
+                                autoLoad: {
+                                    url: getAbsoluteUrl('maestra_etapa', 'index'),
                                     scripts: true,
                                     scope: this
                                 }

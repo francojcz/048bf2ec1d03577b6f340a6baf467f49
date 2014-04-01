@@ -636,11 +636,11 @@ CREATE TABLE `registro_uso_maquina`
         `rum_resolucion` DECIMAL(12,4),
         `rum_tailing` DECIMAL(12,4),
 	PRIMARY KEY (`rum_codigo`),
-	KEY `FK_reference_22`(`rum_usu_codigo_elimino`),
-	KEY `FK_reference_6`(`rum_maq_codigo`),
-	KEY `FK_reference_7`(`rum_met_codigo`),
-	KEY `FK_reference_8`(`rum_usu_codigo`),
-        KEY `FK_reference_9`(`rum_col_codigo`),
+	KEY `FK_reference_1`(`rum_usu_codigo_elimino`),
+	KEY `FK_reference_2`(`rum_maq_codigo`),
+	KEY `FK_reference_3`(`rum_met_codigo`),
+	KEY `FK_reference_4`(`rum_usu_codigo`),
+        KEY `FK_reference_5`(`rum_col_codigo`),
 	CONSTRAINT `registro_uso_maquina_FK_1`
 		FOREIGN KEY (`rum_maq_codigo`)
 		REFERENCES `maquina` (`maq_codigo`)
@@ -661,7 +661,7 @@ CREATE TABLE `registro_uso_maquina`
 		REFERENCES `usuario` (`usu_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT,
-        CONSTRAINT `registro_uso_maquina_FK_4`
+        CONSTRAINT `registro_uso_maquina_FK_5`
 		FOREIGN KEY (`rum_col_codigo`)
 		REFERENCES `columna` (`col_codigo`)
 		ON UPDATE RESTRICT
@@ -961,6 +961,39 @@ CREATE TABLE `columna`
         CONSTRAINT `columna_FK_7`
 		FOREIGN KEY (`col_tam_codigo`)
 		REFERENCES `tamano_particula` (`tam_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
+#-----------------------------------------------------------------------------
+#-- etapa
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `etapa`;
+
+
+CREATE TABLE `etapa`
+(
+	`eta_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
+	`eta_nombre` VARCHAR(200),
+        `eta_eliminado` SMALLINT(6),
+        `eta_fecha_registro_sistema` DATETIME,
+        `eta_usu_crea` INTEGER(11),
+        `eta_fecha_actualizacion` DATETIME,
+        `eta_usu_actualiza` INTEGER(11),
+        `eta_causa_eliminacion` VARCHAR(250),
+	`eta_causa_actualizacion` VARCHAR(250),
+	PRIMARY KEY (`eta_codigo`),
+        KEY `FK_reference_1`(`eta_usu_crea`),
+        KEY `FK_reference_2`(`eta_usu_actualiza`),
+        CONSTRAINT `etapa_FK_1`
+		FOREIGN KEY (`eta_usu_crea`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `etapa_FK_2`
+		FOREIGN KEY (`eta_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
