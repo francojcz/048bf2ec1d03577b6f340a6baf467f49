@@ -358,7 +358,7 @@ var crud_maquina_formpanel = new Ext.FormPanel({
     }]
 });
 
-function maquinaRenderComboColumn(value, meta, record){
+function maquinaRenderComboColumn(value, meta, record) {
     return ComboRenderer(value, maq_est_codigo);
 }
 
@@ -573,7 +573,7 @@ function crud_maquina_eliminar(){
         var record = crud_maquina_gridpanel.getSelectionModel().getSelected();
         if (record.get('maq_codigo') != '') {
         
-            Ext.Msg.confirm('Eliminar equipo', "Realmente desea eliminar esta equipo?", function(btn){
+            Ext.Msg.confirm('Eliminar equipo', "Realmente desea eliminar este equipo?", function(btn){
                 if (btn == 'yes') {
                 
                     Ext.Msg.prompt('Eliminar equipo', 'Digite la causa de la eliminaci&oacute;n de este equipo', function(btn2, text){
@@ -595,10 +595,9 @@ function crud_maquina_eliminar(){
     }
 }
 
-function crud_maquina_agregar(btn, ev){
+function crud_maquina_agregar(btn, ev) {
     crud_maquina_formpanel.getForm().reset();
-    Ext.getCmp('crud_maquina_actualizar_boton').setText('Guardar');
-    
+    Ext.getCmp('crud_maquina_actualizar_boton').setText('Guardar');    
 }
 
 

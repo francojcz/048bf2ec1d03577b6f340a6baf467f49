@@ -3,6 +3,9 @@ var ayuda_col_codigo_interno = 'Escriba el c&oacute;digo interno de la columna';
 var ayuda_col_lote = 'Escriba el lote de la columna';
 var ayuda_col_mar_nombre = 'Seleccione la marca de la columna';
 var ayuda_col_mod_nombre = 'Seleccione el modelo de la columna';
+var ayuda_col_fase_nombre = 'Seleccione la fase ligada de la columna';
+var ayuda_col_dim_nombre = 'Seleccione la dimensi&oacute;n de la columna';
+var ayuda_col_tam_nombre = 'Seleccione el tama&ntilde;o de part&iacute;cula de la columna';
 
 var largo_panel = 500;
 
@@ -52,15 +55,18 @@ var crud_columna_datastore = new Ext.data.Store({
         type: 'string'
     }, {
         name: 'col_mar_codigo',
-        type: 'int'
-    }, {
-        name: 'col_mar_nombre',
         type: 'string'
     }, {
         name: 'col_mod_codigo',
-        type: 'int'
+        type: 'string'
     }, {
-        name: 'col_mod_nombre',
+        name: 'col_fase_codigo',
+        type: 'string'
+    }, {
+        name: 'col_dim_codigo',
+        type: 'string'
+    }, {
+        name: 'col_tam_codigo',
         type: 'string'
     }])
 });
@@ -103,6 +109,63 @@ var crud_columna_modelo_datastore = new Ext.data.Store({
     }])
 });
 crud_columna_modelo_datastore.load();
+
+var crud_columna_fase_datastore = new Ext.data.Store({
+    id: 'crud_columna_fase_datastore',
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('crud_columna', 'listarFaseLigada'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total',
+        id: 'id'
+    }, [{
+        name: 'fase_codigo'
+    }, {
+        name: 'fase_nombre'
+    }])
+});
+crud_columna_fase_datastore.load();
+
+var crud_columna_dimension_datastore = new Ext.data.Store({
+    id: 'crud_columna_dimension_datastore',
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('crud_columna', 'listarDimensiones'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total',
+        id: 'id'
+    }, [{
+        name: 'dim_codigo'
+    }, {
+        name: 'dim_nombre'
+    }])
+});
+crud_columna_dimension_datastore.load();
+
+var crud_columna_tamano_datastore = new Ext.data.Store({
+    id: 'crud_columna_tamano_datastore',
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('crud_columna', 'listarTamanos'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total',
+        id: 'id'
+    }, [{
+        name: 'tam_codigo'
+    }, {
+        name: 'tam_nombre'
+    }])
+});
+crud_columna_tamano_datastore.load();
 
 var col_eliminado = new Ext.form.NumberField({
     xtype: 'numberfield',
@@ -209,6 +272,81 @@ var col_mod_codigo = new Ext.form.ComboBox({
     }
 });
 
+var col_fase_codigo = new Ext.form.ComboBox({
+    xtype: 'combobox',
+    labelStyle: 'text-align:right;',
+    id: 'col_fase_nombre',
+    hiddenName: 'col_fase_codigo',
+    name: 'col_fase_codigo',
+    fieldLabel: 'Fase Ligada',
+    store: crud_columna_fase_datastore,
+    mode: 'local',
+    emptyText: 'Seleccione ...',
+    displayField: 'fase_nombre',
+    valueField: 'fase_codigo',
+    triggerAction: 'all',
+    forceSelection: true,
+    allowBlank: false,
+    listeners: {
+        'render': function(){
+            ayuda('col_fase_nombre', ayuda_col_fase_nombre);
+        },
+        focus: function(){
+            crud_columna_fase_datastore.reload();
+        }
+    }
+});
+
+var col_dim_codigo = new Ext.form.ComboBox({
+    xtype: 'combobox',
+    labelStyle: 'text-align:right;',
+    id: 'col_dim_nombre',
+    hiddenName: 'col_dim_codigo',
+    name: 'col_dim_codigo',
+    fieldLabel: 'Dimensi&oacute;n (mm)',
+    store: crud_columna_dimension_datastore,
+    mode: 'local',
+    emptyText: 'Seleccione ...',
+    displayField: 'dim_nombre',
+    valueField: 'dim_codigo',
+    triggerAction: 'all',
+    forceSelection: true,
+    allowBlank: false,
+    listeners: {
+        'render': function(){
+            ayuda('col_dim_nombre', ayuda_col_dim_nombre);
+        },
+        focus: function(){
+            crud_columna_dimension_datastore.reload();
+        }
+    }
+});
+
+var col_tam_codigo = new Ext.form.ComboBox({
+    xtype: 'combobox',
+    labelStyle: 'text-align:right;',
+    id: 'col_tam_nombre',
+    hiddenName: 'col_tam_codigo',
+    name: 'col_tam_codigo',
+    fieldLabel: 'Tama&ntilde;o de Part&iacute;cula (μ)',
+    store: crud_columna_tamano_datastore,
+    mode: 'local',
+    emptyText: 'Seleccione ...',
+    displayField: 'tam_nombre',
+    valueField: 'tam_codigo',
+    triggerAction: 'all',
+    forceSelection: true,
+    allowBlank: false,
+    listeners: {
+        'render': function(){
+            ayuda('col_tam_nombre', ayuda_col_tam_nombre);
+        },
+        focus: function(){
+            crud_columna_tamano_datastore.reload();
+        }
+    }
+});
+
 var col_fecha_registro_sistema = new Ext.form.TextField({
     xtype: 'textfield',
     labelStyle: 'text-align:right;',
@@ -232,11 +370,11 @@ var crud_columna_formpanel = new Ext.FormPanel({
     height: 470,
     layout: 'form',
     bodyStyle: 'padding:10px;',
-    labelWidth: 120,
+    labelWidth: 140,
     defaults: {
         anchor: '98%'
     },
-    items: [col_eliminado, col_codigo, col_codigo_interno, col_lote, col_mar_codigo, col_mod_codigo, col_fecha_registro_sistema],
+    items: [col_eliminado, col_codigo, col_codigo_interno, col_lote, col_mar_codigo, col_mod_codigo, col_fase_codigo, col_dim_codigo, col_tam_codigo, col_fecha_registro_sistema],
     buttons: [{
         text: 'Guardar',
         iconCls: 'guardar',
@@ -262,8 +400,24 @@ var crud_columna_formpanel = new Ext.FormPanel({
     }]
 });
 
-function columnaRenderComboColumn(value, meta, record){
-    return ComboRenderer(value, col_est_codigo);
+function marcaRenderComboColumn(value1, meta1, record1){
+    return ComboRenderer(value1, col_mar_codigo);
+}
+
+function modeloRenderComboColumn(value2, meta2, record2){
+    return ComboRenderer(value2, col_mod_codigo);
+}
+
+function faseRenderComboColumn(value2, meta2, record2){
+    return ComboRenderer(value2, col_fase_codigo);
+}
+
+function dimensionRenderComboColumn(value2, meta2, record2){
+    return ComboRenderer(value2, col_dim_codigo);
+}
+
+function tamanoRenderComboColumn(value2, meta2, record2){
+    return ComboRenderer(value2, col_tam_codigo);
 }
 
 var crud_columna_colmodel = new Ext.grid.ColumnModel({
@@ -284,15 +438,32 @@ var crud_columna_colmodel = new Ext.grid.ColumnModel({
     }, {
         header: "Lote",
         width: 100,
-        dataIndex: 'col_lote'
+        dataIndex: 'col_lote'    
     }, {
         header: "Marca",
         width: 120,
-        dataIndex: 'col_mar_nombre'        
+        dataIndex: 'col_mar_codigo',
+        renderer: marcaRenderComboColumn
     }, {
         header: "Modelo",
         width: 120,
-        dataIndex: 'col_mod_nombre'        
+        dataIndex: 'col_mod_codigo',
+        renderer: modeloRenderComboColumn
+    }, {
+        header: "Fase Ligada",
+        width: 120,
+        dataIndex: 'col_fase_codigo',
+        renderer: faseRenderComboColumn
+    }, {
+        header: "Dimensi&oacute;n (mm)",
+        width: 120,
+        dataIndex: 'col_dim_codigo',
+        renderer: dimensionRenderComboColumn
+    }, {
+        header: "Tam. de Part&iacute;cula (μ)",
+        width: 120,
+        dataIndex: 'col_dim_codigo',
+        renderer: tamanoRenderComboColumn
     }, {
         header: "Creado por",
         width: 120,
@@ -334,7 +505,7 @@ var crud_columna_gridpanel = new Ext.grid.GridPanel({
         listeners: {
             rowselect: function(sm, row, record){
                 Ext.getCmp('crud_columna_formpanel').getForm().loadRecord(record);
-                Ext.getCmp('crud_columna_actualizar_boton').setText('Actualizar');
+                Ext.getCmp('crud_columna_actualizar_boton').setText('Actualizar');                
             }
         }
     }),    
@@ -412,6 +583,17 @@ var crud_columna_gridpanel = new Ext.grid.GridPanel({
             }
         }
     }
+    ],
+    plugins:[
+            new Ext.ux.grid.Search({
+            mode:          'local',
+            position:      top,
+            searchText:    'Filtrar',
+            iconCls:  'filtrar',
+            selectAllText: 'Seleccionar todos',
+            searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
+            width:         150
+        })
     ]
 });
 
@@ -432,7 +614,6 @@ var crud_columna_contenedor_panel = new Ext.Panel({
 });
 
 function crud_columna_actualizar(text){
-
     if (crud_columna_formpanel.getForm().isValid()) {
         subirDatos(crud_columna_formpanel, getAbsoluteUrl('crud_columna', 'actualizarColumna'), {
             col_causa_actualizacion: text

@@ -52,6 +52,9 @@ class crud_columnaActions extends sfActions
                                 $columna->setColLote($this->getRequestParameter('col_lote'));
                                 $columna->setColMarCodigo($this->getRequestParameter('col_mar_codigo'));
                                 $columna->setColModCodigo($this->getRequestParameter('col_mod_codigo'));
+                                $columna->setColFaseCodigo($this->getRequestParameter('col_fase_codigo'));
+                                $columna->setColDimCodigo($this->getRequestParameter('col_dim_codigo'));
+                                $columna->setColTamCodigo($this->getRequestParameter('col_tam_codigo'));
                                 
 				$columna->setColFechaActualizacion(time());
 				$columna->setColUsuActualiza($this->getUser()->getAttribute('usu_codigo'));
@@ -104,16 +107,11 @@ class crud_columnaActions extends sfActions
 				$datos[$fila]['col_codigo']=$temporal->getColCodigo();
 				$datos[$fila]['col_codigo_interno'] = $temporal->getColCodigoInterno();
                                 $datos[$fila]['col_lote'] = $temporal->getColLote();
-                                
-                                //Información de la Marca
                                 $datos[$fila]['col_mar_codigo'] = $temporal->getColMarCodigo();
-                                $marca = MarcaPeer::retrieveByPK($temporal->getColMarCodigo());
-                                $datos[$fila]['col_mar_nombre'] = $marca->getMarNombre();
-                                
-                                //Información del Modelo
                                 $datos[$fila]['col_mod_codigo'] = $temporal->getColModCodigo();
-                                $modelo = ModeloPeer::retrieveByPK($temporal->getColModCodigo());
-                                $datos[$fila]['col_mod_nombre'] = $modelo->getModNombre();
+                                $datos[$fila]['col_fase_codigo'] = $temporal->getColFaseCodigo();
+                                $datos[$fila]['col_dim_codigo'] = $temporal->getColDimCodigo();
+                                $datos[$fila]['col_tam_codigo'] = $temporal->getColTamCodigo();
 				
 				$datos[$fila]['col_fecha_registro_sistema'] = $temporal->getColFechaRegistroSistema();
 				$datos[$fila]['col_fecha_actualizacion'] = $temporal->getColFechaActualizacion();				
@@ -267,6 +265,105 @@ class crud_columnaActions extends sfActions
 		}catch (Exception $excepcion)
 		{
 			$salida='Exception en listar Modelos';
+		}
+		return $this->renderText($salida);
+	}
+        
+        /**
+	 *Esta funcion lista las fases ligadas de la columna
+	*/
+	public function executeListarFaseLigada(sfWebRequest $request)
+	{
+		$salida='({"total":"0", "results":""})';
+		$fila=0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->addAscendingOrderByColumn(FaseLigadaPeer::FASE_NOMBRE);
+			$fases = FaseLigadaPeer::doSelect($conexion);
+
+			foreach($fases As $temporal)
+			{
+				$datos[$fila]['fase_codigo'] = $temporal->getFaseCodigo();
+				$datos[$fila]['fase_nombre'] = $temporal->getFaseNombre();
+				$fila++;
+			}
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Exception en listar Fases Ligadas';
+		}
+		return $this->renderText($salida);
+	}
+        
+        /**
+	 *Esta funcion lista las dimensiones de columna
+	*/
+	public function executeListarDimensiones(sfWebRequest $request)
+	{
+		$salida='({"total":"0", "results":""})';
+		$fila=0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->addAscendingOrderByColumn(DimensionPeer::DIM_NOMBRE);
+			$dimensiones = DimensionPeer::doSelect($conexion);
+
+			foreach($dimensiones As $temporal)
+			{
+				$datos[$fila]['dim_codigo'] = $temporal->getDimCodigo();
+				$datos[$fila]['dim_nombre'] = $temporal->getDimNombre();
+				$fila++;
+			}
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Exception en listar Dimensiones';
+		}
+		return $this->renderText($salida);
+	}
+        
+        /**
+	 *Esta funcion lista los tamanos de particula de columna
+	*/
+	public function executeListarTamanos(sfWebRequest $request)
+	{
+		$salida='({"total":"0", "results":""})';
+		$fila=0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->addAscendingOrderByColumn(TamanoParticulaPeer::TAM_NOMBRE);
+			$tamanos = TamanoParticulaPeer::doSelect($conexion);
+
+			foreach($tamanos As $temporal)
+			{
+				$datos[$fila]['tam_codigo'] = $temporal->getTamCodigo();
+				$datos[$fila]['tam_nombre'] = $temporal->getTamNombre();
+				$fila++;
+			}
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Exception en listar Tamanos';
 		}
 		return $this->renderText($salida);
 	}

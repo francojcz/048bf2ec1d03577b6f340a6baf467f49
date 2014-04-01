@@ -917,11 +917,17 @@ CREATE TABLE `columna`
 	`col_causa_actualizacion` VARCHAR(250),
         `col_mar_codigo` INTEGER(11),
         `col_mod_codigo` INTEGER(11),
+        `col_fase_codigo` INTEGER(11),
+        `col_dim_codigo` INTEGER(11),
+        `col_tam_codigo` INTEGER(11),
 	PRIMARY KEY (`col_codigo`),
         KEY `FK_reference_1`(`col_usu_crea`),
         KEY `FK_reference_2`(`col_usu_actualiza`),
         KEY `FK_reference_3`(`col_mar_codigo`),
         KEY `FK_reference_4`(`col_mod_codigo`),
+        KEY `FK_reference_5`(`col_fase_codigo`),
+        KEY `FK_reference_6`(`col_dim_codigo`),
+        KEY `FK_reference_7`(`col_tam_codigo`),
         CONSTRAINT `columna_FK_1`
 		FOREIGN KEY (`col_usu_crea`)
 		REFERENCES `usuario` (`usu_codigo`)
@@ -939,7 +945,22 @@ CREATE TABLE `columna`
 		ON DELETE RESTRICT,
         CONSTRAINT `columna_FK_4`
 		FOREIGN KEY (`col_mod_codigo`)
-		REFERENCES `modelo` (`od_codigo`)
+		REFERENCES `modelo` (`mod_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `columna_FK_5`
+		FOREIGN KEY (`col_fase_codigo`)
+		REFERENCES `fase_ligada` (`fase_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `columna_FK_6`
+		FOREIGN KEY (`col_dim_codigo`)
+		REFERENCES `dimension` (`dim_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `columna_FK_7`
+		FOREIGN KEY (`col_tam_codigo`)
+		REFERENCES `tamano_particula` (`tam_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );
