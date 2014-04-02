@@ -163,3 +163,16 @@ INSERT INTO `metodo` (`met_codigo`, `met_nombre`, `met_tiempo_alistamiento`, `me
 (26, 'Fallo', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', 0, 0, 0, 0, 0, 0, NULL, NULL, '2012-08-29 15:09:37', 0, 0, 0, 0, 0, 0, 0, 1, 1, '2012-08-29 15:09:37', 0, NULL, '', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', 0),
 (27, 'Impurezas Comunes ', '15.0000', '0.0000', '0.0000', '15.0000', '0.0000', '15.0000', 1, 0, 0, 0, 0, 0, NULL, NULL, '2012-12-11 15:09:28', 0, 0, 2, 0, 0, 0, 0, 1, 1, '2012-12-11 15:14:11', 0, NULL, '', '0.0000', '0.0000', '15.0000', '0.0000', '0.0000', '0.0000', 0),
 (28, 'Trazas Boldenona Undecilato', '15.0000', '15.0000', '0.0000', '30.0000', '0.0000', '9.0000', 1, 0, 0, 0, 0, 0, NULL, NULL, '2013-01-28 17:29:05', 1, 0, 0, 0, 0, 0, 0, 1, 1, '2013-01-28 17:29:48', 0, NULL, '', '9.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', 0);
+
+INSERT INTO `etapa` (`eta_codigo`, `eta_nombre`, `eta_eliminado`, `eta_fecha_registro_sistema`, `eta_usu_crea`, `eta_fecha_actualizacion`, `eta_usu_actualiza`, `eta_causa_eliminacion`, `eta_causa_actualizacion`) VALUES
+(1, 'PT', 0, now(), 1, now(), 1, NULL, NULL),
+(2, 'VAL', 0, now(), 1, now(), 1, NULL, NULL),
+(3, 'DIS', 0, now(), 1, now(), 1, NULL, NULL),
+(4, 'MP', 0, now(), 1, now(), 1, NULL, NULL),
+(5, 'EST NAT', 0, now(), 1, now(), 1, NULL, NULL),
+(6, 'EST ACE', 0, now(), 1, now(), 1, NULL, NULL),
+(7, 'EST', 0, now(), 1, now(), 1, NULL, NULL),
+(8, 'NIR', 0, now(), 1, now(), 1, NULL, NULL),
+(9, 'PROYECTO', 0, now(), 1, now(), 1, NULL, NULL),
+(10, 'DISEÑO', 0, now(), 1, now(), 1, NULL, NULL),
+(11, 'EST ACEL', 0, now(), 1, now(), 1, NULL, NULL);

@@ -631,6 +631,7 @@ CREATE TABLE `registro_uso_maquina`
 	`rum_tc_disolucion_estandar` DECIMAL(12,4),
 	`rum_tc_uniformidad_estandar` DECIMAL(12,4),
         `rum_col_codigo` INTEGER(11),
+        `rum_eta_codigo` INTEGER(11),
         `rum_platos_teoricos` DECIMAL(12,4),
         `rum_tiempo_retencion` DECIMAL(12,4),
         `rum_resolucion` DECIMAL(12,4),
@@ -641,6 +642,7 @@ CREATE TABLE `registro_uso_maquina`
 	KEY `FK_reference_3`(`rum_met_codigo`),
 	KEY `FK_reference_4`(`rum_usu_codigo`),
         KEY `FK_reference_5`(`rum_col_codigo`),
+        KEY `FK_reference_6`(`rum_eta_codigo`),
 	CONSTRAINT `registro_uso_maquina_FK_1`
 		FOREIGN KEY (`rum_maq_codigo`)
 		REFERENCES `maquina` (`maq_codigo`)
@@ -664,6 +666,11 @@ CREATE TABLE `registro_uso_maquina`
         CONSTRAINT `registro_uso_maquina_FK_5`
 		FOREIGN KEY (`rum_col_codigo`)
 		REFERENCES `columna` (`col_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+        CONSTRAINT `registro_uso_maquina_FK_6`
+		FOREIGN KEY (`rum_eta_codigo`)
+		REFERENCES `etapa` (`eta_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
 );

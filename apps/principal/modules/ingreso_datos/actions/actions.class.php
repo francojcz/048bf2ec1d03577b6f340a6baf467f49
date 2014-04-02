@@ -81,6 +81,7 @@ class ingreso_datosActions extends sfActions
         //Cambios: 28 de febrero de 2014
         $registroSegundoDia ->setRumLote($registro ->getRumLote());
         $registroSegundoDia ->setRumColCodigo($registro ->getRumColCodigo());
+        $registroSegundoDia ->setRumEtaCodigo($registro ->getRumEtaCodigo());
         $registroSegundoDia ->setRumPlatosTeoricos($registro ->getRumPlatosTeoricos());
         $registroSegundoDia ->setRumTiempoRetencion($registro ->getRumTiempoRetencion());
         $registroSegundoDia ->setRumResolucion($registro ->getRumResolucion());
@@ -1872,7 +1873,13 @@ class ingreso_datosActions extends sfActions
             } else {
                 $columna = ColumnaPeer::retrieveByPK($registro->getRumColCodigo());
                 $fields['col_codigo_interno'] = $columna -> getColCodigoInterno();
-            }            
+            }
+            if($registro->getRumEtaCodigo() == '') {
+                $fields['etapa_nombre'] = '';
+            } else {
+                $etapa = EtapaPeer::retrieveByPK($registro->getRumEtaCodigo());
+                $fields['etapa_nombre'] = $etapa -> getEtaNombre();
+            }
             $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
             $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
@@ -1935,7 +1942,13 @@ class ingreso_datosActions extends sfActions
                 $fields['col_codigo_interno'] = '';
             } else {
                 $fields['col_codigo_interno'] = $columna -> getColCodigoInterno();
-            } 
+            }
+            if($registro->getRumEtaCodigo() == '') {
+                $fields['etapa_nombre'] = '';
+            } else {
+                $etapa = EtapaPeer::retrieveByPK($registro->getRumEtaCodigo());
+                $fields['etapa_nombre'] = $etapa -> getEtaNombre();
+            }
             $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
             $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
@@ -2000,7 +2013,7 @@ class ingreso_datosActions extends sfActions
         return $this -> renderText(json_encode($result));
     }
     
-    //Cambios: Marzo de 2014
+    //Cambios: 24 de febrero de 2014
     public function executeListarColumnas()
     {
         $conexion = new Criteria();
@@ -2023,5 +2036,36 @@ class ingreso_datosActions extends sfActions
         return $this -> renderText(json_encode($result));
     }
     
+    //Cambios: 24 de febrero de 2014
+    public function executeListarEtapas(sfWebRequest $request)
+    {
+            $salida='({"total":"0", "results":""})';
+            $fila=0;
+            $datos = array();
+
+            try{
+
+                    $conexion = new Criteria();
+                    $conexion->add(EtapaPeer::ETA_ELIMINADO, 0);
+                    $conexion->addAscendingOrderByColumn(EtapaPeer::ETA_NOMBRE);
+                    $etapas = EtapaPeer::doSelect($conexion);
+
+                    foreach($etapas As $temporal)
+                    {
+                            $datos[$fila]['eta_codigo'] = $temporal->getEtaCodigo();
+                            $datos[$fila]['eta_nombre'] = $temporal->getEtaNombre();
+                            $fila++;
+                    }
+
+                    if($fila>0){
+                            $jsonresult = json_encode($datos);
+                            $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+                    }
+            }catch (Exception $excepcion)
+            {
+                    $salida='Exception en listar Etapas';
+            }
+            return $this->renderText($salida);
+    }
 
 }

@@ -120,6 +120,9 @@ Ext.onReady(function()
     name : 'col_codigo_interno'
   }, {
     type : 'string',
+    name : 'etapa_nombre'
+  }, {
+    type : 'string',
     name : 'platos_teoricos'
   }, {
     type : 'string',
@@ -172,7 +175,7 @@ Ext.onReady(function()
     },
     {
       header : '<h3>Informaci&oacute;n de Columnas</h3>',
-      colspan : 5,
+      colspan : 6,
       align : 'center'
     }]]
   });
@@ -255,7 +258,7 @@ Ext.onReady(function()
     }])
   });
   
-  //Cambios: 28 de febrero de 2014
+  //Cambios: 24 de febrero de 2014
   var columnas_datastore = new Ext.data.Store(
   {
     proxy : new Ext.data.HttpProxy(
@@ -278,6 +281,24 @@ Ext.onReady(function()
   });
   columnas_datastore.load();
   
+var etapas_datastore = new Ext.data.Store({
+    id: 'etapas_datastore',
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('ingreso_datos', 'listarEtapas'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total',
+        id: 'id'
+    }, [{
+        name: 'eta_codigo'
+    }, {
+        name: 'eta_nombre'
+    }])
+});
+etapas_datastore.load();  
 
   var datastore = new Ext.data.Store(
   {
@@ -1654,6 +1675,24 @@ Ext.onReady(function()
     tooltip : 'C&oacute;digo Interno',
     columnWidth : 80,
     align : 'center',
+    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+  },
+  {
+    dataIndex : 'etapa_nombre',
+    header : 'Etapa',
+    tooltip : 'Etapa',
+    columnWidth : 80,
+    align : 'center',
+    editor : new Ext.form.ComboBox(
+    {
+        store : etapas_datastore,
+        displayField : 'eta_nombre',
+        valueField : 'eta_codigo',
+        mode : 'local',
+        triggerAction : 'all',
+        forceSelection : false,
+        allowBlank : true
+    }),
     renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
   },
   {
