@@ -117,6 +117,9 @@ Ext.onReady(function()
     name : 'lote'
   }, {
     type : 'string',
+    name : 'observaciones'
+  }, {
+    type : 'string',
     name : 'col_codigo_interno'
   }, {
     type : 'string',
@@ -133,6 +136,9 @@ Ext.onReady(function()
   }, {
     type : 'string',
     name : 'tailing'
+  }, {
+    type : 'string',
+    name : 'presion'
   }];
 
   var columnHeaderGroup = new Ext.ux.grid.ColumnHeaderGroup(
@@ -162,20 +168,14 @@ Ext.onReady(function()
       header : '<h3>Inicio y fin<br>de an&aacute;lisis</h3>',
       colspan : 2,
       align : 'center'
-    },
-    {
-      header : '',
-      colspan : 1,
-      align : 'center'
-    },
-    {
-      header : '',
-      colspan : 1,
-      align : 'center'
-    },
+    },    
     {
       header : '<h3>Informaci&oacute;n de Columnas</h3>',
-      colspan : 6,
+      colspan : 7,
+      align : 'center'
+    },{
+      header : '',
+      colspan : 2,
       align : 'center'
     }]]
   });
@@ -258,29 +258,27 @@ Ext.onReady(function()
     }])
   });
   
-  //Cambios: 24 de febrero de 2014
-  var columnas_datastore = new Ext.data.Store(
-  {
-    proxy : new Ext.data.HttpProxy(
-    {
-      url : getAbsoluteUrl('ingreso_datos', 'listarColumnas'),
-      method : 'POST'
+//Cambios: 24 de febrero de 2014
+var columnas_datastore = new Ext.data.Store({
+    id: 'columnas_datastore',
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('ingreso_datos', 'listarColumnas'),
+        method: 'POST'
     }),
-    reader : new Ext.data.JsonReader(
-    {
-      root : 'data'
-    }, [
-    {
-      name : 'codigo',
-      type : 'integer'
-    },
-    {
-      name : 'nombre',
-      type : 'string'
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total',
+        id: 'id'
+    }, [{
+        name: 'col_codigo'
+    }, {
+        name: 'col_cod_interno'
     }])
-  });
-  columnas_datastore.load();
-  
+});
+columnas_datastore.load();  
+
+//Cambios: 24 de febrero de 2014
 var etapas_datastore = new Ext.data.Store({
     id: 'etapas_datastore',
     proxy: new Ext.data.HttpProxy({
@@ -1644,37 +1642,24 @@ etapas_datastore.load();
     renderer : generarRenderer('#f0a05f', '#000000', '#f0a05f', '#000000')
   },
   {
-    dataIndex : 'fallas',
-    header : 'Fallas<br>(Hrs)',
-    tooltip : 'Fallas (Hrs)',
-    width : 59,
-    align : 'center',
-    editor :
-    {
-      xtype : 'numberfield',
-      allowNegative : false,
-      maxValue : 100000
-    },
-    renderer : generarRenderer('#ff5454', '#000000', '#ff5454', '#000000')
-  },
-  {
-    dataIndex : 'lote',
-    header : 'Lote de Muestra',
-    tooltip : 'Lote',
-    width : 130,
-    align : 'center',
-    editor :
-    {
-      xtype : 'textfield'
-    },
-    renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
-  },
-  {
     dataIndex : 'col_codigo_interno',
     header : 'C&oacute;digo<br>Interno',
     tooltip : 'C&oacute;digo Interno',
     columnWidth : 80,
     align : 'center',
+    editor : new Ext.form.ComboBox(
+    {
+        store : columnas_datastore,
+        displayField : 'col_cod_interno',
+        valueField : 'col_codigo',
+        mode : 'local',
+        triggerAction : 'all',
+        forceSelection : false,
+        allowBlank : true,
+        focus: function(){
+            columnas_datastore.reload();
+        }
+    }),
     renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
   },
   {
@@ -1691,8 +1676,25 @@ etapas_datastore.load();
         mode : 'local',
         triggerAction : 'all',
         forceSelection : false,
-        allowBlank : true
+        allowBlank : true,
+        focus: function(){
+            etapas_datastore.reload();
+        }
     }),
+    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+  },
+  {
+    dataIndex : 'tiempo_retencion',
+    header : 'Tiempo<br>Retenci&oacute;n<br>(tr)',
+    tooltip : 'Tiempo de Retenci&oacute;n (tr)',
+    columnWidth : 80,
+    align : 'center',
+    editor :
+    {
+      xtype : 'numberfield',
+      allowNegative : false,
+      maxValue : 100000
+    },
     renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
   },
   {
@@ -1707,21 +1709,21 @@ etapas_datastore.load();
       allowNegative : false,
       maxValue : 10000000
     },
-    renderer : generarRenderer('#72a8cd', '#000000', '#72a8cd', '#000000')
+    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
   },
   {
-    dataIndex : 'tiempo_retencion',
-    header : 'Tiempo de<br>Retenci&oacute;n<br>(min)',
-    tooltip : 'Tiempo de Retenci&oacute;n (min)',
+    dataIndex : 'tailing',
+    header : 'Factor de Cola<br>(T)',
+    tooltip : 'Factor de Cola (T)',
     columnWidth : 80,
     align : 'center',
     editor :
     {
       xtype : 'numberfield',
       allowNegative : false,
-      maxValue : 100000
+      maxValue : 10000000
     },
-    renderer : generarRenderer('#72a8cd', '#000000', '#72a8cd', '#000000')
+    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
   },
   {
     dataIndex : 'resolucion',
@@ -1735,12 +1737,12 @@ etapas_datastore.load();
       allowNegative : false,
       maxValue : 10000000
     },
-    renderer : generarRenderer('#72a8cd', '#000000', '#72a8cd', '#000000')
+    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
   },
   {
-    dataIndex : 'tailing',
-    header : 'Tailing<br>(T)',
-    tooltip : 'Tailing (T)',
+    dataIndex : 'presion',
+    header : 'Presi&oacute;n de<br>Sistema<br>(psi)',
+    tooltip : 'Presi&oacute;n de Sistema (psi)',
     columnWidth : 80,
     align : 'center',
     editor :
@@ -1749,7 +1751,31 @@ etapas_datastore.load();
       allowNegative : false,
       maxValue : 10000000
     },
-    renderer : generarRenderer('#72a8cd', '#000000', '#72a8cd', '#000000')
+    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+  },
+  {
+    dataIndex : 'lote',
+    header : 'Lote de Muestra',
+    tooltip : 'Lote',
+    width : 130,
+    align : 'center',
+    editor :
+    {
+      xtype : 'textfield'
+    },
+    renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
+  },
+  {
+    dataIndex : 'observaciones',
+    header : 'Observaciones',
+    tooltip : 'Observaciones',
+    width : 150,
+    align : 'center',
+    editor :
+    {
+      xtype : 'textfield'
+    },
+    renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
   });
 
   var metodo_para_agregar_combobox = new Ext.form.ComboBox({

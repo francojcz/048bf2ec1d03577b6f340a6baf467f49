@@ -80,12 +80,14 @@ class ingreso_datosActions extends sfActions
         
         //Cambios: 28 de febrero de 2014
         $registroSegundoDia ->setRumLote($registro ->getRumLote());
+        $registroSegundoDia ->setRumObservaciones($registro ->getRumObservaciones());
         $registroSegundoDia ->setRumColCodigo($registro ->getRumColCodigo());
         $registroSegundoDia ->setRumEtaCodigo($registro ->getRumEtaCodigo());
         $registroSegundoDia ->setRumPlatosTeoricos($registro ->getRumPlatosTeoricos());
         $registroSegundoDia ->setRumTiempoRetencion($registro ->getRumTiempoRetencion());
         $registroSegundoDia ->setRumResolucion($registro ->getRumResolucion());
         $registroSegundoDia ->setRumTailing($registro ->getRumTailing());
+        $registroSegundoDia ->setRumPresion($registro ->getRumPresion());
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirFallas($deficitTiempo, $registro, $registroSegundoDia);
 
@@ -1093,7 +1095,6 @@ class ingreso_datosActions extends sfActions
                 return $this -> renderText('1');
             }            
 
-            $user = $this -> getUser();
             $codigo_usuario = $user -> getAttribute('usu_codigo');
 
             $registroModificacion = new RegistroModificacion();
@@ -1169,7 +1170,7 @@ class ingreso_datosActions extends sfActions
                     $registro -> setRumNumeroInyeccionEstandar6($request -> getParameter('numero_inyecciones_estandar6'));
                     $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumeroInyeccionEstandar6());
                 }
-            }            
+            }
             
             if ($request -> hasParameter('tiempo_corrida_producto'))
             {
@@ -1328,6 +1329,15 @@ class ingreso_datosActions extends sfActions
                 $registro ->setRumLote($request -> getParameter('lote'));
                 
                 $registroModificacion -> setRemValorNuevo('' . $registro ->getRumLote());
+            }
+            if ($request -> hasParameter('observaciones'))
+            {
+                $registroModificacion -> setRemNombreCampo('Observaciones');
+                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumObservaciones());
+
+                $registro ->setRumObservaciones($request -> getParameter('observaciones'));
+                
+                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumObservaciones());
             }
             if ($request -> hasParameter('tiempo_entre_metodos_perdida'))
             {
@@ -1642,6 +1652,42 @@ class ingreso_datosActions extends sfActions
             }
             
             //Cambios: 28 de febrero de 2014
+            if ($request -> hasParameter('col_codigo_interno'))
+            {
+                $registroModificacion -> setRemNombreCampo('Código Interno');
+                
+                //Si el valor antiguo es vacío
+                if($registro->getRumColCodigo() == '') {
+                    $registroModificacion -> setRemValorAntiguo('' . $registro->getRumColCodigo()); 
+                }
+                else {
+                    $columnaAntiguo = ColumnaPeer::retrieveByPK($registro -> getRumColCodigo());
+                    $registroModificacion -> setRemValorAntiguo('' . $columnaAntiguo->getColCodigoInterno()); 
+                }                
+                
+                $registro ->setRumColCodigo($request -> getParameter('col_codigo_interno'));
+                
+                $columnaNuevo = ColumnaPeer::retrieveByPK($registro->getRumColCodigo());
+                $registroModificacion -> setRemValorNuevo('' . $columnaNuevo->getColCodigoInterno());
+            }
+            if ($request -> hasParameter('etapa_nombre'))
+            {
+                $registroModificacion -> setRemNombreCampo('Etapa');
+                
+                //Si el valor antiguo es vacío
+                if($registro->getRumEtaCodigo() == '') {
+                    $registroModificacion -> setRemValorAntiguo('' . $registro->getRumEtaCodigo()); 
+                }
+                else {
+                    $etapaAntiguo = EtapaPeer::retrieveByPK($registro ->getRumEtaCodigo());
+                    $registroModificacion -> setRemValorAntiguo('' . $etapaAntiguo->getEtaNombre()); 
+                }
+                
+                $registro ->setRumEtaCodigo($request -> getParameter('etapa_nombre'));                
+                
+                $etapaNuevo = EtapaPeer::retrieveByPK($registro ->getRumEtaCodigo());
+                $registroModificacion -> setRemValorNuevo('' . $etapaNuevo->getEtaNombre());
+            }
             if ($request -> hasParameter('platos_teoricos'))
             {
                 $registroModificacion -> setRemNombreCampo('Platos teóricos');
@@ -1670,7 +1716,13 @@ class ingreso_datosActions extends sfActions
                 $registro ->setRumTailing($request -> getParameter('tailing'));                
                 $registroModificacion -> setRemValorNuevo('' . $registro ->getRumTailing());
             }
-            
+            if ($request -> hasParameter('presion'))
+            {
+                $registroModificacion -> setRemNombreCampo('Presi&oacute;n');
+                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumPresion());
+                $registro ->setRumPresion($request -> getParameter('presion'));
+                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumPresion());
+            }
             
             if ($registro -> isModified())
             {
@@ -1866,6 +1918,7 @@ class ingreso_datosActions extends sfActions
             $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajo('H:i:s');
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
+            $fields['observaciones'] = $registro -> getRumObservaciones();
             
             //Cambios: 28 de febrero de 2014
             if($registro->getRumColCodigo() == '') {
@@ -1884,6 +1937,7 @@ class ingreso_datosActions extends sfActions
             $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
             $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
+            $fields['presion'] = number_format($registro -> getRumPresion(), 2, '.', '');
 
             $data[] = $fields;
 
@@ -1936,6 +1990,7 @@ class ingreso_datosActions extends sfActions
             $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajo('H:i:s');
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
+            $fields['observaciones'] = $registro -> getRumObservaciones();
 
             //Cambios: 28 de febrero de 2014
             if($registro->getRumColCodigo() == '') {
@@ -1946,13 +2001,13 @@ class ingreso_datosActions extends sfActions
             if($registro->getRumEtaCodigo() == '') {
                 $fields['etapa_nombre'] = '';
             } else {
-                $etapa = EtapaPeer::retrieveByPK($registro->getRumEtaCodigo());
                 $fields['etapa_nombre'] = $etapa -> getEtaNombre();
             }
             $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
             $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
             $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
+            $fields['presion'] = number_format($registro -> getRumPresion(), 2, '.', '');
             
             $horasFin = $registro -> getRumHoraFinTrabajo('H');
             $minutosFin = $registro -> getRumHoraFinTrabajo('i');
@@ -2014,26 +2069,35 @@ class ingreso_datosActions extends sfActions
     }
     
     //Cambios: 24 de febrero de 2014
-    public function executeListarColumnas()
+    public function executeListarColumnas(sfWebRequest $request)
     {
-        $conexion = new Criteria();
-        $conexion -> add(ColumnaPeer::COL_ELIMINADO, 0);
-        $conexion -> addAscendingOrderByColumn(ColumnaPeer::COL_CODIGO_INTERNO);
-        $columnas = ColumnaPeer::doSelect($conexion);
-        
-        $result = array();
-        $data = array();
+            $salida='({"total":"0", "results":""})';
+            $fila=0;
+            $datos = array();
 
-        foreach ($columnas as $columna)
-        {
-            $fields = array();
-            $fields['codigo'] = $columna -> getColCodigo();
-            $fields['nombre'] = $columna -> getColCodigoInterno();
-            $data[] = $fields;
-        }
+            try{
 
-        $result['data'] = $data;
-        return $this -> renderText(json_encode($result));
+                    $conexion = new Criteria();
+                    $conexion->add(ColumnaPeer::COL_ELIMINADO, 0);
+                    $conexion->addAscendingOrderByColumn(ColumnaPeer::COL_CODIGO_INTERNO);
+                    $columnas = ColumnaPeer::doSelect($conexion);
+
+                    foreach($columnas As $temporal)
+                    {
+                            $datos[$fila]['col_codigo'] = $temporal->getColCodigo();
+                            $datos[$fila]['col_cod_interno'] = $temporal->getColCodigoInterno();
+                            $fila++;
+                    }
+
+                    if($fila>0){
+                            $jsonresult = json_encode($datos);
+                            $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+                    }
+            }catch (Exception $excepcion)
+            {
+                    $salida='Excepci&oacute;n en listar Columnas';
+            }
+            return $this->renderText($salida);
     }
     
     //Cambios: 24 de febrero de 2014
@@ -2063,7 +2127,7 @@ class ingreso_datosActions extends sfActions
                     }
             }catch (Exception $excepcion)
             {
-                    $salida='Exception en listar Etapas';
+                    $salida='Excepci&oacute;n en listar Etapas';
             }
             return $this->renderText($salida);
     }
