@@ -112,6 +112,9 @@ Ext.onReady(function(){
     }, {
         type: 'string',
         name: 'lote'
+    }, {
+        type: 'string',
+        name: 'observaciones'
     }];
     
     var columnHeaderGroup = new Ext.ux.grid.ColumnHeaderGroup({
@@ -137,11 +140,7 @@ Ext.onReady(function(){
             align: 'center'
         }, {
             header: '',
-            colspan: 1,
-            align: 'center'
-        }, {
-            header: '',
-            colspan: 1,
+            colspan: 2,
             align: 'center'
         }]]
     });
@@ -827,21 +826,21 @@ var win = new Ext.Window(
         }),
         renderer: generarRenderer('#f0a05f', '#000000', '#f0a05f', '#000000')
     }, {
-        dataIndex: 'fallas',
-        header: 'Fallas<br>(Hrs)',
-        tooltip: 'Fallas (Hrs)',
-        width: 59,
+        dataIndex: 'lote',
+        header: 'Lote',
+        tooltip: 'Lote',
+        width: 130,
         align: 'center',
         editor: {
             xtype: 'numberfield',
             allowNegative: false,
             maxValue: 100000
         },
-        renderer: generarRenderer('#ff5454', '#000000', '#ff5454', '#000000')
+        renderer: generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
     }, {
-        dataIndex: 'lote',
-        header: 'Lote',
-        tooltip: 'Lote',
+        dataIndex: 'observaciones',
+        header: 'Observaciones',
+        tooltip: 'Observaciones',
         width: 150,
         align: 'center',
         editor: {

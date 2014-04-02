@@ -252,22 +252,41 @@ class reporte_columnasActions extends sfActions
 
 			foreach($datos_columnas as $temporal)
 			{
-                                $datos[$fila]['rum_col_maquina'] = $temporal->obtenerMaquina();
+                            //El registro se tiene en cuenta solo si se ha registrado alguna columna
+                            if($temporal->getRumColCodigo() != '') {
+                                $datos[$fila]['rum_col_fecha'] = $temporal->getRumFecha();
                                 $datos[$fila]['rum_col_metodo'] = $temporal->obtenerMetodo();
-                                $datos[$fila]['rum_col_fecha'] = $temporal->getRumFecha();				
+                                $datos[$fila]['rum_col_maquina'] = $temporal->obtenerMaquina();                                                                				
 
-				$col_codigo = $temporal -> getRumColCodigo();
-				$columna  = ColumnaPeer::retrieveByPk($col_codigo);
-				if($columna){
-					$datos[$fila]['rum_col_nombre'] = $columna->getColConsecutivo();
-				}
-
-				$datos[$fila]['rum_col_platos_teoricos'] = number_format($temporal->getRumPlatosTeoricos(), 2, '.', '');
-				$datos[$fila]['rum_col_tiempo_retencion'] = number_format($temporal->getRumTiempoRetencion(), 2, '.', '');
-				$datos[$fila]['rum_col_resolucion'] = number_format($temporal->getRumResolucion(), 2, '.', '');
-				$datos[$fila]['rum_col_tailing'] = number_format($temporal->getRumTailing(), 2, '.', '');
+                                //Información de columna
+                                $columna  = ColumnaPeer::retrieveByPk($temporal->getRumColCodigo());                                
+                                $datos[$fila]['rum_col_codigo_interno'] = $columna->getColCodigoInterno();
+                                $fase = FaseLigadaPeer::retrieveByPK($columna->getColFaseCodigo());
+                                $dimension = DimensionPeer::retrieveByPK($columna->getColDimCodigo());
+                                $tamano = TamanoParticulaPeer::retrieveByPK($columna->getColDimCodigo());
+                                $datos[$fila]['rum_col_configuracion'] = $fase->getFaseNombre().'; '.$dimension->getDimNombre().'; '.$tamano->getTamNombre();
+                                $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
+                                $datos[$fila]['rum_col_modelo'] = $modelo->getModNombre();
+                                $marca = MarcaPeer::retrieveByPK($columna->getColMarCodigo());
+                                $datos[$fila]['rum_col_marca'] = $marca->getMarNombre();
                                 
-				$fila++;
+                                //Nombre de etapa
+                                if($temporal->getRumEtaCodigo() == '') {
+                                    $datos[$fila]['rum_etapa_nombre'] = $temporal->getRumEtaCodigo();
+                                }
+                                else {
+                                    $etapa = EtapaPeer::retrieveByPK($temporal->getRumEtaCodigo());
+                                    $datos[$fila]['rum_etapa_nombre'] = $etapa->getEtaNombre();
+                                }                                
+
+                                $datos[$fila]['rum_col_tiempo_retencion'] = number_format($temporal->getRumTiempoRetencion(), 2, '.', '');
+                                $datos[$fila]['rum_col_platos_teoricos'] = number_format($temporal->getRumPlatosTeoricos(), 2, '.', '');
+                                $datos[$fila]['rum_col_tailing'] = number_format($temporal->getRumTailing(), 2, '.', '');
+                                $datos[$fila]['rum_col_resolucion'] = number_format($temporal->getRumResolucion(), 2, '.', '');
+                                $datos[$fila]['rum_col_presion'] = number_format($temporal->getRumPresion(), 2, '.', '');				
+
+                                $fila++;
+                            }                            
 			}
 
 			if($fila>0){
@@ -438,22 +457,214 @@ class reporte_columnasActions extends sfActions
 
             return $this->renderText($xml);
 	}
+        
 
 	/**
-	 * Esta funcion retorna un listado de los metodos
+	 * Esta funcion retorna un listado de métodos
 	*/
 	public function executeListarMetodos(sfWebRequest $request)
 	{
-
-		$salida='({"total":"0", "results":""})';
-		$datos=  MetodoPeer::listarMetodosActivos();
-		$cant=count($datos);
+		$salida = '({"total":"0", "results":""})';
+		$datos = MetodoPeer::listarMetodosActivos();
+		$cant = count($datos);
 		if (count($datos)>0){
 			$jsonresult = json_encode($datos);
 			$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
 		}
 		return $this->renderText($salida);	
         }
+        
+        
+        /**
+	 * Esta funcion retorna un listado de marcas
+	*/
+	public function executeListarMarcas(sfWebRequest $request)
+	{
+                $salida = '({"total":"0", "results":""})';
+		$fila = 0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->add(MarcaPeer::MAR_ELIMINADO, 0);
+                        $conexion->addAscendingOrderByColumn(MarcaPeer::MAR_NOMBRE);
+			$marcas = MarcaPeer::doSelect($conexion);
+
+			foreach($marcas As $temporal)
+			{
+				$datos[$fila]['mar_codigo'] = $temporal->getMarCodigo();
+				$datos[$fila]['mar_nombre'] = $temporal->getMarNombre();
+				$fila++;
+			}
+                        
+                        $datos[$fila]['mar_codigo']='';
+			$datos[$fila]['mar_nombre'] ='TODAS';
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Excepci&oacute;n en listar Marcas';
+		}
+		return $this->renderText($salida);
+        }
+        
+        
+        /**
+	 * Esta funcion retorna un listado de modelos
+	*/
+	public function executeListarModelos(sfWebRequest $request)
+	{
+                $salida = '({"total":"0", "results":""})';
+		$fila = 0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->add(ModeloPeer::MOD_ELIMINADO, 0);
+                        $conexion->addAscendingOrderByColumn(ModeloPeer::MOD_NOMBRE);
+			$modelos = ModeloPeer::doSelect($conexion);
+
+			foreach($modelos As $temporal)
+			{
+				$datos[$fila]['mod_codigo'] = $temporal->getModCodigo();
+				$datos[$fila]['mod_nombre'] = $temporal->getModNombre();
+				$fila++;
+			}
+                        
+                        $datos[$fila]['mod_codigo']='';
+			$datos[$fila]['mod_nombre'] ='TODOS';
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Excepci&oacute;n en listar Modelos';
+		}
+		return $this->renderText($salida);
+        }
+        
+        
+        /**
+	 * Esta funcion retorna un listado de fases ligadas
+	*/
+	public function executeListarFases(sfWebRequest $request)
+	{
+                $salida = '({"total":"0", "results":""})';
+		$fila = 0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->add(FaseLigadaPeer::FASE_ELIMINADO, 0);
+                        $conexion->addAscendingOrderByColumn(FaseLigadaPeer::FASE_NOMBRE);
+			$fases = FaseLigadaPeer::doSelect($conexion);
+
+			foreach($fases As $temporal)
+			{
+				$datos[$fila]['fase_codigo'] = $temporal->getFaseCodigo();
+				$datos[$fila]['fase_nombre'] = $temporal->getFaseNombre();
+				$fila++;
+			}
+                        
+                        $datos[$fila]['fase_codigo']='';
+			$datos[$fila]['fase_nombre'] ='TODAS';
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Excepci&oacute;n en listar Fases';
+		}
+		return $this->renderText($salida);
+        }
+        
+        
+        /**
+	 * Esta funcion retorna un listado de dimensiones
+	*/
+	public function executeListarDimensiones(sfWebRequest $request)
+	{
+                $salida = '({"total":"0", "results":""})';
+		$fila = 0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->add(DimensionPeer::DIM_ELIMINADO, 0);
+                        $conexion->addAscendingOrderByColumn(DimensionPeer::DIM_NOMBRE);
+			$dimensiones = DimensionPeer::doSelect($conexion);
+
+			foreach($dimensiones As $temporal)
+			{
+				$datos[$fila]['dim_codigo'] = $temporal->getDimCodigo();
+				$datos[$fila]['dim_nombre'] = $temporal->getDimNombre();
+				$fila++;
+			}
+                        
+                        $datos[$fila]['dim_codigo']='';
+			$datos[$fila]['dim_nombre'] ='TODAS';
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Excepci&oacute;n en listar Dimensiones';
+		}
+		return $this->renderText($salida);
+        }
+        
+        
+        
+        /**
+	 * Esta funcion retorna un listado de tamanos
+	*/
+	public function executeListarTamanos(sfWebRequest $request)
+	{
+                $salida = '({"total":"0", "results":""})';
+		$fila = 0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->add(TamanoParticulaPeer::TAM_ELIMINADO, 0);
+                        $conexion->addAscendingOrderByColumn(TamanoParticulaPeer::TAM_NOMBRE);
+			$tamanos = TamanoParticulaPeer::doSelect($conexion);
+
+			foreach($tamanos As $temporal)
+			{
+				$datos[$fila]['tam_codigo'] = $temporal->getTamCodigo();
+				$datos[$fila]['tam_nombre'] = $temporal->getTamNombre();
+				$fila++;
+			}
+                        
+                        $datos[$fila]['tam_codigo']='';
+			$datos[$fila]['tam_nombre'] ='TODOS';
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Excepci&oacute;n en listar Tamanos';
+		}
+		return $this->renderText($salida);
+        }
+        
                 
         //Reemplaza el número del mes por el nombre
         public function mes($fecha_original) {

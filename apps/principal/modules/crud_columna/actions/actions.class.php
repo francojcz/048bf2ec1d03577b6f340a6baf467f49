@@ -208,13 +208,14 @@ class crud_columnaActions extends sfActions
 	*/
 	public function executeListarMarcas(sfWebRequest $request)
 	{
-		$salida='({"total":"0", "results":""})';
-		$fila=0;
+		$salida = '({"total":"0", "results":""})';
+		$fila = 0;
 		$datos = array();
 
 		try{
 
 			$conexion = new Criteria();
+                        $conexion->add(MarcaPeer::MAR_ELIMINADO, 0);
                         $conexion->addAscendingOrderByColumn(MarcaPeer::MAR_NOMBRE);
 			$marcas = MarcaPeer::doSelect($conexion);
 
@@ -231,7 +232,7 @@ class crud_columnaActions extends sfActions
 			}
 		}catch (Exception $excepcion)
 		{
-			$salida='Exception en listar Marcas';
+			$salida='Excepci&oacute;n en listar Marcas';
 		}
 		return $this->renderText($salida);
 	}
@@ -248,6 +249,7 @@ class crud_columnaActions extends sfActions
 		try{
 
 			$conexion = new Criteria();
+                        $conexion->add(ModeloPeer::MOD_ELIMINADO, 0);
                         $conexion->addAscendingOrderByColumn(ModeloPeer::MOD_NOMBRE);
 			$modelos = ModeloPeer::doSelect($conexion);
 
@@ -264,7 +266,7 @@ class crud_columnaActions extends sfActions
 			}
 		}catch (Exception $excepcion)
 		{
-			$salida='Exception en listar Modelos';
+			$salida='Excepci&oacute;n en listar Modelos';
 		}
 		return $this->renderText($salida);
 	}
@@ -281,6 +283,7 @@ class crud_columnaActions extends sfActions
 		try{
 
 			$conexion = new Criteria();
+                        $conexion->add(FaseLigadaPeer::FASE_ELIMINADO, 0);
                         $conexion->addAscendingOrderByColumn(FaseLigadaPeer::FASE_NOMBRE);
 			$fases = FaseLigadaPeer::doSelect($conexion);
 
@@ -297,7 +300,7 @@ class crud_columnaActions extends sfActions
 			}
 		}catch (Exception $excepcion)
 		{
-			$salida='Exception en listar Fases Ligadas';
+			$salida='Excepci&oacute;n en listar Fases Ligadas';
 		}
 		return $this->renderText($salida);
 	}
@@ -314,6 +317,7 @@ class crud_columnaActions extends sfActions
 		try{
 
 			$conexion = new Criteria();
+                        $conexion->add(DimensionPeer::DIM_ELIMINADO, 0);
                         $conexion->addAscendingOrderByColumn(DimensionPeer::DIM_NOMBRE);
 			$dimensiones = DimensionPeer::doSelect($conexion);
 
@@ -330,7 +334,7 @@ class crud_columnaActions extends sfActions
 			}
 		}catch (Exception $excepcion)
 		{
-			$salida='Exception en listar Dimensiones';
+			$salida='Excepci&oacute;n en listar Dimensiones';
 		}
 		return $this->renderText($salida);
 	}
@@ -347,6 +351,7 @@ class crud_columnaActions extends sfActions
 		try{
 
 			$conexion = new Criteria();
+                        $conexion->add(TamanoParticulaPeer::TAM_ELIMINADO, 0);
                         $conexion->addAscendingOrderByColumn(TamanoParticulaPeer::TAM_NOMBRE);
 			$tamanos = TamanoParticulaPeer::doSelect($conexion);
 
@@ -363,7 +368,7 @@ class crud_columnaActions extends sfActions
 			}
 		}catch (Exception $excepcion)
 		{
-			$salida='Exception en listar Tamanos';
+			$salida='Excepci&oacute;n en listar Tamanos';
 		}
 		return $this->renderText($salida);
 	}

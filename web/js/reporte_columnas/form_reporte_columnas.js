@@ -12,7 +12,7 @@ Ext.onReady(function(){
             type: 'string'
         }, ]
     });
-    reporcol_metodo_codigo_datastore.load();    
+    reporcol_metodo_codigo_datastore.load();
     
     var reporcol_metodo_codigo_combobox = new Ext.form.ComboBox({
         xtype: 'combo',
@@ -25,9 +25,166 @@ Ext.onReady(function(){
         forceSelection: true,
         displayField: 'met_nombre',
         triggerAction: 'all',
-        emptyText: 'Seleccione un método...',
+        emptyText: 'Seleccione ..',
+        selectOnFocus: true
+    });    
+    
+    
+    var reporcol_marca_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_marca_codigo_datastore',
+        url: getAbsoluteUrl('reporte_columnas', 'listarMarcas'),
+        root: 'results',
+        totalProperty: 'total',
+        fields: [{
+            name: 'mar_codigo',
+            type: 'string'
+        }, {
+            name: 'mar_nombre',
+            type: 'string'
+        }, ]
+    });
+    reporcol_marca_codigo_datastore.load();
+    
+    var reporcol_marca_codigo_combobox = new Ext.form.ComboBox({
+        xtype: 'combo',
+        store: reporcol_marca_codigo_datastore,
+        hiddenName: 'marca_codigo',
+        name: 'reporcol_marca_codigo_combobox',
+        id: 'reporcol_marca_codigo_combobox',
+        mode: 'local',
+        valueField: 'mar_codigo',
+        forceSelection: true,
+        displayField: 'mar_nombre',
+        triggerAction: 'all',
+        emptyText: 'Seleccione ..',
         selectOnFocus: true
     });
+    
+    
+    var reporcol_modelo_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_modelo_codigo_datastore',
+        url: getAbsoluteUrl('reporte_columnas', 'listarModelos'),
+        root: 'results',
+        totalProperty: 'total',
+        fields: [{
+            name: 'mod_codigo',
+            type: 'string'
+        }, {
+            name: 'mod_nombre',
+            type: 'string'
+        }, ]
+    });
+    reporcol_modelo_codigo_datastore.load();
+    
+    var reporcol_modelo_codigo_combobox = new Ext.form.ComboBox({
+        xtype: 'combo',
+        store: reporcol_modelo_codigo_datastore,
+        hiddenName: 'modelo_codigo',
+        name: 'reporcol_modelo_codigo_combobox',
+        id: 'reporcol_modelo_codigo_combobox',
+        mode: 'local',
+        valueField: 'mod_codigo',
+        forceSelection: true,
+        displayField: 'mod_nombre',
+        triggerAction: 'all',
+        emptyText: 'Seleccione ..',
+        selectOnFocus: true
+    });    
+    
+    
+    var reporcol_fase_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_fase_codigo_datastore',
+        url: getAbsoluteUrl('reporte_columnas', 'listarFases'),
+        root: 'results',
+        totalProperty: 'total',
+        fields: [{
+            name: 'fase_codigo',
+            type: 'string'
+        }, {
+            name: 'fase_nombre',
+            type: 'string'
+        }, ]
+    });
+    reporcol_fase_codigo_datastore.load();
+    
+    var reporcol_fase_codigo_combobox = new Ext.form.ComboBox({
+        xtype: 'combo',
+        store: reporcol_fase_codigo_datastore,
+        hiddenName: 'fase_codigo',
+        name: 'reporcol_fase_codigo_combobox',
+        id: 'reporcol_fase_codigo_combobox',
+        mode: 'local',
+        valueField: 'fase_codigo',
+        forceSelection: true,
+        displayField: 'fase_nombre',
+        triggerAction: 'all',
+        emptyText: 'Seleccione ..',
+        selectOnFocus: true,
+        width: 130
+    }); 
+    
+    
+    var reporcol_dimension_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_dimension_codigo_datastore',
+        url: getAbsoluteUrl('reporte_columnas', 'listarDimensiones'),
+        root: 'results',
+        totalProperty: 'total',
+        fields: [{
+            name: 'dim_codigo',
+            type: 'string'
+        }, {
+            name: 'dim_nombre',
+            type: 'string'
+        }, ]
+    });
+    reporcol_dimension_codigo_datastore.load();
+    
+    var reporcol_dimension_codigo_combobox = new Ext.form.ComboBox({
+        xtype: 'combo',
+        store: reporcol_dimension_codigo_datastore,
+        hiddenName: 'dimension_codigo',
+        name: 'reporcol_dimension_codigo_combobox',
+        id: 'reporcol_dimension_codigo_combobox',
+        mode: 'local',
+        valueField: 'dim_codigo',
+        forceSelection: true,
+        displayField: 'dim_nombre',
+        triggerAction: 'all',
+        emptyText: 'Seleccione ..',
+        selectOnFocus: true
+    });    
+    
+    
+    var reporcol_tamano_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_tamano_codigo_datastore',
+        url: getAbsoluteUrl('reporte_columnas', 'listarTamanos'),
+        root: 'results',
+        totalProperty: 'total',
+        fields: [{
+            name: 'tam_codigo',
+            type: 'string'
+        }, {
+            name: 'tam_nombre',
+            type: 'string'
+        }, ]
+    });
+    reporcol_tamano_codigo_datastore.load();
+    
+    var reporcol_tamano_codigo_combobox = new Ext.form.ComboBox({
+        xtype: 'combo',
+        store: reporcol_tamano_codigo_datastore,
+        hiddenName: 'tamano_codigo',
+        name: 'reporcol_tamano_codigo_combobox',
+        id: 'reporcol_tamano_codigo_combobox',
+        mode: 'local',
+        valueField: 'tam_codigo',
+        forceSelection: true,
+        displayField: 'tam_nombre',
+        triggerAction: 'all',
+        emptyText: 'Seleccione ..',
+        selectOnFocus: true
+    }); 
+    
     
     var reporcol_desde_fecha_datefield = new Ext.form.DateField({
         xtype: 'datefield',
@@ -54,18 +211,15 @@ Ext.onReady(function(){
             hideLabel: true,
             items: [{
                 xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 0px',
                 value: 'Desde'
             }, reporcol_desde_fecha_datefield, {
                 xtype: 'displayfield',
-                value: 'Hasta',
-                style: 'padding: 0px 0px 0px 20px'
-            }, reporcol_hasta_fecha_datefield]
-        }, {
-            xtype: 'compositefield',
-            fieldLabel: '',
-            hideLabel: true,
-            items: [{
+                style: 'padding: 4px 0px 0px 20px',
+                value: 'Hasta'                
+            }, reporcol_hasta_fecha_datefield, {
                 xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 20px',
                 value: 'Método'
             }, reporcol_metodo_codigo_combobox, {
                 xtype: 'button',
@@ -115,6 +269,31 @@ Ext.onReady(function(){
                     reporcol_cargardatosreportes();
                 }
             }]
+        }, {
+            xtype: 'compositefield',
+            fieldLabel: '',
+            hideLabel: true,
+            items: [{
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 0px',
+                value: 'Marca'
+            }, reporcol_marca_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 10px',
+                value: 'Modelo'
+            }, reporcol_modelo_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 10px',
+                value: 'Fase Ligada'
+            }, reporcol_fase_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 10px',
+                value: 'Dimensi&oacute;n'
+            }, reporcol_dimension_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 10px',
+                value: 'Tama&ntilde;o de Part&iacute;cula'
+            }, reporcol_tamano_codigo_combobox]
         }],
         renderTo: 'div_form_reporte_columnas'
     });    
@@ -138,7 +317,19 @@ Ext.onReady(function(){
             name: 'rum_col_fecha',
             type: 'string'
         }, {
-            name: 'rum_col_nombre',
+            name: 'rum_col_codigo_interno',
+            type: 'string'
+        }, {
+            name: 'rum_col_configuracion',
+            type: 'string'
+        }, {
+            name: 'rum_col_modelo',
+            type: 'string'
+        }, {
+            name: 'rum_col_marca',
+            type: 'string'
+        }, {
+            name: 'rum_etapa_nombre',
             type: 'string'
         }, {
             name: 'rum_col_platos_teoricos',
@@ -151,6 +342,9 @@ Ext.onReady(function(){
             type: 'string'
         }, {
             name: 'rum_col_tailing',
+            type: 'string'
+        }, {
+            name: 'rum_col_presion',
             type: 'string'
         }])
     });
@@ -169,40 +363,65 @@ Ext.onReady(function(){
             align : 'center',
             dataIndex: 'rum_col_fecha'
         }, {
-            header: "Cód. Interno Columna",
-            width: 120,
+            header: "C&oacute;digo Interno",
+            width: 90,
             align : 'center',
-            dataIndex: 'rum_col_nombre'
+            dataIndex: 'rum_col_codigo_interno'
+        }, {
+            header: "Configuraci&oacute;n",
+            width: 150,
+            align : 'center',
+            dataIndex: 'rum_col_configuracion'
+        }, {
+            header: "Modelo",
+            width: 110,
+            align : 'center',
+            dataIndex: 'rum_col_modelo'
+        }, {
+            header: "Marca",
+            width: 110,
+            align : 'center',
+            dataIndex: 'rum_col_marca'
+        }, {
+            header: "Etapa",
+            width: 90,
+            align : 'center',
+            dataIndex: 'rum_etapa_nombre'
+        }, {
+            header: "Tiempo Retenci&oacute;n (tr)",
+            width: 130,
+            align : 'center',
+            dataIndex: 'rum_col_tiempo_retencion'
         }, {
             header: "Platos Te&oacute;ricos (N)",
             width: 120,
             align : 'center',
             dataIndex: 'rum_col_platos_teoricos'
         }, {
-            header: "Tiempo Retenci&oacute;n (min)",
-            width: 130,
+            header: "Factor de Cola (T)",
+            width: 120,
             align : 'center',
-            dataIndex: 'rum_col_tiempo_retencion'
+            dataIndex: 'rum_col_tailing'
         }, {
             header: "Resoluci&oacute;n (R)",
             width: 120,
             align : 'center',
             dataIndex: 'rum_col_resolucion'
         }, {
-            header: "Tailing (T)",
-            width: 120,
+            header: "Presi&oacute;n de Sistema (psi)",
+            width: 130,
             align : 'center',
-            dataIndex: 'rum_col_tailing'
-        }, {
-            header: "Equipo",
-            width: 150,
-            align : 'center',
-            dataIndex: 'rum_col_maquina'
+            dataIndex: 'rum_col_presion'
         }, {
             header: "Método",
             width: 160,
             align : 'center',
             dataIndex: 'rum_col_metodo'
+        }, {
+            header: "Equipo",
+            width: 150,
+            align : 'center',
+            dataIndex: 'rum_col_maquina'
         }]
     });
     
