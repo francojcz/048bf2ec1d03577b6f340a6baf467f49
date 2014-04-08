@@ -303,7 +303,7 @@ var col_dim_codigo = new Ext.form.ComboBox({
     id: 'col_dim_nombre',
     hiddenName: 'col_dim_codigo',
     name: 'col_dim_codigo',
-    fieldLabel: 'Dimensi&oacute;n (mm)',
+    fieldLabel: 'Dimensi&oacute;n',
     store: crud_columna_dimension_datastore,
     mode: 'local',
     emptyText: 'Seleccione ...',
@@ -455,14 +455,14 @@ var crud_columna_colmodel = new Ext.grid.ColumnModel({
         dataIndex: 'col_fase_codigo',
         renderer: faseRenderComboColumn
     }, {
-        header: "Dimensi&oacute;n (mm)",
+        header: "Dimensi&oacute;n",
         width: 120,
         dataIndex: 'col_dim_codigo',
         renderer: dimensionRenderComboColumn
     }, {
-        header: "Tam. de Part&iacute;cula (μ)",
+        header: "Tam. de Part&iacute;cula (\u03bc)",
         width: 120,
-        dataIndex: 'col_dim_codigo',
+        dataIndex: 'col_tam_codigo',
         renderer: tamanoRenderComboColumn
     }, {
         header: "Creado por",

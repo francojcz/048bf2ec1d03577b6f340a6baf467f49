@@ -24,6 +24,11 @@ class reporte_columnasActions extends sfActions
 		$desde_fecha = $this->getRequestParameter('desde_fecha');
 		$hasta_fecha = $this->getRequestParameter('hasta_fecha');
 		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
+                $marca_codigo=$this->getRequestParameter('marca_codigo');
+                $modelo_codigo=$this->getRequestParameter('modelo_codigo');
+                $fase_codigo=$this->getRequestParameter('fase_codigo');
+                $dimension_codigo=$this->getRequestParameter('dimension_codigo');
+                $tamano_codigo=$this->getRequestParameter('tamano_codigo');
 
 		$conexion = new Criteria();
                 if($desde_fecha=='' && $hasta_fecha=='') {
@@ -44,6 +49,38 @@ class reporte_columnasActions extends sfActions
                 
 		if($metodo_codigo!='') {
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
+                }
+                
+                //Se buscan las columnas que cumplan con los criterios seleccionados
+                $conexion_columna = new Criteria();
+                if($marca_codigo!='') {
+                    $conexion_columna->add(ColumnaPeer::COL_MAR_CODIGO, $marca_codigo);                    
+                }
+                if($modelo_codigo!='') {
+                    $conexion_columna->add(ColumnaPeer::COL_MOD_CODIGO, $modelo_codigo);                    
+                }
+                if($fase_codigo!='') {
+                    $conexion_columna->add(ColumnaPeer::COL_FASE_CODIGO, $fase_codigo);                    
+                }
+                if($dimension_codigo!='') {
+                    $conexion_columna->add(ColumnaPeer::COL_DIM_CODIGO, $dimension_codigo);                    
+                }
+                if($tamano_codigo!='') {
+                    $conexion_columna->add(ColumnaPeer::COL_TAM_CODIGO, $tamano_codigo);                    
+                }
+                $columnas = ColumnaPeer::doSelect($conexion_columna);
+                //Si existe al menos una columna que coincida con los criterios
+                if(count($columnas) > 0) {                    
+                    foreach ($columnas as $columna) {
+                        //Se búsca en la tabla RegistroUsoMáquina los códigos de las columnas que cumplieron con los criterios
+                        $conexion->addOr(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columna->getColCodigo());
+                    }
+                }
+                else 
+                {
+                    /* No existe ninguna columna que coincida con los criterios, 
+                       entonces para que no muestre ningún registro, se coloca la siguiente condición */
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, -1);
                 }
 
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
@@ -149,38 +186,73 @@ class reporte_columnasActions extends sfActions
                x:FullRows="1" ss:DefaultRowHeight="15">');
                 $this->renderText('                
                 <Column ss:AutoFitWidth="0" ss:Width="70"/>
-                <Column ss:AutoFitWidth="0" ss:Width="130"/>
                 <Column ss:AutoFitWidth="0" ss:Width="90"/>
+                <Column ss:AutoFitWidth="0" ss:Width="120"/>
+                <Column ss:AutoFitWidth="0" ss:Width="90"/>
+                <Column ss:AutoFitWidth="0" ss:Width="90"/>
+                <Column ss:AutoFitWidth="0" ss:Width="80"/>
+                <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Column ss:AutoFitWidth="0" ss:Width="90"/>
                 <Column ss:AutoFitWidth="0" ss:Width="90"/>
                 <Column ss:AutoFitWidth="0" ss:Width="100"/>
-                <Column ss:AutoFitWidth="0" ss:Width="140"/>
+                <Column ss:AutoFitWidth="0" ss:Width="120"/>
+                <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Row ss:AutoFitHeight="0" ss:Height="40">                
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Fecha</Data></Cell>
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Cód. Interno Columna</Data></Cell>
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Platos Teóricos (N)</Data></Cell>
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Tiempo de Retención (min)</Data></Cell>
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Resolución (R)</Data></Cell>
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Tailing (T)</Data></Cell>
-                <Cell ss:StyleID="s73"><Data ss:Type="String">Equipo</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">C&oacute;digo Interno</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Configuraci&oacute;n</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Modelo</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Marca</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Etapa</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Tiempo Retenci&oacute;n (tr)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Platos Te&oacute;ricos (N)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Factor de Cola (T)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Resoluci&oacute;n (R)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Presi&oacute;n de Sistema (psi)</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Método</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Equipo</Data></Cell>
                </Row>');
                 
                 foreach($registros as $registro) {
-                        $col_codigo = $registro -> getRumColCodigo();
-                        $columna  = ColumnaPeer::retrieveByPk($col_codigo);
-                        
-			$this->renderText('<Row>			
-                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumFecha('d-m-Y').'</Data></Cell>
-			<Cell ss:StyleID="s64"><Data ss:Type="String">'.$columna->getColConsecutivo().'</Data></Cell>
-			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumPlatosTeoricos(), 2, '.', '').'</Data></Cell>
-			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTiempoRetencion(), 2, '.', '').'</Data></Cell>
-			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumResolucion(), 2, '.', '').'</Data></Cell>
-			<Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTailing(), 2, '.', '').'</Data></Cell>
-                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>
-                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMetodo().'</Data></Cell>
-			</Row>');			
+                        //El registro se tiene en cuenta solo si se ha registrado alguna columna
+                        if($registro->getRumColCodigo() != '') {
+                            //Información de columna
+                            $columna  = ColumnaPeer::retrieveByPk($registro->getRumColCodigo());         
+                            $fase = FaseLigadaPeer::retrieveByPK($columna->getColFaseCodigo());
+                            $dimension = DimensionPeer::retrieveByPK($columna->getColDimCodigo());
+                            $tamano = TamanoParticulaPeer::retrieveByPK($columna->getColTamCodigo());
+                            $configuracion = $fase->getFaseNombre().'; '.$dimension->getDimNombre().'; '.$tamano->getTamNombre().'μ';
+                            
+                            $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
+                            $marca = MarcaPeer::retrieveByPK($columna->getColMarCodigo());
+                            
+                            //Nombre de etapa
+                            if($registro->getRumEtaCodigo() == '') {
+                                $etapa = $registro->getRumEtaCodigo();
+                            }
+                            else {
+                                $etapa_info = EtapaPeer::retrieveByPK($registro->getRumEtaCodigo());
+                                $etapa = $etapa_info->getEtaNombre();
+                            }   
+
+                            $this->renderText('<Row>			
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumFecha('d-m-Y').'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$columna->getColCodigoInterno().'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$configuracion.'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$modelo->getModNombre().'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$marca->getMarNombre().'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$etapa.'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTiempoRetencion(), 2, '.', '').'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumPlatosTeoricos(), 2, '.', '').'</Data></Cell>                            
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTailing(), 2, '.', '').'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumResolucion(), 2, '.', '').'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumPresion(), 2, '.', '').'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMetodo().'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>                            
+                            </Row>');
+                            
+                        }                        			
 		}
                 
                 $this->renderText('</Table>
@@ -263,8 +335,8 @@ class reporte_columnasActions extends sfActions
                                 $datos[$fila]['rum_col_codigo_interno'] = $columna->getColCodigoInterno();
                                 $fase = FaseLigadaPeer::retrieveByPK($columna->getColFaseCodigo());
                                 $dimension = DimensionPeer::retrieveByPK($columna->getColDimCodigo());
-                                $tamano = TamanoParticulaPeer::retrieveByPK($columna->getColDimCodigo());
-                                $datos[$fila]['rum_col_configuracion'] = $fase->getFaseNombre().'; '.$dimension->getDimNombre().'; '.$tamano->getTamNombre();
+                                $tamano = TamanoParticulaPeer::retrieveByPK($columna->getColTamCodigo());
+                                $datos[$fila]['rum_col_configuracion'] = $fase->getFaseNombre().'; '.$dimension->getDimNombre().'; '.$tamano->getTamNombre().'μ';
                                 $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
                                 $datos[$fila]['rum_col_modelo'] = $modelo->getModNombre();
                                 $marca = MarcaPeer::retrieveByPK($columna->getColMarCodigo());
@@ -304,32 +376,77 @@ class reporte_columnasActions extends sfActions
         //Grafico Platos Teóricos
 	public function executeGenerarDatosPlatosTeoricos(sfWebRequest $request)
 	{
+            //Se guardan en un arreglo las fechas que comprenden el rango [desde_fecha-hasta_fecha]
             $desde_fecha = $this->getRequestParameter('desde_fecha');
             $hasta_fecha = $this->getRequestParameter('hasta_fecha');
             $fechas = array();
-            $fechas[] = $this->mes($desde_fecha);
-            
+            $fechas[] = $desde_fecha;
             while($desde_fecha < $hasta_fecha) {
                 $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
-                $fechas[] = $this->mes($desde_fecha);
+                $fechas[] = $desde_fecha;
+            }            
+            
+            //Obtener las columnas registradas sin repetición
+            $columnas = array();
+            $pos = 0;
+            $conexion = $this->obtenerConexion();
+            $conexion->addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_COL_CODIGO);
+            $datos_rum = RegistroUsoMaquinaPeer::doSelect($conexion);
+            foreach ($datos_rum as $dato_rum) {
+                $var = false;
+                for($tam=0; $tam<sizeof($columnas); $tam++) {
+                    if($dato_rum->getRumColCodigo() == $columnas[$tam]['codigo']) {
+                        $tam = sizeof($columnas);
+                        $var = true;
+                    }                    
+                }
+                if($var == false) {
+                    $columnas[$pos]['codigo'] = $dato_rum->getRumColCodigo();
+                    $columnas[$pos]['color'] = $this->randomColor();
+                    $columna = ColumnaPeer::retrieveByPK($dato_rum->getRumColCodigo());
+                    $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
+                    $columnas[$pos]['informacion'] = $columna->getColCodigoInterno().'-'.$modelo->getModNombre();                    
+                    $pos++;
+                }
             }
-                
-            $indicador = array('Platos Teóricos');
-            $colores = array('47d552');
+            
+            //Obtener platos teoricos para cada columna por día 
+            $datos = array();
+            for($fecha=0; $fecha<sizeof($fechas); $fecha++) {
+                for($columna=0; $columna<sizeof($columnas); $columna++) {
+                    $conexion = $this->obtenerConexion();
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
+                    $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
+                    $cant_columnas = 0;
+                    foreach ($datos_col as $dato_col) {
+                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumPlatosTeoricos();
+                        $cant_columnas++;
+                    }
+                    //Calcula el promedio de platos teóricos de la columna para el día en análisis
+                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+                }
+            }
+            
+            //Cambiar fecha de formato Y-m-d a formato texto
+            $fechas_texto = array();
+            for($i=0; $i<sizeof($fechas); $i++) {
+                $fechas_texto[] = $this->mes($fechas[$i]);
+            }            
 
             $xml = '<?xml version="1.0"?>';
             $xml .= '<chart>';
             $xml .= '<series>';
             for($dias = 0; $dias < sizeof($fechas); $dias++) {
-                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas[$dias].'</value>';
+                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas_texto[$dias].'</value>';
             }
             $xml .= '</series>';
             $xml .= '<graphs>';
-            for($ind = 0; $ind < sizeof($indicador); $ind++) {
-                $xml .= '<graph color="#'.$colores[$ind].'" title="'.$indicador[$ind].'" bullet="round">';
-                for($dias = 0; $dias < sizeof($fechas); $dias++) {
-                    $cantidad = 50;
-                    $xml .= '<value xid="'.$fechas[$dias].'">'.round($cantidad, 2).'</value>';
+            for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
+                for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
+                    $numero_platos = $datos[$diasmes][$columnas[$indicador]['codigo']];
+                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($numero_platos, 2).'</value>';
                 }
                 $xml.='</graph>';
             }
@@ -338,79 +455,81 @@ class reporte_columnasActions extends sfActions
 
             return $this->renderText($xml);
 	}
-        
-        //Consultar Platos Teóricos por Columna
-        public function consultarPlatosTeoricos() {
-            
-        }
         
         //Grafico Tiempo de Retención
 	public function executeGenerarDatosTiempoRetencion(sfWebRequest $request)
 	{
+            //Se guardan en un arreglo las fechas que comprenden el rango [desde_fecha-hasta_fecha]
             $desde_fecha = $this->getRequestParameter('desde_fecha');
             $hasta_fecha = $this->getRequestParameter('hasta_fecha');
             $fechas = array();
-            $fechas[] = $this->mes($desde_fecha);
-            
+            $fechas[] = $desde_fecha;
             while($desde_fecha < $hasta_fecha) {
                 $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
-                $fechas[] = $this->mes($desde_fecha);
-            }
-                
-            $indicador = array('Tiempo de Retención');
-            $colores = array('ff5454');
-
-            $xml = '<?xml version="1.0"?>';
-            $xml .= '<chart>';
-            $xml .= '<series>';
-            for($dias = 0; $dias < sizeof($fechas); $dias++) {
-                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas[$dias].'</value>';
-            }
-            $xml .= '</series>';
-            $xml .= '<graphs>';
-            for($ind = 0; $ind < sizeof($indicador); $ind++) {
-                $xml .= '<graph color="#'.$colores[$ind].'" title="'.$indicador[$ind].'" bullet="round">';
-                for($dias = 0; $dias < sizeof($fechas); $dias++) {
-                    $cantidad = 50;
-                    $xml .= '<value xid="'.$fechas[$dias].'">'.round($cantidad, 2).'</value>';
+                $fechas[] = $desde_fecha;
+            }            
+            
+            //Obtener las columnas registradas sin repetición
+            $columnas = array();
+            $pos = 0;
+            $conexion = $this->obtenerConexion();
+            $conexion->addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_COL_CODIGO);
+            $datos_rum = RegistroUsoMaquinaPeer::doSelect($conexion);
+            foreach ($datos_rum as $dato_rum) {
+                $var = false;
+                for($tam=0; $tam<sizeof($columnas); $tam++) {
+                    if($dato_rum->getRumColCodigo() == $columnas[$tam]['codigo']) {
+                        $tam = sizeof($columnas);
+                        $var = true;
+                    }                    
                 }
-                $xml.='</graph>';
+                if($var == false) {
+                    $columnas[$pos]['codigo'] = $dato_rum->getRumColCodigo();
+                    $columnas[$pos]['color'] = $this->randomColor();
+                    $columna = ColumnaPeer::retrieveByPK($dato_rum->getRumColCodigo());
+                    $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
+                    $columnas[$pos]['informacion'] = $columna->getColCodigoInterno().'-'.$modelo->getModNombre();                    
+                    $pos++;
+                }
             }
-            $xml.='</graphs>';
-            $xml.='</chart>';
-
-            return $this->renderText($xml);
-	}
-        
-        //Grafico Resolución
-	public function executeGenerarDatosResolucion(sfWebRequest $request)
-	{
-            $desde_fecha = $this->getRequestParameter('desde_fecha');
-            $hasta_fecha = $this->getRequestParameter('hasta_fecha');
-            $fechas = array();
-            $fechas[] = $this->mes($desde_fecha);
             
-            while($desde_fecha < $hasta_fecha) {
-                $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
-                $fechas[] = $this->mes($desde_fecha);
+            //Obtener tiempos de retención para cada columna por día 
+            $datos = array();
+            for($fecha=0; $fecha<sizeof($fechas); $fecha++) {
+                for($columna=0; $columna<sizeof($columnas); $columna++) {
+                    $conexion = $this->obtenerConexion();
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
+                    $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
+                    $cant_columnas = 0;
+                    foreach ($datos_col as $dato_col) {
+                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumTiempoRetencion();
+                        $cant_columnas++;
+                    }
+                    //Calcula el promedio de tiempos de retención de la columna para el día en análisis
+                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+                }
             }
-                
-            $indicador = array('Resolución');
-            $colores = array('ffdc44');
+            
+            //Cambiar fecha de formato Y-m-d a formato texto
+            $fechas_texto = array();
+            for($i=0; $i<sizeof($fechas); $i++) {
+                $fechas_texto[] = $this->mes($fechas[$i]);
+            }            
 
             $xml = '<?xml version="1.0"?>';
             $xml .= '<chart>';
             $xml .= '<series>';
             for($dias = 0; $dias < sizeof($fechas); $dias++) {
-                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas[$dias].'</value>';
+                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas_texto[$dias].'</value>';
             }
             $xml .= '</series>';
             $xml .= '<graphs>';
-            for($ind = 0; $ind < sizeof($indicador); $ind++) {
-                $xml .= '<graph color="#'.$colores[$ind].'" title="'.$indicador[$ind].'" bullet="round">';
-                for($dias = 0; $dias < sizeof($fechas); $dias++) {
-                    $cantidad = 50;
-                    $xml .= '<value xid="'.$fechas[$dias].'">'.round($cantidad, 2).'</value>';
+            for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
+                for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
+                    $tiempos_retencion = $datos[$diasmes][$columnas[$indicador]['codigo']];
+                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($tiempos_retencion, 2).'</value>';
                 }
                 $xml.='</graph>';
             }
@@ -423,32 +542,243 @@ class reporte_columnasActions extends sfActions
         //Grafico Tailing
 	public function executeGenerarDatosTailing(sfWebRequest $request)
 	{
+            //Se guardan en un arreglo las fechas que comprenden el rango [desde_fecha-hasta_fecha]
             $desde_fecha = $this->getRequestParameter('desde_fecha');
             $hasta_fecha = $this->getRequestParameter('hasta_fecha');
             $fechas = array();
-            $fechas[] = $this->mes($desde_fecha);
-            
+            $fechas[] = $desde_fecha;
             while($desde_fecha < $hasta_fecha) {
                 $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
-                $fechas[] = $this->mes($desde_fecha);
+                $fechas[] = $desde_fecha;
+            }            
+            
+            //Obtener las columnas registradas sin repetición
+            $columnas = array();
+            $pos = 0;
+            $conexion = $this->obtenerConexion();
+            $conexion->addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_COL_CODIGO);
+            $datos_rum = RegistroUsoMaquinaPeer::doSelect($conexion);
+            foreach ($datos_rum as $dato_rum) {
+                $var = false;
+                for($tam=0; $tam<sizeof($columnas); $tam++) {
+                    if($dato_rum->getRumColCodigo() == $columnas[$tam]['codigo']) {
+                        $tam = sizeof($columnas);
+                        $var = true;
+                    }                    
+                }
+                if($var == false) {
+                    $columnas[$pos]['codigo'] = $dato_rum->getRumColCodigo();
+                    $columnas[$pos]['color'] = $this->randomColor();
+                    $columna = ColumnaPeer::retrieveByPK($dato_rum->getRumColCodigo());
+                    $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
+                    $columnas[$pos]['informacion'] = $columna->getColCodigoInterno().'-'.$modelo->getModNombre();                    
+                    $pos++;
+                }
             }
-                
-            $indicador = array('Tailing');
-            $colores = array('72a8cd');
+            
+            //Obtener factor de cola de cada columna por día 
+            $datos = array();
+            for($fecha=0; $fecha<sizeof($fechas); $fecha++) {
+                for($columna=0; $columna<sizeof($columnas); $columna++) {
+                    $conexion = $this->obtenerConexion();
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
+                    $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
+                    $cant_columnas = 0;
+                    foreach ($datos_col as $dato_col) {
+                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumTailing();
+                        $cant_columnas++;
+                    }
+                    //Calcula el promedio de factor de cola de la columna para el día en análisis
+                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+                }
+            }
+            
+            //Cambiar fecha de formato Y-m-d a formato texto
+            $fechas_texto = array();
+            for($i=0; $i<sizeof($fechas); $i++) {
+                $fechas_texto[] = $this->mes($fechas[$i]);
+            }            
 
             $xml = '<?xml version="1.0"?>';
             $xml .= '<chart>';
             $xml .= '<series>';
             for($dias = 0; $dias < sizeof($fechas); $dias++) {
-                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas[$dias].'</value>';
+                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas_texto[$dias].'</value>';
             }
             $xml .= '</series>';
             $xml .= '<graphs>';
-            for($ind = 0; $ind < sizeof($indicador); $ind++) {
-                $xml .= '<graph color="#'.$colores[$ind].'" title="'.$indicador[$ind].'" bullet="round">';
-                for($dias = 0; $dias < sizeof($fechas); $dias++) {
-                    $cantidad = 50;
-                    $xml .= '<value xid="'.$fechas[$dias].'">'.round($cantidad, 2).'</value>';
+            for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
+                for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
+                    $factor_cola = $datos[$diasmes][$columnas[$indicador]['codigo']];
+                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($factor_cola, 2).'</value>';
+                }
+                $xml.='</graph>';
+            }
+            $xml.='</graphs>';
+            $xml.='</chart>';
+
+            return $this->renderText($xml);
+	}        
+        
+        //Grafico Resolución
+	public function executeGenerarDatosResolucion(sfWebRequest $request)
+	{
+            //Se guardan en un arreglo las fechas que comprenden el rango [desde_fecha-hasta_fecha]
+            $desde_fecha = $this->getRequestParameter('desde_fecha');
+            $hasta_fecha = $this->getRequestParameter('hasta_fecha');
+            $fechas = array();
+            $fechas[] = $desde_fecha;
+            while($desde_fecha < $hasta_fecha) {
+                $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
+                $fechas[] = $desde_fecha;
+            }            
+            
+            //Obtener las columnas registradas sin repetición
+            $columnas = array();
+            $pos = 0;
+            $conexion = $this->obtenerConexion();
+            $conexion->addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_COL_CODIGO);
+            $datos_rum = RegistroUsoMaquinaPeer::doSelect($conexion);
+            foreach ($datos_rum as $dato_rum) {
+                $var = false;
+                for($tam=0; $tam<sizeof($columnas); $tam++) {
+                    if($dato_rum->getRumColCodigo() == $columnas[$tam]['codigo']) {
+                        $tam = sizeof($columnas);
+                        $var = true;
+                    }                    
+                }
+                if($var == false) {
+                    $columnas[$pos]['codigo'] = $dato_rum->getRumColCodigo();
+                    $columnas[$pos]['color'] = $this->randomColor();
+                    $columna = ColumnaPeer::retrieveByPK($dato_rum->getRumColCodigo());
+                    $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
+                    $columnas[$pos]['informacion'] = $columna->getColCodigoInterno().'-'.$modelo->getModNombre();                    
+                    $pos++;
+                }
+            }
+            
+            //Obtener la resolución para cada columna por día 
+            $datos = array();
+            for($fecha=0; $fecha<sizeof($fechas); $fecha++) {
+                for($columna=0; $columna<sizeof($columnas); $columna++) {
+                    $conexion = $this->obtenerConexion();
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
+                    $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
+                    $cant_columnas = 0;
+                    foreach ($datos_col as $dato_col) {
+                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumResolucion();
+                        $cant_columnas++;
+                    }
+                    //Calcula el promedio de resoluciones de la columna para el día en análisis
+                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+                }
+            }
+            
+            //Cambiar fecha de formato Y-m-d a formato texto
+            $fechas_texto = array();
+            for($i=0; $i<sizeof($fechas); $i++) {
+                $fechas_texto[] = $this->mes($fechas[$i]);
+            }            
+
+            $xml = '<?xml version="1.0"?>';
+            $xml .= '<chart>';
+            $xml .= '<series>';
+            for($dias = 0; $dias < sizeof($fechas); $dias++) {
+                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas_texto[$dias].'</value>';
+            }
+            $xml .= '</series>';
+            $xml .= '<graphs>';
+            for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
+                for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
+                    $resoluciones = $datos[$diasmes][$columnas[$indicador]['codigo']];
+                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($resoluciones, 2).'</value>';
+                }
+                $xml.='</graph>';
+            }
+            $xml.='</graphs>';
+            $xml.='</chart>';
+
+            return $this->renderText($xml);
+	}
+        
+        //Grafico Presion de Sistema
+	public function executeGenerarDatosPresionSistema(sfWebRequest $request)
+	{
+            //Se guardan en un arreglo las fechas que comprenden el rango [desde_fecha-hasta_fecha]
+            $desde_fecha = $this->getRequestParameter('desde_fecha');
+            $hasta_fecha = $this->getRequestParameter('hasta_fecha');
+            $fechas = array();
+            $fechas[] = $desde_fecha;
+            while($desde_fecha < $hasta_fecha) {
+                $desde_fecha = date('Y-m-d',strtotime('+1 day', strtotime($desde_fecha)));
+                $fechas[] = $desde_fecha;
+            }            
+            
+            //Obtener las columnas registradas sin repetición
+            $columnas = array();
+            $pos = 0;
+            $conexion = $this->obtenerConexion();
+            $conexion->addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_COL_CODIGO);
+            $datos_rum = RegistroUsoMaquinaPeer::doSelect($conexion);
+            foreach ($datos_rum as $dato_rum) {
+                $var = false;
+                for($tam=0; $tam<sizeof($columnas); $tam++) {
+                    if($dato_rum->getRumColCodigo() == $columnas[$tam]['codigo']) {
+                        $tam = sizeof($columnas);
+                        $var = true;
+                    }                    
+                }
+                if($var == false) {
+                    $columnas[$pos]['codigo'] = $dato_rum->getRumColCodigo();
+                    $columnas[$pos]['color'] = $this->randomColor();
+                    $columna = ColumnaPeer::retrieveByPK($dato_rum->getRumColCodigo());
+                    $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
+                    $columnas[$pos]['informacion'] = $columna->getColCodigoInterno().'-'.$modelo->getModNombre();                    
+                    $pos++;
+                }
+            }
+            
+            //Obtener la presión del sistema para cada columna por día 
+            $datos = array();
+            for($fecha=0; $fecha<sizeof($fechas); $fecha++) {
+                for($columna=0; $columna<sizeof($columnas); $columna++) {
+                    $conexion = $this->obtenerConexion();
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
+                    $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
+                    $cant_columnas = 0;
+                    foreach ($datos_col as $dato_col) {
+                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumPresion();
+                        $cant_columnas++;
+                    }
+                    //Calcula el promedio de presiones de sistema de la columna para el día en análisis
+                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+                }
+            }
+            
+            //Cambiar fecha de formato Y-m-d a formato texto
+            $fechas_texto = array();
+            for($i=0; $i<sizeof($fechas); $i++) {
+                $fechas_texto[] = $this->mes($fechas[$i]);
+            }            
+
+            $xml = '<?xml version="1.0"?>';
+            $xml .= '<chart>';
+            $xml .= '<series>';
+            for($dias = 0; $dias < sizeof($fechas); $dias++) {
+                $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas_texto[$dias].'</value>';
+            }
+            $xml .= '</series>';
+            $xml .= '<graphs>';
+            for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
+                for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
+                    $presion_sistema = $datos[$diasmes][$columnas[$indicador]['codigo']];
+                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($presion_sistema, 2).'</value>';
                 }
                 $xml.='</graph>';
             }
@@ -671,18 +1001,35 @@ class reporte_columnasActions extends sfActions
             $fecha = strtotime($fecha_original);
             $dia = (int) date('d', $fecha);
             $mes = (int) date('m', $fecha);
-            $ano = (int) date('Y', $fecha);
-            if($mes == 1) { return ($dia.'-Ene-'.$ano); }
-            if($mes == 2) { return ($dia.'-Feb-'.$ano); }
-            if($mes == 3) { return ($dia.'-Mar-'.$ano); }
-            if($mes == 4) { return ($dia.'-Abr-'.$ano); }
-            if($mes == 5) { return ($dia.'-May-'.$ano); }
-            if($mes == 6) { return ($dia.'-Jun-'.$ano); }
-            if($mes == 7) { return ($dia.'-Jul-'.$ano); }
-            if($mes == 8) { return ($dia.'-Ago-'.$ano); }
-            if($mes == 9) { return ($dia.'-Sep-'.$ano); }
-            if($mes == 10) { return ($dia.'-Oct-'.$ano); }
-            if($mes == 11) { return ($dia.'-Nov-'.$ano); }
-            if($mes == 12) { return ($dia.'-Dic-'.$ano); }
+            if($mes == 1) { return ($dia.' Ene'); }
+            if($mes == 2) { return ($dia.' Feb'); }
+            if($mes == 3) { return ($dia.' Mar'); }
+            if($mes == 4) { return ($dia.' Abr'); }
+            if($mes == 5) { return ($dia.' May'); }
+            if($mes == 6) { return ($dia.' Jun'); }
+            if($mes == 7) { return ($dia.' Jul'); }
+            if($mes == 8) { return ($dia.' Ago'); }
+            if($mes == 9) { return ($dia.' Sep'); }
+            if($mes == 10) { return ($dia.' Oct'); }
+            if($mes == 11) { return ($dia.' Nov'); }
+            if($mes == 12) { return ($dia.' Dic'); }
+        }
+        
+        //Genera un color de forma aleatoria
+        public function randomColor() {
+            $str = '';
+            for($i = 0 ; $i < 6 ; $i++) {
+                $randNum = rand(0 , 15);
+                switch ($randNum) {
+                    case 10: $randNum = 'A'; break;
+                    case 11: $randNum = 'B'; break;
+                    case 12: $randNum = 'C'; break;
+                    case 13: $randNum = 'D'; break;
+                    case 14: $randNum = 'E'; break;
+                    case 15: $randNum = 'F'; break;
+                }
+                $str .= $randNum;
+            }
+            return $str;
         }
 }

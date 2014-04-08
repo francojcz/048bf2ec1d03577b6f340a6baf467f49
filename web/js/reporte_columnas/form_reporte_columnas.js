@@ -57,7 +57,8 @@ Ext.onReady(function(){
         displayField: 'mar_nombre',
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
-        selectOnFocus: true
+        selectOnFocus: true,
+        width: 140
     });
     
     
@@ -88,7 +89,8 @@ Ext.onReady(function(){
         displayField: 'mod_nombre',
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
-        selectOnFocus: true
+        selectOnFocus: true,
+        width: 140
     });    
     
     
@@ -151,7 +153,8 @@ Ext.onReady(function(){
         displayField: 'dim_nombre',
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
-        selectOnFocus: true
+        selectOnFocus: true,
+        width: 130
     });    
     
     
@@ -182,7 +185,8 @@ Ext.onReady(function(){
         displayField: 'tam_nombre',
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
-        selectOnFocus: true
+        selectOnFocus: true,
+        width: 130
     }); 
     
     
@@ -219,11 +223,11 @@ Ext.onReady(function(){
                 value: 'Hasta'                
             }, reporcol_hasta_fecha_datefield, {
                 xtype: 'displayfield',
-                style: 'padding: 4px 0px 0px 20px',
+                style: 'padding: 4px 0px 0px 30px',
                 value: 'Método'
             }, reporcol_metodo_codigo_combobox, {
                 xtype: 'button',
-                style: 'padding: 0px 0px 0px 20px',
+                style: 'padding: 0px 0px 0px 30px',
                 iconCls: 'exportar_excel',
                 text: 'Guardar en formato Excel',
                 handler: function(){
@@ -242,31 +246,6 @@ Ext.onReady(function(){
 
                     var params = 'metodo_codigo=' + metodo_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
                     window.location = getAbsoluteUrl('reporte_columnas', 'exportar') + '?' + params;                   
-                }
-            }, {
-                text: 'Buscar',
-                xtype: 'button',
-                iconCls: 'filtrar',
-                style: 'padding: 0px 0px 0px 20px',
-                handler: function(){                
-                    var desde = '';
-                    if (reporcol_desde_fecha_datefield.getValue() != '') {
-                        desde = reporcol_desde_fecha_datefield.getValue().format('Y-m-d');
-                    }
-                    var hasta = '';
-                    if (reporcol_hasta_fecha_datefield.getValue() != '') {
-                        hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
-                    }
-                    
-                    reporcol_datastore.reload({
-                        params: {
-                            metodo_codigo: reporcol_metodo_codigo_combobox.getValue(),
-                            desde_fecha: desde,
-                            hasta_fecha: hasta
-                        }
-                    });
-                    
-                    reporcol_cargardatosreportes();
                 }
             }]
         }, {
@@ -292,8 +271,36 @@ Ext.onReady(function(){
             }, reporcol_dimension_codigo_combobox, {
                 xtype: 'displayfield',
                 style: 'padding: 4px 0px 0px 10px',
-                value: 'Tama&ntilde;o de Part&iacute;cula'
-            }, reporcol_tamano_codigo_combobox]
+                value: 'Tama&ntilde;o de Part&iacute;cula (μ)'
+            }, reporcol_tamano_codigo_combobox, {
+                text: 'Buscar',
+                xtype: 'button',
+                iconCls: 'filtrar',
+                style: 'padding: 0px 0px 0px 10px',
+                handler: function(){                
+                    var desde = '';
+                    if (reporcol_desde_fecha_datefield.getValue() != '') {
+                        desde = reporcol_desde_fecha_datefield.getValue().format('Y-m-d');
+                    }
+                    var hasta = '';
+                    if (reporcol_hasta_fecha_datefield.getValue() != '') {
+                        hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
+                    }                    
+                    reporcol_datastore.reload({
+                        params: {                            
+                            metodo_codigo: reporcol_metodo_codigo_combobox.getValue(),
+                            marca_codigo: reporcol_marca_codigo_combobox.getValue(),
+                            modelo_codigo: reporcol_modelo_codigo_combobox.getValue(),
+                            fase_codigo: reporcol_fase_codigo_combobox.getValue(),
+                            dimension_codigo: reporcol_dimension_codigo_combobox.getValue(),
+                            tamano_codigo: reporcol_tamano_codigo_combobox.getValue(),
+                            desde_fecha: desde,
+                            hasta_fecha: hasta
+                        }
+                    });                    
+                    reporcol_cargardatosreportes();
+                }
+            }]
         }],
         renderTo: 'div_form_reporte_columnas'
     });    
@@ -348,7 +355,7 @@ Ext.onReady(function(){
             type: 'string'
         }])
     });
-    reporcol_datastore.load();
+//    reporcol_datastore.load();
     
     
     var reporcol_colmodel = new Ext.grid.ColumnModel({
@@ -452,20 +459,24 @@ Ext.onReady(function(){
             deferredRender: false,
             items: [{
                 xtype: 'panel',
-                title: 'Platos Teóricos',
-                contentEl: 'div_reporte_columnas_platos_teoricos'
-            }, {
-                xtype: 'panel',
-                title: 'Tiempo de Retención',
+                title: 'Tiempo Retención (tr)',
                 contentEl: 'div_reporte_columnas_tiempo_retencion'
             }, {
                 xtype: 'panel',
-                title: 'Resolución',
+                title: 'Platos Teóricos (N)',
+                contentEl: 'div_reporte_columnas_platos_teoricos'
+            }, {
+                xtype: 'panel',
+                title: 'Factor de Cola (T)',
+                contentEl: 'div_reporte_columnas_tailing'
+            }, {
+                xtype: 'panel',
+                title: 'Resolución (R)',
                 contentEl: 'div_reporte_columnas_resolucion'
             }, {
                 xtype: 'panel',
-                title: 'Tailing',
-                contentEl: 'div_reporte_columnas_tailing'
+                title: 'Presión de Sistema (psi)',
+                contentEl: 'div_reporte_columnas_presion_sistema'
             }],
             listeners: {
                 tabchange: function(){
@@ -480,7 +491,12 @@ Ext.onReady(function(){
     function reporcol_cargardatosreportes(){
         redirigirSiSesionExpiro();
         
-        var metodo_codigo = reporcol_metodo_codigo_combobox.getValue();        
+        var metodo_codigo = reporcol_metodo_codigo_combobox.getValue();
+        var marca_codigo = reporcol_marca_codigo_combobox.getValue();
+        var modelo_codigo = reporcol_modelo_codigo_combobox.getValue();
+        var fase_codigo = reporcol_fase_codigo_combobox.getValue();
+        var dimension_codigo = reporcol_dimension_codigo_combobox.getValue();
+        var tamano_codigo = reporcol_tamano_codigo_combobox.getValue();
         
         var desde = '';
         if (reporcol_desde_fecha_datefield.getValue() != '') {
@@ -492,18 +508,10 @@ Ext.onReady(function(){
         }
         
         var params = '?metodo_codigo=' + metodo_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
-        
-        //Platos Teóricos
-        var reporcol_platos_teoricos = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
-        reporcol_platos_teoricos.addVariable("path", urlWeb + "flash/amline/");
-        reporcol_platos_teoricos.addParam("wmode", "opaque");
-        reporcol_platos_teoricos.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_platos_teoricos.php');
-        reporcol_platos_teoricos.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosPlatosTeoricos') + params));
-        reporcol_platos_teoricos.addVariable("loading_data", "... CARGANDO ...");
-        reporcol_platos_teoricos.write("div_reporte_columnas_platos_teoricos");  
-        
+        params += '&marca_codigo=' + marca_codigo + '&modelo_codigo=' + modelo_codigo + '&fase_codigo=' + fase_codigo + '&dimension_codigo=' + dimension_codigo + '&tamano_codigo=' + tamano_codigo;
+                
         //Tiempo de Retención
-        var reporcol_tiempo_retencion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
+        var reporcol_tiempo_retencion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "690", "320", "8", "#FFFFFF");
         reporcol_tiempo_retencion.addVariable("path", urlWeb + "flash/amline/");
         reporcol_tiempo_retencion.addParam("wmode", "opaque");
         reporcol_tiempo_retencion.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_tiempo_retencion.php');
@@ -511,8 +519,17 @@ Ext.onReady(function(){
         reporcol_tiempo_retencion.addVariable("loading_data", "... CARGANDO ...");
         reporcol_tiempo_retencion.write("div_reporte_columnas_tiempo_retencion");
         
+        //Platos Teóricos
+        var reporcol_platos_teoricos = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "690", "320", "8", "#FFFFFF");
+        reporcol_platos_teoricos.addVariable("path", urlWeb + "flash/amline/");
+        reporcol_platos_teoricos.addParam("wmode", "opaque");
+        reporcol_platos_teoricos.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_platos_teoricos.php');
+        reporcol_platos_teoricos.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosPlatosTeoricos') + params));
+        reporcol_platos_teoricos.addVariable("loading_data", "... CARGANDO ...");
+        reporcol_platos_teoricos.write("div_reporte_columnas_platos_teoricos");  
+        
         //Resolución
-        var reporcol_resolucion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
+        var reporcol_resolucion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "690", "320", "8", "#FFFFFF");
         reporcol_resolucion.addVariable("path", urlWeb + "flash/amline/");
         reporcol_resolucion.addParam("wmode", "opaque");
         reporcol_resolucion.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_resolucion.php');
@@ -521,16 +538,25 @@ Ext.onReady(function(){
         reporcol_resolucion.write("div_reporte_columnas_resolucion");
         
         //Tailing
-        var reporcol_tailing = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "700", "400", "8", "#FFFFFF");
+        var reporcol_tailing = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "690", "320", "8", "#FFFFFF");
         reporcol_tailing.addVariable("path", urlWeb + "flash/amline/");
         reporcol_tailing.addParam("wmode", "opaque");
         reporcol_tailing.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_tailing.php');
         reporcol_tailing.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosTailing') + params));
         reporcol_tailing.addVariable("loading_data", "... CARGANDO ...");
         reporcol_tailing.write("div_reporte_columnas_tailing");
+        
+        //Presión de Sistema
+        var reporcol_presion_sistema = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "690", "320", "8", "#FFFFFF");
+        reporcol_presion_sistema.addVariable("path", urlWeb + "flash/amline/");
+        reporcol_presion_sistema.addParam("wmode", "opaque");
+        reporcol_presion_sistema.addVariable("settings_file", urlWeb + 'js/reporte_columnas/amline_st_grafico_presion_sistema.php');
+        reporcol_presion_sistema.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_columnas', 'generarDatosPresionSistema') + params));
+        reporcol_presion_sistema.addVariable("loading_data", "... CARGANDO ...");
+        reporcol_presion_sistema.write("div_reporte_columnas_presion_sistema");
     }
     
-    reporcol_cargardatosreportes();    
+//    reporcol_cargardatosreportes();    
     
     function obtenerAncho(cmp, v_default){
         var ancho = cmp.getWidth();

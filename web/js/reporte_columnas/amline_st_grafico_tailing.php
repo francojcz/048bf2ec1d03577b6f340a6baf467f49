@@ -26,7 +26,7 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia Tailing Columna / día</b>]]>
+        <![CDATA[<b>Tendencia Factor de Cola (T) / día</b>]]>
       </text> 
     </label>
 	<label lid='2'>
@@ -45,21 +45,16 @@
       <width>100</width>
       <align>left</align>
       <text>
-        <![CDATA[<b>Tailing (T)</b>]]>
+        <![CDATA[<b>Factor de Cola (T)</b>]]>
       </text> 
     </label>
   </labels>
   <!--Me permite poner texto adicconal sobre la grafica -->
 	<guides>	        
 	 <max_min>true</max_min>
-	</guides> 
-<!-- rotar eje x -->
-  <values> 
-    <x>
-      <rotate>45</rotate>
-    </x>
-  </values>
-<!-- cantidad lineas vertical -->
+	</guides>
+  <!-- rotar eje x -->
+  <!-- cantidad lineas vertical -->
   <grid> 
     <x>
       <approx_count>10</approx_count>
@@ -71,3 +66,10 @@
     <alpha>50</alpha>                           
   </export_as_image>
 </settings>"; ?>
+
+<!-- rotar eje x -->
+<!--  <values> 
+    <x>
+      <rotate>45</rotate>
+    </x>
+  </values>-->

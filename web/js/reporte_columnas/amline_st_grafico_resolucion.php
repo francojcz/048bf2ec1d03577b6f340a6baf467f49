@@ -26,7 +26,7 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia Resolución Columna / día</b>]]>
+        <![CDATA[<b>Tendencia Resolución (R) / día</b>]]>
       </text> 
     </label>
 	<label lid='2'>
@@ -53,13 +53,8 @@
 	<guides>	        
 	 <max_min>true</max_min>
 	</guides> 
-<!-- rotar eje x -->
-  <values> 
-    <x>
-      <rotate>45</rotate>
-    </x>
-  </values>
-<!-- cantidad lineas vertical -->
+  <!-- rotar eje x -->
+  <!-- cantidad lineas vertical -->
   <grid> 
     <x>
       <approx_count>10</approx_count>
@@ -71,3 +66,10 @@
     <alpha>50</alpha>                           
   </export_as_image>
 </settings>"; ?>
+
+<!-- rotar eje x -->
+<!--  <values> 
+    <x>
+      <rotate>45</rotate>
+    </x>
+  </values>-->

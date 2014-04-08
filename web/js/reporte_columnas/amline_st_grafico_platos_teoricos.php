@@ -1,6 +1,6 @@
 <?php require_once(dirname(__FILE__).'/../../../config/variablesGenerales.php'); ?>
 <?php echo "<?xml version='1.0' encoding='UTF-8'?>
-<settings> 
+<settings>
 <!-- fondo degradado de la grafica -->
   <background> 
     <color>#FFFFFF</color>
@@ -11,7 +11,7 @@
   <!-- margenes de la grafica -->
   <plot_area> 
     <margins> 
-      <left>70</left>
+      <left>75</left>
       <top>60</top>
       <right>50</right> 
       <bottom>60</bottom> 
@@ -26,21 +26,23 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia Platos Teóricos Columna / día</b>]]>
+        <![CDATA[<b>Tendencia Platos Teóricos (N) / día</b>]]>
       </text> 
     </label>
-	<label lid='2'>
-      <x>92%</x> 
-      <y>325</y>
+    
+    <label lid='2'>
+      <x>94%</x> 
+      <y>230</y>
       <width>40</width>
       <align>right</align> 
       <text>
         <![CDATA[<b>Días</b>]]>
       </text> 
     </label>
-	<label lid='1'>
-      <x>15</x> 
-      <y>55%</y>
+    
+    <label lid='1'>
+      <x>5</x> 
+      <y>60%</y>
       <rotate>true</rotate> 
       <width>100</width>
       <align>left</align>
@@ -49,17 +51,12 @@
       </text> 
     </label>
   </labels>
-  <!--Me permite poner texto adicconal sobre la grafica -->
-	<guides>	        
-	 <max_min>true</max_min>
-	</guides> 
-<!-- rotar eje x -->
-  <values> 
-    <x>
-      <rotate>45</rotate>
-    </x>
-  </values>
-<!-- cantidad lineas vertical -->
+  <!--Me permite poner texto adicional sobre la grafica -->
+  <guides>	        
+     <max_min>true</max_min>
+   </guides> 
+   <!-- rotar eje x -->
+  <!-- cantidad lineas vertical -->
   <grid> 
     <x>
       <approx_count>10</approx_count>
@@ -71,3 +68,10 @@
     <alpha>50</alpha>                           
   </export_as_image>
 </settings>"; ?>
+
+<!-- rotar eje x -->
+<!--  <values> 
+    <x>
+      <rotate>45</rotate>
+    </x>
+  </values>-->

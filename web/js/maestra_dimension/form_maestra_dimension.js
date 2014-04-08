@@ -1,6 +1,6 @@
 //ayudas
 var ayuda_maestra_dim_codigo='C&oacute;digo identificador en el sistema';
-var ayuda_maestra_dim_nombre='Dimensi&oacute;n (mm)';
+var ayuda_maestra_dim_nombre='Dimensi&oacute;n';
 	
 	var maestra_dimension_datastore = new Ext.data.Store({
         id: 'maestra_dimension_datastore',
@@ -47,7 +47,7 @@ var ayuda_maestra_dim_nombre='Dimensi&oacute;n (mm)';
 	   maxLength : 100,
 	   name: 'maestra_dim_nombre',
 	   id: 'maestra_dim_nombre',
-	   fieldLabel: 'Dimensión (mm)',
+	   fieldLabel: 'Dimensión',
 	   allowBlank: false,
 	   listeners:
 	   {
@@ -61,7 +61,7 @@ var ayuda_maestra_dim_nombre='Dimensi&oacute;n (mm)';
 		defaults:{sortable: true, locked: false, resizable: true},
 		columns:[
 			{id: 'maestra_dim_codigo_column', header: "Id", width: 30, dataIndex: 'maestra_dim_codigo'},
-			{ id: 'maestra_dim_nombre_column', header: "Dimensi&oacute;n (mm)", width: 100, dataIndex: 'maestra_dim_nombre', editor:maestra_dim_nombre},
+			{ id: 'maestra_dim_nombre_column', header: "Dimensi&oacute;n", width: 100, dataIndex: 'maestra_dim_nombre', editor:maestra_dim_nombre},
 			{ header: "Creado por", width: 120, dataIndex: 'maestra_dim_usu_crea_nombre'},
 			{ header: "Fecha de creaci&oacute;n", width: 120, dataIndex: 'maestra_dim_fecha_registro_sistema'},
 			{ header: "Actualizado por", width: 120, dataIndex: 'maestra_dim_usu_actualiza_nombre'},

@@ -145,29 +145,29 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         $minutosInicioCorrida = ($this -> getRumHoraInicioTrabajo('H') * 60) + ($this -> getRumHoraInicioTrabajo('i')) + ($this -> getRumHoraInicioTrabajo('s') / 60);
         $tiempoCambioModelo = $this -> getRumTiempoCambioModelo();
 
-		$controlValorNegativo = 0;
+	$controlValorNegativo = 0;
 		
         if ($minutosInicioCorrida >= $minutosInicioAlistamiento)
         {
-			$controlValorNegativo = ($minutosInicioCorrida - $minutosInicioAlistamiento) - $tiempoCambioModelo;
+            $controlValorNegativo = ($minutosInicioCorrida - $minutosInicioAlistamiento) - $tiempoCambioModelo;
         } 
-		else
+        else
         {
-			$controlValorNegativo = 1440 + ($minutosInicioCorrida - $minutosInicioAlistamiento) - $tiempoCambioModelo;
+            $controlValorNegativo = 1440 + ($minutosInicioCorrida - $minutosInicioAlistamiento) - $tiempoCambioModelo;
         }
 		
-		/*
-		la variable controlValorNegativo se uso para corregir un error presentado en dividir registro al utilizar como hora de fin 23:59:59 ya que en
-		la base de datos no se pudo guardar el valor de 23:59:59.999 lo cual dejaba un margen de perdida de -0.02 minutos
-		*/
-		if($controlValorNegativo > -0.03 && $controlValorNegativo < 0.03)
-		{
-			return 0.00;
-		}
-		else
-		{
-			return $controlValorNegativo;
-		}
+        /*
+        la variable controlValorNegativo se uso para corregir un error presentado en dividir registro al utilizar como hora de fin 23:59:59 ya que en
+        la base de datos no se pudo guardar el valor de 23:59:59.999 lo cual dejaba un margen de perdida de -0.02 minutos
+        */
+        if($controlValorNegativo > -0.03 && $controlValorNegativo < 0.03)
+        {
+                return 0.00;
+        }
+        else
+        {
+                return $controlValorNegativo;
+        }
     }
 
     public function calcularRetrabajosMinutos($inyeccionesEstandarPromedio = 8)

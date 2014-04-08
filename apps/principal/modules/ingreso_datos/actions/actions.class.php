@@ -313,9 +313,9 @@ class ingreso_datosActions extends sfActions
 		<category>
 		  <width>1</width>
 		</category>
-			<value>
+		    <value>
 			 <width>1</width>
-			</value>
+		    </value>
 		</axes>');
         $this -> renderText('<balloon>
 		<alpha>80</alpha>
@@ -338,91 +338,125 @@ class ingreso_datosActions extends sfActions
 
     //Cambios: 24 de febrero de 2014
     //Modificaciones para que la gráfica incluya los TPNP registrados en eventos
-        $this -> renderText('<graphs>');        
-        $this -> renderText('<graph>
-      <type>column</type>
-      <title>TNP</title>
-      <color>#ffdc44</color>
-      </graph>');        
-        $this -> renderText('<graph>
-      <title>TPP</title>
-      <color>#47d552</color>
-      </graph>');
-        $this -> renderText('<graph>
-      <title>TPNP</title>
-      <color>#ff5454</color>
-      </graph>');        
-        $this -> renderText('<graph>
-      <title>TO</title>
-      <color>#72a8cd</color>
-      </graph>');
-        $this -> renderText('<graph>
-      <title>TPNP</title>
-      <color>#ff5454</color>
-      <visible_in_legend>false</visible_in_legend>
-      </graph>');
-         
-        
-        if (count($registros) > 0)
-        {
-            unset($registros[0]);
+    $orden_tiempos = $this->executeGenerarTiemposGrafico($request -> getParameter('codigo_maquina'), $request -> getParameter('fecha'));
+    $this -> renderText('<graphs>');   
+    for($i=0; $i<sizeof($orden_tiempos); $i++) {
+        if($orden_tiempos[$i] == 'TNP') {
+              $this -> renderText('<graph>
+              <type>column</type>
+              <title>TNP</title>
+              <color>#ffdc44</color>
+              </graph>');
         }
-
-        foreach ($registros as $registro)
-        {
-            $this -> renderText('<graph>
-			<title>TNP</title>
-			<color>#ffdc44</color>
-			<visible_in_legend>false</visible_in_legend>
-			</graph>');
-            $this -> renderText('<graph>
-			<title>Tiempo de parada programada</title>
-			<color>#47d552</color>
-			<visible_in_legend>false</visible_in_legend>
-			</graph>');
-            $this -> renderText('<graph>
-                        <title>Tiempo de parada no programada</title>
-                        <color>#ff5454</color>
-                        <visible_in_legend>false</visible_in_legend>
-                        </graph>');
-            $this -> renderText('<graph>
-                        <title>Tiempo programado</title>
-                        <color>#72a8cd</color>
-		        <visible_in_legend>false</visible_in_legend>
-                        </graph>');
-            $this -> renderText('<graph>
-                        <title>Tiempo de parada no programada</title>
-                        <color>#ff5454</color>
-		        <visible_in_legend>false</visible_in_legend>
-                        </graph>');
+        if($orden_tiempos[$i] == 'TPP') {
+              $this -> renderText('<graph>
+              <type>column</type>
+              <title>TPP</title>
+              <color>#47d552</color>
+              </graph>');
         }
+        if($orden_tiempos[$i] == 'TPNP') {
+              $this -> renderText('<graph>
+              <type>column</type>
+              <title>TPNP</title>
+              <color>#ff5454</color>
+              </graph>');
+        }
+        if($orden_tiempos[$i] == 'TO') {
+              $this -> renderText('<graph>
+              <type>column</type>
+              <title>TO</title>
+              <color>#72a8cd</color>
+              </graph>');
+        }
+    }
+    echo sizeof($orden_tiempos);
+    
+//      $this -> renderText('<graphs>');        
+//      $this -> renderText('<graph>
+//      <type>column</type>
+//      <title>TNP</title>
+//      <color>#ffdc44</color>
+//      </graph>');        
+//      $this -> renderText('<graph>
+//      <title>TPP</title>
+//      <color>#47d552</color>
+//      </graph>');
+//      $this -> renderText('<graph>
+//      <title>TPNP</title>
+//      <color>#ff5454</color>
+//      </graph>');        
+//      $this -> renderText('<graph>
+//      <title>TO</title>
+//      <color>#72a8cd</color>
+//      </graph>');
+//      $this -> renderText('<graph>
+//      <title>TPNP</title>
+//      <color>#ff5454</color>
+//      <visible_in_legend>false</visible_in_legend>
+//      </graph>');
+//         
+//        
+//      if (count($registros) > 0)
+//      {
+//          unset($registros[0]);
+//      }
+//
+//      foreach ($registros as $registro)
+//      {
+//            $this -> renderText('<graph>
+//			<title>TNP</title>
+//			<color>#ffdc44</color>
+//			<visible_in_legend>false</visible_in_legend>
+//			</graph>');
+//            $this -> renderText('<graph>
+//			<title>TPP</title>
+//			<color>#47d552</color>
+//			<visible_in_legend>false</visible_in_legend>
+//			</graph>');
+//            $this -> renderText('<graph>
+//                        <title>TPNP</title>
+//                        <color>#ff5454</color>
+//                        <visible_in_legend>false</visible_in_legend>
+//                        </graph>');
+//            $this -> renderText('<graph>
+//                        <title>TO</title>
+//                        <color>#72a8cd</color>
+//		        <visible_in_legend>false</visible_in_legend>
+//                        </graph>');
+//            $this -> renderText('<graph>
+//                        <title>TPNP</title>
+//                        <color>#ff5454</color>
+//		        <visible_in_legend>false</visible_in_legend>
+//                        </graph>');
+//      }
+//
+//      $this -> renderText('<graph>
+//      <title>TNP</title>
+//      <color>#ffdc44</color>
+//      <visible_in_legend>false</visible_in_legend>
+//      </graph>');
 
-      $this -> renderText('<graph>
-      <title>TNP</title>
-      <color>#ffdc44</color>
-      <visible_in_legend>false</visible_in_legend>
-      </graph>');
-
-        $this -> renderText('</graphs>');
-        $this -> renderText('<labels>
-		<label lid="1">
+      $this -> renderText('</graphs>');
+      $this -> renderText('<labels>
+      <label lid="1">
       <x>50%</x> 
       <y>10</y>
       <width>200</width>
       <align>left</align>
       <text>
-        <![CDATA[<b>Tiempo (minutos)</b>]]>
+      <![CDATA[<b>Tiempo (minutos)</b>]]>
       </text> 
-    </label>
-    </labels>');
-        $this -> renderText('<guides>
-		<guide>
-		<behind>true</behind>
-		<width>3</width>
-		<start_value>1440</start_value>
-		</guide>
-		</guides>');
-        return $this -> renderText('<settings>');
+      </label>
+      </labels>');
+      $this -> renderText('<guides>
+      <guide>
+      <behind>true</behind>
+      <width>3</width>
+      <start_value>1440</start_value>
+      </guide>
+      </guides>');
+      return $this -> renderText('<settings>');
     }
     
     public function executeGenerarConfiguracionGrafico1(sfWebRequest $request)
@@ -573,15 +607,15 @@ class ingreso_datosActions extends sfActions
             //      </graph>');
         }
 
-        $this -> renderText('<graph>
+      $this -> renderText('<graph>
       <title>TNP</title>
       <color>#ffdc44</color>
       <visible_in_legend>false</visible_in_legend>
       </graph>');
 
-        $this -> renderText('</graphs>');
-        $this -> renderText('<labels>
-		<label lid="1">
+      $this -> renderText('</graphs>');
+      $this -> renderText('<labels>
+      <label lid="1">
       <x>50%</x> 
       <y>10</y>
       <width>200</width>
@@ -589,8 +623,8 @@ class ingreso_datosActions extends sfActions
       <text>
         <![CDATA[<b>Tiempo (horas)</b>]]>
       </text> 
-    </label>
-    </labels>');
+      </label>
+      </labels>');
         $this -> renderText('<guides>
 		<guide>
 		<behind>true</behind>
@@ -601,62 +635,156 @@ class ingreso_datosActions extends sfActions
         return $this -> renderText('<settings>');
     }
     
+    public function executeGenerarTiemposGrafico($codigo_maquina, $fecha)
+    {
+        $user = $this -> getUser();
+        $codigo_usuario = $user -> getAttribute('usu_codigo');
+
+        $criteria1 = new Criteria();
+        $codigoMaquina = $codigo_maquina;
+        $criteria1 -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $codigoMaquina);
+        $fecha = $fecha;
+        $criteria1 -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha);
+        $criteria1 -> add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
+        $criteria1 -> addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_TIEMPO_ENTRE_MODELO);
+        $registros = RegistroUsoMaquinaPeer::doSelect($criteria1);
+
+        $criteria2 = new Criteria();
+        $criteria2 -> add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+        $operario = EmpleadoPeer::doSelectOne($criteria2);
+        
+        $criteria3 = new Criteria();
+        $criteria3 -> add(EmpresaPeer::EMP_CODIGO, $operario -> getEmplEmpCodigo());
+        $empresa = EmpresaPeer::doSelectOne($criteria3);
+
+        $criteria4 = new Criteria();
+        $criteria4 -> add(MaquinaPeer::MAQ_CODIGO, $codigoMaquina);
+        $maquina = MaquinaPeer::doSelectOne($criteria4);
+        
+        //Arreglo que guarda el orden en que se ejecutan los TNP, TPP. TPNP Y TO
+        $orden_tiempos = array();
+
+        if (count($registros) == 0)
+        {
+            $orden_tiempos[] = 'TNP';
+            $orden_tiempos[] = 'TPP';
+            $orden_tiempos[] = 'TPNP';
+            $orden_tiempos[] = 'TP';
+        }
+        
+        $minutosActuales = 0;
+        foreach ($registros as $registro)
+        {   
+            $minutosTiempoNoProgramado = round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
+            $minutosTiempoNoProgramado -= $minutosActuales;            
+            
+            $minutosTiempoParadaProgramada = $registro -> getRumTiempoCambioModelo();       
+
+            $minutosTiempoParadaNoProgramada1 = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+
+            $minutosTiempoProgramado = ($registro -> getRumTiempoCorridaSistema() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumeroInyeccionEstandar();
+            $inyeccionesEstandarPromedio = $empresa -> getEmpInyectEstandarPromedio();
+            for ($i = 1; $i <= $inyeccionesEstandarPromedio; $i++) {
+                $minutosTiempoProgramado += ($registro -> getRumTiempoCorridaCurvas() + $maquina -> getMaqTiempoInyeccion()) * eval('return $registro->getRumNumeroInyeccionEstandar' . $i . '();');
+            }
+
+            $minutosTiempoProgramado += ($registro -> getRumTcProductoTerminado() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasProducto() * $registro -> getRumNumInyecXMuestraProduc();
+            $minutosTiempoProgramado += ($registro -> getRumTcEstabilidad() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasEstabilidad() * $registro -> getRumNumInyecXMuestraEstabi();
+            $minutosTiempoProgramado += ($registro -> getRumTcMateriaPrima() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasMateriaPrima() * $registro -> getRumNumInyecXMuestraMateri();
+            $minutosTiempoProgramado += ($registro -> getRumTcPureza() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasPureza() * $registro -> getRumNumInyecXMuestraPureza();
+            $minutosTiempoProgramado += ($registro -> getRumTcDisolucion() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasDisolucion() * $registro -> getRumNumInyecXMuestraDisolu();
+            $minutosTiempoProgramado += ($registro -> getRumTcUniformidad() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasUniformidad() * $registro -> getRumNumInyecXMuestraUnifor();            
+
+            $minutosTiempoParadaNoProgramada2 = 0;
+            $minutosTiempoParadaNoProgramada2 += $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
+            $minutosTiempoParadaNoProgramada2 += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+            $minutosTiempoParadaNoProgramada2 += $registro -> getRumFallas();
+
+            $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);            
+            
+            //Cambios: 24 de febrero de 2014
+            //Ingreso del orden en que se ejecutan los tiempos
+            if(round($minutosTiempoNoProgramado) != 0) {
+                $orden_tiempos[] = 'TNP';
+            }
+            if(round($minutosTiempoParadaProgramada) != 0) {
+                $orden_tiempos[] = 'TPP';
+            }
+            if(round($minutosTiempoParadaNoProgramada1) != 0) {
+                $orden_tiempos[] = 'TPNP';
+            }
+            if(round($minutosTiempoProgramado) != 0) {
+                $orden_tiempos[] = 'TP';
+            }
+            if(round($minutosTiempoParadaNoProgramada2) != 0) {
+                $orden_tiempos[] = 'TPNP';
+            }
+        }
+
+        $tiempoDisponible = 0;
+        $tiempoDisponible += RegistroUsoMaquinaPeer::calcularTiempoDisponibleHoras($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE) * 60;        
+        if(round($tiempoDisponible) != 0) {
+            $orden_tiempos[] = 'TNP';
+        }
+
+        return $orden_tiempos;
+    }
+    
     public function executeGenerarDatosGrafico(sfWebRequest $request)
     {
         $user = $this -> getUser();
         $codigo_usuario = $user -> getAttribute('usu_codigo');
 
-        $criteria = new Criteria();
-        //		$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $codigo_usuario);
-
+        $criteria1 = new Criteria();
         $codigoMaquina = $request -> getParameter('codigo_maquina');
-        $criteria -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $codigoMaquina);
+        $criteria1 -> add(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $codigoMaquina);
         $fecha = $request -> getParameter('fecha');
-        $criteria -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha);
-        $criteria -> add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
-        $criteria -> addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_TIEMPO_ENTRE_MODELO);
-        $registros = RegistroUsoMaquinaPeer::doSelect($criteria);
+        $criteria1 -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha);
+        $criteria1 -> add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
+        $criteria1 -> addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_TIEMPO_ENTRE_MODELO);
+        $registros = RegistroUsoMaquinaPeer::doSelect($criteria1);
 
-        $criteria = new Criteria();
-        $criteria -> add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
-        $operario = EmpleadoPeer::doSelectOne($criteria);
-        $criteria = new Criteria();
-        $criteria -> add(EmpresaPeer::EMP_CODIGO, $operario -> getEmplEmpCodigo());
-        $empresa = EmpresaPeer::doSelectOne($criteria);
+        $criteria2 = new Criteria();
+        $criteria2 -> add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+        $operario = EmpleadoPeer::doSelectOne($criteria2);
+        
+        $criteria3 = new Criteria();
+        $criteria3 -> add(EmpresaPeer::EMP_CODIGO, $operario -> getEmplEmpCodigo());
+        $empresa = EmpresaPeer::doSelectOne($criteria3);
 
-        $criteria = new Criteria();
-        $criteria -> add(MaquinaPeer::MAQ_CODIGO, $codigoMaquina);
-        $maquina = MaquinaPeer::doSelectOne($criteria);
+        $criteria4 = new Criteria();
+        $criteria4 -> add(MaquinaPeer::MAQ_CODIGO, $codigoMaquina);
+        $maquina = MaquinaPeer::doSelectOne($criteria4);
 
         if (count($registros) == 0)
         {
             return $this -> renderText(';0;0;');
         }
-
+        
         $minutosActuales = 0;
         foreach ($registros as $registro)
         {   
-            //Cambios: 24 de febrero de 2014
-            //Calculo de duración de eventos por registro para sumarlos a los TPNP
-            $criteria = new Criteria();
-            $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $registro->getRumCodigo());
-            $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
-            $duracion_evento = 0;
-            foreach ($eventos_rum as $evento_rum) {
-                $duracion_evento += $evento_rum->getEvrgDuracion();
+            $minutosTiempoNoProgramado = 0;
+            $minutosTiempoNoProgramado += round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
+            $minutosTiempoNoProgramado -= $minutosActuales;
+            if(round($minutosTiempoNoProgramado) != 0) {
+                $this -> renderText(';' . round($minutosTiempoNoProgramado, 2));
+            }            
+            
+            $minutosTiempoParadaProgramada = 0;
+            $minutosTiempoParadaProgramada += $registro -> getRumTiempoCambioModelo();
+            if(round($minutosTiempoParadaProgramada) != 0) {
+                $this -> renderText(';' . round($minutosTiempoParadaProgramada, 2));
             }
             
-            $minutosTiempoNoProgramado = round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
-            $minutosTiempoNoProgramado -= $minutosActuales;            
-            $this -> renderText(';' . round($minutosTiempoNoProgramado, 2));
+            $minutosTiempoParadaNoProgramada1 = 0;
+            $minutosTiempoParadaNoProgramada1 += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if(round($minutosTiempoParadaNoProgramada1) != 0) { 
+                $this -> renderText(';' . round($minutosTiempoParadaNoProgramada1, 2));
+            }            
 
-            $minutosTiempoParadaProgramada = $registro -> getRumTiempoCambioModelo();
-            $this -> renderText(';' . round($minutosTiempoParadaProgramada, 2));
-
-            $minutosTiempoParadaNoProgramada1 = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
-            $this -> renderText(';' . round($minutosTiempoParadaNoProgramada1, 2));
-
-            $minutosTiempoProgramado = ($registro -> getRumTiempoCorridaSistema() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumeroInyeccionEstandar();
+            $minutosTiempoProgramado = 0;
+            $minutosTiempoProgramado += ($registro -> getRumTiempoCorridaSistema() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumeroInyeccionEstandar();
             $inyeccionesEstandarPromedio = $empresa -> getEmpInyectEstandarPromedio();
             for ($i = 1; $i <= $inyeccionesEstandarPromedio; $i++)
             {
@@ -669,19 +797,38 @@ class ingreso_datosActions extends sfActions
             $minutosTiempoProgramado += ($registro -> getRumTcPureza() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasPureza() * $registro -> getRumNumInyecXMuestraPureza();
             $minutosTiempoProgramado += ($registro -> getRumTcDisolucion() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasDisolucion() * $registro -> getRumNumInyecXMuestraDisolu();
             $minutosTiempoProgramado += ($registro -> getRumTcUniformidad() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasUniformidad() * $registro -> getRumNumInyecXMuestraUnifor();
-            $this -> renderText(';' . round($minutosTiempoProgramado, 2));
-
-            $minutosTiempoParadaNoProgramada2 = $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
+            if(round($minutosTiempoProgramado) != 0) { 
+                $this -> renderText(';' . round($minutosTiempoProgramado, 2));                
+            }
+            
+            $minutosTiempoParadaNoProgramada2 = 0;
+            $minutosTiempoParadaNoProgramada2 += $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
             $minutosTiempoParadaNoProgramada2 += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
             $minutosTiempoParadaNoProgramada2 += $registro -> getRumFallas();
-            $this -> renderText(';' . round($minutosTiempoParadaNoProgramada2, 2));
+            if(round($minutosTiempoParadaNoProgramada2) != 0) { 
+                $this -> renderText(';' . round($minutosTiempoParadaNoProgramada2, 2));
+            }            
 
-            $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);
+            $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);            
+            
+//            //Cambios: 24 de febrero de 2014
+//            //Calculo de duración de eventos por registro para sumarlos a los TPNP
+//            $criteria = new Criteria();
+//            $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $registro->getRumCodigo());
+//            $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
+//            $duracion_evento = 0;
+//            foreach ($eventos_rum as $evento_rum) {
+//                $duracion_evento = $evento_rum->getEvrgDuracion();
+//                $eventos[] = round($duracion_evento);
+//            }
         }
-
-        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleHoras($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE) * 60;
-        $this -> renderText(';' . round($tiempoDisponible, 2));
-
+        
+        $tiempoDisponible = 0;
+        $tiempoDisponible += RegistroUsoMaquinaPeer::calcularTiempoDisponibleHoras($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE) * 60;
+        if(round($tiempoDisponible) != 0) {
+            $this -> renderText(';' . round($tiempoDisponible, 2));
+        }
+        
         return $this -> renderText('');
     }
 
@@ -720,20 +867,30 @@ class ingreso_datosActions extends sfActions
         $minutosActuales = 0;
         foreach ($registros as $registro)
         {            
-            $minutosTiempoNoProgramado = round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
+            $minutosTiempoNoProgramado = 0;
+            $minutosTiempoNoProgramado += round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
             $minutosTiempoNoProgramado -= $minutosActuales;
-            $this -> renderText(';' . round($minutosTiempoNoProgramado/60, 2));
+            if(round($minutosTiempoNoProgramado) != 0) {
+                $this -> renderText(';' . round($minutosTiempoNoProgramado/60, 2));
+            }            
 
-            $minutosTiempoParadaProgramada = $registro -> getRumTiempoCambioModelo();
-            $this -> renderText(';' . round($minutosTiempoParadaProgramada/60, 2));
+            $minutosTiempoParadaProgramada = 0;
+            $minutosTiempoParadaProgramada += $registro -> getRumTiempoCambioModelo();
+            if(round($minutosTiempoParadaProgramada) != 0) {
+                $this -> renderText(';' . round($minutosTiempoParadaProgramada/60, 2));
+            }
+            
 
-            $minutosTiempoParadaNoProgramada1 = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
-            $this -> renderText(';' . round($minutosTiempoParadaNoProgramada1/60, 2));
+            $minutosTiempoParadaNoProgramada1 = 0;
+            $minutosTiempoParadaNoProgramada1 += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if(round($minutosTiempoParadaNoProgramada1) != 0) {
+                $this -> renderText(';' . round($minutosTiempoParadaNoProgramada1/60, 2));
+            }
 
-            $minutosTiempoProgramado = ($registro -> getRumTiempoCorridaSistema() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumeroInyeccionEstandar();
+            $minutosTiempoProgramado = 0;
+            $minutosTiempoProgramado += ($registro -> getRumTiempoCorridaSistema() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumeroInyeccionEstandar();
             $inyeccionesEstandarPromedio = $empresa -> getEmpInyectEstandarPromedio();
-            for ($i = 1; $i <= $inyeccionesEstandarPromedio; $i++)
-            {
+            for ($i = 1; $i <= $inyeccionesEstandarPromedio; $i++) {
                 $minutosTiempoProgramado += ($registro -> getRumTiempoCorridaCurvas() + $maquina -> getMaqTiempoInyeccion()) * eval('return $registro->getRumNumeroInyeccionEstandar' . $i . '();');
             }
 
@@ -743,18 +900,27 @@ class ingreso_datosActions extends sfActions
             $minutosTiempoProgramado += ($registro -> getRumTcPureza() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasPureza() * $registro -> getRumNumInyecXMuestraPureza();
             $minutosTiempoProgramado += ($registro -> getRumTcDisolucion() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasDisolucion() * $registro -> getRumNumInyecXMuestraDisolu();
             $minutosTiempoProgramado += ($registro -> getRumTcUniformidad() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasUniformidad() * $registro -> getRumNumInyecXMuestraUnifor();
-            $this -> renderText(';' . round($minutosTiempoProgramado/60, 2));
+            if(round($minutosTiempoProgramado) != 0) {
+                $this -> renderText(';' . round($minutosTiempoProgramado/60, 2));
+            }            
 
-            $minutosTiempoParadaNoProgramada2 = $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
+            $minutosTiempoParadaNoProgramada2 = 0;
+            $minutosTiempoParadaNoProgramada2 += $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
             $minutosTiempoParadaNoProgramada2 += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
             $minutosTiempoParadaNoProgramada2 += $registro -> getRumFallas();
-            $this -> renderText(';' . round($minutosTiempoParadaNoProgramada2/60, 2));
+            if(round($minutosTiempoParadaNoProgramada2) != 0) {
+                $this -> renderText(';' . round($minutosTiempoParadaNoProgramada2/60, 2));            
+            }
 
             $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);
         }
 
-        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleHoras($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE) * 60;
-        $this -> renderText(';' . round($tiempoDisponible/60, 2));
+        $tiempoDisponible = 0;
+        $tiempoDisponible += RegistroUsoMaquinaPeer::calcularTiempoDisponibleHoras($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE) * 60;
+        if(round($tiempoDisponible) != 0) {
+            $this -> renderText(';' . round($tiempoDisponible/60, 2));
+        }
+        
 
         return $this -> renderText('');
     }

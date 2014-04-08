@@ -535,7 +535,6 @@ class reporte_graficomensualActions extends sfActions
 		$xml.='</series>';
 		$xml.='<graphs>';
 		for ($indicador=0;$indicador<5;$indicador++){
-
 			$xml.='<graph color="#'.$indicadores_colores[$indicador].'" title="'.$indicadores_tiempo[$indicador].'" bullet="round">';
 			for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
 				$numero_fallas_dia=$datos[$diasmes][$indicadores_tiempo[$indicador]];
@@ -547,10 +546,6 @@ class reporte_graficomensualActions extends sfActions
 
 		$xml.='</chart>';
 
-		//		$this->getRequest()->setRequestFormat('xml');
-		//		$response = $this->getResponse();
-		//		$response->setContentType('text/xml');
-		//		$response->setHttpHeader('Content-length', strlen($xml), true);
 		return $this->renderText($xml);
 	}
 

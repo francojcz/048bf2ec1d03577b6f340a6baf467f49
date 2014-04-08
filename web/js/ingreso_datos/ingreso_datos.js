@@ -175,7 +175,11 @@ Ext.onReady(function()
       align : 'center'
     },{
       header : '',
-      colspan : 2,
+      colspan : 1,
+      align : 'center'
+    },{
+      header : '',
+      colspan : 1,
       align : 'center'
     }]]
   });
