@@ -961,6 +961,7 @@ etapas_datastore.load();
       handler : function()
       {
         win.hide();
+        recargarDatosMetodos();
       }
     }],
     listeners :
@@ -1900,6 +1901,7 @@ etapas_datastore.load();
       }
     });
   }
+  
   var grillaHistorial = new Ext.grid.GridPanel(
   {
     autoWidth : true,
@@ -2203,10 +2205,10 @@ etapas_datastore.load();
         }
       }
     },'-',
-{
+{    
             xtype : 'button',
             text : 'Dividir registro',
-iconCls : 'calcular',
+            iconCls : 'calcular',
             tooltip : 'Pulse este botón para dividir el último registro del día',
             width : 70,
             handler : function()
@@ -2230,9 +2232,9 @@ iconCls : 'calcular',
                       case '1':
                         mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
                         break;
-//                      default:
-//                      mensaje = result.responseText;
-//                        break;
+                      default:
+                        mensaje = result.responseText;
+                        break;
                           
                     }
                     recargarDatosMetodos(function()

@@ -222,8 +222,6 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 
     public function calcularParosMenoresMinutos($inyeccionesEstandarPromedio)
     {
-        $maquina = MaquinaPeer::retrieveByPK($this -> getRumMaqCodigo());
-
         $TF = $this -> calcularTiempoFuncionamientoMinutos();
         $TO = $this -> calcularTOMinutos($inyeccionesEstandarPromedio);
         $minutosRetrabajos = $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
@@ -237,6 +235,34 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 
         return $minutosParosMenores;
     }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula los paros menores teniendo en cuenta los paros por eventos para un método específico
+    public function calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $rum_codigo)
+    {
+        $TF = $this -> calcularTiempoFuncionamientoMinutos();
+        $TO = $this -> calcularTOMinutos($inyeccionesEstandarPromedio);
+        $minutosRetrabajos = $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula la duración de los eventos del método
+        $duracion = 0;
+        $criteria = new Criteria();
+        $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $rum_codigo);
+        $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
+        foreach ($eventos_rum as $evento_rum) {                
+            $duracion += round($evento_rum->getEvrgDuracion(), 2);
+        }
+
+        $minutosParosMenores = $TF - $TO - $minutosRetrabajos - $duracion;
+
+        if ($minutosParosMenores < 0)
+        {
+            $minutosParosMenores = 0;
+        }
+
+        return $minutosParosMenores;
+    }    
 
     //	public function calcularParosMenoresMinutos($inyeccionesEstandarPromedio) {
     //		$maquina = MaquinaPeer::retrieveByPK($this->getRumMaqCodigo());
