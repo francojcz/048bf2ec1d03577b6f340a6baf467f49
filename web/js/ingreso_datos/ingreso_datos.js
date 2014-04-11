@@ -907,7 +907,7 @@ etapas_datastore.load();
       width : 70,
       align : 'center',
       editor : new Ext.form.TimeField(
-      {
+      {        
         format : 'H:i',
         minValue : '00:00',
         maxValue : '23:59',
