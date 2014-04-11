@@ -322,7 +322,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
     {
         $registroSegundoDia -> setRumHoraInicioTrabajo('00:00:00');
 
-        $segundosParosMenores = $registroPrimerDia -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio) * 60;
+        $segundosParosMenores = $registroPrimerDia -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registroPrimerDia->getRumCodigo()) * 60;
 
         $tiempoATrasladar = 0;
         if ($segundosParosMenores >= $deficitTiempo)
@@ -489,17 +489,17 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
             
             $TPNP += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
-            $TPNP += $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
+            $TPNP += $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
             $TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
-            $TPNP += $registro -> getRumFallas();
+//            $TPNP += $registro -> getRumFallas();
             //Cambios: 24 de febrero de 2014
             //Se suma la duración de los eventos a los TPNP
-//            $criteria = new Criteria();
-//            $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $registro->getRumCodigo());
-//            $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
-//            foreach ($eventos_rum as $evento_rum) {                
-//                $TPNP += round($evento_rum->getEvrgDuracion(), 2);
-//            }
+            $criteria = new Criteria();
+            $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $registro->getRumCodigo());
+            $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
+            foreach ($eventos_rum as $evento_rum) {                
+                $TPNP += round($evento_rum->getEvrgDuracion(), 2);
+            }
             $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);
         }
 
@@ -507,12 +507,12 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         if ($tiempoExcedente || $tiempoDisponible >= 0)
         {
-            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
-//            return $tiempoDisponible;
+//            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
+            return $tiempoDisponible;
         } else
         {
-            return array(0, 0, 0, 0, 0);
-//            return 0;
+//            return array(0, 0, 0, 0, 0);
+            return 0;
         }
     }
 

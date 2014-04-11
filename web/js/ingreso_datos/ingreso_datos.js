@@ -2234,8 +2234,7 @@ etapas_datastore.load();
                         break;
                       default:
                         mensaje = result.responseText;
-                        break;
-                          
+                        break;                          
                     }
                     recargarDatosMetodos(function()
                     {

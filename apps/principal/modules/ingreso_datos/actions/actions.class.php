@@ -43,16 +43,16 @@ class ingreso_datosActions extends sfActions
 
         $deficitTiempo = null;
 
-//        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
-        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE); 
-//        if ($tiempoDisponible < 0)
-//        {
-//            $deficitTiempo = 0 - ($tiempoDisponible * 60);
-//        } else
-//        {
-//            return $this -> renderText('1');
-//        }
-        return $this -> renderText('Disp. '.$t[0].'-TNP '.$t[1].'-TPP '.$t[2].'-TPNP '.$t[3].'- TO'.$t[4].'');
+        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
+//        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE); 
+        if ($tiempoDisponible < 0)
+        {
+            $deficitTiempo = 0 - ($tiempoDisponible * 60);
+        } else
+        {
+            return $this -> renderText('1');
+        }
+//        return $this -> renderText('Disp. '.$t[0].'-TNP '.$t[1].'-TPP '.$t[2].'-TPNP '.$t[3].'- TO'.$t[4].'');
 
         $registroSegundoDia = new RegistroUsoMaquina();
         $datetimeSegundoDia = new DateTime('@' . ($registro -> getRumFecha('U') + 86400));
@@ -768,11 +768,11 @@ class ingreso_datosActions extends sfActions
                                         
                     /* Guardar los tiempos divididos y el tiempo del evento en el arreglo $tiempos.
                        Lo mismo con el orden de los tiempos*/
-                    $fecha1 = $hora_inicio - ($total - $tiempos[$j]);
-                    $fecha2 = $tiempos[$j] - $fecha1;
-                    $tiempos[$j] = $fecha1;
-                    $tiempos[$j+1] = $eventos[$i]['duracion'];
-                    $tiempos[$j+2] = $fecha2;
+                    $tiempo1 = $hora_inicio - ($total - $tiempos[$j]);
+                    $tiempo2 = $tiempos[$j] - $tiempo1;                    
+                    $tiempos[$j] = round($tiempo1, 2);
+                    $tiempos[$j+1] = round($eventos[$i]['duracion'], 2);
+                    $tiempos[$j+2] = round($tiempo2, 2);                    
                     $orden_tiempos[$j+1] = 'TPNP';
                     $orden_tiempos[$j+2] = $orden_tiempos[$j];
                     
