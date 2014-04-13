@@ -234,7 +234,7 @@ class reporte_columnasActions extends sfActions
                             else {
                                 $etapa_info = EtapaPeer::retrieveByPK($registro->getRumEtaCodigo());
                                 $etapa = $etapa_info->getEtaNombre();
-                            }   
+                            }
 
                             $this->renderText('<Row>			
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumFecha('d-m-Y').'</Data></Cell>

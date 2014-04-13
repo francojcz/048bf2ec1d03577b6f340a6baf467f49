@@ -174,14 +174,10 @@ Ext.onReady(function()
       colspan : 7,
       align : 'center'
     },{
-      header : '',
-      colspan : 1,
+      header : '<h3>Informaci&oacute;n Adicional</h3>',
+      colspan : 2,
       align : 'center'
-    },{
-      header : '',
-      colspan : 1,
-      align : 'center'
-    }]]
+    },]]
   });
   
   var columnInfoMuestras = new Ext.ux.grid.ColumnHeaderGroup(

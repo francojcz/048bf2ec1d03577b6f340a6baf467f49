@@ -288,7 +288,10 @@ var win = new Ext.Window(
             name: 'evrg_observaciones',
             type: 'string'
         }, {
-            name: 'evrg_hora_ocurrio',
+            name: 'evrg_hora_inicio',
+            type: 'string'
+        }, {
+            name: 'evrg_hora_fin',
             type: 'string'
         }, {
             name: 'evrg_hora_registro',
@@ -305,7 +308,7 @@ var win = new Ext.Window(
             resizable: true
         },
         columns: [{
-            header: "M&aacute;quina",
+            header: "Equipo",
             width: 110,
             align : 'center',
             dataIndex: 'evrg_maquina'
@@ -330,10 +333,15 @@ var win = new Ext.Window(
             align : 'center',
             dataIndex: 'evrg_eve_nombre'
         },{
-            header: "Hora",
-            width: 70,
+            header: "Hora Inicio",
+            width: 80,
             align : 'center',
-            dataIndex: 'evrg_hora_ocurrio'
+            dataIndex: 'evrg_hora_inicio'
+        },{
+            header: "Hora Fin",
+            width: 80,
+            align : 'center',
+            dataIndex: 'evrg_hora_fin'
         },{
             header: "Duraci&oacute;n (min.)",
             width: 100,

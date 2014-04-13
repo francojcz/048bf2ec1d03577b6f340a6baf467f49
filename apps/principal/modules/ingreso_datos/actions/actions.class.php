@@ -89,7 +89,7 @@ class ingreso_datosActions extends sfActions
         $registroSegundoDia ->setRumLote($registro ->getRumLote());
         $registroSegundoDia ->setRumObservaciones($registro ->getRumObservaciones());
 
-        list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirFallas($deficitTiempo, $registro, $registroSegundoDia);
+//        list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirFallas($deficitTiempo, $registro, $registroSegundoDia);
 
         list($registro, $registroSegundoDia, $deficitTiempo) = RegistroUsoMaquinaPeer::dividirParosMenores($deficitTiempo, $registro, $registroSegundoDia);
 
@@ -1123,6 +1123,7 @@ class ingreso_datosActions extends sfActions
         $duracion = 0;
         //Tienen la misma hora pero pueden tener diferentes minutos
         if(($horas2 - $horas1) == 0) {
+            //Se restan los segundos entre la hora de fin y la hora de inicio
             $duracion = $minutos2 - $minutos1;
         }
         //Tienen diferente hora
@@ -1412,6 +1413,8 @@ class ingreso_datosActions extends sfActions
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
                 
                 //Cambios: 28 de febrero de 2014
+                /* Cuando el método de la corrida es un mantenimiento, se registra en la hora de fin de la corrida
+                   el mismo valor de la hora de inicio de la corrida*/
                 $cod_metodo = $registro->getRumMetCodigo();
                 $metodo = MetodoPeer::retrieveByPK($cod_metodo);
                 if($metodo->getMetMantenimiento() == 1) {
@@ -2106,18 +2109,43 @@ class ingreso_datosActions extends sfActions
             $fields['numero_inyecciones_x_muestra_uniformidad'] = number_format($registro -> getRumNumInyecXMuUniforPerd(), 2, '.', '');
             // }
 
-            $fields['hora_inicio_corrida'] = $registro -> getRumHoraInicioTrabajo('H:i:s');
-            $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajo('H:i:s');
+            //Cambios: 24 de febrero de 2014
+            //Se le resta a la hora de inicio ingresada el tiempo de inyección de la máquina
+            $hora_inicio = $registro -> getRumHoraInicioTrabajo('H:i:s');
+            $fields['hora_inicio_corrida'] = date('H:i:s',strtotime('+1 minute', strtotime($hora_inicio)));
+            
+            //Se le suma a la hora de fin el tiempo de la corrida
+            //1. Se obtiene el primer TC diferente de cero de derecha a izquierda de las columnas de "Información de muestras"
+            $tc = array();
+            $tc[] = number_format($registro -> getRumTcUniformidad(), 2, '.', '');
+            $tc[] = number_format($registro -> getRumTcDisolucion(), 2, '.', '');
+            $tc[] = number_format($registro -> getRumTcPureza(), 2, '.', '');
+            $tc[] = number_format($registro -> getRumTcMateriaPrima(), 2, '.', '');
+            $tc[] = number_format($registro -> getRumTcEstabilidad(), 2, '.', '');
+            $tc[] = number_format($registro -> getRumTcProductoTerminado(), 2, '.', '');
+            $tiempo_corrida = 0;
+            for($i=0; $i<sizeof($tc); $i++) {
+                if($tc[$i] != 0.00) {
+                    $tiempo_corrida += $tc[$i];
+                    $i = sizeof($tc);
+                }
+            }
+            //2. Se suma el tiempo de corrida a la hora de fin ingresada
+            $hora_fin = $registro -> getRumHoraFinTrabajo('H:i:s');
+            $fields['hora_fin_corrida'] = date('H:i:s',strtotime('+'.$tiempo_corrida.' minute', strtotime($hora_fin)));
+            
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
             $fields['observaciones'] = $registro -> getRumObservaciones();
 
-            //Cambios: 28 de febrero de 2014
+            //Cambios: 24 de febrero de 2014
+            //Se muestra el código interno de la columna en caso de haberse registrado
             if($registro->getRumColCodigo() == '') {
                 $fields['col_codigo_interno'] = '';
             } else {
                 $fields['col_codigo_interno'] = $columna -> getColCodigoInterno();
             }
+            //Se muestra el nombre de la etapa de la columna en caso de haberse registrado
             if($registro->getRumEtaCodigo() == '') {
                 $fields['etapa_nombre'] = '';
             } else {

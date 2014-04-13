@@ -232,8 +232,13 @@ Ext.onReady(function(){
                 text: 'Guardar en formato Excel',
                 handler: function(){
                     redirigirSiSesionExpiro();
-
-                    var metodo_codigo = reporcol_metodo_codigo_combobox.getValue();        
+                    
+                    var metodo_codigo = reporcol_metodo_codigo_combobox.getValue();
+                    var marca_codigo = reporcol_marca_codigo_combobox.getValue();
+                    var modelo_codigo = reporcol_modelo_codigo_combobox.getValue();
+                    var fase_codigo = reporcol_fase_codigo_combobox.getValue();
+                    var dimension_codigo = reporcol_dimension_codigo_combobox.getValue();
+                    var tamano_codigo = reporcol_tamano_codigo_combobox.getValue();
 
                     var desde = '';
                     if (reporcol_desde_fecha_datefield.getValue() != '') {
@@ -245,6 +250,8 @@ Ext.onReady(function(){
                     }
 
                     var params = 'metodo_codigo=' + metodo_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
+                    params += '&marca_codigo=' + marca_codigo + '&modelo_codigo=' + modelo_codigo + '&fase_codigo=' + fase_codigo + '&dimension_codigo=' + dimension_codigo + '&tamano_codigo=' + tamano_codigo;
+                    
                     window.location = getAbsoluteUrl('reporte_columnas', 'exportar') + '?' + params;                   
                 }
             }]

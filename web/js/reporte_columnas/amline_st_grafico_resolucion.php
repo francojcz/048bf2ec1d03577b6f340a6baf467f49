@@ -29,18 +29,20 @@
         <![CDATA[<b>Tendencia Resolución (R) / día</b>]]>
       </text> 
     </label>
-	<label lid='2'>
-      <x>92%</x> 
-      <y>325</y>
+    
+    <label lid='2'>
+      <x>93%</x> 
+      <y>240</y>
       <width>40</width>
       <align>right</align> 
       <text>
         <![CDATA[<b>Días</b>]]>
       </text> 
     </label>
-	<label lid='1'>
-      <x>15</x> 
-      <y>55%</y>
+    
+    <label lid='1'>
+      <x>5</x> 
+      <y>60%</y>
       <rotate>true</rotate> 
       <width>100</width>
       <align>left</align>
