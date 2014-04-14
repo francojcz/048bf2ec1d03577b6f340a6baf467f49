@@ -738,8 +738,6 @@ class ingreso_datosActions extends sfActions
             }            
         }
         
-        //Ordenar ascendentemente el arreglo $eventos por hora de inicio en minutos
-        
         //Ingresar los tiempos de los eventos en la barra de tiempo
         for($i=0; $i<sizeof($eventos); $i++) {
             $total = 0;
@@ -2111,28 +2109,33 @@ class ingreso_datosActions extends sfActions
 
             //Cambios: 24 de febrero de 2014
             //Se le resta a la hora de inicio ingresada el tiempo de inyección de la máquina
-            $hora_inicio = $registro -> getRumHoraInicioTrabajo('H:i:s');
-            $fields['hora_inicio_corrida'] = date('H:i:s',strtotime('+1 minute', strtotime($hora_inicio)));
+            if($registro -> getRumHoraInicioTrabajo() != '') {
+                $hora_inicio = $registro -> getRumHoraInicioTrabajo('H:i:s');
+                $fields['hora_inicio_corrida'] = date('H:i:s',strtotime('+1 minute', strtotime($hora_inicio)));
+            }
+            
             
             //Se le suma a la hora de fin el tiempo de la corrida
             //1. Se obtiene el primer TC diferente de cero de derecha a izquierda de las columnas de "Información de muestras"
-            $tc = array();
-            $tc[] = number_format($registro -> getRumTcUniformidad(), 2, '.', '');
-            $tc[] = number_format($registro -> getRumTcDisolucion(), 2, '.', '');
-            $tc[] = number_format($registro -> getRumTcPureza(), 2, '.', '');
-            $tc[] = number_format($registro -> getRumTcMateriaPrima(), 2, '.', '');
-            $tc[] = number_format($registro -> getRumTcEstabilidad(), 2, '.', '');
-            $tc[] = number_format($registro -> getRumTcProductoTerminado(), 2, '.', '');
-            $tiempo_corrida = 0;
-            for($i=0; $i<sizeof($tc); $i++) {
-                if($tc[$i] != 0.00) {
-                    $tiempo_corrida += $tc[$i];
-                    $i = sizeof($tc);
+            if($registro -> getRumHoraFinTrabajo() != '') {
+                $tc = array();
+                $tc[] = number_format($registro -> getRumTcUniformidad(), 2, '.', '');
+                $tc[] = number_format($registro -> getRumTcDisolucion(), 2, '.', '');
+                $tc[] = number_format($registro -> getRumTcPureza(), 2, '.', '');
+                $tc[] = number_format($registro -> getRumTcMateriaPrima(), 2, '.', '');
+                $tc[] = number_format($registro -> getRumTcEstabilidad(), 2, '.', '');
+                $tc[] = number_format($registro -> getRumTcProductoTerminado(), 2, '.', '');
+                $tiempo_corrida = 0;
+                for($i=0; $i<sizeof($tc); $i++) {
+                    if($tc[$i] != 0.00) {
+                        $tiempo_corrida += $tc[$i];
+                        $i = sizeof($tc);
+                    }
                 }
-            }
-            //2. Se suma el tiempo de corrida a la hora de fin ingresada
-            $hora_fin = $registro -> getRumHoraFinTrabajo('H:i:s');
-            $fields['hora_fin_corrida'] = date('H:i:s',strtotime('+'.$tiempo_corrida.' minute', strtotime($hora_fin)));
+                //2. Se suma el tiempo de corrida a la hora de fin ingresada
+                $hora_fin = $registro -> getRumHoraFinTrabajo('H:i:s');
+                $fields['hora_fin_corrida'] = date('H:i:s',strtotime('+'.$tiempo_corrida.' minute', strtotime($hora_fin)));
+            }            
             
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
