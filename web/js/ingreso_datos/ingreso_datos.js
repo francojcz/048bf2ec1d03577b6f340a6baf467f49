@@ -2187,7 +2187,7 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
   {
 //    autoWidth : true,
     region : 'center',
-    height: 340,
+    height: 305,
 //    autoHeight: true,
     store : datastore,
     stripeRows : true,
@@ -2267,7 +2267,7 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
   {
 //    autoWidth : true,
     region : 'center',
-    height: 340,
+    height: 305,
 //    autoHeight: true,
     store : datastore,
     stripeRows : true,
@@ -2615,8 +2615,20 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
           iconCls : 'eliminar',
           handler : function()
           {
-            var sm = grid_tab1.getSelectionModel();
-            if(sm.hasSelection())
+            var sm1 = grid_tab1.getSelectionModel();
+            var sm2 = grid_tab2.getSelectionModel();
+            var sm3 = grid_tab3.getSelectionModel();
+            var sm;
+            if (sm1.hasSelection()) {
+                sm = sm1;
+            }
+            if (sm2.hasSelection()) {
+                sm = sm2;
+            }
+            if (sm3.hasSelection()) {
+                sm = sm3;
+            }
+            if(sm1.hasSelection() || sm2.hasSelection() || sm3.hasSelection())
             {
               Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
               {
