@@ -139,83 +139,8 @@ Ext.onReady(function()
   }, {
     type : 'string',
     name : 'presion'
-  }];
-
-  var columnHeaderGroup = new Ext.ux.grid.ColumnHeaderGroup(
-  {
-    rows : [[
-    {
-      header : '<h3>Informaci&oacute;n de<br>cambio de m&eacute;todo</h3>',
-      colspan : 3,
-      align : 'center'
-    },
-    {
-      header : '<h3>Informaci&oacute;n<br>system<br>suitability</h3>',
-      colspan : 2,
-      align : 'center'
-    },
-    {
-      header : '<h3>Informaci&oacute;n<br>estándares de<br>calibraci&oacute;n</h3>',
-      colspan : (inyeccionesEstandarPromedio + 1),
-      align : 'center'
-    },
-    {
-      header : '<h3>Informaci&oacute;n de muestras</h3>',
-      colspan : 18,
-      align : 'center'
-    },
-    {
-      header : '<h3>Inicio y fin<br>de an&aacute;lisis</h3>',
-      colspan : 2,
-      align : 'center'
-    },    
-    {
-      header : '<h3>Informaci&oacute;n de Columnas</h3>',
-      colspan : 7,
-      align : 'center'
-    },{
-      header : '<h3>Informaci&oacute;n Adicional</h3>',
-      colspan : 2,
-      align : 'center'
-    },]]
-  });
+  }];  
   
-  var columnInfoMuestras = new Ext.ux.grid.ColumnHeaderGroup(
-  {
-    rows : [[
-    {
-      header : '1',
-      colspan : 3,
-      align : 'center'
-    },
-    {
-      header : '2',
-      colspan : 3,
-      align : 'center'
-    },
-    {
-      header : '3',
-      colspan : 3,
-      align : 'center'
-    },
-    {
-      header : '4',
-      colspan : 3,
-      align : 'center'
-    },
-    {
-      header : '5',
-      colspan : 3,
-      align : 'center'
-    },
-    {
-      header : '6',
-      colspan : 3,
-      align : 'center'
-    }
-    ]]
-  });
-
   var metodosinorden_datastore = new Ext.data.Store(
   {
     proxy : new Ext.data.HttpProxy(
@@ -387,7 +312,8 @@ etapas_datastore.load();
         codigo_maquina.setValue(registro.get('codigo_inventario'));
         recargarDatosMetodos(function()
         {
-          grid.enable();
+          grid_tab1.enable();
+          grid_tab2.enable();
         });
       }
     }
@@ -585,7 +511,7 @@ etapas_datastore.load();
       'afteredit' : function()
       {
         var record = grillaEventos.getSelectionModel().getSelected();
-        var sm = grid.getSelectionModel();
+        var sm = grid_tab1.getSelectionModel();
         var cell = sm.getSelectedCell();
         var index = cell[0];
         var registro = datastore.getAt(index);
@@ -736,7 +662,7 @@ etapas_datastore.load();
     {
       callback : function()
       {
-        var sm = grid.getSelectionModel();
+        var sm = grid_tab1.getSelectionModel();
         var cell = sm.getSelectedCell();
         var index = cell[0];
         var registro = datastore.getAt(index);
@@ -1236,8 +1162,39 @@ etapas_datastore.load();
     registro4.set('fraccion_muestra_dia1', fraccion_muestra_dia1);
     registro4.set('fraccion_muestra_dia2', clipFloat(1 - fraccion_muestra_dia1, 3));
   };
+  
+  var columnHeaderGroup_tab1 = new Ext.ux.grid.ColumnHeaderGroup(
+  {
+    rows : [[
+    {
+      header : '<h3>Informaci&oacute;n de<br>cambio de m&eacute;todo</h3>',
+      colspan : 3,
+      align : 'center'
+    },
+    {
+      header : '<h3>Informaci&oacute;n<br>system<br>suitability</h3>',
+      colspan : 2,
+      align : 'center'
+    },
+    {
+      header : '<h3>Informaci&oacute;n<br>estándares de<br>calibraci&oacute;n</h3>',
+      colspan : (inyeccionesEstandarPromedio + 1),
+      align : 'center'
+    },
+    {
+      header : '<h3>Inicio y fin<br>de an&aacute;lisis</h3>',
+      colspan : 2,
+      align : 'center'
+    },
+    {
+      header : '<h3>Informaci&oacute;n Adicional</h3>',
+      colspan : 2,
+      align : 'center'
+    }
+    ]]
+  });
 
-  var columns = [
+  var columns_tab1 = [
   {
     dataIndex : 'id_metodo',
     header : 'Método ',
@@ -1332,7 +1289,7 @@ etapas_datastore.load();
 
   for(var i = 1; i <= inyeccionesEstandarPromedio; i++)
   {
-    columns.push(
+    columns_tab1.push(
     {
       dataIndex : 'numero_inyecciones_estandar' + i,
       header : 'No.<br>inyec.<br>Std. ' + i,
@@ -1358,8 +1315,102 @@ etapas_datastore.load();
       }
     });
   }
+  
+   columns_tab1.push(
+  {
+    dataIndex : 'hora_inicio_corrida',
+    header : 'Hora<br>inicio<br>corrida',
+    tooltip : 'Hora de inicio de corrida',
+    width : 70,
+    align : 'center',
+    editor : new Ext.form.TimeField(
+    {
+      format : 'H:i:s',
+      minValue : '00:00',
+      maxValue : '23:59',
+      increment : 30
+    }),
+    renderer : generarRenderer('#f0a05f', '#000000', '#f0a05f', '#000000')
+  },
+  {
+    dataIndex : 'hora_fin_corrida',
+    header : 'Hora<br>fin<br>corrida',
+    tooltip : 'Hora de inicio de corrida',
+    width : 70,
+    align : 'center',
+    editor : new Ext.form.TimeField(
+    {
+      format : 'H:i:s',
+      minValue : '00:00',
+      maxValue : '23:59:59',
+      increment : 30
+    }),
+    renderer : generarRenderer('#f0a05f', '#000000', '#f0a05f', '#000000')
+  },
+  {
+    dataIndex : 'lote',
+    header : 'Lote de Muestra',
+    tooltip : 'Lote',
+    width : 130,
+    align : 'center',
+    editor :
+    {
+      xtype : 'textfield'
+    },
+    renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
+  },
+  {
+    dataIndex : 'observaciones',
+    header : 'Observaciones',
+    tooltip : 'Observaciones',
+    width : 150,
+    align : 'center',
+    editor :
+    {
+      xtype : 'textfield'
+    },
+    renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
+  });
 
-  columns.push(
+var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
+  {
+    rows : [[
+    {
+      header : '<h3>Nombre<br>de<br>M&eacute;todo</h3>',
+      colspan : 1,
+      align : 'center'
+    },
+    {
+      header : '<h3>Informaci&oacute;n de muestras</h3>',
+      colspan : 18,
+      align : 'center'
+    }
+    ]]
+  });
+
+
+  var columns_tab2 = [];
+  columns_tab2.push(
+  {
+    dataIndex : 'id_metodo',
+    header : 'Método ',
+    tooltip : 'Método ',
+    columnWidth : 60,
+    align : 'center',
+    renderer : function(value)
+    {
+      var index = metodosinorden_datastore.find('codigo', value);
+      if(index != -1)
+      {
+        var record = metodosinorden_datastore.getAt(index);
+        var renderer = generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000');
+        return renderer(record.get('nombre'));
+      } else
+      {
+        return '';
+      }
+    }
+  },
   {
     dataIndex : 'tiempo_corrida_producto',
     header : '<a style="color:#B80000;">T. C.<br>Prod.<br>(Min)</a>',
@@ -1611,37 +1662,10 @@ etapas_datastore.load();
       maxValue : 100000
     },
     renderer : generarRenderer('#72a8cd', '#000000', '#ff5454', '#000000')
-  },
-  {
-    dataIndex : 'hora_inicio_corrida',
-    header : 'Hora<br>inicio<br>corrida',
-    tooltip : 'Hora de inicio de corrida',
-    width : 70,
-    align : 'center',
-    editor : new Ext.form.TimeField(
-    {
-      format : 'H:i:s',
-      minValue : '00:00',
-      maxValue : '23:59',
-      increment : 30
-    }),
-    renderer : generarRenderer('#f0a05f', '#000000', '#f0a05f', '#000000')
-  },
-  {
-    dataIndex : 'hora_fin_corrida',
-    header : 'Hora<br>fin<br>corrida',
-    tooltip : 'Hora de inicio de corrida',
-    width : 70,
-    align : 'center',
-    editor : new Ext.form.TimeField(
-    {
-      format : 'H:i:s',
-      minValue : '00:00',
-      maxValue : '23:59:59',
-      increment : 30
-    }),
-    renderer : generarRenderer('#f0a05f', '#000000', '#f0a05f', '#000000')
-  },
+  });
+  
+  var columns_tab3 = [];
+  columns_tab3.push(
   {
     dataIndex : 'col_codigo_interno',
     header : 'C&oacute;digo<br>Interno',
@@ -1753,30 +1777,6 @@ etapas_datastore.load();
       maxValue : 10000000
     },
     renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
-  },
-  {
-    dataIndex : 'lote',
-    header : 'Lote de Muestra',
-    tooltip : 'Lote',
-    width : 130,
-    align : 'center',
-    editor :
-    {
-      xtype : 'textfield'
-    },
-    renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
-  },
-  {
-    dataIndex : 'observaciones',
-    header : 'Observaciones',
-    tooltip : 'Observaciones',
-    width : 150,
-    align : 'center',
-    editor :
-    {
-      xtype : 'textfield'
-    },
-    renderer : generarRenderer('#d2b48c', '#000000', '#d2b48c', '#000000')
   });
 
   var metodo_para_agregar_combobox = new Ext.form.ComboBox({
@@ -1885,7 +1885,7 @@ etapas_datastore.load();
 
   var recargarDatosHistorial = function()
   {
-    var sm = grid.getSelectionModel();
+    var sm = grid_tab1.getSelectionModel();
     var cell = sm.getSelectedCell();
     var index = cell[0];
     var registro = datastore.getAt(index);
@@ -2056,12 +2056,12 @@ etapas_datastore.load();
   }
   
   
-  var grid = new Ext.grid.EditorGridPanel(
+  var grid_tab1 = new Ext.grid.EditorGridPanel(
   {
-    autoWidth : true,
+//    autoWidth : true,
     region : 'center',
-    //height: 340,
-    //autoHeight: true,
+    height: 340,
+//    autoHeight: true,
     store : datastore,
     stripeRows : true,
     frame : true,
@@ -2073,7 +2073,7 @@ etapas_datastore.load();
     {
       msg : 'Cargando...'
     },
-    plugins : columnHeaderGroup,
+    plugins : columnHeaderGroup_tab1,
     tbar : [metodo_para_agregar_combobox,
     {
       text : 'Agregar registro',
@@ -2104,7 +2104,7 @@ etapas_datastore.load();
       iconCls : 'eliminar',
       handler : function()
       {
-        var sm = grid.getSelectionModel();
+        var sm = grid_tab1.getSelectionModel();
         if(sm.hasSelection())
         {
           Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
@@ -2160,7 +2160,7 @@ etapas_datastore.load();
       iconCls : 'evento',
       handler : function()
       {
-        var sm = grid.getSelectionModel();
+        var sm = grid_tab1.getSelectionModel();
         if(sm.hasSelection())
         {
           recargarDatosEventos();
@@ -2183,7 +2183,7 @@ etapas_datastore.load();
       iconCls : 'historial',
       handler : function()
       {
-        var sm = grid.getSelectionModel();
+        var sm = grid_tab1.getSelectionModel();
         if(sm.hasSelection())
         {
           recargarDatosHistorial();
@@ -2201,65 +2201,319 @@ etapas_datastore.load();
         }
       }
     },'-',
-{    
-            xtype : 'button',
-            text : 'Dividir registro',
-            iconCls : 'calcular',
-            tooltip : 'Pulse este botón para dividir el último registro del día',
-            width : 70,
-            handler : function()
+    {    
+        xtype : 'button',
+        text : 'Dividir registro',
+        iconCls : 'calcular',
+        tooltip : 'Pulse este botón para dividir el último registro del día',
+        width : 70,
+        handler : function()
+        {
+          if(maquina_combobox.isValid() && fechaField.isValid() && maquina_combobox.getValue() != '')
+          {
+            Ext.Ajax.request(
             {
-              if(maquina_combobox.isValid() && fechaField.isValid() && maquina_combobox.getValue() != '')
+              url : getAbsoluteUrl('ingreso_datos', 'dividirRegistro'),
+              failure : function()
               {
-                Ext.Ajax.request(
+              },
+              success : function(result)
+              {
+                var mensaje = '';
+                switch(result.responseText)
                 {
-                  url : getAbsoluteUrl('ingreso_datos', 'dividirRegistro'),
-                  failure : function()
-                  {
-                  },
-                  success : function(result)
-                  {
-                    var mensaje = '';
-                    switch(result.responseText)
-                    {
-                      case 'Ok':
-                        mensaje = 'El último registro del día fue divido exitosamente';
-                        break;
-                      case '1':
-                        mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
-                        break;
-                      default:
-                        mensaje = result.responseText;
-                        break;                          
-                    }
-                    recargarDatosMetodos(function()
-                    {
-                    });
-                    alert(mensaje);
-                  },
-                  params :
-                  {
-                    'codigo_maquina' : maquina_combobox.getValue(),
-                    'fecha' : fechaField.getValue()
-                  }
+                  case 'Ok':
+                    mensaje = 'El último registro del día fue divido exitosamente';
+                    break;
+                  case '1':
+                    mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
+                    break;
+                  default:
+                    mensaje = result.responseText;
+                    break;                          
+                }
+                recargarDatosMetodos(function()
+                {
                 });
+                alert(mensaje);
+              },
+              params :
+              {
+                'codigo_maquina' : maquina_combobox.getValue(),
+                'fecha' : fechaField.getValue()
               }
-            }
-          }],
-    columns : columns,
+            });
+          }
+        }
+      }],
+    columns : columns_tab1,
     listeners :
     {
       afteredit : function(e)
       {
         var row = null;
         var column = null;
-        var sm = grid.getSelectionModel();
+        var sm = grid_tab1.getSelectionModel();
         if(sm.hasSelection())
         {
           var cell = sm.getSelectedCell();
           var row = cell[0];
           var column = cell[1];
-          var cm = grid.getColumnModel();
+          var cm = grid_tab1.getColumnModel();
+          if(column == (cm.getColumnCount() - 1))
+          {
+            if(row == (datastore.getCount() - 1))
+            {
+              column = 0;
+              row = 0;
+            } else
+            {
+              column = 0;
+              row++;
+            }
+          } else
+          {
+            column++;
+          }
+        }
+        var callback = function()
+        {
+          sm.select(row, column);
+        }
+        var par = (e.row % 2) == 0;
+        var params =
+        {
+        };
+
+        if(esAdministrador)
+        {
+          Ext.Msg.prompt('Modificando...', 'Digite la causa de la modificación', function(btn, text, op)
+          {
+            if(btn == 'ok')
+            {
+              params['causa'] = text;
+              modificarRegistroUsoMaquina(e.record.get('id_registro_uso_maquina'), e.field, e.value, par, params, callback);
+            } else
+            {
+              recargarDatosMetodos(function()
+              {
+              });
+            }
+          });
+        } else
+        {
+          modificarRegistroUsoMaquina(e.record.get('id_registro_uso_maquina'), e.field, e.value, par, params, callback);
+        }
+      }
+    }
+  });
+  
+  
+  var grid_tab2 = new Ext.grid.EditorGridPanel(
+  {
+//    autoWidth : true,
+    region : 'center',
+    height: 340,
+//    autoHeight: true,
+    store : datastore,
+    stripeRows : true,
+    frame : true,
+    border : true,
+    autoScroll : true,
+    columnLines : true,
+    disabled : true,
+    loadMask :
+    {
+      msg : 'Cargando...'
+    },
+    plugins : columnHeaderGroup_tab2,
+    tbar : [
+    metodo_para_agregar_combobox,
+    {
+      text : 'Agregar registro',
+      iconCls : 'agregar',
+      handler : function()
+      {
+        var codigo_metodo = metodo_para_agregar_combobox.getValue();        
+        if(codigo_metodo == '') {
+            if(codigo_metodo == '') {
+                metodo_para_agregar_combobox.focus();
+                alert('Primero debe seleccionar un método');
+            }
+          
+        } else
+        {
+          var params =
+          {
+            'id_metodo' : codigo_metodo,
+            'codigo_maquina' : maquina_combobox.getValue(),
+            'fecha' : fechaField.getValue()
+          };
+          crearRegistroUsoMaquina(params);
+        }
+      }
+    }, '-',
+    {
+      text : 'Eliminar registro',
+      iconCls : 'eliminar',
+      handler : function()
+      {
+        var sm = grid_tab1.getSelectionModel();
+        if(sm.hasSelection())
+        {
+          Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
+          {
+            if(idButton == 'yes')
+            {
+              var cell = sm.getSelectedCell();
+              var index = cell[0];
+              var registro = datastore.getAt(index);
+              Ext.Msg.prompt('Eliminar método', 'Digite la causa de la eliminación de este método', function(idButton, text)
+              {
+                if(idButton == 'ok')
+                {
+                  Ext.Ajax.request(
+                  {
+                    url : getAbsoluteUrl('ingreso_datos', 'eliminarRegistroUsoMaquina'),
+                    failure : function()
+                    {
+                      recargarDatosMetodos();
+                    },
+                    success : function(result)
+                    {
+                      recargarDatosMetodos();
+                      if(result.responseText != 'Ok')
+                      {
+                        alert(result.responseText);
+                      }
+                    },
+                    params :
+                    {
+                      'id_registro_uso_maquina' : registro.get('id_registro_uso_maquina'),
+                      'causa' : text
+                    }
+                  });
+                }
+              });
+            }
+          });
+        } else
+        {
+          Ext.Msg.show(
+          {
+            title : 'Información',
+            msg : 'Primero debe seleccionar un método',
+            buttons : Ext.Msg.OK,
+            icon : Ext.MessageBox.INFO
+          });
+        }
+      }
+    }, '-',
+    {
+      text : 'Editar eventos',
+      iconCls : 'evento',
+      handler : function()
+      {
+        var sm = grid_tab1.getSelectionModel();
+        if(sm.hasSelection())
+        {
+          recargarDatosEventos();
+          Ext.getBody().mask();
+          win.show();
+        } else
+        {
+          Ext.Msg.show(
+          {
+            title : 'Información',
+            msg : 'Primero debe seleccionar un método',
+            buttons : Ext.Msg.OK,
+            icon : Ext.MessageBox.INFO
+          });
+        }
+      }
+    }, '-',
+    {
+      text : 'Historial',
+      iconCls : 'historial',
+      handler : function()
+      {
+        var sm = grid_tab1.getSelectionModel();
+        if(sm.hasSelection())
+        {
+          recargarDatosHistorial();
+          Ext.getBody().mask();
+          winHistorial.show();
+        } else
+        {
+          Ext.Msg.show(
+          {
+            title : 'Información',
+            msg : 'Primero debe seleccionar un método',
+            buttons : Ext.Msg.OK,
+            icon : Ext.MessageBox.INFO
+          });
+        }
+      }
+    },'-',
+    {    
+        xtype : 'button',
+        text : 'Dividir registro',
+        iconCls : 'calcular',
+        tooltip : 'Pulse este botón para dividir el último registro del día',
+        width : 70,
+        handler : function()
+        {
+          if(maquina_combobox.isValid() && fechaField.isValid() && maquina_combobox.getValue() != '')
+          {
+            Ext.Ajax.request(
+            {
+              url : getAbsoluteUrl('ingreso_datos', 'dividirRegistro'),
+              failure : function()
+              {
+              },
+              success : function(result)
+              {
+                var mensaje = '';
+                switch(result.responseText)
+                {
+                  case 'Ok':
+                    mensaje = 'El último registro del día fue divido exitosamente';
+                    break;
+                  case '1':
+                    mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
+                    break;
+                  default:
+                    mensaje = result.responseText;
+                    break;                          
+                }
+                recargarDatosMetodos(function()
+                {
+                });
+                alert(mensaje);
+              },
+              params :
+              {
+                'codigo_maquina' : maquina_combobox.getValue(),
+                'fecha' : fechaField.getValue()
+              }
+            });
+          }
+        }
+      }],
+    columns : columns_tab2,
+    listeners :
+    {
+      afteredit : function(e)
+      {
+        var row = null;
+        var column = null;
+        var sm = grid_tab1.getSelectionModel();
+        if(sm.hasSelection())
+        {
+          var cell = sm.getSelectedCell();
+          var row = cell[0];
+          var column = cell[1];
+          var cm = grid_tab1.getColumnModel();
           if(column == (cm.getColumnCount() - 1))
           {
             if(row == (datastore.getCount() - 1))
@@ -2425,7 +2679,6 @@ etapas_datastore.load();
 
   var panelPrincipal = new Ext.FormPanel(
   {
-    // renderTo: 'panel_principal',
     border : false,
     frame : false,
     layout : 'border',
@@ -2442,33 +2695,31 @@ etapas_datastore.load();
         layout : 'column',
         items : [
         {
-          width : '225',
+          width : '240',
           layout : 'form',
-          labelWidth : 75,
+          labelWidth : 70,
           footer : false,
           items : [operario_field, maquina_combobox]
         },
         {
-          width : '250',
+          width : '265',
           footer : false,
           layout : 'form',
+          labelWidth : 85,
           items : [identificacion_field, codigo_maquina]
         },
         {
-          width : '220',
+          width : '200',
           layout : 'form',
-          labelWidth : 75,
+          labelWidth : 50,
           items : [fechaField, horaField]
         },
         {
-          width : '140',
+          width : '160',
           layout : 'form',
-          layout : 'column',
-          //hideLabel: true,
           items : [
           {
             xtype : 'panel',
-            columnWidth : '1',
             padding : '0px 0px 4px 0px',
             items : [genral_tema_combobox]
           },
@@ -2488,24 +2739,6 @@ etapas_datastore.load();
                 window.open(getAbsoluteUrl('interfaz_reporte', 'index'));
               }
             }]
-          },
-          {
-            columnWidth : '.5',
-            xtype : 'panel',
-            padding : '0px 0px 0px 4px',
-            items : [
-            {
-              xtype : 'button',
-              text : 'Manual',
-              iconCls : 'abrir_manual',
-              tooltip : 'Pulse este botón para ver el manual',
-              width : 60,
-              handler : function()
-              {
-                window.open(urlWeb + 'manual-tpm/main.html');
-              }
-            }
-]
           }]
         },
         {
@@ -2516,9 +2749,8 @@ etapas_datastore.load();
           items : [
           {
             padding : '0px 0px 4px 0px',
-            items : [
-            
-{
+            items : [            
+            {
               xtype : 'button',
               text : 'Salir',
               tooltip : 'Pulse este botón para salir del sistema',
@@ -2529,23 +2761,56 @@ etapas_datastore.load();
                 cerrarSesion();
               }
             }
-]
-          }
-          // {
-          // xtype : 'button',
-          // text : 'Tiempo disponible',
-          // iconCls : 'tiempo_disponible',
-          // tooltip : 'Pulse este botón para utilizar la calculadora',
-          // width : 70,
-          // handler : function()
-          // {
-          // win_calculadora.show();
-          // }
-          // },
-          ]
+            ]
+          },
+          {
+            columnWidth : '.5',
+            xtype : 'panel',
+            items : [
+                {
+                  xtype : 'button',
+                  text : 'Manual',
+                  iconCls : 'abrir_manual',
+                  tooltip : 'Pulse este botón para ver el manual',
+                  width : 60,
+                  handler : function()
+                  {
+                    window.open(urlWeb + 'manual-tpm/main.html');
+                  }
+                }
+            ]
+          }]
         }]
       }]
-    }, grid]
+    }, {
+      border : true,
+      frame : true,
+      region : 'center',
+      items : [
+      {
+        xtype: 'tabpanel',
+        autoHeight: true,
+        activeTab: 0,
+        items: [{
+            title: 'Información de Método',
+            border: false,
+            width: '1400',
+            items: [grid_tab1]
+        }, {
+            title: 'Información de Muestras',
+            border: false,
+            items: [grid_tab2]
+        }, {
+            title: 'Información de Columnas',
+            border: false
+        }],
+        listeners: {
+            tabchange: function(){
+                redirigirSiSesionExpiro();
+            }
+        }
+    }]
+    }]
   });
 
   if(esAdministrador)

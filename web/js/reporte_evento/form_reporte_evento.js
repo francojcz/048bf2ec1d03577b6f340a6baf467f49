@@ -375,7 +375,6 @@ var win = new Ext.Window(
         frame: true,
         monitorResize: true,
         layout: 'border',
-        monitorResize: true,
         items: [reporevent_gridpanel, {
             xtype: 'tabpanel',
             activeTab: 0,
