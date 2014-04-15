@@ -314,6 +314,8 @@ etapas_datastore.load();
         {
           grid_tab1.enable();
           grid_tab2.enable();
+          grid_tab3.enable();
+          metodo_para_agregar_combobox.setDisabled(false);
         });
       }
     }
@@ -1167,17 +1169,17 @@ etapas_datastore.load();
   {
     rows : [[
     {
-      header : '<h3>Informaci&oacute;n de<br>cambio de m&eacute;todo</h3>',
+      header : '<h3>Informaci&oacute;n<br>cambio de m&eacute;todo</h3>',
       colspan : 3,
       align : 'center'
     },
     {
-      header : '<h3>Informaci&oacute;n<br>system<br>suitability</h3>',
+      header : '<h3>Informaci&oacute;n<br>system suitability</h3>',
       colspan : 2,
       align : 'center'
     },
     {
-      header : '<h3>Informaci&oacute;n<br>estándares de<br>calibraci&oacute;n</h3>',
+      header : '<h3>Informaci&oacute;n<br>estándares de calibraci&oacute;n</h3>',
       colspan : (inyeccionesEstandarPromedio + 1),
       align : 'center'
     },
@@ -1187,8 +1189,13 @@ etapas_datastore.load();
       align : 'center'
     },
     {
-      header : '<h3>Informaci&oacute;n Adicional</h3>',
-      colspan : 2,
+      header : '',
+      colspan : 1,
+      align : 'center'
+    },
+    {
+      header : '',
+      colspan : 1,
       align : 'center'
     }
     ]]
@@ -1199,7 +1206,7 @@ etapas_datastore.load();
     dataIndex : 'id_metodo',
     header : 'Método ',
     tooltip : 'Método ',
-    columnWidth : 60,
+    width : 130,
     align : 'center',
     renderer : function(value)
     {
@@ -1217,9 +1224,9 @@ etapas_datastore.load();
   },
   {
     dataIndex : 'tiempo_entre_metodos',
-    header : 'Tiempo<br>entre<br>métodos<br>(Hrs)',
+    header : 'Tiempo entre<br>métodos<br>(Hrs)',
     tooltip : 'Tiempo entre métodos (Horas)',
-    width : 70,
+    width : 80,
     align : 'center',
     editor : new Ext.form.TimeField(
     {
@@ -1232,9 +1239,9 @@ etapas_datastore.load();
   },
   {
     dataIndex : 'cambio_metodo_ajuste',
-    header : 'Cambio<br>método<br>(alistamiento)<br>(Min)',
+    header : 'Cambio método<br>(alistamiento)<br>(Min)',
     tooltip : 'Cambio de método y ajustes',
-    width : 75,
+    width : 90,
     align : 'center',
     editor :
     {
@@ -1248,7 +1255,7 @@ etapas_datastore.load();
     dataIndex : 'tiempo_corrida_ss',
     header : 'T. C.<br>(Min)',
     tooltip : 'Tiempo de corrida',
-    width : 44,
+    width : 55,
     align : 'center',
     editor :
     {
@@ -1262,7 +1269,7 @@ etapas_datastore.load();
     dataIndex : 'numero_inyecciones_ss',
     header : 'No.<br>inyec.',
     tooltip : 'N&uacute;mero de inyecciones',
-    width : 44,
+    width : 55,
     align : 'center',
     editor :
     {
@@ -1319,9 +1326,9 @@ etapas_datastore.load();
    columns_tab1.push(
   {
     dataIndex : 'hora_inicio_corrida',
-    header : 'Hora<br>inicio<br>corrida',
+    header : 'Hora<br>inicio corrida',
     tooltip : 'Hora de inicio de corrida',
-    width : 70,
+    width : 75,
     align : 'center',
     editor : new Ext.form.TimeField(
     {
@@ -1334,9 +1341,9 @@ etapas_datastore.load();
   },
   {
     dataIndex : 'hora_fin_corrida',
-    header : 'Hora<br>fin<br>corrida',
+    header : 'Hora<br>fin corrida',
     tooltip : 'Hora de inicio de corrida',
-    width : 70,
+    width : 75,
     align : 'center',
     editor : new Ext.form.TimeField(
     {
@@ -1351,7 +1358,7 @@ etapas_datastore.load();
     dataIndex : 'lote',
     header : 'Lote de Muestra',
     tooltip : 'Lote',
-    width : 130,
+    width : 120,
     align : 'center',
     editor :
     {
@@ -1361,9 +1368,9 @@ etapas_datastore.load();
   },
   {
     dataIndex : 'observaciones',
-    header : 'Observaciones',
+    header : 'Observaciones de Muestra',
     tooltip : 'Observaciones',
-    width : 150,
+    width : 180,
     align : 'center',
     editor :
     {
@@ -1373,10 +1380,10 @@ etapas_datastore.load();
   });
 
 var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
-  {
+{
     rows : [[
     {
-      header : '<h3>Nombre<br>de<br>M&eacute;todo</h3>',
+      header : '<h3>Nombre de<br>M&eacute;todo</h3>',
       colspan : 1,
       align : 'center'
     },
@@ -1386,7 +1393,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
       align : 'center'
     }
     ]]
-  });
+});
 
 
   var columns_tab2 = [];
@@ -1395,7 +1402,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'id_metodo',
     header : 'Método ',
     tooltip : 'Método ',
-    columnWidth : 60,
+    width : 130,
     align : 'center',
     renderer : function(value)
     {
@@ -1664,13 +1671,51 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     renderer : generarRenderer('#72a8cd', '#000000', '#ff5454', '#000000')
   });
   
+  
+  
+var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
+{
+    rows : [[
+    {
+      header : '<h3>Nombre de<br>m&eacute;todo</h3>',
+      colspan : 1,
+      align : 'center'
+    },
+    {
+      header : '<h3>Informaci&oacute;n de columnas</h3>',
+      colspan : 7,
+      align : 'center'
+    }
+    ]]
+});
+  
   var columns_tab3 = [];
   columns_tab3.push(
   {
+    dataIndex : 'id_metodo',
+    header : 'Método ',
+    tooltip : 'Método ',
+    width : 130,
+    align : 'center',
+    renderer : function(value)
+    {
+      var index = metodosinorden_datastore.find('codigo', value);
+      if(index != -1)
+      {
+        var record = metodosinorden_datastore.getAt(index);
+        var renderer = generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000');
+        return renderer(record.get('nombre'));
+      } else
+      {
+        return '';
+      }
+    }
+  },
+  {
     dataIndex : 'col_codigo_interno',
-    header : 'C&oacute;digo<br>Interno',
+    header : 'C&oacute;digo Interno',
     tooltip : 'C&oacute;digo Interno',
-    columnWidth : 80,
+    width : 120,
     align : 'center',
     editor : new Ext.form.ComboBox(
     {
@@ -1691,7 +1736,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'etapa_nombre',
     header : 'Etapa',
     tooltip : 'Etapa',
-    columnWidth : 80,
+    width : 120,
     align : 'center',
     editor : new Ext.form.ComboBox(
     {
@@ -1710,9 +1755,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'tiempo_retencion',
-    header : 'Tiempo<br>Retenci&oacute;n<br>(tr)',
+    header : 'Tiempo Retenci&oacute;n<br>(tr)',
     tooltip : 'Tiempo de Retenci&oacute;n (tr)',
-    columnWidth : 80,
+    width : 120,
     align : 'center',
     editor :
     {
@@ -1724,9 +1769,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'platos_teoricos',
-    header : 'Platos<br>Te&oacute;ricos<br>(N)',
+    header : 'Platos Te&oacute;ricos<br>(N)',
     tooltip : 'Platos Te&oacute;ricos',
-    columnWidth : 80,
+    width : 120,
     align : 'center',
     editor :
     {
@@ -1740,7 +1785,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'tailing',
     header : 'Factor de Cola<br>(T)',
     tooltip : 'Factor de Cola (T)',
-    columnWidth : 80,
+    width : 120,
     align : 'center',
     editor :
     {
@@ -1754,7 +1799,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'resolucion',
     header : 'Resoluci&oacute;n<br>(R)',
     tooltip : 'Resoluci&oacute;n (R)',
-    columnWidth : 80,
+    width : 120,
     align : 'center',
     editor :
     {
@@ -1766,9 +1811,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'presion',
-    header : 'Presi&oacute;n de<br>Sistema<br>(psi)',
+    header : 'Presi&oacute;n de Sistema<br>(psi)',
     tooltip : 'Presi&oacute;n de Sistema (psi)',
-    columnWidth : 80,
+    width : 120,
     align : 'center',
     editor :
     {
@@ -1790,6 +1835,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     allowBlank : false,
     width : 150,
     allQuery: 'nombre',
+    disabled: true,
     listeners: {
          'keyup': function() {
                this.store.filter('nombre', this.getRawValue(), true, false);
@@ -2060,7 +2106,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   {
 //    autoWidth : true,
     region : 'center',
-    height: 340,
+    height: 305,
 //    autoHeight: true,
     store : datastore,
     stripeRows : true,
@@ -2074,178 +2120,6 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
       msg : 'Cargando...'
     },
     plugins : columnHeaderGroup_tab1,
-    tbar : [metodo_para_agregar_combobox,
-    {
-      text : 'Agregar registro',
-      iconCls : 'agregar',
-      handler : function()
-      {
-        var codigo_metodo = metodo_para_agregar_combobox.getValue();        
-        if(codigo_metodo == '') {
-            if(codigo_metodo == '') {
-                metodo_para_agregar_combobox.focus();
-                alert('Primero debe seleccionar un método');
-            }
-          
-        } else
-        {
-          var params =
-          {
-            'id_metodo' : codigo_metodo,
-            'codigo_maquina' : maquina_combobox.getValue(),
-            'fecha' : fechaField.getValue()
-          };
-          crearRegistroUsoMaquina(params);
-        }
-      }
-    }, '-',
-    {
-      text : 'Eliminar registro',
-      iconCls : 'eliminar',
-      handler : function()
-      {
-        var sm = grid_tab1.getSelectionModel();
-        if(sm.hasSelection())
-        {
-          Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
-          {
-            if(idButton == 'yes')
-            {
-              var cell = sm.getSelectedCell();
-              var index = cell[0];
-              var registro = datastore.getAt(index);
-              Ext.Msg.prompt('Eliminar método', 'Digite la causa de la eliminación de este método', function(idButton, text)
-              {
-                if(idButton == 'ok')
-                {
-                  Ext.Ajax.request(
-                  {
-                    url : getAbsoluteUrl('ingreso_datos', 'eliminarRegistroUsoMaquina'),
-                    failure : function()
-                    {
-                      recargarDatosMetodos();
-                    },
-                    success : function(result)
-                    {
-                      recargarDatosMetodos();
-                      if(result.responseText != 'Ok')
-                      {
-                        alert(result.responseText);
-                      }
-                    },
-                    params :
-                    {
-                      'id_registro_uso_maquina' : registro.get('id_registro_uso_maquina'),
-                      'causa' : text
-                    }
-                  });
-                }
-              });
-            }
-          });
-        } else
-        {
-          Ext.Msg.show(
-          {
-            title : 'Información',
-            msg : 'Primero debe seleccionar un método',
-            buttons : Ext.Msg.OK,
-            icon : Ext.MessageBox.INFO
-          });
-        }
-      }
-    }, '-',
-    {
-      text : 'Editar eventos',
-      iconCls : 'evento',
-      handler : function()
-      {
-        var sm = grid_tab1.getSelectionModel();
-        if(sm.hasSelection())
-        {
-          recargarDatosEventos();
-          Ext.getBody().mask();
-          win.show();
-        } else
-        {
-          Ext.Msg.show(
-          {
-            title : 'Información',
-            msg : 'Primero debe seleccionar un método',
-            buttons : Ext.Msg.OK,
-            icon : Ext.MessageBox.INFO
-          });
-        }
-      }
-    }, '-',
-    {
-      text : 'Historial',
-      iconCls : 'historial',
-      handler : function()
-      {
-        var sm = grid_tab1.getSelectionModel();
-        if(sm.hasSelection())
-        {
-          recargarDatosHistorial();
-          Ext.getBody().mask();
-          winHistorial.show();
-        } else
-        {
-          Ext.Msg.show(
-          {
-            title : 'Información',
-            msg : 'Primero debe seleccionar un método',
-            buttons : Ext.Msg.OK,
-            icon : Ext.MessageBox.INFO
-          });
-        }
-      }
-    },'-',
-    {    
-        xtype : 'button',
-        text : 'Dividir registro',
-        iconCls : 'calcular',
-        tooltip : 'Pulse este botón para dividir el último registro del día',
-        width : 70,
-        handler : function()
-        {
-          if(maquina_combobox.isValid() && fechaField.isValid() && maquina_combobox.getValue() != '')
-          {
-            Ext.Ajax.request(
-            {
-              url : getAbsoluteUrl('ingreso_datos', 'dividirRegistro'),
-              failure : function()
-              {
-              },
-              success : function(result)
-              {
-                var mensaje = '';
-                switch(result.responseText)
-                {
-                  case 'Ok':
-                    mensaje = 'El último registro del día fue divido exitosamente';
-                    break;
-                  case '1':
-                    mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
-                    break;
-                  default:
-                    mensaje = result.responseText;
-                    break;                          
-                }
-                recargarDatosMetodos(function()
-                {
-                });
-                alert(mensaje);
-              },
-              params :
-              {
-                'codigo_maquina' : maquina_combobox.getValue(),
-                'fecha' : fechaField.getValue()
-              }
-            });
-          }
-        }
-      }],
     columns : columns_tab1,
     listeners :
     {
@@ -2326,180 +2200,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     {
       msg : 'Cargando...'
     },
-    plugins : columnHeaderGroup_tab2,
-    tbar : [
-    metodo_para_agregar_combobox,
-    {
-      text : 'Agregar registro',
-      iconCls : 'agregar',
-      handler : function()
-      {
-        var codigo_metodo = metodo_para_agregar_combobox.getValue();        
-        if(codigo_metodo == '') {
-            if(codigo_metodo == '') {
-                metodo_para_agregar_combobox.focus();
-                alert('Primero debe seleccionar un método');
-            }
-          
-        } else
-        {
-          var params =
-          {
-            'id_metodo' : codigo_metodo,
-            'codigo_maquina' : maquina_combobox.getValue(),
-            'fecha' : fechaField.getValue()
-          };
-          crearRegistroUsoMaquina(params);
-        }
-      }
-    }, '-',
-    {
-      text : 'Eliminar registro',
-      iconCls : 'eliminar',
-      handler : function()
-      {
-        var sm = grid_tab1.getSelectionModel();
-        if(sm.hasSelection())
-        {
-          Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
-          {
-            if(idButton == 'yes')
-            {
-              var cell = sm.getSelectedCell();
-              var index = cell[0];
-              var registro = datastore.getAt(index);
-              Ext.Msg.prompt('Eliminar método', 'Digite la causa de la eliminación de este método', function(idButton, text)
-              {
-                if(idButton == 'ok')
-                {
-                  Ext.Ajax.request(
-                  {
-                    url : getAbsoluteUrl('ingreso_datos', 'eliminarRegistroUsoMaquina'),
-                    failure : function()
-                    {
-                      recargarDatosMetodos();
-                    },
-                    success : function(result)
-                    {
-                      recargarDatosMetodos();
-                      if(result.responseText != 'Ok')
-                      {
-                        alert(result.responseText);
-                      }
-                    },
-                    params :
-                    {
-                      'id_registro_uso_maquina' : registro.get('id_registro_uso_maquina'),
-                      'causa' : text
-                    }
-                  });
-                }
-              });
-            }
-          });
-        } else
-        {
-          Ext.Msg.show(
-          {
-            title : 'Información',
-            msg : 'Primero debe seleccionar un método',
-            buttons : Ext.Msg.OK,
-            icon : Ext.MessageBox.INFO
-          });
-        }
-      }
-    }, '-',
-    {
-      text : 'Editar eventos',
-      iconCls : 'evento',
-      handler : function()
-      {
-        var sm = grid_tab1.getSelectionModel();
-        if(sm.hasSelection())
-        {
-          recargarDatosEventos();
-          Ext.getBody().mask();
-          win.show();
-        } else
-        {
-          Ext.Msg.show(
-          {
-            title : 'Información',
-            msg : 'Primero debe seleccionar un método',
-            buttons : Ext.Msg.OK,
-            icon : Ext.MessageBox.INFO
-          });
-        }
-      }
-    }, '-',
-    {
-      text : 'Historial',
-      iconCls : 'historial',
-      handler : function()
-      {
-        var sm = grid_tab1.getSelectionModel();
-        if(sm.hasSelection())
-        {
-          recargarDatosHistorial();
-          Ext.getBody().mask();
-          winHistorial.show();
-        } else
-        {
-          Ext.Msg.show(
-          {
-            title : 'Información',
-            msg : 'Primero debe seleccionar un método',
-            buttons : Ext.Msg.OK,
-            icon : Ext.MessageBox.INFO
-          });
-        }
-      }
-    },'-',
-    {    
-        xtype : 'button',
-        text : 'Dividir registro',
-        iconCls : 'calcular',
-        tooltip : 'Pulse este botón para dividir el último registro del día',
-        width : 70,
-        handler : function()
-        {
-          if(maquina_combobox.isValid() && fechaField.isValid() && maquina_combobox.getValue() != '')
-          {
-            Ext.Ajax.request(
-            {
-              url : getAbsoluteUrl('ingreso_datos', 'dividirRegistro'),
-              failure : function()
-              {
-              },
-              success : function(result)
-              {
-                var mensaje = '';
-                switch(result.responseText)
-                {
-                  case 'Ok':
-                    mensaje = 'El último registro del día fue divido exitosamente';
-                    break;
-                  case '1':
-                    mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
-                    break;
-                  default:
-                    mensaje = result.responseText;
-                    break;                          
-                }
-                recargarDatosMetodos(function()
-                {
-                });
-                alert(mensaje);
-              },
-              params :
-              {
-                'codigo_maquina' : maquina_combobox.getValue(),
-                'fecha' : fechaField.getValue()
-              }
-            });
-          }
-        }
-      }],
+    plugins : columnHeaderGroup_tab2,    
     columns : columns_tab2,
     listeners :
     {
@@ -2561,6 +2262,88 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
       }
     }
   });
+  
+  var grid_tab3 = new Ext.grid.EditorGridPanel(
+  {
+//    autoWidth : true,
+    region : 'center',
+    height: 340,
+//    autoHeight: true,
+    store : datastore,
+    stripeRows : true,
+    frame : true,
+    border : true,
+    autoScroll : true,
+    columnLines : true,
+    disabled : true,
+    loadMask :
+    {
+      msg : 'Cargando...'
+    },
+    plugins : columnHeaderGroup_tab3,    
+    columns : columns_tab3,
+    listeners :
+    {
+      afteredit : function(e)
+      {
+        var row = null;
+        var column = null;
+        var sm = grid_tab1.getSelectionModel();
+        if(sm.hasSelection())
+        {
+          var cell = sm.getSelectedCell();
+          var row = cell[0];
+          var column = cell[1];
+          var cm = grid_tab1.getColumnModel();
+          if(column == (cm.getColumnCount() - 1))
+          {
+            if(row == (datastore.getCount() - 1))
+            {
+              column = 0;
+              row = 0;
+            } else
+            {
+              column = 0;
+              row++;
+            }
+          } else
+          {
+            column++;
+          }
+        }
+        var callback = function()
+        {
+          sm.select(row, column);
+        }
+        var par = (e.row % 2) == 0;
+        var params =
+        {
+        };
+
+        if(esAdministrador)
+        {
+          Ext.Msg.prompt('Modificando...', 'Digite la causa de la modificación', function(btn, text, op)
+          {
+            if(btn == 'ok')
+            {
+              params['causa'] = text;
+              modificarRegistroUsoMaquina(e.record.get('id_registro_uso_maquina'), e.field, e.value, par, params, callback);
+            } else
+            {
+              recargarDatosMetodos(function()
+              {
+              });
+            }
+          });
+        } else
+        {
+          modificarRegistroUsoMaquina(e.record.get('id_registro_uso_maquina'), e.field, e.value, par, params, callback);
+        }
+      }
+    }
+  });  
+  
+  
 
   var horaField = new Ext.form.TextField(
   {
@@ -2687,7 +2470,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     {
       border : true,
       frame : true,
-      height : 63,
+      height : 99,
       region : 'north',
       items : [
       {
@@ -2781,6 +2564,199 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
             ]
           }]
         }]
+      }, 
+      {
+        //Barra con los botones para el registro y eliminación de un método y para gestión de eventos
+        border : true,
+        frame : false,
+        tbar : [metodo_para_agregar_combobox,
+        {
+          text : 'Agregar registro',
+          iconCls : 'agregar',          
+          handler : function()
+          {
+            var codigo_equipo = maquina_combobox.getValue();
+            if(codigo_equipo == '') {                
+                Ext.Msg.show(
+                {
+                    title : 'Información',
+                    msg : 'Primero debe seleccionar un equipo',
+                    buttons : Ext.Msg.OK,
+                    icon : Ext.MessageBox.INFO
+                });
+                maquina_combobox.focus();
+            }
+            
+            var codigo_metodo = metodo_para_agregar_combobox.getValue();            
+            if(codigo_metodo == '' && codigo_equipo != '') {                
+                metodo_para_agregar_combobox.focus();
+                Ext.Msg.show(
+                {
+                    title : 'Información',
+                    msg : 'Primero debe seleccionar un método',
+                    buttons : Ext.Msg.OK,
+                    icon : Ext.MessageBox.INFO
+                });
+                metodo_para_agregar_combobox.focus();
+            } else
+            {
+              var params =
+              {
+                'id_metodo' : codigo_metodo,
+                'codigo_maquina' : maquina_combobox.getValue(),
+                'fecha' : fechaField.getValue()
+              };
+              crearRegistroUsoMaquina(params);
+            }
+          }
+        }, '-',
+        {
+          text : 'Eliminar registro',
+          iconCls : 'eliminar',
+          handler : function()
+          {
+            var sm = grid_tab1.getSelectionModel();
+            if(sm.hasSelection())
+            {
+              Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
+              {
+                if(idButton == 'yes')
+                {
+                  var cell = sm.getSelectedCell();
+                  var index = cell[0];
+                  var registro = datastore.getAt(index);
+                  Ext.Msg.prompt('Eliminar método', 'Digite la causa de la eliminación de este método', function(idButton, text)
+                  {
+                    if(idButton == 'ok')
+                    {
+                      Ext.Ajax.request(
+                      {
+                        url : getAbsoluteUrl('ingreso_datos', 'eliminarRegistroUsoMaquina'),
+                        failure : function()
+                        {
+                          recargarDatosMetodos();
+                        },
+                        success : function(result)
+                        {
+                          recargarDatosMetodos();
+                          if(result.responseText != 'Ok')
+                          {
+                            alert(result.responseText);
+                          }
+                        },
+                        params :
+                        {
+                          'id_registro_uso_maquina' : registro.get('id_registro_uso_maquina'),
+                          'causa' : text
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            } else
+            {
+              Ext.Msg.show(
+              {
+                title : 'Información',
+                msg : 'Primero debe seleccionar un método',
+                buttons : Ext.Msg.OK,
+                icon : Ext.MessageBox.INFO
+              });
+            }
+          }
+        }, '-',
+        {
+          text : 'Editar eventos',
+          iconCls : 'evento',
+          handler : function()
+          {
+            var sm = grid_tab1.getSelectionModel();
+            if(sm.hasSelection())
+            {
+              recargarDatosEventos();
+              Ext.getBody().mask();
+              win.show();
+            } else
+            {
+              Ext.Msg.show(
+              {
+                title : 'Información',
+                msg : 'Primero debe seleccionar un método',
+                buttons : Ext.Msg.OK,
+                icon : Ext.MessageBox.INFO
+              });
+            }
+          }
+        }, '-',
+        {
+          text : 'Historial',
+          iconCls : 'historial',
+          handler : function()
+          {
+            var sm = grid_tab1.getSelectionModel();
+            if(sm.hasSelection())
+            {
+              recargarDatosHistorial();
+              Ext.getBody().mask();
+              winHistorial.show();
+            } else
+            {
+              Ext.Msg.show(
+              {
+                title : 'Información',
+                msg : 'Primero debe seleccionar un método',
+                buttons : Ext.Msg.OK,
+                icon : Ext.MessageBox.INFO
+              });
+            }
+          }
+        },'-',
+        {
+            xtype : 'button',
+            text : 'Dividir registro',
+            iconCls : 'calcular',
+            tooltip : 'Pulse este botón para dividir el último registro del día',
+            width : 70,
+            handler : function()
+            {
+              if(maquina_combobox.isValid() && fechaField.isValid() && maquina_combobox.getValue() != '')
+              {
+                Ext.Ajax.request(
+                {
+                  url : getAbsoluteUrl('ingreso_datos', 'dividirRegistro'),
+                  failure : function()
+                  {
+                  },
+                  success : function(result)
+                  {
+                    var mensaje = '';
+                    switch(result.responseText)
+                    {
+                      case 'Ok':
+                        mensaje = 'El último registro del día fue divido exitosamente';
+                        break;
+                      case '1':
+                        mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
+                        break;
+                      default:
+                        mensaje = result.responseText;
+                        break;                          
+                    }
+                    recargarDatosMetodos(function()
+                    {
+                    });
+                    alert(mensaje);
+                  },
+                  params :
+                  {
+                    'codigo_maquina' : maquina_combobox.getValue(),
+                    'fecha' : fechaField.getValue()
+                  }
+                });
+              }
+            }
+          }]
       }]
     }, {
       border : true,
@@ -2802,7 +2778,8 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
             items: [grid_tab2]
         }, {
             title: 'Información de Columnas',
-            border: false
+            border: false,
+            items: [grid_tab3]
         }],
         listeners: {
             tabchange: function(){
