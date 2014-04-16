@@ -43,16 +43,16 @@ class ingreso_datosActions extends sfActions
 
         $deficitTiempo = null;
 
-        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
-//        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE); 
-        if ($tiempoDisponible < 0)
-        {
-            $deficitTiempo = 0 - ($tiempoDisponible * 60);
-        } else
-        {
-            return $this -> renderText('1');
-        }
-//        return $this -> renderText('Disp. '.$t[0].'-TNP '.$t[1].'-TPP '.$t[2].'-TPNP '.$t[3].'- TO'.$t[4].'');
+//        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
+        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE); 
+//        if ($tiempoDisponible < 0)
+//        {
+//            $deficitTiempo = 0 - ($tiempoDisponible * 60);
+//        } else
+//        {
+//            return $this -> renderText('1');
+//        }
+        return $this -> renderText('Disp. '.$t[0].'-TNP '.$t[1].'-TPP '.$t[2].'-TPNP '.$t[3].'- TO'.$t[4].'');
 
         $registroSegundoDia = new RegistroUsoMaquina();
         $datetimeSegundoDia = new DateTime('@' . ($registro -> getRumFecha('U') + 86400));
@@ -86,6 +86,7 @@ class ingreso_datosActions extends sfActions
         $registroSegundoDia ->setRumTailing($registro ->getRumTailing());
         $registroSegundoDia ->setRumResolucion($registro ->getRumResolucion());        
         $registroSegundoDia ->setRumPresion($registro ->getRumPresion());
+        $registroSegundoDia ->setRumObservacionesCol($registro ->getRumObservacionesCol());
         $registroSegundoDia ->setRumLote($registro ->getRumLote());
         $registroSegundoDia ->setRumObservaciones($registro ->getRumObservaciones());
 
@@ -1844,6 +1845,13 @@ class ingreso_datosActions extends sfActions
                 $registro ->setRumPresion($request -> getParameter('presion'));
                 $registroModificacion -> setRemValorNuevo('' . $registro ->getRumPresion());
             }
+            if ($request -> hasParameter('observaciones_col'))
+            {
+                $registroModificacion -> setRemNombreCampo('Observaciones Columna');
+                $registroModificacion -> setRemValorAntiguo('' . $registro ->getRumObservacionesCol());
+                $registro ->setRumObservacionesCol($request -> getParameter('observaciones_col'));
+                $registroModificacion -> setRemValorNuevo('' . $registro ->getRumObservacionesCol());
+            }
             
             if ($registro -> isModified())
             {
@@ -2059,6 +2067,7 @@ class ingreso_datosActions extends sfActions
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
             $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
             $fields['presion'] = number_format($registro -> getRumPresion(), 2, '.', '');
+            $fields['observaciones_col'] = $registro -> getRumObservacionesCol();
 
             $data[] = $fields;
 
@@ -2159,6 +2168,7 @@ class ingreso_datosActions extends sfActions
             $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
             $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
             $fields['presion'] = number_format($registro -> getRumPresion(), 2, '.', '');
+            $fields['observaciones_col'] = $registro -> getRumObservacionesCol();
             
             $horasFin = $registro -> getRumHoraFinTrabajo('H');
             $minutosFin = $registro -> getRumHoraFinTrabajo('i');

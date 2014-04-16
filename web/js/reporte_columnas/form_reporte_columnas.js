@@ -360,6 +360,9 @@ Ext.onReady(function(){
         }, {
             name: 'rum_col_presion',
             type: 'string'
+        }, {
+            name: 'rum_col_observaciones',
+            type: 'string'
         }])
     });
 //    reporcol_datastore.load();
@@ -426,6 +429,11 @@ Ext.onReady(function(){
             width: 130,
             align : 'center',
             dataIndex: 'rum_col_presion'
+        }, {
+            header: "Observaciones",
+            width: 150,
+            align : 'center',
+            dataIndex: 'rum_col_observaciones'
         }, {
             header: "Método",
             width: 160,

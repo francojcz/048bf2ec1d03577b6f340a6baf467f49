@@ -638,6 +638,7 @@ CREATE TABLE `registro_uso_maquina`
         `rum_resolucion` DECIMAL(12,4),
         `rum_tailing` DECIMAL(12,4),
         `rum_presion` DECIMAL(12,4),
+        `rum_observaciones_col` VARCHAR(300),
 	PRIMARY KEY (`rum_codigo`),
 	KEY `FK_reference_1`(`rum_usu_codigo_elimino`),
 	KEY `FK_reference_2`(`rum_maq_codigo`),

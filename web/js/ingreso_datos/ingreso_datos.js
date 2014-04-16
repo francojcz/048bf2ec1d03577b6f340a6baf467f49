@@ -139,6 +139,9 @@ Ext.onReady(function()
   }, {
     type : 'string',
     name : 'presion'
+  }, {
+    type : 'string',
+    name : 'observaciones_col'
   }];  
   
   var metodosinorden_datastore = new Ext.data.Store(
@@ -513,7 +516,20 @@ etapas_datastore.load();
       'afteredit' : function()
       {
         var record = grillaEventos.getSelectionModel().getSelected();
-        var sm = grid_tab1.getSelectionModel();
+        
+        //Guarda en sm la grilla seleccionada (Son tres grillas: Info. Método, Info. Muestras e Info. Columnas)        
+        var activeTab = pestanas_grilla.getActiveTab();
+        var sm;
+        if (activeTab.id == 1) {
+            sm = grid_tab1.getSelectionModel();
+        }
+        if (activeTab.id == 2) {
+            sm = grid_tab2.getSelectionModel();
+        }
+        if (activeTab.id == 3) {
+            sm = grid_tab3.getSelectionModel();
+        }
+        
         var cell = sm.getSelectedCell();
         var index = cell[0];
         var registro = datastore.getAt(index);
@@ -664,7 +680,19 @@ etapas_datastore.load();
     {
       callback : function()
       {
-        var sm = grid_tab1.getSelectionModel();
+        //Guarda en sm la grilla seleccionada (Son tres grillas: Info. Método, Info. Muestras e Info. Columnas)        
+        var activeTab = pestanas_grilla.getActiveTab();
+        var sm;
+        if (activeTab.id == 1) {
+            sm = grid_tab1.getSelectionModel();
+        }
+        if (activeTab.id == 2) {
+            sm = grid_tab2.getSelectionModel();
+        }
+        if (activeTab.id == 3) {
+            sm = grid_tab3.getSelectionModel();
+        }
+        
         var cell = sm.getSelectedCell();
         var index = cell[0];
         var registro = datastore.getAt(index);
@@ -1206,7 +1234,7 @@ etapas_datastore.load();
     dataIndex : 'id_metodo',
     header : 'Método ',
     tooltip : 'Método ',
-    width : 130,
+    width : 150,
     align : 'center',
     renderer : function(value)
     {
@@ -1283,7 +1311,7 @@ etapas_datastore.load();
     dataIndex : 'tiempo_corrida_cc',
     header : 'T. C.<br>(Min)',
     tooltip : 'Tiempo de corrida',
-    width : 44,
+    width : 50,
     align : 'center',
     editor :
     {
@@ -1301,7 +1329,7 @@ etapas_datastore.load();
       dataIndex : 'numero_inyecciones_estandar' + i,
       header : 'No.<br>inyec.<br>Std. ' + i,
       tooltip : 'N&uacute;mero de inyecciones del estándar No. ' + i,
-      width : 44,
+      width : 50,
       align : 'center',
       editor :
       {
@@ -1368,7 +1396,7 @@ etapas_datastore.load();
   },
   {
     dataIndex : 'observaciones',
-    header : 'Observaciones de Muestra',
+    header : 'Observaciones Muestra',
     tooltip : 'Observaciones',
     width : 180,
     align : 'center',
@@ -1402,7 +1430,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'id_metodo',
     header : 'Método ',
     tooltip : 'Método ',
-    width : 130,
+    width : 150,
     align : 'center',
     renderer : function(value)
     {
@@ -1420,9 +1448,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'tiempo_corrida_producto',
-    header : '<a style="color:#B80000;">T. C.<br>Prod.<br>(Min)</a>',
+    header : '<a style="color:#B80000;">T. C.<br>Producto<br>(Min)</a>',
     tooltip : 'Tiempo de corrida',    
-    width : 44,
+    width : 53,
     align : 'center',
     editor :
     {    
@@ -1434,9 +1462,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'numero_muestras_producto',
-    header : '<a style="color:#B80000;">No.<br>lotes<br>del<br>Prod.</a>',
+    header : '<a style="color:#B80000;">No. lotes<br>del<br>Producto</a>',
     tooltip : 'N&uacute;mero de muestras del producto',
-    width : 44,
+    width : 54,
     align : 'center',
     editor :
     {
@@ -1450,7 +1478,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'numero_inyecciones_x_muestra_producto',
     header : '<a style="color:#B80000;">No.<br>inyec.<br>x<br>lotes</a>',
     tooltip : 'N&uacute;mero de muestras del producto',
-    width : 44,
+    width : 53,
     align : 'center',
     editor :
     {
@@ -1462,9 +1490,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'tiempo_corrida_estabilidad',
-    header : '<a style="color:#0033CC;">T. C.<br>Estb.<br>(Min)</a>',
+    header : '<a style="color:#0033CC;">T. C.<br>Estabilidad<br>(Min)</a>',
     tooltip : 'Tiempo de corrida',
-    width : 44,
+    width : 61,
     align : 'center',
     editor :
     {
@@ -1476,9 +1504,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'numero_muestras_estabilidad',
-    header : '<a style="color:#0033CC;">No.<br>lotes<br>de<br>Estb.</a>',
+    header : '<a style="color:#0033CC;">No. lotes<br>de<br>Estabilidad</a>',
     tooltip : 'N&uacute;mero de muestras de estabilidad',
-    width : 44,
+    width : 61,
     align : 'center',
     editor :
     {
@@ -1492,7 +1520,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'numero_inyecciones_x_muestra_estabilidad',
     header : '<a style="color:#0033CC;">No.<br>inyec.<br>x<br>lotes</a>',
     tooltip : 'N&uacute;mero de muestras de estabilidad',
-    width : 44,
+    width : 53,
     align : 'center',
     editor :
     {
@@ -1504,9 +1532,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'tiempo_corrida_materia_prima',
-    header : '<a style="color:#004C00;">T. C.<br>Mo.<br>Po.<br>(Min)</a>',
+    header : '<a style="color:#004C00;">T. C.<br>Materia<br>Prima<br>(Min)</a>',
     tooltip : 'Tiempo de corrida',
-    width : 44,
+    width : 48,
     align : 'center',
     editor :
     {
@@ -1518,9 +1546,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'numero_muestras_materia_prima',
-    header : '<a style="color:#004C00;">No.<br>lotes<br>Mo.<br>Po.</a>',
+    header : '<a style="color:#004C00;">No. lotes<br>Materia<br>Prima</a>',
     tooltip : 'N&uacute;mero de muestras de materia prima',
-    width : 44,
+    width : 52,
     align : 'center',
     editor :
     {
@@ -1534,7 +1562,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'numero_inyecciones_x_muestra_materia_prima',
     header : '<a style="color:#004C00;">No.<br>inyec.<br>x<br>lotes</a>',
     tooltip : 'N&uacute;mero de muestras de materia prima',
-    width : 44,
+    width : 53,
     align : 'center',
     editor :
     {
@@ -1546,9 +1574,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'tiempo_corrida_pureza',
-    header : '<a style="color:#8B4513;">T. C.<br>Pureza<br>Crom.<br>(Min)</a>',
+    header : '<a style="color:#8B4513;">T. C.<br>Pureza<br>Cromatográfica<br>(Min)</a>',
     tooltip : 'Tiempo de corrida',
-    width : 44,
+    width : 84,
     align : 'center',
     editor :
     {
@@ -1560,9 +1588,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'numero_muestras_pureza',
-    header : '<a style="color:#8B4513;">No.<br>lotes<br>Pureza<br>Crom.</a>',
+    header : '<a style="color:#8B4513;">No. lotes<br>Pureza<br>Cromatográfica</a>',
     tooltip : 'N&uacute;mero de muestras pureza',
-    width : 44,
+    width : 84,
     align : 'center',
     editor :
     {
@@ -1576,7 +1604,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'numero_inyecciones_x_muestra_pureza',
     header : '<a style="color:#8B4513;">No.<br>inyec.<br>x<br>lotes</a>',
     tooltip : 'N&uacute;mero de muestras de pureza',
-    width : 44,
+    width : 53,
     align : 'center',
     editor :
     {
@@ -1588,9 +1616,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'tiempo_corrida_disolucion',
-    header : '<a style="color:#006666;">T. C.<br>Disol.<br>(Min)</a>',
+    header : '<a style="color:#006666;">T. C.<br>Disolución<br>(Min)</a>',
     tooltip : 'Tiempo de corrida',
-    width : 44,
+    width : 60,
     align : 'center',
     editor :
     {
@@ -1602,9 +1630,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'numero_muestras_disolucion',
-    header : '<a style="color:#006666;">No.<br>lotes<br>Disol.</a>',
+    header : '<a style="color:#006666;">No. lotes<br>Disolución</a>',
     tooltip : 'N&uacute;mero de muestras disolucion',
-    width : 44,
+    width : 60,
     align : 'center',
     editor :
     {
@@ -1618,7 +1646,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'numero_inyecciones_x_muestra_disolucion',
     header : '<a style="color:#006666;">No.<br>inyec.<br>x<br>lotes</a>',
     tooltip : 'N&uacute;mero de muestras de disolucion',
-    width : 44,
+    width : 53,
     align : 'center',
     editor :
     {
@@ -1630,9 +1658,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'tiempo_corrida_uniformidad',
-    header : '<a style="color:#E63E00;">T. C.<br>Unif.<br>Cont.<br>(Min)</a>',
+    header : '<a style="color:#E63E00;">T. C.<br>Uniformidad<br>Contenida<br>(Min)</a>',
     tooltip : 'Tiempo de corrida',
-    width : 44,
+    width : 68,
     align : 'center',
     editor :
     {
@@ -1644,9 +1672,9 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
   },
   {
     dataIndex : 'numero_muestras_uniformidad',
-    header : '<a style="color:#E63E00;">No.<br>lotes<br>Unif.<br>Cont.</a>',
+    header : '<a style="color:#E63E00;">No. lotes<br>Uniformidad<br>Contenida</a>',
     tooltip : 'N&uacute;mero de muestras uniformidad',
-    width : 44,
+    width : 68,
     align : 'center',
     editor :
     {
@@ -1660,7 +1688,7 @@ var columnHeaderGroup_tab2 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'numero_inyecciones_x_muestra_uniformidad',
     header : '<a style="color:#E63E00;">No.<br>inyec.<br>x<br>lotes</a>',
     tooltip : 'N&uacute;mero de muestras de uniformidad',
-    width : 44,
+    width : 53,
     align : 'center',
     editor :
     {
@@ -1683,7 +1711,7 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
     },
     {
       header : '<h3>Informaci&oacute;n de columnas</h3>',
-      colspan : 7,
+      colspan : 8,
       align : 'center'
     }
     ]]
@@ -1695,7 +1723,7 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'id_metodo',
     header : 'Método ',
     tooltip : 'Método ',
-    width : 130,
+    width : 150,
     align : 'center',
     renderer : function(value)
     {
@@ -1715,7 +1743,7 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
     dataIndex : 'col_codigo_interno',
     header : 'C&oacute;digo Interno',
     tooltip : 'C&oacute;digo Interno',
-    width : 120,
+    width : 130,
     align : 'center',
     editor : new Ext.form.ComboBox(
     {
@@ -1730,13 +1758,13 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
             columnas_datastore.reload();
         }
     }),
-    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    renderer : generarRenderer('#add8e6', '#000000', '#add8e6', '#000000')
   },
   {
     dataIndex : 'etapa_nombre',
     header : 'Etapa',
     tooltip : 'Etapa',
-    width : 120,
+    width : 130,
     align : 'center',
     editor : new Ext.form.ComboBox(
     {
@@ -1751,13 +1779,13 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
             etapas_datastore.reload();
         }
     }),
-    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    renderer : generarRenderer('#add8e6', '#000000', '#add8e6', '#000000')
   },
   {
     dataIndex : 'tiempo_retencion',
-    header : 'Tiempo Retenci&oacute;n<br>(tr)',
+    header : 'Tiempo Retenci&oacute;n (tr)',
     tooltip : 'Tiempo de Retenci&oacute;n (tr)',
-    width : 120,
+    width : 130,
     align : 'center',
     editor :
     {
@@ -1765,13 +1793,13 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
       allowNegative : false,
       maxValue : 100000
     },
-    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    renderer : generarRenderer('#add8e6', '#000000', '#add8e6', '#000000')
   },
   {
     dataIndex : 'platos_teoricos',
-    header : 'Platos Te&oacute;ricos<br>(N)',
+    header : 'Platos Te&oacute;ricos (N)',
     tooltip : 'Platos Te&oacute;ricos',
-    width : 120,
+    width : 130,
     align : 'center',
     editor :
     {
@@ -1779,13 +1807,13 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
       allowNegative : false,
       maxValue : 10000000
     },
-    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    renderer : generarRenderer('#add8e6', '#000000', '#add8e6', '#000000')
   },
   {
     dataIndex : 'tailing',
-    header : 'Factor de Cola<br>(T)',
+    header : 'Factor de Cola (T)',
     tooltip : 'Factor de Cola (T)',
-    width : 120,
+    width : 130,
     align : 'center',
     editor :
     {
@@ -1793,13 +1821,13 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
       allowNegative : false,
       maxValue : 10000000
     },
-    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    renderer : generarRenderer('#add8e6', '#000000', '#add8e6', '#000000')
   },
   {
     dataIndex : 'resolucion',
-    header : 'Resoluci&oacute;n<br>(R)',
+    header : 'Resoluci&oacute;n (R)',
     tooltip : 'Resoluci&oacute;n (R)',
-    width : 120,
+    width : 130,
     align : 'center',
     editor :
     {
@@ -1807,13 +1835,13 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
       allowNegative : false,
       maxValue : 10000000
     },
-    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    renderer : generarRenderer('#add8e6', '#000000', '#add8e6', '#000000')
   },
   {
     dataIndex : 'presion',
-    header : 'Presi&oacute;n de Sistema<br>(psi)',
+    header : 'Presi&oacute;n de Sistema (psi)',
     tooltip : 'Presi&oacute;n de Sistema (psi)',
-    width : 120,
+    width : 130,
     align : 'center',
     editor :
     {
@@ -1821,7 +1849,19 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
       allowNegative : false,
       maxValue : 10000000
     },
-    renderer : generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    renderer : generarRenderer('#add8e6', '#000000', '#add8e6', '#000000')
+  },
+  {
+    dataIndex : 'observaciones_col',
+    header : 'Observaciones Columna',
+    tooltip : 'Observaciones',
+    width : 170,
+    align : 'center',
+    editor :
+    {
+      xtype : 'textfield'
+    },
+    renderer : generarRenderer('#add8e6', '#000000', '#add8e6', '#000000')
   });
 
   var metodo_para_agregar_combobox = new Ext.form.ComboBox({
@@ -1931,10 +1971,22 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
 
   var recargarDatosHistorial = function()
   {
-    var sm = grid_tab1.getSelectionModel();
+    //Guarda en sm la grilla seleccionada (Son tres grillas: Info. Método, Info. Muestras e Info. Columnas)        
+    var activeTab = pestanas_grilla.getActiveTab();
+    var sm;
+    if (activeTab.id == 1) {
+        sm = grid_tab1.getSelectionModel();
+    }
+    if (activeTab.id == 2) {
+        sm = grid_tab2.getSelectionModel();
+    }
+    if (activeTab.id == 3) {
+        sm = grid_tab3.getSelectionModel();
+    }
+        
     var cell = sm.getSelectedCell();
     var index = cell[0];
-    var registro = datastore.getAt(index);
+    var registro = datastore.getAt(index);    
     historial_datastore.load(
     {
       params :
@@ -2208,13 +2260,13 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
       {
         var row = null;
         var column = null;
-        var sm = grid_tab1.getSelectionModel();
+        var sm = grid_tab2.getSelectionModel();
         if(sm.hasSelection())
         {
           var cell = sm.getSelectedCell();
           var row = cell[0];
           var column = cell[1];
-          var cm = grid_tab1.getColumnModel();
+          var cm = grid_tab2.getColumnModel();
           if(column == (cm.getColumnCount() - 1))
           {
             if(row == (datastore.getCount() - 1))
@@ -2288,13 +2340,13 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
       {
         var row = null;
         var column = null;
-        var sm = grid_tab1.getSelectionModel();
+        var sm = grid_tab3.getSelectionModel();
         if(sm.hasSelection())
         {
           var cell = sm.getSelectedCell();
           var row = cell[0];
           var column = cell[1];
-          var cm = grid_tab1.getColumnModel();
+          var cm = grid_tab3.getColumnModel();
           if(column == (cm.getColumnCount() - 1))
           {
             if(row == (datastore.getCount() - 1))
@@ -2459,6 +2511,34 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
       readOnly : true
     };
   }
+  
+  var pestanas_grilla = new Ext.TabPanel({
+    xtype: 'tabpanel',
+    autoHeight: true,
+    activeTab: 0,
+    items: [{
+        id: 1,
+        title: 'Información de Método',
+        border: false,
+        width: '1400',
+        items: [grid_tab1]
+    }, {
+        id: 2,
+        title: 'Información de Muestras',
+        border: false,
+        items: [grid_tab2]
+    }, {
+        id: 3,
+        title: 'Información de Columnas',
+        border: false,
+        items: [grid_tab3]
+    }],
+    listeners: {
+        tabchange: function(){
+            redirigirSiSesionExpiro();
+        }
+    }
+  });
 
   var panelPrincipal = new Ext.FormPanel(
   {
@@ -2615,20 +2695,18 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
           iconCls : 'eliminar',
           handler : function()
           {
-            var sm1 = grid_tab1.getSelectionModel();
-            var sm2 = grid_tab2.getSelectionModel();
-            var sm3 = grid_tab3.getSelectionModel();
+            var activeTab = pestanas_grilla.getActiveTab();
             var sm;
-            if (sm1.hasSelection()) {
-                sm = sm1;
+            if (activeTab.id == 1) {
+                sm = grid_tab1.getSelectionModel();
             }
-            if (sm2.hasSelection()) {
-                sm = sm2;
+            if (activeTab.id == 2) {
+                sm = grid_tab2.getSelectionModel();
             }
-            if (sm3.hasSelection()) {
-                sm = sm3;
+            if (activeTab.id == 3) {
+                sm = grid_tab3.getSelectionModel();
             }
-            if(sm1.hasSelection() || sm2.hasSelection() || sm3.hasSelection())
+            if(sm.hasSelection())
             {
               Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
               {
@@ -2683,8 +2761,10 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
           iconCls : 'evento',
           handler : function()
           {
-            var sm = grid_tab1.getSelectionModel();
-            if(sm.hasSelection())
+            var sm1 = grid_tab1.getSelectionModel();
+            var sm2 = grid_tab2.getSelectionModel();
+            var sm3 = grid_tab3.getSelectionModel();            
+            if(sm1.hasSelection() || sm2.hasSelection() || sm3.hasSelection())
             {
               recargarDatosEventos();
               Ext.getBody().mask();
@@ -2706,8 +2786,10 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
           iconCls : 'historial',
           handler : function()
           {
-            var sm = grid_tab1.getSelectionModel();
-            if(sm.hasSelection())
+            var sm1 = grid_tab1.getSelectionModel();
+            var sm2 = grid_tab2.getSelectionModel();
+            var sm3 = grid_tab3.getSelectionModel();            
+            if(sm1.hasSelection() || sm2.hasSelection() || sm3.hasSelection())
             {
               recargarDatosHistorial();
               Ext.getBody().mask();
@@ -2773,32 +2855,10 @@ var columnHeaderGroup_tab3 = new Ext.ux.grid.ColumnHeaderGroup(
     }, {
       border : true,
       frame : true,
-      region : 'center',
+      region : 'center',      
       items : [
-      {
-        xtype: 'tabpanel',
-        autoHeight: true,
-        activeTab: 0,
-        items: [{
-            title: 'Información de Método',
-            border: false,
-            width: '1400',
-            items: [grid_tab1]
-        }, {
-            title: 'Información de Muestras',
-            border: false,
-            items: [grid_tab2]
-        }, {
-            title: 'Información de Columnas',
-            border: false,
-            items: [grid_tab3]
-        }],
-        listeners: {
-            tabchange: function(){
-                redirigirSiSesionExpiro();
-            }
-        }
-    }]
+        pestanas_grilla
+      ]
     }]
   });
 

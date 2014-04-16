@@ -389,6 +389,7 @@ propel:
     rum_resolucion: { phpName: RumResolucion, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_tailing: { phpName: RumTailing, type: DECIMAL, size: '12', scale: '4', required: false }
     rum_presion: { phpName: RumPresion, type: DECIMAL, size: '12', scale: '4', required: false }
+    rum_observaciones_col: { phpName: RumObservacionesCol, type: VARCHAR, size: '300', required: false }
     _indexes: { FK_reference_1: [rum_usu_codigo_elimino], FK_reference_2: [rum_maq_codigo], FK_reference_3: [rum_met_codigo], FK_reference_4: [rum_usu_codigo], FK_reference_5: [rum_col_codigo], FK_reference_6: [rum_eta_codigo] }
   tamano_particula:
     _attributes: { phpName: TamanoParticula }

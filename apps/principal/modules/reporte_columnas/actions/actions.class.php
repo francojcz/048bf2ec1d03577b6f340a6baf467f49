@@ -197,6 +197,7 @@ class reporte_columnasActions extends sfActions
                 <Column ss:AutoFitWidth="0" ss:Width="90"/>
                 <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Column ss:AutoFitWidth="0" ss:Width="120"/>
+                <Column ss:AutoFitWidth="0" ss:Width="120"/>
                 <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Row ss:AutoFitHeight="0" ss:Height="40">                
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Fecha</Data></Cell>
@@ -210,6 +211,7 @@ class reporte_columnasActions extends sfActions
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Factor de Cola (T)</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Resoluci&oacute;n (R)</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Presi&oacute;n de Sistema (psi)</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Observaciones</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Método</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Equipo</Data></Cell>
                </Row>');
@@ -248,6 +250,7 @@ class reporte_columnasActions extends sfActions
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumTailing(), 2, '.', '').'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumResolucion(), 2, '.', '').'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumPresion(), 2, '.', '').'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumObservacionesCol().'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMetodo().'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>                            
                             </Row>');
@@ -355,7 +358,8 @@ class reporte_columnasActions extends sfActions
                                 $datos[$fila]['rum_col_platos_teoricos'] = number_format($temporal->getRumPlatosTeoricos(), 2, '.', '');
                                 $datos[$fila]['rum_col_tailing'] = number_format($temporal->getRumTailing(), 2, '.', '');
                                 $datos[$fila]['rum_col_resolucion'] = number_format($temporal->getRumResolucion(), 2, '.', '');
-                                $datos[$fila]['rum_col_presion'] = number_format($temporal->getRumPresion(), 2, '.', '');				
+                                $datos[$fila]['rum_col_presion'] = number_format($temporal->getRumPresion(), 2, '.', '');
+                                $datos[$fila]['rum_col_observaciones'] = $temporal->getRumObservacionesCol();
 
                                 $fila++;
                             }                            
