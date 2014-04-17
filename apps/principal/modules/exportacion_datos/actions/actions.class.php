@@ -169,7 +169,6 @@ class exportacion_datosActions extends sfActions
     
     <Cell ss:StyleID="s73"><Data ss:Type="String">Hora inicio de corrida</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Hora fin de corrida</Data></Cell>
-    <Cell ss:StyleID="s73"><Data ss:Type="String">Fallas</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Lote</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Observaciones</Data></Cell>
     
@@ -223,8 +222,7 @@ class exportacion_datosActions extends sfActions
       <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuestraUnifor(), 2, '.', '').'</Data></Cell>
 			
 			<Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraInicioTrabajo('H:i:s').'</Data></Cell>
-			<Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraFinTrabajo('H:i:s').'</Data></Cell>
-			<Cell ss:StyleID="s69"><Data ss:Type="Number">'.number_format($registro->getRumFallas(), 2).'</Data></Cell>
+			<Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraFinTrabajo('H:i:s').'</Data></Cell>			
                         <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumLote().'</Data></Cell>
                         <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumObservaciones().'</Data></Cell>
 			</Row>');
@@ -266,8 +264,7 @@ class exportacion_datosActions extends sfActions
       <Cell ss:StyleID="s71"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuUniforPerd(), 2, '.', '').'</Data></Cell>
       
       <Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraInicioTrabajo('H:i:s').'</Data></Cell>
-      <Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraFinTrabajo('H:i:s').'</Data></Cell>
-      <Cell ss:StyleID="s69"><Data ss:Type="Number">'.number_format($registro->getRumFallas(), 2).'</Data></Cell>
+      <Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraFinTrabajo('H:i:s').'</Data></Cell>      
       <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumLote().'</Data></Cell>
       <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumObservaciones().'</Data></Cell>
       

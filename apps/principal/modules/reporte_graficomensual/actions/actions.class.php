@@ -357,12 +357,12 @@ class reporte_graficomensualActions extends sfActions
 		$xml.='</series>';
 
 		$xml.='<graphs>';
-		$xml.='<graph color="#72a8cd" title="Fallas" bullet="round">';
-		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-			$numero_fallas_dia=$datos[$diasmes]['fallas'];
-			$xml.='<value xid="'.$diasmes.'">'.$numero_fallas_dia.'</value>';
-		}
-		$xml.='</graph>';
+//		$xml.='<graph color="#72a8cd" title="Fallas" bullet="round">';
+//		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
+//			$numero_fallas_dia=$datos[$diasmes]['fallas'];
+//			$xml.='<value xid="'.$diasmes.'">'.$numero_fallas_dia.'</value>';
+//		}
+//		$xml.='</graph>';
 
 		$xml.='<graph color="#ff5454" title="Paros menores y reajustes" bullet="round" >';
 		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
@@ -402,7 +402,7 @@ class reporte_graficomensualActions extends sfActions
 		$datos;
 		try{
 			for($dia=1;$dia<$cant_dias;$dia++){
-				$suma_fallas_dia= 0;
+//				$suma_fallas_dia= 0;
 				$suma_paros_dia= 0;
 				$suma_retrabajos_dia= 0;
 				$suma_perdidarendimiento_dia= 0;
@@ -412,13 +412,13 @@ class reporte_graficomensualActions extends sfActions
 
 				foreach($registros_uso_maquinas as $temporal)
 				{
-					$suma_fallas_dia+= $temporal->getRumFallas();
+//					$suma_fallas_dia+= $temporal->getRumFallas();
 					$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
 					$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
 					$suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
 				}
 
-				$datos[$dia]['fallas'] = round($suma_fallas_dia/60,2);
+//				$datos[$dia]['fallas'] = round($suma_fallas_dia/60,2);
 				$datos[$dia]['paros'] = round($suma_paros_dia/60,2);
 				$datos[$dia]['retrabajos'] = round($suma_retrabajos_dia/60,2);
 				$datos[$dia]['perdida_rendimiento'] = round($suma_perdidarendimiento_dia/60,2);
@@ -455,7 +455,7 @@ class reporte_graficomensualActions extends sfActions
 
 		$xml='<?xml version="1.0"?>';
 		$xml.='<pie>';
-		$xml.='<slice title="Fallas " color="#72a8cd" pull_out="true">'.$datos['fallas'].'</slice>';
+//		$xml.='<slice title="Fallas " color="#72a8cd" pull_out="true">'.$datos['fallas'].'</slice>';
 		$xml.='<slice title="Paros Menores o Reajustes" color="#ff5454" pull_out="false">'.$datos['paros'].'</slice>';
 		$xml.='<slice title="Defectos y Retrabajos" color="#47d552" pull_out="false">'.$datos['retrabajos'].'</slice>';
 		$xml.='<slice title="Pérdidas de velocidad" color="#47d599" pull_out="false">'.$datos['perdida_rendimiento'].'</slice>';
@@ -472,7 +472,7 @@ class reporte_graficomensualActions extends sfActions
 	{
 		$datos;
 		try{
-			$suma_fallas_dia= 0;
+//			$suma_fallas_dia= 0;
 			$suma_paros_dia= 0;
 			$suma_retrabajos_dia= 0;
 			$suma_perdidarendimiento_dia=0;
@@ -482,12 +482,12 @@ class reporte_graficomensualActions extends sfActions
 
 			foreach($registros_uso_maquinas as $temporal)
 			{
-				$suma_fallas_dia+= $temporal->getRumFallas();
+//				$suma_fallas_dia+= $temporal->getRumFallas();
 				$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
 				$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
 				$suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
 			}
-			$datos['fallas']=round($suma_fallas_dia/60,2);
+//			$datos['fallas']=round($suma_fallas_dia/60,2);
 			$datos['paros']=round(($suma_paros_dia/60),2);
 			$datos['retrabajos']=round($suma_retrabajos_dia/60,2);
 			$datos['perdida_rendimiento']=round($suma_perdidarendimiento_dia/60,2);
@@ -537,8 +537,8 @@ class reporte_graficomensualActions extends sfActions
 		for ($indicador=0;$indicador<5;$indicador++){
 			$xml.='<graph color="#'.$indicadores_colores[$indicador].'" title="'.$indicadores_tiempo[$indicador].'" bullet="round">';
 			for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-				$numero_fallas_dia=$datos[$diasmes][$indicadores_tiempo[$indicador]];
-				$xml.='<value xid="'.$diasmes.'">'.round($numero_fallas_dia, 2).'</value>';
+				$numero_tiempos_dia=$datos[$diasmes][$indicadores_tiempo[$indicador]];
+				$xml.='<value xid="'.$diasmes.'">'.round($numero_tiempos_dia, 2).'</value>';
 			}
 			$xml.='</graph>';
 		}
@@ -746,8 +746,8 @@ class reporte_graficomensualActions extends sfActions
 
 			$xml.='<graph color="#'.$indicadores_colores[$indicador].'" title="'.$indicadores_tiempo[$indicador].'" bullet="round">';
 			for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
-				$numero_fallas_dia=$datos[$diasmes][$indicadores_tiempo[$indicador]];
-				$xml.='<value xid="'.$diasmes.'">'.$numero_fallas_dia.'</value>';
+				$numero_indicadores_dia=$datos[$diasmes][$indicadores_tiempo[$indicador]];
+				$xml.='<value xid="'.$diasmes.'">'.$numero_indicadores_dia.'</value>';
 			}
 			$xml.='</graph>';
 		}

@@ -625,7 +625,7 @@ class graficos_anualesActions extends sfActions
 
 		$inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
 
-		$fallasAnual = 0;
+//		$fallasAnual = 0;
 		$parosMenoresAnual = 0;
 		$retrabajosAnual = 0;
 		$perdidasVelocidadAnual = 0;
@@ -644,13 +644,13 @@ class graficos_anualesActions extends sfActions
                 foreach($maquinas as $maquina) {
                         $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-                        $fallasAnual += RegistroUsoMaquinaPeer::contarFallasAñoEnDias($codigoTemporalMaquina, $anho, $params);
+//                        $fallasAnual += RegistroUsoMaquinaPeer::contarFallasAñoEnDias($codigoTemporalMaquina, $anho, $params);
                         $parosMenoresAnual += RegistroUsoMaquinaPeer::contarParosMenoresIncluyendoCambioMetodoAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
                         $retrabajosAnual += RegistroUsoMaquinaPeer::contarRetrabajosAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
                         $perdidasVelocidadAnual += RegistroUsoMaquinaPeer::contarPerdidasVelocidadAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
                 }
 
-		echo "Fallas;".round($fallasAnual,2)."\n";
+//		echo "Fallas;".round($fallasAnual,2)."\n";
 		echo "Paros menores y reajustes;".round($parosMenoresAnual,2)."\n";
 		echo "Retrabajos;".round($retrabajosAnual,2)."\n";
 		return $this->renderText("Pérdidas de velocidad;".round($perdidasVelocidadAnual,2)."\n");
@@ -761,18 +761,18 @@ class graficos_anualesActions extends sfActions
       </series>
       <graphs>');
 
-		$fallasEnero = 0;
-		$fallasFebrero = 0;
-		$fallasMarzo = 0;
-		$fallasAbril = 0;
-		$fallasMayo = 0;
-		$fallasJunio = 0;
-		$fallasJulio = 0;
-		$fallasAgosto =  0;
-		$fallasSeptiembre = 0;
-		$fallasOctubre = 0;
-		$fallasNoviembre = 0;
-		$fallasDiciembre = 0;
+//		$fallasEnero = 0;
+//		$fallasFebrero = 0;
+//		$fallasMarzo = 0;
+//		$fallasAbril = 0;
+//		$fallasMayo = 0;
+//		$fallasJunio = 0;
+//		$fallasJulio = 0;
+//		$fallasAgosto =  0;
+//		$fallasSeptiembre = 0;
+//		$fallasOctubre = 0;
+//		$fallasNoviembre = 0;
+//		$fallasDiciembre = 0;
 
 		$parosMenoresEnero = 0;
 		$parosMenoresFebrero = 0;
@@ -827,18 +827,18 @@ class graficos_anualesActions extends sfActions
                 foreach($maquinas as $maquina) {
                         $codigoTemporalMaquina = $maquina->getMaqCodigo();
 
-                        $fallasEnero += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 1, $anho, $params);
-                        $fallasFebrero += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 2, $anho, $params);
-                        $fallasMarzo += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 3, $anho, $params);
-                        $fallasAbril += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 4, $anho, $params);
-                        $fallasMayo += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 5, $anho, $params);
-                        $fallasJunio += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 6, $anho, $params);
-                        $fallasJulio += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 7, $anho, $params);
-                        $fallasAgosto += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 8, $anho, $params);
-                        $fallasSeptiembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 9, $anho, $params);
-                        $fallasOctubre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 10, $anho, $params);
-                        $fallasNoviembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 11, $anho, $params);
-                        $fallasDiciembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 12, $anho, $params);
+//                        $fallasEnero += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 1, $anho, $params);
+//                        $fallasFebrero += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 2, $anho, $params);
+//                        $fallasMarzo += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 3, $anho, $params);
+//                        $fallasAbril += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 4, $anho, $params);
+//                        $fallasMayo += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 5, $anho, $params);
+//                        $fallasJunio += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 6, $anho, $params);
+//                        $fallasJulio += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 7, $anho, $params);
+//                        $fallasAgosto += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 8, $anho, $params);
+//                        $fallasSeptiembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 9, $anho, $params);
+//                        $fallasOctubre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 10, $anho, $params);
+//                        $fallasNoviembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 11, $anho, $params);
+//                        $fallasDiciembre += RegistroUsoMaquinaPeer::contarFallasMesEnDias($codigoTemporalMaquina, 12, $anho, $params);
 
                         $parosMenoresEnero += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 1, $anho, $params,$inyeccionesEstandarPromedio);
                         $parosMenoresFebrero += RegistroUsoMaquinaPeer::contarParosMenoresMesEnDias($codigoTemporalMaquina, 2, $anho, $params,$inyeccionesEstandarPromedio);
@@ -879,20 +879,20 @@ class graficos_anualesActions extends sfActions
                         $perdidasVelocidadNoviembre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 11, $anho, $params,$inyeccionesEstandarPromedio);
                         $perdidasVelocidadDiciembre += RegistroUsoMaquinaPeer::contarPerdidasVelocidadMesEnDias($codigoTemporalMaquina, 12, $anho, $params,$inyeccionesEstandarPromedio);
                 }
-		$this->renderText('<graph color="#72a8cd" title="Fallas" bullet="round">
-          <value xid="0">'.round($fallasEnero, 2).'</value>
-          <value xid="1">'.round($fallasFebrero, 2).'</value>
-          <value xid="2">'.round($fallasMarzo, 2).'</value>
-          <value xid="3">'.round($fallasAbril, 2).'</value>
-          <value xid="4">'.round($fallasMayo, 2).'</value>
-          <value xid="5">'.round($fallasJunio, 2).'</value>
-          <value xid="6">'.round($fallasJulio, 2).'</value>
-          <value xid="7">'.round($fallasAgosto, 2).'</value>
-          <value xid="8">'.round($fallasSeptiembre, 2).'</value>
-          <value xid="9">'.round($fallasOctubre, 2).'</value>
-          <value xid="10">'.round($fallasNoviembre, 2).'</value>
-          <value xid="11">'.round($fallasDiciembre, 2).'</value>
-        </graph>'); 
+//		$this->renderText('<graph color="#72a8cd" title="Fallas" bullet="round">
+//          <value xid="0">'.round($fallasEnero, 2).'</value>
+//          <value xid="1">'.round($fallasFebrero, 2).'</value>
+//          <value xid="2">'.round($fallasMarzo, 2).'</value>
+//          <value xid="3">'.round($fallasAbril, 2).'</value>
+//          <value xid="4">'.round($fallasMayo, 2).'</value>
+//          <value xid="5">'.round($fallasJunio, 2).'</value>
+//          <value xid="6">'.round($fallasJulio, 2).'</value>
+//          <value xid="7">'.round($fallasAgosto, 2).'</value>
+//          <value xid="8">'.round($fallasSeptiembre, 2).'</value>
+//          <value xid="9">'.round($fallasOctubre, 2).'</value>
+//          <value xid="10">'.round($fallasNoviembre, 2).'</value>
+//          <value xid="11">'.round($fallasDiciembre, 2).'</value>
+//        </graph>'); 
 		$this->renderText('<graph color="#ff5454" title="Paros menores y reajustes" bullet="round">
               <value xid="0">'.round($parosMenoresEnero, 2).'</value>
               <value xid="1">'.round($parosMenoresFebrero, 2).'</value>

@@ -426,7 +426,7 @@ class reporte_graficosemanalActions extends sfActions
                 $fecha_fin = $rango_fechas[$i]['fecha_fin'];
                 $fecha = $this->fecha($fecha_inicio);
                 $temp = $this->calcularPerdidasDiarias($fecha[0], $fecha[1], $fecha[2], $inyeccionesEstandarPromedio);
-                $datos[$i]['fallas'] = $temp['fallas'];
+//                $datos[$i]['fallas'] = $temp['fallas'];
                 $datos[$i]['paros'] = $temp['paros'];
                 $datos[$i]['retrabajos'] = $temp['retrabajos'];
                 $datos[$i]['perdida_rendimiento'] = $temp['perdida_rendimiento'];
@@ -434,7 +434,7 @@ class reporte_graficosemanalActions extends sfActions
                     $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
                     $fecha = $this->fecha($fecha_inicio);
                     $temp = $this->calcularPerdidasDiarias($fecha[0], $fecha[1], $fecha[2], $inyeccionesEstandarPromedio);
-                    $datos[$i]['fallas'] += $temp['fallas'];
+//                    $datos[$i]['fallas'] += $temp['fallas'];
                     $datos[$i]['paros'] += $temp['paros'];
                     $datos[$i]['retrabajos'] += $temp['retrabajos'];
                     $datos[$i]['perdida_rendimiento'] += $temp['perdida_rendimiento'];
@@ -450,12 +450,12 @@ class reporte_graficosemanalActions extends sfActions
             $xml.='</series>';
 
             $xml.='<graphs>';
-            $xml.='<graph color="#72a8cd" title="Fallas" bullet="round">';
-            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
-                    $numero_fallas_dia=$datos[$diasmes]['fallas'];
-                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_fallas_dia.'</value>';
-            }
-            $xml.='</graph>';
+//            $xml.='<graph color="#72a8cd" title="Fallas" bullet="round">';
+//            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+//                    $numero_fallas_dia=$datos[$diasmes]['fallas'];
+//                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_fallas_dia.'</value>';
+//            }
+//            $xml.='</graph>';
 
             $xml.='<graph color="#ff5454" title="Paros menores y reajustes" bullet="round" >';
             for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
@@ -493,7 +493,7 @@ class reporte_graficosemanalActions extends sfActions
             $datos = array();
 
             try{
-                $suma_fallas_dia= 0;
+//                $suma_fallas_dia= 0;
                 $suma_paros_dia= 0;
                 $suma_retrabajos_dia= 0;
                 $suma_perdidarendimiento_dia= 0;
@@ -503,13 +503,13 @@ class reporte_graficosemanalActions extends sfActions
 
                 foreach($registros_uso_maquinas as $temporal)
                 {
-                        $suma_fallas_dia+= $temporal->getRumFallas();
+//                        $suma_fallas_dia+= $temporal->getRumFallas();
                         $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
                         $suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
                         $suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
                 }
 
-                $datos['fallas'] = round($suma_fallas_dia/60,2);
+//                $datos['fallas'] = round($suma_fallas_dia/60,2);
                 $datos['paros'] = round($suma_paros_dia/60,2);
                 $datos['retrabajos'] = round($suma_retrabajos_dia/60,2);
                 $datos['perdida_rendimiento'] = round($suma_perdidarendimiento_dia/60,2);
@@ -546,7 +546,7 @@ class reporte_graficosemanalActions extends sfActions
 
             $xml='<?xml version="1.0"?>';
             $xml.='<pie>';
-            $xml.='<slice title="Fallas " color="#72a8cd" pull_out="true">'.$datos['fallas'].'</slice>';
+//            $xml.='<slice title="Fallas " color="#72a8cd" pull_out="true">'.$datos['fallas'].'</slice>';
             $xml.='<slice title="Paros Menores o Reajustes" color="#ff5454" pull_out="false">'.$datos['paros'].'</slice>';
             $xml.='<slice title="Defectos y Retrabajos" color="#47d552" pull_out="false">'.$datos['retrabajos'].'</slice>';
             $xml.='<slice title="Pérdidas de velocidad" color="#47d599" pull_out="false">'.$datos['perdida_rendimiento'].'</slice>';
@@ -563,7 +563,7 @@ class reporte_graficosemanalActions extends sfActions
 	{
             $datos = array();
             try{
-                    $suma_fallas_dia= 0;
+//                    $suma_fallas_dia= 0;
                     $suma_paros_dia= 0;
                     $suma_retrabajos_dia= 0;
                     $suma_perdidarendimiento_dia=0;
@@ -573,12 +573,12 @@ class reporte_graficosemanalActions extends sfActions
 
                     foreach($registros_uso_maquinas as $temporal)
                     {
-                        $suma_fallas_dia+= $temporal->getRumFallas();
+//                        $suma_fallas_dia+= $temporal->getRumFallas();
                         $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
                         $suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
                         $suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
                     }
-                    $datos['fallas']=round($suma_fallas_dia/60,2);
+//                    $datos['fallas']=round($suma_fallas_dia/60,2);
                     $datos['paros']=round(($suma_paros_dia/60),2);
                     $datos['retrabajos']=round($suma_retrabajos_dia/60,2);
                     $datos['perdida_rendimiento']=round($suma_perdidarendimiento_dia/60,2);
@@ -644,8 +644,8 @@ class reporte_graficosemanalActions extends sfActions
 		for ($indicador=0;$indicador<5;$indicador++){
 			$xml.='<graph color="#'.$indicadores_colores[$indicador].'" title="'.$indicadores_tiempo[$indicador].'" bullet="round">';
 			for($rango=0;$rango<sizeof($rango_fechas);$rango++){
-                            $numero_fallas_dia=$datos[$rango][$indicadores_tiempo[$indicador]];
-                            $xml.='<value xid="'.$this->mes($rango_fechas[$rango]['fecha_inicio']).'">'.round($numero_fallas_dia, 2).'</value>';
+                            $numero_tiempos_dia=$datos[$rango][$indicadores_tiempo[$indicador]];
+                            $xml.='<value xid="'.$this->mes($rango_fechas[$rango]['fecha_inicio']).'">'.round($numero_tiempos_dia, 2).'</value>';
 			}
 			$xml.='</graph>';
 		}
@@ -804,8 +804,8 @@ class reporte_graficosemanalActions extends sfActions
             for ($indicador=0;$indicador<6;$indicador++) {
                 $xml.='<graph color="#'.$indicadores_colores[$indicador].'" title="'.$indicadores_tiempo[$indicador].'" bullet="round">';
                 for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
-                        $numero_fallas_dia = $datos[$diasmes][$indicadores_tiempo[$indicador]];
-                        $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_fallas_dia.'</value>';
+                        $numero_indicadores_dia = $datos[$diasmes][$indicadores_tiempo[$indicador]];
+                        $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_indicadores_dia.'</value>';
                 }
                 $xml.='</graph>';
             }

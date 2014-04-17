@@ -702,21 +702,23 @@ var rdperdi_columns = [{
     width: 70,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
-}, {
-    dataIndex: 'fallas',
-    header: 'Fallas<br>(Min)<br>Método',
-    tooltip: 'Fallas (Minutos)',
-    width: 70,
-    align: 'center',
-    renderer: generarRenderer('#ff5454', '#000000')
-}, {
-    dataIndex: 'fallas_dia',
-    header: 'Fallas<br>(Min)<br>Día',
-    tooltip: 'Fallas (Minutos) del día',
-    width: 70,
-    align: 'center',
-    renderer: generarRenderer('#ff5454', '#000000')
-}, {
+}, 
+//{
+//    dataIndex: 'fallas',
+//    header: 'Fallas<br>(Min)<br>Método',
+//    tooltip: 'Fallas (Minutos)',
+//    width: 70,
+//    align: 'center',
+//    renderer: generarRenderer('#ff5454', '#000000')
+//}, {
+//    dataIndex: 'fallas_dia',
+//    header: 'Fallas<br>(Min)<br>Día',
+//    tooltip: 'Fallas (Minutos) del día',
+//    width: 70,
+//    align: 'center',
+//    renderer: generarRenderer('#ff5454', '#000000')
+//}, 
+{
     dataIndex: 'perdidas_velocidad',
     header: 'Pérdidas de<br>velocidad (Min)<br>Método',
     tooltip: 'Pérdidas de velocidad (Minutos)',
