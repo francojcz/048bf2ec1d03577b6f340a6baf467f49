@@ -1403,12 +1403,15 @@ class ingreso_datosActions extends sfActions
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumMuestrasUniformidad());
             }
             if ($request -> hasParameter('hora_inicio_corrida'))
-            {
+            {  
+                //Cambios: 24 de febrero de 2014
+                //Restar a la hora de inicio ingresada el tiempo de inyección de la máquina
+                $hora_inicio = $request -> getParameter('hora_inicio_corrida');
+                $hora_total = $this->calcularHoraInicio($registro, $hora_inicio, '-');
+                
                 $registroModificacion -> setRemNombreCampo('Hora inicio');
                 $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
-
-                $registro -> setRumHoraInicioTrabajo($request -> getParameter('hora_inicio_corrida'));
-
+                $registro -> setRumHoraInicioTrabajo($hora_total);
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
                 
                 //Cambios: 24 de febrero de 2014
@@ -1419,20 +1422,20 @@ class ingreso_datosActions extends sfActions
                 if($metodo->getMetMantenimiento() == 1) {
                     $registroModificacion -> setRemNombreCampo('Hora fin');
                     $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
-
-                    $registro -> setRumHoraFinTrabajo($request -> getParameter('hora_inicio_corrida'));
-
+                    $registro -> setRumHoraFinTrabajo($hora_total);
                     $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
                 }
             }
             if ($request -> hasParameter('hora_fin_corrida'))
             {
+                //Sumar a la hora de fin el tiempo de la corrida
+                $hora_fin = $request -> getParameter('hora_fin_corrida');
+                $hora_total = $this->calcularHoraFin($registro, $hora_fin, '+');                
+                
                 $registroModificacion -> setRemNombreCampo('Hora fin');
                 $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
-
-                $registro -> setRumHoraFinTrabajo($request -> getParameter('hora_fin_corrida'));
-
-                $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+                $registro -> setRumHoraFinTrabajo($hora_total);
+                $registroModificacion -> setRemValorNuevo($hora_total);
             }
             if ($request -> hasParameter('fallas'))
             {
@@ -1732,36 +1735,40 @@ class ingreso_datosActions extends sfActions
 
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumNumInyecXMuUniforPerd());
             }
-
-            if ($request -> hasParameter('hora_inicio_corrida_perdida'))
-            {                
-                $registroModificacion -> setRemNombreCampo('Hora inicio');
-                $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
-                $registro -> setRumHoraInicioTrabajo($request -> getParameter('hora_inicio_corrida_perdida'));
-                $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
-                
-                //Cambios: 24 de febrero de 2014
-                //Cuando un método es de alistamiento o mantenimiento se registra como la hora de fin la misma hora de inicio
-                $cod_metodo = $registro->getRumMetCodigo();
-                $metodo = MetodoPeer::retrieveByPK($cod_metodo);
-                if($metodo->getMetMantenimiento() == 1) {
-                    $registroModificacion -> setRemNombreCampo('Hora fin');
-                    $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
-
-                    $registro -> setRumHoraFinTrabajo($request -> getParameter('hora_inicio_corrida_perdida'));
-
-                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
-                }
-            }            
-            if ($request -> hasParameter('hora_fin_corrida_perdida'))
-            {
-                $registroModificacion -> setRemNombreCampo('Hora fin');
-                $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
-
-                $registro -> setRumHoraFinTrabajo($request -> getParameter('hora_fin_corrida_perdida'));
-
-                $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
-            }
+            
+            //Cambios: 24 de febrero de 2014
+            /* Se comentan las siguientes líneas pues la hora de inicio y fin de corridas para pérdidas
+               corresponden a las calculadas por el sistema al tener en cuenta el tiempo de inyección de la 
+               máquina y el tiempo de corrida del método respectivamente */
+//            if ($request -> hasParameter('hora_inicio_corrida_perdida'))
+//            {                
+//                $registroModificacion -> setRemNombreCampo('Hora inicio');
+//                $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
+//                $registro -> setRumHoraInicioTrabajo($request -> getParameter('hora_inicio_corrida_perdida'));
+//                $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
+//                
+//                //Cambios: 24 de febrero de 2014
+//                //Cuando un método es de alistamiento o mantenimiento se registra como la hora de fin la misma hora de inicio
+//                $cod_metodo = $registro->getRumMetCodigo();
+//                $metodo = MetodoPeer::retrieveByPK($cod_metodo);
+//                if($metodo->getMetMantenimiento() == 1) {
+//                    $registroModificacion -> setRemNombreCampo('Hora fin');
+//                    $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+//
+//                    $registro -> setRumHoraFinTrabajo($request -> getParameter('hora_inicio_corrida_perdida'));
+//
+//                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+//                }
+//            }            
+//            if ($request -> hasParameter('hora_fin_corrida_perdida'))
+//            {
+//                $registroModificacion -> setRemNombreCampo('Hora fin');
+//                $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+//
+//                $registro -> setRumHoraFinTrabajo($request -> getParameter('hora_fin_corrida_perdida'));
+//
+//                $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+//            }
             if ($request -> hasParameter('fallas_perdida'))
             {
                 $registroModificacion -> setRemNombreCampo('Fallas');
@@ -2042,8 +2049,14 @@ class ingreso_datosActions extends sfActions
             $fields['numero_inyecciones_x_muestra_uniformidad'] = number_format($registro -> getRumNumInyecXMuestraUnifor(), 2, '.', '');
             // }
 
-            $fields['hora_inicio_corrida'] = $registro -> getRumHoraInicioTrabajo('H:i:s');
-            $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajo('H:i:s');
+            //Sumar a la hora de inicio ingresada el tiempo de inyección de la máquina
+            $hora_inicio = $registro -> getRumHoraInicioTrabajo('H:i:s');
+            $fields['hora_inicio_corrida'] = $this->calcularHoraInicio($registro, $hora_inicio, '+');
+            
+            //Restar a la hora de fin el tiempo de la corrida
+            $hora_fin = $registro -> getRumHoraFinTrabajo('H:i:s');
+            $fields['hora_fin_corrida'] = $this->calcularHoraFin($registro, $hora_fin, '-');
+            
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
             $fields['observaciones'] = $registro -> getRumObservaciones();
@@ -2114,46 +2127,9 @@ class ingreso_datosActions extends sfActions
             $fields['numero_muestras_uniformidad'] = number_format($registro -> getRumNumMuestrasUniformidadP(), 2, '.', '');
             $fields['numero_inyecciones_x_muestra_uniformidad'] = number_format($registro -> getRumNumInyecXMuUniforPerd(), 2, '.', '');
             // }
-
-            //Cambios: 24 de febrero de 2014
-            //Se le resta a la hora de inicio ingresada el tiempo de inyección de la máquina
-            if($registro -> getRumHoraInicioTrabajo() != '') {
-                $hora_inicio = $registro -> getRumHoraInicioTrabajo('H:i:s');
-                //Obtener el tiempo de inyección de la máquina
-                $maquina = MaquinaPeer::retrieveByPK($registro -> getRumMaqCodigo());
-                $tiempo_inyeccion = $maquina->getMaqTiempoInyeccion();
-                //Obtener la parte entera del tiempo de inyeccion para restarla en minutos a la hora de inicio de trabajo
-                $entera = (int) ($tiempo_inyeccion);                
-                $hora_minutos = date('H:i:s',strtotime('-'.$entera.' minute', strtotime($hora_inicio)));
-                //Obtener la parte decimal del tiempo de inyeccion para restarla en segundos a la hora de inicio de trabajo
-                $decimal = round(($tiempo_inyeccion-$entera)*60);
-                $hora_total = date('H:i:s',strtotime('-'.$decimal.' second', strtotime($hora_minutos)));
-                
-                $fields['hora_inicio_corrida'] = $hora_total;
-            }           
             
-            //Se le suma a la hora de fin el tiempo de la corrida
-            //1. Se obtiene el primer TC diferente de cero de derecha a izquierda de las columnas de "Información de muestras"
-            if($registro -> getRumHoraFinTrabajo() != '') {
-                $tc = array();
-                $tc[] = number_format($registro -> getRumTcUniformidad(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcDisolucion(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcPureza(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcMateriaPrima(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcEstabilidad(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcProductoTerminado(), 2, '.', '');
-                $tiempo_corrida = 0;
-                for($i=0; $i<sizeof($tc); $i++) {
-                    if($tc[$i] != 0.00) {
-                        $tiempo_corrida += $tc[$i];
-                        $i = sizeof($tc);
-                    }
-                }
-                //2. Se suma el tiempo de corrida a la hora de fin ingresada
-                $hora_fin = $registro -> getRumHoraFinTrabajo('H:i:s');
-                $fields['hora_fin_corrida'] = date('H:i:s',strtotime('+'.$tiempo_corrida.' minute', strtotime($hora_fin)));
-            }            
-            
+            $fields['hora_inicio_corrida'] = $registro -> getRumHoraInicioTrabajo('H:i:s');
+            $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajo('H:i:s');            
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
             $fields['observaciones'] = $registro -> getRumObservaciones();
@@ -2311,6 +2287,47 @@ class ingreso_datosActions extends sfActions
             }
         }
         return $var;
+    }
+        
+    
+    //Cambios: 24 de febrero de 2014
+    //Restar a la hora inicio el tiempo de inyección de la máquina
+    public function calcularHoraInicio($registro, $hora_inicio, $operacion) {
+        //Obtener el tiempo de inyección de la máquina
+        $maquina = MaquinaPeer::retrieveByPK($registro -> getRumMaqCodigo());
+        $tiempo_inyeccion = $maquina->getMaqTiempoInyeccion();
+        //Obtener la parte entera del tiempo de inyeccion para restarla en minutos a la hora de inicio de trabajo
+        $entera = (int) ($tiempo_inyeccion);                
+        $hora_minutos = date('H:i:s',strtotime($operacion.''.$entera.' minute', strtotime($hora_inicio)));
+        //Obtener la parte decimal del tiempo de inyeccion para restarla en segundos a la hora de inicio de trabajo
+        $decimal = round(($tiempo_inyeccion-$entera)*60);
+        $hora_total = date('H:i:s',strtotime($operacion.''.$decimal.' second', strtotime($hora_minutos)));
+        
+        return $hora_total;
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Sumar a la hora de fin el tiempo de la corrida
+    public function calcularHoraFin($registro, $hora_fin, $operacion) {
+        //1. Se obtiene el primer TC diferente de cero de derecha a izquierda de las columnas de "Información de muestras"                
+        $tc = array();
+        $tc[] = number_format($registro -> getRumTcUniformidad(), 2, '.', '');
+        $tc[] = number_format($registro -> getRumTcDisolucion(), 2, '.', '');
+        $tc[] = number_format($registro -> getRumTcPureza(), 2, '.', '');
+        $tc[] = number_format($registro -> getRumTcMateriaPrima(), 2, '.', '');
+        $tc[] = number_format($registro -> getRumTcEstabilidad(), 2, '.', '');
+        $tc[] = number_format($registro -> getRumTcProductoTerminado(), 2, '.', '');
+        $tiempo_corrida = 0;
+        for($i=0; $i<sizeof($tc); $i++) {
+            if($tc[$i] != 0.00) {
+                $tiempo_corrida += $tc[$i];
+                $i = sizeof($tc);
+            }
+        }
+        //2. Se aplica la operación entre el tiempo de corrida y la hora de fin ingresada
+        $hora_total = date('H:i:s',strtotime($operacion.''.$tiempo_corrida.' minute', strtotime($hora_fin)));
+        
+        return $hora_total;
     }
 
 }
