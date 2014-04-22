@@ -1405,26 +1405,34 @@ class ingreso_datosActions extends sfActions
             if ($request -> hasParameter('hora_inicio_corrida'))
             {  
                 //Cambios: 24 de febrero de 2014
-                //Restar a la hora de inicio ingresada el tiempo de inyección de la máquina
-                $hora_inicio = $request -> getParameter('hora_inicio_corrida');
-                $hora_total = $this->calcularHoraInicio($registro, $hora_inicio, '-');
-                
-                $registroModificacion -> setRemNombreCampo('Hora inicio');
-                $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
-                $registro -> setRumHoraInicioTrabajo($hora_total);
-                $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
-                
-                //Cambios: 24 de febrero de 2014
                 /* Cuando el método de la corrida es un mantenimiento, se registra en la hora de fin de la corrida
                    el mismo valor de la hora de inicio de la corrida*/
                 $cod_metodo = $registro->getRumMetCodigo();
                 $metodo = MetodoPeer::retrieveByPK($cod_metodo);
                 if($metodo->getMetMantenimiento() == 1) {
+                    $hora_inicio = $request -> getParameter('hora_inicio_corrida');                
+                    $registroModificacion -> setRemNombreCampo('Hora inicio');
+                    $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
+                    $registro -> setRumHoraInicioTrabajo($hora_inicio);
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
+                    
+                    $hora_fin = $request -> getParameter('hora_inicio_corrida');
                     $registroModificacion -> setRemNombreCampo('Hora fin');
                     $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
-                    $registro -> setRumHoraFinTrabajo($hora_total);
-                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
+                    $registro -> setRumHoraFinTrabajo($hora_fin);
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));                    
                 }
+                else {
+                    //Cambios: 24 de febrero de 2014
+                    //Restar a la hora de inicio ingresada el tiempo de inyección de la máquina
+                    $hora_inicio = $request -> getParameter('hora_inicio_corrida');
+                    $hora_total = $this->calcularHoraInicio($registro, $hora_inicio, '-');
+
+                    $registroModificacion -> setRemNombreCampo('Hora inicio');
+                    $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
+                    $registro -> setRumHoraInicioTrabajo($hora_total);
+                    $registroModificacion -> setRemValorNuevo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
+                }                
             }
             if ($request -> hasParameter('hora_fin_corrida'))
             {
@@ -2049,13 +2057,30 @@ class ingreso_datosActions extends sfActions
             $fields['numero_inyecciones_x_muestra_uniformidad'] = number_format($registro -> getRumNumInyecXMuestraUnifor(), 2, '.', '');
             // }
 
+            $cod_metodo = $registro->getRumMetCodigo();
+            $metodo = MetodoPeer::retrieveByPK($cod_metodo);
             //Sumar a la hora de inicio ingresada el tiempo de inyección de la máquina
-            $hora_inicio = $registro -> getRumHoraInicioTrabajo('H:i:s');
-            $fields['hora_inicio_corrida'] = $this->calcularHoraInicio($registro, $hora_inicio, '+');
-            
+            if($registro -> getRumHoraInicioTrabajo() != '') {                
+                //Si el método es de mantenimiento no se debe sumar nada
+                if($metodo->getMetMantenimiento() == 1) {
+                    $fields['hora_inicio_corrida'] = $registro -> getRumHoraInicioTrabajo('H:i:s');
+                }
+                else {
+                    $hora_inicio = $registro -> getRumHoraInicioTrabajo('H:i:s');
+                    $fields['hora_inicio_corrida'] = $this->calcularHoraInicio($registro, $hora_inicio, '+');
+                }                
+            }
             //Restar a la hora de fin el tiempo de la corrida
-            $hora_fin = $registro -> getRumHoraFinTrabajo('H:i:s');
-            $fields['hora_fin_corrida'] = $this->calcularHoraFin($registro, $hora_fin, '-');
+            if($registro -> getRumHoraFinTrabajo() != '') {                
+                //Si el método es de mantenimiento no se debe restar nada
+                if($metodo->getMetMantenimiento() == 1) {
+                    $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajo('H:i:s');
+                }
+                else {
+                    $hora_fin = $registro -> getRumHoraFinTrabajo('H:i:s');
+                    $fields['hora_fin_corrida'] = $this->calcularHoraFin($registro, $hora_fin, '-');
+                }                
+            }
             
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');
             $fields['lote'] = $registro -> getRumLote();
@@ -2317,15 +2342,18 @@ class ingreso_datosActions extends sfActions
         $tc[] = number_format($registro -> getRumTcMateriaPrima(), 2, '.', '');
         $tc[] = number_format($registro -> getRumTcEstabilidad(), 2, '.', '');
         $tc[] = number_format($registro -> getRumTcProductoTerminado(), 2, '.', '');
-        $tiempo_corrida = 0;
+        $tiempo_corrida_min = 0;
+        $tiempo_corrida_seg = 0;
         for($i=0; $i<sizeof($tc); $i++) {
             if($tc[$i] != 0.00) {
-                $tiempo_corrida += $tc[$i];
+                $tiempo_corrida_min += (int) ($tc[$i]);
+                $tiempo_corrida_seg += round(($tc[$i]-$tiempo_corrida_min)*60);
                 $i = sizeof($tc);
             }
         }
         //2. Se aplica la operación entre el tiempo de corrida y la hora de fin ingresada
-        $hora_total = date('H:i:s',strtotime($operacion.''.$tiempo_corrida.' minute', strtotime($hora_fin)));
+        $hora_min = date('H:i:s',strtotime($operacion.''.$tiempo_corrida_min.' minute', strtotime($hora_fin)));
+        $hora_total = date('H:i:s',strtotime($operacion.''.$tiempo_corrida_seg.' second', strtotime($hora_min)));
         
         return $hora_total;
     }
