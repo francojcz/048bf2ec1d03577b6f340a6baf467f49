@@ -137,7 +137,7 @@ propel:
     evrg_rum_codigo: { phpName: EvrgRumCodigo, type: INTEGER, size: '11', required: false }
     evrg_eve_codigo: { phpName: EvrgEveCodigo, type: INTEGER, size: '11', required: false }
     evrg_observaciones: { phpName: EvrgObservaciones, type: VARCHAR, size: '200', required: false }
-    evrg_hora_inicio: { phpName: EvrgHoraInicio, type: TIME, required: false }
+    evrg_hora_ocurrio: { phpName: EvrgHoraOcurrio, type: TIME, required: false }
     evrg_hora_fin: { phpName: EvrgHoraFin, type: TIME, required: false }
     evrg_hora_registro: { phpName: EvrgHoraRegistro, type: TIME, required: false }
     evrg_fecha_registro_sistema: { phpName: EvrgFechaRegistroSistema, type: TIMESTAMP, required: false }

@@ -225,7 +225,7 @@ CREATE TABLE `evento_en_registro`
 	`evrg_rum_codigo` INTEGER(11),
 	`evrg_eve_codigo` INTEGER(11),
 	`evrg_observaciones` VARCHAR(200),
-	`evrg_hora_inicio` TIME,
+	`evrg_hora_ocurrio` TIME,
         `evrg_hora_fin` TIME,
 	`evrg_hora_registro` TIME,
 	`evrg_fecha_registro_sistema` DATETIME,

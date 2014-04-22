@@ -97,7 +97,7 @@ class reporte_eventoActions extends sfActions
 				$datos[$fila]['evrg_codigo'] = $temporal->getEvrgCodigo();
 				$datos[$fila]['evrg_duracion'] = $temporal->getEvrgDuracion();
 				$datos[$fila]['evrg_observaciones'] = $temporal->getEvrgObservaciones();
-				$datos[$fila]['evrg_hora_inicio'] = $temporal->getEvrgHoraInicio();
+				$datos[$fila]['evrg_hora_inicio'] = $temporal->getEvrgHoraOcurrio();
                                 $datos[$fila]['evrg_hora_fin'] = $temporal->getEvrgHoraFin();
 					
 				$datos[$fila]['evrg_hora_registro'] = $temporal->getEvrgHoraRegistro();
