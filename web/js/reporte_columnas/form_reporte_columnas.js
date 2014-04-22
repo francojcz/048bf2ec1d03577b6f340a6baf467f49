@@ -278,7 +278,7 @@ Ext.onReady(function(){
             }, reporcol_dimension_codigo_combobox, {
                 xtype: 'displayfield',
                 style: 'padding: 4px 0px 0px 10px',
-                value: 'Tama&ntilde;o de Part&iacute;cula (μ)'
+                value: 'Tama&ntilde;o de Part&iacute;cula (μm)'
             }, reporcol_tamano_codigo_combobox, {
                 text: 'Buscar',
                 xtype: 'button',

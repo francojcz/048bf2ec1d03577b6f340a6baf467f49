@@ -3,11 +3,11 @@ var largo_panel = 400;
 Ext.BLANK_IMAGE_URL = urlPrefix + '../css/extjs/resources/images/default/s.gif';
 Ext.QuickTips.init();
 
-function ComboRenderer(value, combo){
+function ComboRenderer(value, combo) {
     var returnValue = value;
     var valueField = combo.valueField;
     
-    var idx = combo.store.findBy(function(record){
+    var idx = combo.store.findBy( function(record) {
         if (record.get(valueField) == value) {
             returnValue = record.get(combo.displayField);
             return true;

@@ -47,7 +47,7 @@ var ayuda_maestra_tam_nombre='Tama&ntilde;o de Part&iacute;cula';
 	   maxLength : 100,
 	   name: 'maestra_tam_nombre',
 	   id: 'maestra_tam_nombre',
-	   fieldLabel: 'Tama&ntilde;o de Part&iacute;cula',
+	   fieldLabel: 'Tama&ntilde;o de Part&iacute;cula (μm)',
 	   allowBlank: false,
 	   listeners:
 	   {
@@ -61,7 +61,7 @@ var ayuda_maestra_tam_nombre='Tama&ntilde;o de Part&iacute;cula';
 		defaults:{sortable: true, locked: false, resizable: true},
 		columns:[
 			{id: 'maestra_tam_codigo_column', header: "Id", width: 30, dataIndex: 'maestra_tam_codigo'},
-			{ id: 'maestra_tam_nombre_column', header: "Tama&ntilde;o de Part&iacute;cula (μ)", width: 100, dataIndex: 'maestra_tam_nombre', editor:maestra_tam_nombre},
+			{ id: 'maestra_tam_nombre_column', header: "Tama&ntilde;o de Part&iacute;cula (μm)", width: 100, dataIndex: 'maestra_tam_nombre', editor:maestra_tam_nombre},
 			{ header: "Creado por", width: 120, dataIndex: 'maestra_tam_usu_crea_nombre'},
 			{ header: "Fecha de creaci&oacute;n", width: 120, dataIndex: 'maestra_tam_fecha_registro_sistema'},
 			{ header: "Actualizado por", width: 120, dataIndex: 'maestra_tam_usu_actualiza_nombre'},

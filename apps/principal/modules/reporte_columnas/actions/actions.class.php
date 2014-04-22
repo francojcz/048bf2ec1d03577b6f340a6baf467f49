@@ -224,7 +224,7 @@ class reporte_columnasActions extends sfActions
                             $fase = FaseLigadaPeer::retrieveByPK($columna->getColFaseCodigo());
                             $dimension = DimensionPeer::retrieveByPK($columna->getColDimCodigo());
                             $tamano = TamanoParticulaPeer::retrieveByPK($columna->getColTamCodigo());
-                            $configuracion = $fase->getFaseNombre().'; '.$dimension->getDimNombre().'; '.$tamano->getTamNombre().'μ';
+                            $configuracion = $fase->getFaseNombre().'; '.$dimension->getDimNombre().'; '.$tamano->getTamNombre().'μm';
                             
                             $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
                             $marca = MarcaPeer::retrieveByPK($columna->getColMarCodigo());
@@ -339,7 +339,7 @@ class reporte_columnasActions extends sfActions
                                 $fase = FaseLigadaPeer::retrieveByPK($columna->getColFaseCodigo());
                                 $dimension = DimensionPeer::retrieveByPK($columna->getColDimCodigo());
                                 $tamano = TamanoParticulaPeer::retrieveByPK($columna->getColTamCodigo());
-                                $datos[$fila]['rum_col_configuracion'] = $fase->getFaseNombre().'; '.$dimension->getDimNombre().'; '.$tamano->getTamNombre().'μ';
+                                $datos[$fila]['rum_col_configuracion'] = $fase->getFaseNombre().'; '.$dimension->getDimNombre().'; '.$tamano->getTamNombre().'μm';
                                 $modelo = ModeloPeer::retrieveByPK($columna->getColModCodigo());
                                 $datos[$fila]['rum_col_modelo'] = $modelo->getModNombre();
                                 $marca = MarcaPeer::retrieveByPK($columna->getColMarCodigo());

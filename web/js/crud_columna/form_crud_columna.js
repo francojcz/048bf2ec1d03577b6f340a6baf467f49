@@ -16,8 +16,8 @@ var crud_columna_datastore = new Ext.data.Store({
         method: 'POST'
     }),
     baseParams: {
-        start: 0,
-        limit: 20
+//        start: 0,
+//        limit: 20
     },
     reader: new Ext.data.JsonReader({
         root: 'results',
@@ -57,16 +57,31 @@ var crud_columna_datastore = new Ext.data.Store({
         name: 'col_mar_codigo',
         type: 'string'
     }, {
+        name: 'col_mar_nombre',
+        type: 'string'
+    }, {
         name: 'col_mod_codigo',
+        type: 'string'
+    }, {
+        name: 'col_mod_nombre',
         type: 'string'
     }, {
         name: 'col_fase_codigo',
         type: 'string'
     }, {
+        name: 'col_fase_nombre',
+        type: 'string'
+    }, {
         name: 'col_dim_codigo',
         type: 'string'
     }, {
+        name: 'col_dim_nombre',
+        type: 'string'
+    }, {
         name: 'col_tam_codigo',
+        type: 'string'
+    }, {
+        name: 'col_tam_nombre',
         type: 'string'
     }])
 });
@@ -328,7 +343,7 @@ var col_tam_codigo = new Ext.form.ComboBox({
     id: 'col_tam_nombre',
     hiddenName: 'col_tam_codigo',
     name: 'col_tam_codigo',
-    fieldLabel: 'Tama&ntilde;o de Part&iacute;cula (μ)',
+    fieldLabel: 'Tama&ntilde;o de Part&iacute;cula (μm)',
     store: crud_columna_tamano_datastore,
     mode: 'local',
     emptyText: 'Seleccione ...',
@@ -370,7 +385,7 @@ var crud_columna_formpanel = new Ext.FormPanel({
     height: 470,
     layout: 'form',
     bodyStyle: 'padding:10px;',
-    labelWidth: 140,
+    labelWidth: 150,
     defaults: {
         anchor: '98%'
     },
@@ -400,25 +415,6 @@ var crud_columna_formpanel = new Ext.FormPanel({
     }]
 });
 
-function marcaRenderComboColumn(value1, meta1, record1){
-    return ComboRenderer(value1, col_mar_codigo);
-}
-
-function modeloRenderComboColumn(value2, meta2, record2){
-    return ComboRenderer(value2, col_mod_codigo);
-}
-
-function faseRenderComboColumn(value2, meta2, record2){
-    return ComboRenderer(value2, col_fase_codigo);
-}
-
-function dimensionRenderComboColumn(value2, meta2, record2){
-    return ComboRenderer(value2, col_dim_codigo);
-}
-
-function tamanoRenderComboColumn(value2, meta2, record2){
-    return ComboRenderer(value2, col_tam_codigo);
-}
 
 var crud_columna_colmodel = new Ext.grid.ColumnModel({
     defaults: {
@@ -442,28 +438,23 @@ var crud_columna_colmodel = new Ext.grid.ColumnModel({
     }, {
         header: "Marca",
         width: 120,
-        dataIndex: 'col_mar_codigo',
-        renderer: marcaRenderComboColumn
+        dataIndex: 'col_mar_nombre'
     }, {
         header: "Modelo",
         width: 120,
-        dataIndex: 'col_mod_codigo',
-        renderer: modeloRenderComboColumn
+        dataIndex: 'col_mod_nombre'
     }, {
         header: "Fase Ligada",
         width: 120,
-        dataIndex: 'col_fase_codigo',
-        renderer: faseRenderComboColumn
+        dataIndex: 'col_fase_nombre'
     }, {
         header: "Dimensi&oacute;n",
         width: 120,
-        dataIndex: 'col_dim_codigo',
-        renderer: dimensionRenderComboColumn
+        dataIndex: 'col_dim_nombre'
     }, {
-        header: "Tam. de Part&iacute;cula (\u03bc)",
+        header: "Tam. de Part&iacute;cula (\u03bcm)",
         width: 120,
-        dataIndex: 'col_tam_codigo',
-        renderer: tamanoRenderComboColumn
+        dataIndex: 'col_tam_nombre'
     }, {
         header: "Creado por",
         width: 120,
@@ -510,13 +501,13 @@ var crud_columna_gridpanel = new Ext.grid.GridPanel({
         }
     }),    
     height: largo_panel,
-    bbar: new Ext.PagingToolbar({
-        pageSize: 15,
-        store: crud_columna_datastore,
-        displayInfo: true,
-        displayMsg: 'Columnas {0} - {1} de {2}',
-        emptyMsg: "No hay columnas aun"
-    }),
+//    bbar: new Ext.PagingToolbar({
+//        pageSize: 15,
+//        store: crud_columna_datastore,
+//        displayInfo: true,
+//        displayMsg: 'Columnas {0} - {1} de {2}',
+//        emptyMsg: "No hay columnas aun"
+//    }),
     tbar: [{
         id: 'crud_columna_agregar_boton',
         text: 'Agregar',
@@ -536,8 +527,8 @@ var crud_columna_gridpanel = new Ext.grid.GridPanel({
             crud_columna_datastore.baseParams.col_eliminado = '0';
             crud_columna_datastore.load({
                 params: {
-                    start: 0,
-                    limit: 20
+//                    start: 0,
+//                    limit: 20
                 }
             });
         }
@@ -549,8 +540,8 @@ var crud_columna_gridpanel = new Ext.grid.GridPanel({
             crud_columna_datastore.baseParams.col_eliminado = '1';
             crud_columna_datastore.load({
                 params: {
-                    start: 0,
-                    limit: 20
+//                    start: 0,
+//                    limit: 20
                 }
             });
         }

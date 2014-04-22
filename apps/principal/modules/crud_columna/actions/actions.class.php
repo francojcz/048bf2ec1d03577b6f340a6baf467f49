@@ -107,11 +107,26 @@ class crud_columnaActions extends sfActions
 				$datos[$fila]['col_codigo']=$temporal->getColCodigo();
 				$datos[$fila]['col_codigo_interno'] = $temporal->getColCodigoInterno();
                                 $datos[$fila]['col_lote'] = $temporal->getColLote();
+                                
+                                $marca = MarcaPeer::retrieveByPK($temporal->getColMarCodigo());                                
                                 $datos[$fila]['col_mar_codigo'] = $temporal->getColMarCodigo();
+                                $datos[$fila]['col_mar_nombre'] = $marca->getMarNombre();
+                                
+                                $modelo = ModeloPeer::retrieveByPK($temporal->getColModCodigo());
                                 $datos[$fila]['col_mod_codigo'] = $temporal->getColModCodigo();
+                                $datos[$fila]['col_mod_nombre'] = $modelo->getModNombre();
+                                
+                                $fase = FaseLigadaPeer::retrieveByPK($temporal->getColFaseCodigo());
                                 $datos[$fila]['col_fase_codigo'] = $temporal->getColFaseCodigo();
+                                $datos[$fila]['col_fase_nombre'] = $fase->getFaseNombre();
+                                
+                                $dimension = DimensionPeer::retrieveByPK($temporal->getColDimCodigo());
                                 $datos[$fila]['col_dim_codigo'] = $temporal->getColDimCodigo();
+                                $datos[$fila]['col_dim_nombre'] = $dimension->getDimNombre();
+                                
+                                $tamano = TamanoParticulaPeer::retrieveByPK($temporal->getColTamCodigo());
                                 $datos[$fila]['col_tam_codigo'] = $temporal->getColTamCodigo();
+                                $datos[$fila]['col_tam_nombre'] = $tamano->getTamNombre();
 				
 				$datos[$fila]['col_fecha_registro_sistema'] = $temporal->getColFechaRegistroSistema();
 				$datos[$fila]['col_fecha_actualizacion'] = $temporal->getColFechaActualizacion();				
