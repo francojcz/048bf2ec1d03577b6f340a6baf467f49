@@ -365,13 +365,13 @@ var rdtiemp_colmodel = new Ext.grid.ColumnModel({
         renderer: generarRenderer('#47d552', '#000000')
     }, {
         dataIndex: 'rdtiemp_TPNP_metodo',
-        header: 'TPNP<br/> (Hrs.)<br/>M&eacute;todo',
+        header: 'TPNP<br/>(Hrs.)<br/>M&eacute;todo',
         tooltip: 'Tiempo de paradas no programadas m&eacute;todo',
         width: 60,
         renderer: generarRenderer('#ff5454', '#000000')
     }, {
         dataIndex: 'rdtiemp_TPNP_dia',
-        header: 'TPNP <br/>(Hrs.)<br/>D&iacute;a',
+        header: 'TPNP<br/>(Hrs.)<br/>D&iacute;a',
         tooltip: 'Tiempo de paradas no programadas d&iacute;a',
         width: 60,
         renderer: generarRenderer('#ff5454', '#000000')

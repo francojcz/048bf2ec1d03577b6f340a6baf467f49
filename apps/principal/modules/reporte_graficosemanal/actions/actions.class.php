@@ -503,8 +503,12 @@ class reporte_graficosemanalActions extends sfActions
 
                 foreach($registros_uso_maquinas as $temporal)
                 {
-//                        $suma_fallas_dia+= $temporal->getRumFallas();
-                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                        //Cambios: 24 de febrero de 2014
+                        //Se quitó la columna fallas de la interfaz de ingreso de datos
+//                      $suma_fallas_dia+= $temporal->getRumFallas();
+                        //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
+//                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8);
                         $suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
                         $suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
                 }
@@ -573,8 +577,12 @@ class reporte_graficosemanalActions extends sfActions
 
                     foreach($registros_uso_maquinas as $temporal)
                     {
-//                        $suma_fallas_dia+= $temporal->getRumFallas();
-                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                        //Cambios: 24 de febrero de 2014
+                        //Se quitó la columna fallas de la interfaz de ingreso de datos
+//                      $suma_fallas_dia+= $temporal->getRumFallas();
+                        //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
+//                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8);
                         $suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
                         $suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
                     }
@@ -711,7 +719,7 @@ class reporte_graficosemanalActions extends sfActions
             $fecha_in = $rango_fechas[0]['fecha_inicio'];
             $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
 
-            $datos=$this->calcularTiemposDiariosMesTorta($fecha_in, $fecha_fn);
+            $datos=$this->calcularTiemposDiariosSemanaTorta($fecha_in, $fecha_fn);
             $indicadores_tiempo=array('TPP', 'TNP', 'TPNP', 'TO');
             $indicadores_colores=array('47d552','ffdc44','ff5454','72a8cd');
 
@@ -729,17 +737,17 @@ class reporte_graficosemanalActions extends sfActions
             return $this->renderText($xml);
 	}
 
-	public function calcularTiemposDiariosMesTorta($fecha_inicio, $fecha_fin)
+	public function calcularTiemposDiariosSemanaTorta($fecha_inicio, $fecha_fin)
 	{
             $datos = array();
             $params = array();
 
-            $tp_mes = 0;
-            $tnp_mes = 0;
-            $tpnp_mes = 0;
-            $tpp_mes = 0;
-            $to_mes = 0;
-            $tf_mes = 0;
+            $tp_sem = 0;
+            $tnp_sem = 0;
+            $tpnp_sem = 0;
+            $tpp_sem = 0;
+            $to_sem = 0;
+            $tf_sem = 0;
             $tiempoCalendario = 0;
 
             try{
@@ -756,21 +764,21 @@ class reporte_graficosemanalActions extends sfActions
                 $maquinas = MaquinaPeer::doSelect($criteria);
                 foreach($maquinas as $maquina) {
                     $codigoTemporalMaquina = $maquina->getMaqCodigo();
-                    $tpp_mes += RegistroUsoMaquinaPeer::calcularTPPSemanaEnHoras($codigoTemporalMaquina, $fecha_inicio, $fecha_fin, $params, 8);
-                    $tnp_mes += RegistroUsoMaquinaPeer::calcularTNPSemanaEnHoras($codigoTemporalMaquina, $fecha_inicio, $fecha_fin, $params, 8);
-                    $tpnp_mes += RegistroUsoMaquinaPeer::calcularTPNPSemanaEnHoras($codigoTemporalMaquina, $fecha_inicio, $fecha_fin, $params, 8);
+                    $tpp_sem += RegistroUsoMaquinaPeer::calcularTPPSemanaEnHoras($codigoTemporalMaquina, $fecha_inicio, $fecha_fin, $params, 8);
+                    $tnp_sem += RegistroUsoMaquinaPeer::calcularTNPSemanaEnHoras($codigoTemporalMaquina, $fecha_inicio, $fecha_fin, $params, 8);
+                    $tpnp_sem += RegistroUsoMaquinaPeer::calcularTPNPSemanaEnHoras($codigoTemporalMaquina, $fecha_inicio, $fecha_fin, $params, 8);
                     $tiempoCalendario += $maquina->calcularNumeroHorasActivasSemana($fecha_inicio, $fecha_fin);
-                    $tp_mes += RegistroUsoMaquinaPeer::calcularTPSemanaEnHoras($codigoTemporalMaquina, $fecha_inicio, $fecha_fin, $params, 8);
+                    $tp_sem += RegistroUsoMaquinaPeer::calcularTPSemanaEnHoras($codigoTemporalMaquina, $fecha_inicio, $fecha_fin, $params, 8);
                 }
-                $tf_mes += RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $tpp_mes, $tnp_mes);
-                $to_mes += RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_mes, $tpnp_mes);                
+                $tf_sem += RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $tpp_sem, $tnp_sem);
+                $to_sem += RegistroUsoMaquinaPeer::calcularTODiaMesAño($tf_sem, $tpnp_sem);                
 
-                $datos['TP'] = $tp_mes;
-                $datos['TNP'] = $tnp_mes;
-                $datos['TPNP'] = $tpnp_mes;
-                $datos['TPP'] = $tpp_mes;
-                $datos['TO'] = $to_mes;
-                $datos['TF'] = $tf_mes;
+                $datos['TP'] = $tp_sem;
+                $datos['TNP'] = $tnp_sem;
+                $datos['TPNP'] = $tpnp_sem;
+                $datos['TPP'] = $tpp_sem;
+                $datos['TO'] = $to_sem;
+                $datos['TF'] = $tf_sem;
                 $datos['HorasActivas'] = $tiempoCalendario;
 
             }catch (Exception $excepcion)
@@ -965,11 +973,11 @@ class reporte_graficosemanalActions extends sfActions
                         $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                     }
                 }
-                $datosTiempos = $this->calcularTiemposDiariosMesTorta($fecha_inicio, $fecha_fin);
+                $datosTiempos = $this->calcularTiemposDiariosSemanaTorta($fecha_inicio, $fecha_fin);
 
-                $tp_mes = $datosTiempos['TP'];
-                $tf_mes = $datosTiempos['TF'];
-                $to_mes = $datosTiempos['TO'];
+                $tp_sem = $datosTiempos['TP'];
+                $tf_sem = $datosTiempos['TF'];
+                $to_sem = $datosTiempos['TO'];
                 
                 $fecha_in = strtotime($fecha_inicio);
                 $dia = (int) date('d', $fecha_in);
@@ -992,11 +1000,11 @@ class reporte_graficosemanalActions extends sfActions
                 $numeroInyeccionesMes = $datosInyecciones['inyeccionesMes'];
                 $numeroReinyeccionesMes = $datosInyecciones['reinyeccionesMes'];
 
-                $d_mes = RegistroUsoMaquinaPeer::calcularDisponibilidad($to_mes, $tf_mes);
-                $e_mes = RegistroUsoMaquinaPeer::calcularEficiencia($tp_mes, $to_mes);
+                $d_mes = RegistroUsoMaquinaPeer::calcularDisponibilidad($to_sem, $tf_sem);
+                $e_mes = RegistroUsoMaquinaPeer::calcularEficiencia($tp_sem, $to_sem);
                 $c_mes = RegistroUsoMaquinaPeer::calcularCalidad($numeroInyeccionesMes, $numeroReinyeccionesMes);
                 $cantidadHoras = $datosTiempos['HorasActivas'];
-                $a_mes = RegistroUsoMaquinaPeer::calcularAprovechamiento($tf_mes, $cantidadHoras);
+                $a_mes = RegistroUsoMaquinaPeer::calcularAprovechamiento($tf_sem, $cantidadHoras);
                 $oee_mes = RegistroUsoMaquinaPeer::calcularEfectividadGlobalEquipo($d_mes, $e_mes, $c_mes);
                 $ptee_mes = RegistroUsoMaquinaPeer::calcularProductividadTotalEfectiva($a_mes, $oee_mes);
 

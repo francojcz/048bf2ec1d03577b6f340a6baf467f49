@@ -155,7 +155,7 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         {
             $controlValorNegativo = 1440 + ($minutosInicioCorrida - $minutosInicioAlistamiento) - $tiempoCambioModelo;
         }
-		
+
         /*
         la variable controlValorNegativo se uso para corregir un error presentado en dividir registro al utilizar como hora de fin 23:59:59 ya que en
         la base de datos no se pudo guardar el valor de 23:59:59.999 lo cual dejaba un margen de perdida de -0.02 minutos
@@ -214,8 +214,10 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 
     public function calcularParosMenoresIncluyendoCambioMetodoMinutos($inyeccionesEstandarPromedio)
     {
+        //Cambios: 24 de febrero de 2014
+        //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
         $minutosParosMenores = $this -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
-        $minutosParosMenores += $this -> calcularPerdidaCambioMetodoAjusteMinutos();
+//        $minutosParosMenores += $this -> calcularPerdidaCambioMetodoAjusteMinutos();
 
         return $minutosParosMenores;
     }

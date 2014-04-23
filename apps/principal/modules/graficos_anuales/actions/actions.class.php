@@ -543,7 +543,7 @@ class graficos_anualesActions extends sfActions
     <inner_radius>40</inner_radius>
     <height>20</height>            
     <angle>30</angle>
-    <colors>#ffdc44,#47d552,#ff5454,#f0a05f,#72a8cd</colors>
+    <colors>#ff5454,#47d552,#ffdc44,#f0a05f,#72a8cd</colors>
     <hover_brightness>-10</hover_brightness>                
     <gradient>radial</gradient>                             
     <gradient_ratio>0,0,0,-50,0,0,0,-50</gradient_ratio>');

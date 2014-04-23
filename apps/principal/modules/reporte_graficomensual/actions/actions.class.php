@@ -412,8 +412,12 @@ class reporte_graficomensualActions extends sfActions
 
 				foreach($registros_uso_maquinas as $temporal)
 				{
-//					$suma_fallas_dia+= $temporal->getRumFallas();
-					$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                        //Cambios: 24 de febrero de 2014
+                                        //Se quitó la columna fallas de la interfaz de ingreso de datos
+                                        //$suma_fallas_dia+= $temporal->getRumFallas();
+                                        //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
+                                        //$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8);
 					$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
 					$suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
 				}
@@ -482,8 +486,12 @@ class reporte_graficomensualActions extends sfActions
 
 			foreach($registros_uso_maquinas as $temporal)
 			{
-//				$suma_fallas_dia+= $temporal->getRumFallas();
-				$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                //Cambios: 24 de febrero de 2014
+                                //Se eliminó la columna fallas de la interfaz de ingreso de datos
+                                //$suma_fallas_dia+= $temporal->getRumFallas();
+                                //Las perdidas se van a mostrar de manera independiente
+                                //$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+				$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8);
 				$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
 				$suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
 			}
@@ -632,7 +640,7 @@ class reporte_graficomensualActions extends sfActions
 		$mes=$this->getRequestParameter('mes');
 
 		$datos=$this->calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio);
-		$indicadores_tiempo=array(    'TPP',     'TNP',    'TPNP',    'TO');
+		$indicadores_tiempo=array('TPP', 'TNP', 'TPNP', 'TO');
 		$indicadores_colores=array('47d552','ffdc44','ff5454','72a8cd');
 
 		$xml='<?xml version="1.0"?>';

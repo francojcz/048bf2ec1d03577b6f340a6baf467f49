@@ -36,7 +36,7 @@ Ext.onReady(function(){
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
-            root: 'data',
+            root: 'data'
         }, [{
             name: 'codigo',
             type: 'integer'
@@ -52,7 +52,7 @@ Ext.onReady(function(){
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
-            root: 'data',
+            root: 'data'
         }, fields)
     });
     
@@ -208,7 +208,7 @@ Ext.onReady(function(){
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
-            root: 'data',
+            root: 'data'
         }, [{
             name: 'codigo',
             type: 'string'
@@ -252,7 +252,7 @@ Ext.onReady(function(){
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
-            root: 'data',
+            root: 'data'
         }, [{
             name: 'codigo',
             type: 'string'
