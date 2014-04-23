@@ -1723,6 +1723,7 @@ class graficos_anualesActions extends sfActions
 	}
 	public function executeListarMetodos() {
 		$conexion = new Criteria();
+                $conexion->add(MetodoPeer::MET_ELIMINADO, 0);
 		$conexion->addAscendingOrderByColumn(MetodoPeer::MET_NOMBRE);
 		$metodos = MetodoPeer::doSelect($conexion);
 
