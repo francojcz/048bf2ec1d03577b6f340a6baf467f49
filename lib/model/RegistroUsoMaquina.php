@@ -213,11 +213,11 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
     }
 
     public function calcularParosMenoresIncluyendoCambioMetodoMinutos($inyeccionesEstandarPromedio)
-    {
+    {        
+        $minutosParosMenores = $this -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
         //Cambios: 24 de febrero de 2014
         //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-        $minutosParosMenores = $this -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
-//        $minutosParosMenores += $this -> calcularPerdidaCambioMetodoAjusteMinutos();
+        $minutosParosMenores += $this -> calcularPerdidaCambioMetodoAjusteMinutos();
 
         return $minutosParosMenores;
     }

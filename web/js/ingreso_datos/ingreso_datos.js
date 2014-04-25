@@ -495,6 +495,14 @@ etapas_datastore.load();
     {
       name : 'observaciones',
       type : 'string'
+    },
+    {
+      name : 'hora_inicio_corregida',
+      type : 'string'
+    },
+    {
+      name : 'hora_fin_corregida',
+      type : 'string'
     }])
   });
 
@@ -827,7 +835,7 @@ etapas_datastore.load();
       dataIndex : 'id_evento',
       header : 'Nombre del evento',
       tooltip : 'Nombre del evento',
-      width : 300,
+      width : 270,
       align : 'center',
       editor : new Ext.form.ComboBox(
       {
@@ -854,7 +862,7 @@ etapas_datastore.load();
     },
     {
       dataIndex : 'hora_inicio',
-      header : 'Hora<br>inicio',
+      header : 'Hora inicio',
       tooltip : 'Hora en la cual inició el evento',
       width : 70,
       align : 'center',
@@ -868,7 +876,7 @@ etapas_datastore.load();
     },
     {
       dataIndex : 'hora_fin',
-      header : 'Hora<br>fin',
+      header : 'Hora fin',
       tooltip : 'Hora en la cual finalizó el evento',
       width : 70,
       align : 'center',
@@ -879,6 +887,20 @@ etapas_datastore.load();
         maxValue : '23:59',
         increment : 30
       })
+    },
+    {
+      dataIndex : 'hora_inicio_corregida',
+      header : 'Hora inicio<br>corregida',
+      tooltip : 'Hora inicio corregida (min.)',
+      width : 70,
+      align : 'center'
+    },
+    {
+      dataIndex : 'hora_fin_corregida',
+      header : 'Hora fin<br>corregida',
+      tooltip : 'Hora fin corregida (min.)',
+      width : 70,
+      align : 'center'
     },
     {
       dataIndex : 'evrg_duracion',
@@ -901,11 +923,11 @@ etapas_datastore.load();
   {
     applyTo : 'ventana_flotante',
     layout : 'fit',
-    width : 800,
+    width : 900,
     height : 300,
     closeAction : 'hide',
     plain : true,
-    title : 'Editar eventos...',
+    title : 'Editar eventos',
     items : grillaEventos,
     buttons : [
     {

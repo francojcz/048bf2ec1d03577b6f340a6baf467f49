@@ -1055,13 +1055,23 @@ class ingreso_datosActions extends sfActions
         }
 
         $registroEvento -> setEvrgEveCodigo($request -> getParameter('id_evento'));
-        $registroEvento -> setEvrgHoraOcurrio($request -> getParameter('hora_inicio'));
-        $registroEvento -> setEvrgHoraFin($request -> getParameter('hora_fin'));
+        
+        //Cambios: 24 de febrero de 2014
+        //Restar a la hora de inicio ingresada el tiempo de inyección de la máquina
+        $hora_inicio = $request->getParameter('hora_inicio');
+        $hora_inicio_total = $this->calcularHoraInicio($registro, $hora_inicio, '-');
+        $registroEvento -> setEvrgHoraOcurrio($hora_inicio_total);
+        
+        //Cambios: 24 de febrero de 2014
+        //Sumar a la hora de fin el tiempo de la corrida
+        $hora_fin = $request -> getParameter('hora_fin');
+        $hora_fin_total = $this->calcularHoraFin($registro, $hora_fin, '+');            
+        $registroEvento -> setEvrgHoraFin($hora_fin_total);
         
         //Cambios: 24 de febrero de 2014
         //Calculo de la duración del evento
-        $horaInicio = $request -> getParameter('hora_inicio');
-        $horaFin = $request -> getParameter('hora_fin');
+        $horaInicio = $hora_inicio_total;
+        $horaFin = $hora_fin_total;
         $horas1 = date('H', strtotime($horaInicio));
         $horas2 = date('H', strtotime($horaFin));
         $minutos1 = date('i', strtotime($horaInicio));
@@ -1091,6 +1101,8 @@ class ingreso_datosActions extends sfActions
             $criteria -> add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $request -> getParameter('codigo_rum'));
         }
         $registrosEventos = EventoEnRegistroPeer::doSelect($criteria);
+        
+        $registro = RegistroUsoMaquinaPeer::retrieveByPK($request -> getParameter('codigo_rum'));
 
         $result = array();
         $data = array();
@@ -1100,8 +1112,21 @@ class ingreso_datosActions extends sfActions
             $fields = array();
             $fields['codigo'] = $registroEvento -> getEvrgCodigo();
             $fields['id_evento'] = $registroEvento -> getEvrgEveCodigo();
-            $fields['hora_inicio'] = $registroEvento -> getEvrgHoraOcurrio('H:i');
-            $fields['hora_fin'] = $registroEvento -> getEvrgHoraFin('H:i');
+            
+            //Cambios: 24 de febrero de 2014
+            //Sumar a la hora de inicio ingresada el tiempo de inyección de la máquina
+            $hora_inicio = $registroEvento -> getEvrgHoraOcurrio('H:i:s');
+            $hora_inicio_total = $this->calcularHoraInicio($registro, $hora_inicio, '+');
+            $fields['hora_inicio'] = date('H:i', strtotime($hora_inicio_total));
+            
+            //Cambios: 24 de febrero de 2014
+            //Restar a la hora de fin el tiempo de la corrida
+            $hora_fin = $registroEvento -> getEvrgHoraFin('H:i:s');
+            $hora_fin_total = $this->calcularHoraFin($registro, $hora_fin, '-');            
+            $fields['hora_fin'] = date('H:i', strtotime($hora_fin_total));
+            
+            $fields['hora_inicio_corregida'] = $registroEvento -> getEvrgHoraOcurrio('H:i');
+            $fields['hora_fin_corregida'] = $registroEvento -> getEvrgHoraFin('H:i');
             $fields['evrg_duracion'] = number_format($registroEvento -> getEvrgDuracion(), 2, '.', '');
             $fields['observaciones'] = $registroEvento -> getEvrgObservaciones();
 
@@ -1385,7 +1410,7 @@ class ingreso_datosActions extends sfActions
             {
                 //Sumar a la hora de fin el tiempo de la corrida
                 $hora_fin = $request -> getParameter('hora_fin_corrida');
-                $hora_total = $this->calcularHoraFin($registro, $hora_fin, '+');                
+                $hora_total = $this->calcularHoraFin($registro, $hora_fin, '+');
                 
                 $registroModificacion -> setRemNombreCampo('Hora fin');
                 $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));

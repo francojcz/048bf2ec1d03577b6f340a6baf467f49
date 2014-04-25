@@ -488,10 +488,15 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
             
+            //Cambios: 24 de febrero de 2014
+            //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
             $TPNP += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Se eliminó la columna de fallas en la interfaz de ingreso de datos
+//            $TPNP += $registro -> getRumFallas();
+            
             $TPNP += $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
             $TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
-//            $TPNP += $registro -> getRumFallas();
+           
             //Cambios: 24 de febrero de 2014
             //Se suma la duración de los eventos a los TPNP
             $criteria = new Criteria();
@@ -866,10 +871,10 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         //Cambios: 24 de febrero de 2014
         //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-//        foreach ($registros as $registro)
-//        {
-//            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
-//        }
+        foreach ($registros as $registro)
+        {
+            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+        }
 
         return $sumatoria;
     }
@@ -890,7 +895,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $sumatoria += $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
             //Cambios: 24 de febrero de 2014
             //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-//            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
         }
 
         return ($sumatoria / 60);
@@ -1195,7 +1200,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
             //Cambios: 24 de febrero de 2014
             //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-//            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             //Se quitó la columna fallas de la interfaz de ingreso de datos
 //            $sumatoria += $registro -> getRumFallas();
         }
@@ -1212,7 +1217,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         {
             $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
             //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-//            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             //Se quitó la columna fallas de la interfaz de ingreso de datos
 //            $sumatoria += $registro -> getRumFallas();
         }
@@ -1230,7 +1235,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
             //Cambios: 24 de febrero de 2014
             //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-//          $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+          $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
 //          //Se quitó la columna fallas de la interfaz de ingreso de datos
 //          $sumatoria += $registro -> getRumFallas();
         }

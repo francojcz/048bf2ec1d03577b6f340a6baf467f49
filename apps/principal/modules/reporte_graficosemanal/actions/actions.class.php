@@ -507,8 +507,7 @@ class reporte_graficosemanalActions extends sfActions
                         //Se quitó la columna fallas de la interfaz de ingreso de datos
 //                      $suma_fallas_dia+= $temporal->getRumFallas();
                         //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-//                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
-                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8);
+                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();                        
                         $suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
                         $suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
                 }
@@ -581,8 +580,7 @@ class reporte_graficosemanalActions extends sfActions
                         //Se quitó la columna fallas de la interfaz de ingreso de datos
 //                      $suma_fallas_dia+= $temporal->getRumFallas();
                         //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-//                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
-                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8);
+                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();                        
                         $suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
                         $suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
                     }
