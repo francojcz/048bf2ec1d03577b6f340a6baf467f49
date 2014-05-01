@@ -130,6 +130,7 @@ class reporte_diarioActions extends sfActions
 
             $datos[$fila]['rdtiemp_TPP_metodo'] = round($registro -> calcularTPPHoras(), 2);
             $datos[$fila]['rdtiemp_TPNP_metodo'] = round($registro -> calcularTPNPMinutos(8) / 60, 2);
+            $datos[$fila]['rdtiemp_TPNP_metodo_alistamiento'] = round($registro -> calcularTPNPMinutosConPerdidasAlistamiento(8) / 60, 2);
             $datos[$fila]['rdtiemp_TF_metodo'] = round($tf, 2);
             $datos[$fila]['rdtiemp_TO_metodo'] = round($to, 2);
             $datos[$fila]['lote'] = $registro -> getRumLote();
@@ -469,6 +470,66 @@ class reporte_diarioActions extends sfActions
         $result['data'] = $data;
         return $this -> renderText(json_encode($result));
     }
+    
+    //Cambios: 24 de febrero de 2014
+    //Se agrega una nueva pestaña llamada Ahorros al Reporte Diario
+    public function executeListarReporteAhorrosPorMetodo(sfWebRequest $request)
+    {
+        $user = $this -> getUser();
+        $codigo_usuario = $request -> getParameter('codigo_usu_operario');
+
+        $criteria = new Criteria();
+        
+        //Codigos de los equipos seleccionados
+        $temp = $this->getRequestParameter('cods_equipos');
+        $cods_equipos = json_decode($temp);
+        if($cods_equipos != ''){
+            foreach ($cods_equipos as $cod_equipo) {
+                $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+            }
+        }
+        
+        if ($codigo_usuario != '-1' && $codigo_usuario != '')
+        {
+            $criteria -> add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $codigo_usuario);
+        }
+        $criteria -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $request -> getParameter('fecha'));
+        $criteria -> add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
+        $registros = RegistroUsoMaquinaPeer::doSelect($criteria);
+
+        $criteria = new Criteria();
+        if ($codigo_usuario != '-1' && $codigo_usuario != '')
+        {
+            $criteria -> add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+        }
+        $operario = EmpleadoPeer::doSelectOne($criteria);
+        $criteria = new Criteria();
+        $criteria -> add(EmpresaPeer::EMP_CODIGO, $operario -> getEmplEmpCodigo());
+        $empresa = EmpresaPeer::doSelectOne($criteria);
+        $inyeccionesEstandarPromedio = $empresa -> getEmpInyectEstandarPromedio();
+
+        $result = array();
+        $data = array();
+
+        foreach ($registros as $registro)
+        {
+            $fields = array();
+
+            $fields['ahor_nombre_operario'] = $registro -> obtenerAnalista();
+            $fields['ahor_nombre_maquina'] = $registro -> obtenerMaquina();
+            $fields['ahor_nombre_metodo'] = $registro -> obtenerMetodo();
+            
+            $fields['ahorros'] = number_format(round($registro -> calcularAhorrosMetodoMinutos(), 2), 2);
+
+            $data[] = $fields;
+        }
+        
+        $data[0]['ahorros_dia'] = number_format(round(RegistroUsoMaquinaPeer::contarAhorrosDiaEnMinutos($registros), 2), 2);
+        
+        $result['data'] = $data;
+        return $this -> renderText(json_encode($result));
+    }
+    
 
     public function executeListarEquiposActivos()
     {

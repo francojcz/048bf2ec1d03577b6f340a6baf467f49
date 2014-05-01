@@ -479,6 +479,8 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $TPNP = 0;
         $TO = 0;
         $minutosActuales = 0;
+        $ahorros = 0;
+        
         foreach ($registros as $registro)
         {
             $TNP += round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
@@ -489,13 +491,20 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
             
             //Cambios: 24 de febrero de 2014
-            //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-            $TPNP += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+               pues los tiempos negativos se toman como ahorros y se deben sumar al tiempo disponible */
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($tpnp_temp > 0) {
+                $TPNP += $tpnp_temp;
+            } else {
+                $ahorros += (-1)*$tpnp_temp;
+            }
             //Se eliminó la columna de fallas en la interfaz de ingreso de datos
 //            $TPNP += $registro -> getRumFallas();
+            //El tiempo correspondiente a reinyecciones no se muestra en la barra de tiempo de ingreso de datos
+//            $TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
             
             $TPNP += $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
-            $TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
            
             //Cambios: 24 de febrero de 2014
             //Se suma la duración de los eventos a los TPNP
@@ -508,7 +517,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);
         }
 
-        $tiempoDisponible = 1440 - $TNP - $TPP - $TPNP - $TO;
+        $tiempoDisponible = 1440 + $ahorros - $TNP - $TPP - $TPNP - $TO;
 
         if ($tiempoExcedente || $tiempoDisponible >= 0)
         {
@@ -544,8 +553,13 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             
             $TPNP += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             $TPNP += $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
-            $TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
-            $TPNP += $registro -> getRumFallas();            
+            
+            //Cambios: 24 de febrero de 2014
+            //El tiempo correspondiente a reinyecciones no se muestra en la barra de tiempo de ingreso de datos
+//            $TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);                      
+            //Se eliminó la columna de fallas en la interfaz de ingreso de datos            
+//            $TPNP += $registro -> getRumFallas();
+            
             //Cambios: 24 de febrero de 2014
             //Se suma la duración de los eventos a los TPNP
             $criteria = new Criteria();
@@ -857,8 +871,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         foreach ($registros as $registro)
         {
-            //			            $registro = new RegistroUsoMaquina();
-
             $sumatoria += $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
         }
 
@@ -870,10 +882,31 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $sumatoria = RegistroUsoMaquinaPeer::contarParosMenoresEnMinutos($registros, $inyeccionesEstandarPromedio);
 
         //Cambios: 24 de febrero de 2014
-        //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
+        /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+           pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */
         foreach ($registros as $registro)
         {
-            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($tpnp_temp > 0) {
+                $sumatoria += $tpnp_temp;
+            } 
+        }
+
+        return $sumatoria;
+    }
+    
+    public static function contarAhorrosDiaEnMinutos($registros)
+    {
+        $sumatoria = 0;
+
+        //Cambios: 24 de febrero de 2014
+        /* Los tiempos que aparecen como pérdidas negativas se toman como ahorros */
+        foreach ($registros as $registro)
+        {
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($tpnp_temp < 0) {
+                $sumatoria += (-1)*$tpnp_temp;
+            } 
         }
 
         return $sumatoria;
@@ -893,9 +926,14 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         foreach ($registros as $registro)
         {
             $sumatoria += $registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
+            
             //Cambios: 24 de febrero de 2014
-            //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+               pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */        
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($tpnp_temp > 0) {
+                $sumatoria += $tpnp_temp;
+            }
         }
 
         return ($sumatoria / 60);
@@ -1199,8 +1237,12 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         {
             $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
             //Cambios: 24 de febrero de 2014
-            //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+               pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */        
+//            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+//            if($tpnp_temp > 0) {
+//                $sumatoria += $tpnp_temp;
+//            }
             //Se quitó la columna fallas de la interfaz de ingreso de datos
 //            $sumatoria += $registro -> getRumFallas();
         }
@@ -1216,8 +1258,13 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         foreach ($registros as $registro)
         {
             $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
-            //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-            $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Cambios: 24 de febrero de 2014
+            /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+               pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */        
+//            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+//            if($tpnp_temp > 0) {
+//                $sumatoria += $tpnp_temp;
+//            }
             //Se quitó la columna fallas de la interfaz de ingreso de datos
 //            $sumatoria += $registro -> getRumFallas();
         }
@@ -1234,8 +1281,12 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         {
             $sumatoria += $registro -> calcularTPNPMinutos($inyeccionesEstandarPromedio);
             //Cambios: 24 de febrero de 2014
-            //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-          $sumatoria += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+               pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */        
+//            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+//            if($tpnp_temp > 0) {
+//                $sumatoria += $tpnp_temp;
+//            }
 //          //Se quitó la columna fallas de la interfaz de ingreso de datos
 //          $sumatoria += $registro -> getRumFallas();
         }

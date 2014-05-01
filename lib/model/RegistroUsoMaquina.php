@@ -57,20 +57,53 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 
     public function calcularTPNPMinutos($inyeccionesEstandarPromedio)
     {
-        $TPNP = $this -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
+        $TPNP = $this ->calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
         $TPNP += $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+        
+        return $TPNP;
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    /* Se incluyen las pérdidas a los TPNP del método siempre y cuando sean positivos,
+       pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */
+    public function calcularTPNPMinutosConPerdidasAlistamiento($inyeccionesEstandarPromedio)
+    {
+        $TPNP = $this -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
+        //Cambios: 24 de febrero de 2014
+        /* No se tienen en cuenta los retrabajos ya que estos se incluyen en la duración de los eventos,
+           pues los retrabajos o reinyecciones se ingresan ahora como evento */
+        $TPNP += $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+        
+        //Pérdidas positivas en el alistaminto
+        $tpnp_temp = $this ->calcularPerdidaCambioMetodoAjusteMinutos();
+        if($tpnp_temp > 0) {
+            $TPNP += $tpnp_temp;
+        }
+        
+        return $TPNP;
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcular TPNP en minutos incluyendo la duración de los eventos de un método
+    public function calcularTPNPMinutosConEvento($inyeccionesEstandarPromedio, $rum_codigo)
+    {
+        $TPNP = $this ->calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $rum_codigo);
+        
+        /* Se incluyen las pérdidas a los TPNP del método siempre y cuando sean positivos,
+           pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */
+        $registro = RegistroUsoMaquinaPeer::retrieveByPK($rum_codigo);
+        $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+        if($tpnp_temp > 0) {
+            $TPNP += $tpnp_temp;
+        }
+        
+        /* No se tienen en cuenta los retrabajos ya que estos se incluyen en la duración de los eventos,
+           pues los retrabajos o reinyecciones se ingresan ahora como evento */
+        //$TPNP += $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
         return $TPNP;
     }
 
-    //	public function calcularTPNPMinutos($inyeccionesEstandarPromedio) {
-    //		//		$TPNP += $this->calcularPerdidaCambioMetodoAjusteMinutos();
-    //		$TPNP = $this->calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
-    //		$TPNP += $this->calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
-    //		$TPNP += $this->getRumFallas();
-    //		$TPNP += $this->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
-    //
-    //		return $TPNP;
-    //	}
+   
     public function calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio)
     {
         $maquina = MaquinaPeer::retrieveByPK($this -> getRumMaqCodigo());
@@ -216,8 +249,12 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
     {        
         $minutosParosMenores = $this -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
         //Cambios: 24 de febrero de 2014
-        //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-        $minutosParosMenores += $this -> calcularPerdidaCambioMetodoAjusteMinutos();
+        /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+           pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */        
+        $tpnp_temp = $this -> calcularPerdidaCambioMetodoAjusteMinutos();
+        if($tpnp_temp > 0) {
+            $minutosParosMenores += $tpnp_temp;
+        }
 
         return $minutosParosMenores;
     }
@@ -227,8 +264,8 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         $TF = $this -> calcularTiempoFuncionamientoMinutos();
         $TO = $this -> calcularTOMinutos($inyeccionesEstandarPromedio);
         $minutosRetrabajos = $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
-
-        $minutosParosMenores = $TF - $TO - $minutosRetrabajos;
+        
+        $minutosParosMenores = $TF - $TO - $minutosRetrabajos;        
 
         if ($minutosParosMenores < 0)
         {
@@ -237,26 +274,45 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 
         return $minutosParosMenores;
     }
+        
+    //Cambios: 24 de febrero de 2014
+    //Calcula los ahorros en tiempos de alistamiento por método
+    public function calcularAhorrosMetodoMinutos()
+    {        
+        $ahorros = 0;
+        //Cambios: 24 de febrero de 2014
+        /* Los tiempos que aparecen como pérdidas negativas se toman como ahorros */
+        $tpnp_temp = $this -> calcularPerdidaCambioMetodoAjusteMinutos();
+        if($tpnp_temp < 0) {
+            $ahorros += (-1)*$tpnp_temp;
+        }
+
+        return $ahorros;
+    }
     
     //Cambios: 24 de febrero de 2014
     //Calcula los paros menores teniendo en cuenta los paros por eventos para un método específico
-    public function calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $rum_codigo)
+    public function calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio)
     {
         $TF = $this -> calcularTiempoFuncionamientoMinutos();
-        $TO = $this -> calcularTOMinutos($inyeccionesEstandarPromedio);
-        $minutosRetrabajos = $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+        $TO = $this -> calcularTOMinutos($inyeccionesEstandarPromedio);        
         
         //Cambios: 24 de febrero de 2014
         //Calcula la duración de los eventos del método
         $duracion = 0;
         $criteria = new Criteria();
-        $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $rum_codigo);
+        $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $this->getRumCodigo());
         $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
         foreach ($eventos_rum as $evento_rum) {                
             $duracion += round($evento_rum->getEvrgDuracion(), 2);
         }
 
-        $minutosParosMenores = $TF - $TO - $minutosRetrabajos - $duracion;
+        //Cambios: 24 de febrero de 2014
+        //Las reinyecciones se deben ingresar como evento para que sean tenidas en cuenta en la barra de tiempo
+//        $minutosRetrabajos = $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+//        $minutosParosMenores = $TF - $TO - $minutosRetrabajos - $duracion;
+        
+        $minutosParosMenores = $TF - $TO - $duracion;
 
         if ($minutosParosMenores < 0)
         {
@@ -265,19 +321,6 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 
         return $minutosParosMenores;
     }    
-
-    //	public function calcularParosMenoresMinutos($inyeccionesEstandarPromedio) {
-    //		$maquina = MaquinaPeer::retrieveByPK($this->getRumMaqCodigo());
-    //
-    //		$TF = $this->calcularTiempoFuncionamientoMinutos();
-    //		$TP = $this->calcularTPMinutos($inyeccionesEstandarPromedio);
-    //		$minutosRetrabajos = $this->calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
-    //		$minutosPerdidasVelocidad = $this->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
-    //
-    //		$minutosParosMenores = $TF - $TP - $minutosRetrabajos - $minutosPerdidasVelocidad;
-    //
-    //		return $minutosParosMenores;
-    //	}
 
     //proposito sumar todas las inyecciones obligatorias y reinyecciones
     public function contarNumeroTotalInyecciones($inyeccionesEstandarPromedio)
@@ -473,7 +516,7 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 
         if ($minutosInicio == 0)
         {
-            $tf = $minutosFin;
+            $tf = 0;
             return $tf;
         }
 

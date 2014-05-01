@@ -688,7 +688,13 @@ class ingreso_datosActions extends sfActions
             }
             
             $minutosTiempoParadaNoProgramada1 = 0;
-            $minutosTiempoParadaNoProgramada1 += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Cambios: 24 de febrero de 2014
+            /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+               pues los tiempos negativos se toman como ahorros y ya se incluyen dentro de los TNP*/
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($tpnp_temp > 0) {
+                $minutosTiempoParadaNoProgramada1 += $tpnp_temp;
+            }            
             if(round($minutosTiempoParadaNoProgramada1, 2) != 0.00) {
                 $tiempos[] = round($minutosTiempoParadaNoProgramada1, 2);
                 $orden_tiempos[] = 'TPNP';
@@ -713,8 +719,12 @@ class ingreso_datosActions extends sfActions
                 $orden_tiempos[] = 'TO';
             }
             
-            $minutosTiempoParadaNoProgramada2 = $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
-            $minutosTiempoParadaNoProgramada2 += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+            $minutosTiempoParadaNoProgramada2 = $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio);
+            //Cambios: 24 de febrero de 2014
+            //Las reinyecciones se deben ingresar como evento para que sean tenidas en cuenta en la barra de tiempo
+//            $minutosTiempoParadaNoProgramada2 += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);            
+            //Cambios: 24 de febrero de 2014
+            //Se quitó la columna fallas de la interfaz de ingreso de datos
 //            $minutosTiempoParadaNoProgramada2 += $registro -> getRumFallas();
             if(round($minutosTiempoParadaNoProgramada2, 2) != 0.00) {
                 $tiempos[] = round($minutosTiempoParadaNoProgramada2, 2);
@@ -730,9 +740,11 @@ class ingreso_datosActions extends sfActions
             $criteria->addAscendingOrderByColumn(EventoEnRegistroPeer::EVRG_HORA_OCURRIO);
             $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
             foreach ($eventos_rum as $evento_rum) {
-                $eventos[$pos_evento]['hora_inicio'] = $evento_rum->getEvrgHoraOcurrio();
-                $eventos[$pos_evento]['duracion'] = round($evento_rum->getEvrgDuracion(), 2);
-                $pos_evento++;
+                if(round($evento_rum->getEvrgDuracion(), 2) != 0.00) {
+                    $eventos[$pos_evento]['hora_inicio'] = $evento_rum->getEvrgHoraOcurrio();
+                    $eventos[$pos_evento]['duracion'] = round($evento_rum->getEvrgDuracion(), 2);
+                    $pos_evento++;
+                }
             }
         }
         if (count($registros) != 0)
@@ -1059,14 +1071,24 @@ class ingreso_datosActions extends sfActions
         //Cambios: 24 de febrero de 2014
         //Restar a la hora de inicio ingresada el tiempo de inyección de la máquina
         $hora_inicio = $request->getParameter('hora_inicio');
-        $hora_inicio_total = $this->calcularHoraInicio($registro, $hora_inicio, '-');
-        $registroEvento -> setEvrgHoraOcurrio($hora_inicio_total);
+        if($hora_inicio != '') {
+            $hora_inicio_total = $this->calcularHoraInicio($registro, $hora_inicio, '-');
+            $registroEvento -> setEvrgHoraOcurrio($hora_inicio_total);
+        }
+        else {
+            $registroEvento -> setEvrgHoraOcurrio($request->getParameter('hora_inicio'));
+        }
         
         //Cambios: 24 de febrero de 2014
         //Sumar a la hora de fin el tiempo de la corrida
         $hora_fin = $request -> getParameter('hora_fin');
-        $hora_fin_total = $this->calcularHoraFin($registro, $hora_fin, '+');            
-        $registroEvento -> setEvrgHoraFin($hora_fin_total);
+        if($hora_fin != '') {
+            $hora_fin_total = $this->calcularHoraFin($registro, $hora_fin, '+');            
+            $registroEvento -> setEvrgHoraFin($hora_fin_total);
+        }
+        else {
+            $registroEvento -> setEvrgHoraFin($request -> getParameter('hora_fin'));
+        }
         
         //Cambios: 24 de febrero de 2014
         //Calculo de la duración del evento
@@ -1116,14 +1138,26 @@ class ingreso_datosActions extends sfActions
             //Cambios: 24 de febrero de 2014
             //Sumar a la hora de inicio ingresada el tiempo de inyección de la máquina
             $hora_inicio = $registroEvento -> getEvrgHoraOcurrio('H:i:s');
-            $hora_inicio_total = $this->calcularHoraInicio($registro, $hora_inicio, '+');
-            $fields['hora_inicio'] = date('H:i', strtotime($hora_inicio_total));
+            if($hora_inicio != '') {
+                $hora_inicio_total = $this->calcularHoraInicio($registro, $hora_inicio, '+');
+                $fields['hora_inicio'] = date('H:i', strtotime($hora_inicio_total));
+            }
+            else {
+                $fields['hora_inicio'] = $registroEvento -> getEvrgHoraOcurrio('H:i:s');
+            }
+            
             
             //Cambios: 24 de febrero de 2014
             //Restar a la hora de fin el tiempo de la corrida
             $hora_fin = $registroEvento -> getEvrgHoraFin('H:i:s');
-            $hora_fin_total = $this->calcularHoraFin($registro, $hora_fin, '-');            
-            $fields['hora_fin'] = date('H:i', strtotime($hora_fin_total));
+            if($hora_fin != '') {
+                $hora_fin_total = $this->calcularHoraFin($registro, $hora_fin, '-');            
+                $fields['hora_fin'] = date('H:i', strtotime($hora_fin_total));
+            }
+            else {
+                $fields['hora_fin'] = $registroEvento -> getEvrgHoraFin('H:i:s');
+            }
+            
             
             $fields['hora_inicio_corregida'] = $registroEvento -> getEvrgHoraOcurrio('H:i');
             $fields['hora_fin_corregida'] = $registroEvento -> getEvrgHoraFin('H:i');

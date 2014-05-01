@@ -237,6 +237,15 @@ var recargarDatosMetodos = function(callback){
             }
         });
         
+        rdahor_datastore.load({
+            callback: callback,
+            params: {
+                'codigo_usu_operario': ope,
+                'cods_equipos': arrayEquipos,
+                'fecha': fecha
+            }
+        });
+        
     }
 }
 ///////////REPORTE TIEMPO
@@ -271,6 +280,9 @@ var rdtiemp_datastore = new Ext.data.Store({
         type: 'string'
     }, {
         name: 'rdtiemp_TPNP_metodo',
+        type: 'string'
+    }, {
+        name: 'rdtiemp_TPNP_metodo_alistamiento',
         type: 'string'
     }, {
         name: 'rdtiemp_TF_metodo',
@@ -363,6 +375,12 @@ var rdtiemp_colmodel = new Ext.grid.ColumnModel({
         tooltip: 'Tiempo paradas programadas d&iacute;a',
         width: 60,
         renderer: generarRenderer('#47d552', '#000000')
+    }, {
+        dataIndex: 'rdtiemp_TPNP_metodo_alistamiento',
+        header: 'TPNP<br/>(Hrs.)<br/>Alistamiento',
+        tooltip: 'Tiempo de paradas no programadas m&eacute;todo incluyendo pérdidas por alistamiento',
+        width: 70,
+        renderer: generarRenderer('#ff5454', '#000000')
     }, {
         dataIndex: 'rdtiemp_TPNP_metodo',
         header: 'TPNP<br/>(Hrs.)<br/>M&eacute;todo',
@@ -676,16 +694,16 @@ var rdperdi_columns = [{
     renderer: generarRenderer('#bfbfbf', '#000000')
 }, {
     dataIndex: 'paros_menores',
-    header: 'Paros<br>menores<br>(Min)<br>Método',
+    header: 'Paros menores<br>(Min)<br>Método',
     tooltip: 'Paros menores (Minutos)',
-    width: 60,
+    width: 90,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'paros_menores_dia',
-    header: 'Paros<br>menores<br>(Min)<br>Día',
+    header: 'Paros menores<br>(Min)<br>Día',
     tooltip: 'Paros menores (Minutos) del día',
-    width: 60,
+    width: 90,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
@@ -703,6 +721,8 @@ var rdperdi_columns = [{
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, 
+//Cambios: 24 de febrero de 2014
+//Se quitó la columna fallas de la interfaz de ingreso de datos
 //{
 //    dataIndex: 'fallas',
 //    header: 'Fallas<br>(Min)<br>Método',
@@ -720,16 +740,16 @@ var rdperdi_columns = [{
 //}, 
 {
     dataIndex: 'perdidas_velocidad',
-    header: 'Pérdidas de<br>velocidad (Min)<br>Método',
+    header: 'Pérdidas de velocidad<br>(Min)<br>Método',
     tooltip: 'Pérdidas de velocidad (Minutos)',
-    width: 110,
+    width: 130,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'perdidas_velocidad_dia',
-    header: 'Perdidas de<br>rendimiento (Min)<br>Día',
-    tooltip: 'Perdidas de rendimiento (Minutos) en el día',
-    width: 110,
+    header: 'Pérdidas de velocidad<br>(Min)<br>Día',
+    tooltip: 'Perdidas de velocidad (Minutos) en el día',
+    width: 130,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }];
@@ -746,6 +766,88 @@ var rdperdi_grid = new Ext.grid.GridPanel({
     },
     columns: rdperdi_columns
 });
+
+//REPORTE AHORROS
+//--------------------------------------------------------
+//Cambios: 24 de febrero de 2014
+//Se agrega una nueva pestaña llamada Ahorros
+var rdahor_fields = [{
+    type: 'string',
+    name: 'ahor_nombre_operario'
+}, {
+    type: 'string',
+    name: 'ahor_nombre_maquina'
+}, {
+    type: 'string',
+    name: 'ahor_nombre_metodo'
+}, {
+    type: 'string',
+    name: 'ahorros'
+}, {
+    type: 'string',
+    name: 'ahorros_dia'
+}];
+
+var rdahor_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_diario', 'listarReporteAhorrosPorMetodo'),
+        method: 'POST'
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data'
+    }, rdahor_fields)
+});
+
+var rdahor_columns = [{
+    dataIndex: 'ahor_nombre_operario',
+    header: 'Analista',
+    tooltip: 'Analista que realiz&oacute; el registro',
+    columnWidth: 60,
+    align: 'center',
+    renderer: generarRenderer('#bfbfbf', '#000000')
+}, {
+    dataIndex: 'ahor_nombre_maquina',
+    header: 'Equipo',
+    tooltip: 'Equipo que llev&oacute; a cabo el m&eacute;todo',
+    width: 150,
+    align: 'center',
+    renderer: generarRenderer('#bfbfbf', '#000000')
+}, {
+    dataIndex: 'ahor_nombre_metodo',
+    header: 'M&eacute;todo ',
+    tooltip: 'M&eacute;todo ',
+    columnWidth: 60,
+    align: 'center',
+    renderer: generarRenderer('#bfbfbf', '#000000')
+} , {
+    dataIndex: 'ahorros',
+    header: 'Ahorros<br>(Min)<br>Método',
+    tooltip: 'Ahorros (Minutos) del método',
+    width: 110,
+    align: 'center',
+    renderer: generarRenderer('#e1de98', '#000000')
+}, {
+    dataIndex: 'ahorros_dia',
+    header: 'Ahorros<br>(Min)<br>Día',
+    tooltip: 'Ahorros (Minutos) del día',
+    width: 110,
+    align: 'center',
+    renderer: generarRenderer('#e1de98', '#000000')
+}];
+
+var rdahor_grid = new Ext.grid.GridPanel({
+    autoWidth: true,
+    height: 320,
+    border: true,
+    frame: true,
+    store: rdahor_datastore,
+    stripeRows: true,
+    loadMask: {
+        msg: 'Cargando...'
+    },
+    columns: rdahor_columns
+});
+//--------------------------------------------------------
 
 
 //REPORTE MUESTRAS INYECCION
@@ -945,6 +1047,12 @@ var reportediario_contenedor = new Ext.Panel({
             title: 'Lotes e inyecciones',
             border: false,
             items: [rdmuin_grid]
+        }, {
+            //Cambios:: 24 de febrero de 2014
+            //Se agrega una nueva pestaña llamada Ahorros
+            title: 'Ahorros',
+            border: false,
+            items: [rdahor_grid]
         }],
         listeners: {
             tabchange: function(){

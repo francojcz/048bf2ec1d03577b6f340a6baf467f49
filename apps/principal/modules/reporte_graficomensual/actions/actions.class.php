@@ -415,8 +415,16 @@ class reporte_graficomensualActions extends sfActions
                                         //Cambios: 24 de febrero de 2014
                                         //Se quitó la columna fallas de la interfaz de ingreso de datos
                                         //$suma_fallas_dia+= $temporal->getRumFallas();
-                                        //Los tiempos que aparecen como pérdidas se van a mostrar de manera independiente
-                                        $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();                                        
+                                        /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+                                           pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */
+                                        //$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                        $tpnp_temp = $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                        if($tpnp_temp > 0) {
+                                            $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                        }
+                                        else {
+                                            $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8);
+                                        }                                        
 					$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
 					$suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
 				}
@@ -488,8 +496,18 @@ class reporte_graficomensualActions extends sfActions
                                 //Cambios: 24 de febrero de 2014
                                 //Se eliminó la columna fallas de la interfaz de ingreso de datos
                                 //$suma_fallas_dia+= $temporal->getRumFallas();
-                                //Las perdidas se van a mostrar de manera independiente
-                                $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8) + $temporal->calcularPerdidaCambioMetodoAjusteMinutos();				
+                                
+                                /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
+                                   pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */
+                                //$suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                $tpnp_temp = $temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                if($tpnp_temp > 0) {
+                                    $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8)+$temporal->calcularPerdidaCambioMetodoAjusteMinutos();
+                                }
+                                else {
+                                    $suma_paros_dia+= $temporal->calcularParosMenoresMinutos(8);
+                                } 
+                               
 				$suma_retrabajos_dia+= $temporal->calcularRetrabajosMinutos(8);
 				$suma_perdidarendimiento_dia+=$temporal->calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio);
 			}
