@@ -1484,7 +1484,7 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'numero_muestras_producto',
-        header : '<a style="color:#B80000;">No. lotes<br>del<br>Producto</a>',
+        header : '<a style="color:#B80000;">No. lotes<br>Producto</a>',
         tooltip : 'N&uacute;mero de muestras del producto',
         width : 54,
         align : 'center',
@@ -1526,7 +1526,7 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'numero_muestras_estabilidad',
-        header : '<a style="color:#0033CC;">No. lotes<br>de<br>Estabilidad</a>',
+        header : '<a style="color:#0033CC;">No. lotes<br>Estabilidad</a>',
         tooltip : 'N&uacute;mero de muestras de estabilidad',
         width : 61,
         align : 'center',
@@ -1680,7 +1680,7 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'tiempo_corrida_uniformidad',
-        header : '<a style="color:#E63E00;">T. C.<br>Uniformidad<br>Contenida<br>(Min)</a>',
+        header : '<a style="color:#E63E00;">T. C.<br>Uniformidad<br>Contenido<br>(Min)</a>',
         tooltip : 'Tiempo de corrida',
         width : 68,
         align : 'center',
@@ -1694,7 +1694,7 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'numero_muestras_uniformidad',
-        header : '<a style="color:#E63E00;">No. lotes<br>Uniformidad<br>Contenida</a>',
+        header : '<a style="color:#E63E00;">No. lotes<br>Uniformidad<br>Contenido</a>',
         tooltip : 'N&uacute;mero de muestras uniformidad',
         width : 68,
         align : 'center',

@@ -521,12 +521,12 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         if ($tiempoExcedente || $tiempoDisponible >= 0)
         {
-            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
-//            return $tiempoDisponible;
+//            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
+            return $tiempoDisponible;
         } else
         {
-            return array(0, 0, 0, 0, 0);
-//            return 0;
+//            return array(0, 0, 0, 0, 0);
+            return 0;
         }
     }
 

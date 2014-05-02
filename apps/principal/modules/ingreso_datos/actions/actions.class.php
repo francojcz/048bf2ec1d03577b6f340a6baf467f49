@@ -43,16 +43,16 @@ class ingreso_datosActions extends sfActions
 
         $deficitTiempo = null;
 
-//        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
-        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE); 
-//        if ($tiempoDisponible < 0)
-//        {
-//            $deficitTiempo = 0 - ($tiempoDisponible * 60);
-//        } else
-//        {
-//            return $this -> renderText('1');
-//        }
-        return $this -> renderText('Disp. '.$t[0].'-TNP '.$t[1].'-TPP '.$t[2].'-TPNP '.$t[3].'- TO'.$t[4].'');
+        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
+//        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE); 
+        if ($tiempoDisponible < 0)
+        {
+            $deficitTiempo = 0 - ($tiempoDisponible * 60);
+        } else
+        {
+            return $this -> renderText('1');
+        }
+//        return $this -> renderText('Disp. '.$t[0].'-TNP '.$t[1].'-TPP '.$t[2].'-TPNP '.$t[3].'- TO'.$t[4].'');
 
         $registroSegundoDia = new RegistroUsoMaquina();
         $datetimeSegundoDia = new DateTime('@' . ($registro -> getRumFecha('U') + 86400));
@@ -624,7 +624,7 @@ class ingreso_datosActions extends sfActions
     }
     
     //Cambios: 24 de febrero de 2014
-    //Calcula el orden y el valor de los tiempos que se grafican en la barra de tiempo en minutos
+    //Calcula el orden y el valor de los tiempos que se grafican en la barra de tiempo
     public function generarTiemposGraficoMinutos($codigoMaquina, $fecha)
     {
         $user = $this -> getUser();
