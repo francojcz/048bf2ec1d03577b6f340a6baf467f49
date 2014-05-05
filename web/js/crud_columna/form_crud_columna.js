@@ -57,31 +57,31 @@ var crud_columna_datastore = new Ext.data.Store({
         name: 'col_mar_codigo',
         type: 'string'
     }, {
-        name: 'col_mar_nombre',
+        name: 'col_marca_nombre',
         type: 'string'
     }, {
         name: 'col_mod_codigo',
         type: 'string'
     }, {
-        name: 'col_mod_nombre',
+        name: 'col_modelo_nombre',
         type: 'string'
     }, {
         name: 'col_fase_codigo',
         type: 'string'
     }, {
-        name: 'col_fase_nombre',
+        name: 'col_faseligada_nombre',
         type: 'string'
     }, {
         name: 'col_dim_codigo',
         type: 'string'
     }, {
-        name: 'col_dim_nombre',
+        name: 'col_dimension_nombre',
         type: 'string'
     }, {
         name: 'col_tam_codigo',
         type: 'string'
     }, {
-        name: 'col_tam_nombre',
+        name: 'col_tamano_nombre',
         type: 'string'
     }])
 });
@@ -438,23 +438,23 @@ var crud_columna_colmodel = new Ext.grid.ColumnModel({
     }, {
         header: "Marca",
         width: 120,
-        dataIndex: 'col_mar_nombre'
+        dataIndex: 'col_marca_nombre'
     }, {
         header: "Modelo",
         width: 120,
-        dataIndex: 'col_mod_nombre'
+        dataIndex: 'col_modelo_nombre'
     }, {
         header: "Fase Ligada",
         width: 120,
-        dataIndex: 'col_fase_nombre'
+        dataIndex: 'col_faseligada_nombre'
     }, {
         header: "Dimensi&oacute;n",
         width: 120,
-        dataIndex: 'col_dim_nombre'
+        dataIndex: 'col_dimension_nombre'
     }, {
         header: "Tam. de Part&iacute;cula (\u03bcm)",
         width: 120,
-        dataIndex: 'col_tam_nombre'
+        dataIndex: 'col_tamano_nombre'
     }, {
         header: "Creado por",
         width: 120,
@@ -497,6 +497,8 @@ var crud_columna_gridpanel = new Ext.grid.GridPanel({
             rowselect: function(sm, row, record){
                 Ext.getCmp('crud_columna_formpanel').getForm().loadRecord(record);
                 Ext.getCmp('crud_columna_actualizar_boton').setText('Actualizar');                
+//                alert('Codigo '+col_codigo.getValue());
+//                alert('Marca '+col_mar_codigo.get);
             }
         }
     }),    

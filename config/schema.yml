@@ -168,6 +168,18 @@ propel:
     fase_causa_eliminacion: { phpName: FaseCausaEliminacion, type: VARCHAR, size: '250', required: false }
     fase_causa_actualizacion: { phpName: FaseCausaActualizacion, type: VARCHAR, size: '250', required: false }
     _indexes: { FK_reference_1: [fase_usu_crea], FK_reference_2: [fase_usu_actualiza] }
+  grupo_equipo:
+    _attributes: { phpName: GrupoEquipo }
+    gru_codigo: { phpName: GruCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    gru_nombre: { phpName: GruNombre, type: VARCHAR, size: '200', required: false }
+    gru_fecha_registro_sistema: { phpName: GruFechaRegistroSistema, type: TIMESTAMP, required: false }
+    gru_usu_crea: { phpName: GruUsuCrea, type: INTEGER, size: '11', required: false }
+    gru_usu_actualiza: { phpName: GruUsuActualiza, type: INTEGER, size: '11', required: false }
+    gru_fecha_actualizacion: { phpName: GruFechaActualizacion, type: TIMESTAMP, required: false }
+    gru_eliminado: { phpName: GruEliminado, type: SMALLINT, size: '6', required: false }
+    gru_causa_eliminacion: { phpName: GruCausaEliminacion, type: VARCHAR, size: '250', required: false }
+    gru_causa_actualizacion: { phpName: GruCausaActualizacion, type: VARCHAR, size: '250', required: false }
+    _indexes: { FK_reference_31: [gru_usu_crea], FK_reference_32: [gru_usu_actualiza] }
   indicador:
     _attributes: { phpName: Indicador }
     ind_codigo: { phpName: IndCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }

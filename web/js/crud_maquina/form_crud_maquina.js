@@ -554,9 +554,8 @@ var crud_maquina_contenedor_panel = new Ext.Panel({
 });
 
 function crud_maquina_actualizar(text){
-
     if (crud_maquina_formpanel.getForm().isValid()) {
-        subirDatos(crud_maquina_formpanel, getAbsoluteUrl('crud_maquina', 'actualizarMaquina'), {
+            subirDatos(crud_maquina_formpanel, getAbsoluteUrl('crud_maquina', 'actualizarMaquina'), {
             maq_causa_actualizacion: text
         }, function(){
             crud_maquina_formpanel.getForm().reset();

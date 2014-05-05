@@ -84,7 +84,7 @@ var form_interfazsuperadmin = function(){
                             title: 'Manejo de certificados',
                             border: false,
                             style: 'padding: 10px;',
-                            html: '<div style="text-align:center;"> <font face="arial" size=6 color=#4E79B2><br/><br/>Manejo de certificados</font><br/><br/><img height=130 width=200  src="' + urlPrefix + '../images/iconos/certificado.png" alt="datos"/></div>'
+                            html: '<div style="text-align:center; font-size:40px;"> <font face="arial" color=#4E79B2><br/><br/>Manejo de certificados</font><br/><br/></div>'
                         }, {
                             title: 'Certificar computador',
                             style: 'padding: 10px;',

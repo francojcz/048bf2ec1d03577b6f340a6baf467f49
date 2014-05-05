@@ -1008,6 +1008,39 @@ CREATE TABLE `etapa`
 		ON DELETE RESTRICT
 );
 
+#-----------------------------------------------------------------------------
+#-- grupo_equipo
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `grupo_equipo`;
+
+
+CREATE TABLE `grupo_equipo`
+(
+	`gru_codigo` INTEGER(11)  NOT NULL AUTO_INCREMENT,
+	`gru_nombre` VARCHAR(200),
+	`gru_fecha_registro_sistema` DATETIME,
+	`gru_usu_crea` INTEGER(11),
+	`gru_usu_actualiza` INTEGER(11),
+	`gru_fecha_actualizacion` DATETIME,
+	`gru_eliminado` SMALLINT(6),
+	`gru_causa_eliminacion` VARCHAR(250),
+	`gru_causa_actualizacion` VARCHAR(250),
+	PRIMARY KEY (`gru_codigo`),
+	KEY `FK_reference_31`(`gru_usu_crea`),
+	KEY `FK_reference_32`(`gru_usu_actualiza`),
+	CONSTRAINT `grupo_equipo_evento_FK_1`
+		FOREIGN KEY (`gru_usu_crea`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+	CONSTRAINT `grupo_equipo_evento_FK_2`
+		FOREIGN KEY (`gru_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
 
 
 # This restores the fkey checks, after having unset them earlier
