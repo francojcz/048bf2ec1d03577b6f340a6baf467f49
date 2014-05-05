@@ -180,6 +180,13 @@ propel:
     gru_causa_eliminacion: { phpName: GruCausaEliminacion, type: VARCHAR, size: '250', required: false }
     gru_causa_actualizacion: { phpName: GruCausaActualizacion, type: VARCHAR, size: '250', required: false }
     _indexes: { FK_reference_31: [gru_usu_crea], FK_reference_32: [gru_usu_actualiza] }
+  grupo_por_equipo:
+    _attributes: { phpName: GrupoPorEquipo }
+    greq_gru_codigo: { phpName: GreqGruCodigo, type: INTEGER, size: '11', primaryKey: true, required: true }
+    greq_maq_codigo: { phpName: GreqMaqCodigo, type: INTEGER, size: '11', primaryKey: true, required: true }
+    greq_usu_crea: { phpName: GreqUsuCrea, type: INTEGER, size: '11', required: false }
+    greq_fecha_registro_sistema: { phpName: GreqFechaRegistroSistema, type: TIMESTAMP, required: false }
+    _indexes: { FK_reference_51: [greq_usu_crea], FK_reference_24: [greq_maq_codigo], FK_reference_29: [greq_gru_codigo] }
   indicador:
     _attributes: { phpName: Indicador }
     ind_codigo: { phpName: IndCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }

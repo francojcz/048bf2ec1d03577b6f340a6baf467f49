@@ -68,6 +68,20 @@ var form_interfazdministrador = function(){
                                 }
                             }]
                         }, {
+                            title: 'Grupo de Equipos',
+                            tabTip: 'Manejo de grupos de equipos',
+                            border: false,
+                            style: 'padding: 10px;',
+                            iconCls: 'x-icon-maestra',
+                            items: [{
+                                frame: true,
+                                autoLoad: {
+                                    url: getAbsoluteUrl('maestra_grupoequipo', 'index'),
+                                    scripts: true,
+                                    scope: this
+                                }
+                            }]
+                        }, {
                             title: 'Categor&iacute;a evento',
                             tabTip: 'Categor&iacute;a evento, utilice esto para crear categorizar de los eventos',
                             border: false,

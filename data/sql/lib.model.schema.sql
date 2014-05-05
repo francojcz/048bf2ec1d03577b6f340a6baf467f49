@@ -1029,13 +1029,47 @@ CREATE TABLE `grupo_equipo`
 	PRIMARY KEY (`gru_codigo`),
 	KEY `FK_reference_31`(`gru_usu_crea`),
 	KEY `FK_reference_32`(`gru_usu_actualiza`),
-	CONSTRAINT `grupo_equipo_evento_FK_1`
+	CONSTRAINT `grupo_equipo_FK_1`
 		FOREIGN KEY (`gru_usu_crea`)
 		REFERENCES `usuario` (`usu_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT,
-	CONSTRAINT `grupo_equipo_evento_FK_2`
+	CONSTRAINT `grupo_equipo_FK_2`
 		FOREIGN KEY (`gru_usu_actualiza`)
+		REFERENCES `usuario` (`usu_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT
+);
+
+#-----------------------------------------------------------------------------
+#-- grupo_por_equipo
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `grupo_por_equipo`;
+
+
+CREATE TABLE `grupo_por_equipo`
+(
+	`greq_gru_codigo` INTEGER(11)  NOT NULL,
+	`greq_maq_codigo` INTEGER(11)  NOT NULL,
+	`greq_usu_crea` INTEGER(11),
+	`greq_fecha_registro_sistema` DATETIME,
+	PRIMARY KEY (`greq_gru_codigo`,`greq_maq_codigo`),
+	KEY `FK_reference_51`(`greq_usu_crea`),
+	KEY `FK_reference_24`(`greq_maq_codigo`),
+        KEY `FK_reference_29`(`greq_gru_codigo`),
+	CONSTRAINT `grupo_por_equipo_FK_1`
+		FOREIGN KEY (`greq_gru_codigo`)
+		REFERENCES `grupo_equipo` (`gru_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+	CONSTRAINT `grupo_por_equipo_FK_2`
+		FOREIGN KEY (`greq_maq_codigo`)
+		REFERENCES `maquina` (`maq_codigo`)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT,
+	CONSTRAINT `grupo_por_equipo_FK_3`
+		FOREIGN KEY (`greq_usu_crea`)
 		REFERENCES `usuario` (`usu_codigo`)
 		ON UPDATE RESTRICT
 		ON DELETE RESTRICT
