@@ -256,7 +256,7 @@ Ext.onReady(function(){
     maquinas_datastore.load();
     
 /**********************************************************************/
-//Cambios: 28 de febrero de 2014
+//Cambios: 24 de febrero de 2014
 //Interfaz para seleccionar los equipos a filtrar en el reporte
 var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
         singleSelect:false
@@ -280,7 +280,7 @@ var maquinas_gridpanel = new Ext.grid.GridPanel({
         sm: maquina_selmodel
 });
 
-var win = new Ext.Window(
+var win_maquinas_exportacion = new Ext.Window(
 {
     layout : 'fit',
     width : 500,
@@ -294,7 +294,7 @@ var win = new Ext.Window(
           text : 'Aceptar',
           handler : function()
           {
-            win.hide();
+            win_maquinas_exportacion.hide();
             recargarDatosMetodos();
         }
     }],
@@ -307,7 +307,75 @@ var win = new Ext.Window(
     }
 });
 /**********************************************************************/
+//Cambios: 24 de febrero de 2014
+//Interfaz para seleccionar los grupos de equipos a filtrar en el reporte
+var grupos_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('exportacion_datos', 'listarGruposActivos'),
+        method: 'POST'
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data'
+    }, [{
+        name: 'gru_codigo',
+        type: 'string'
+    }, {
+        name: 'gru_nombre',
+        type: 'string'
+    }])
+});
+
+grupos_datastore.load();
     
+var grupo_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false
+});
+
+var grupo_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+            grupo_selmodel,
+            { header: "Id", width: 30, dataIndex: 'gru_codigo', hidden:true},
+            { header: "Nombre del Grupo", width: 430, dataIndex: 'gru_nombre'}
+        ]
+});
+
+var grupos_gridpanel = new Ext.grid.GridPanel({
+        id: 'grupos_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: grupos_datastore,
+        cm: grupo_colmodel,
+        sm: grupo_selmodel
+});
+
+var win_grupos_exportacion = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 400,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Grupo de Equipos',
+    items : grupos_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win_grupos_exportacion.hide();
+            recargarDatosMetodos();
+        }
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
+    }
+});
+/**********************************************************************/    
     
     var recargarDatosMetodos = function(callback){
         redirigirSiSesionExpiro();
@@ -317,16 +385,25 @@ var win = new Ext.Window(
             //Codigos de los equipos seleccionados
             var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
             var equiposAFiltrar = [];
-            for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+            for(i = 0; i < maquinas_gridpanel.selModel.getCount(); i++){
                     equiposAFiltrar.push(equiposSeleccionados[i].json.codigo);
             }
-            var arrayEquipos = Ext.encode(equiposAFiltrar); 
+            var arrayEquipos = Ext.encode(equiposAFiltrar);
+            
+            //Codigos de los grupos de equipos seleccionados
+            var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+            var gruposAFiltrar = [];
+            for(i = 0; i < grupos_gridpanel.selModel.getCount(); i++){
+                    gruposAFiltrar.push(gruposSeleccionados[i].json.gru_codigo);
+            }
+            var arrayGrupos = Ext.encode(gruposAFiltrar);
             
             datastore.load({
                 callback: callback,
                 params: {
                     'codigo_operario': operarios_combobox.getValue(),
                     'cods_equipos': arrayEquipos,
+                    'cods_grupos': arrayGrupos,
                     'fecha_inicio': fechaInicioField.getValue(),
                     'fecha_fin': fechaFinField.getValue()
                 }
@@ -945,18 +1022,18 @@ var win = new Ext.Window(
                 height: 60,
                 layout: 'column',
                 items: [{
-                    width: '300',
+                    width: '290',
                     layout: 'form',
                     labelWidth: 55,
                     footer: false,
                     items: [operarios_combobox]
                 }, {
-                    width: '190',
+                    width: '180',
                     layout: 'form',
                     labelWidth: 40,
                     items: [fechaInicioField]
                 }, {
-                    width: '150',
+                    width: '140',
                     layout: 'form',
                     labelWidth: 40,
                     items: [fechaFinField]
@@ -965,14 +1042,24 @@ var win = new Ext.Window(
                     iconCls : 'equipo',
                     text : 'Seleccionar Equipos',
                     tooltip: 'Seleccionar los equipos a filtrar en el reporte',                    
-                    style: 'padding: 0px 0px 0px 40px',
+                    style: 'padding: 0px 0px 0px 30px',
                     handler : function() {
                         Ext.getBody().mask();
-                        win.show();
+                        win_maquinas_exportacion.show();
                     }
                 }, {
                     xtype: 'button',
-                    style: 'padding: 0px 0px 0px 40px',
+                    iconCls : 'grupo',
+                    text : 'Seleccionar Grupo de Equipos',
+                    tooltip: 'Seleccionar los grupos de equipos a filtrar en el reporte',                    
+                    style: 'padding: 0px 0px 0px 30px',
+                    handler : function() {
+                        Ext.getBody().mask();
+                        win_grupos_exportacion.show();
+                    }
+                }, {
+                    xtype: 'button',
+                    style: 'padding: 0px 0px 0px 30px',
                     iconCls: 'exportar_excel',
                     text: 'Guardar en formato Excel',
                     handler: function(){
@@ -1008,7 +1095,15 @@ var win = new Ext.Window(
                             }
                             var arrayEquipos = Ext.encode(equiposAFiltrar); 
                             
-                            var params = 'codigo_operario=' + operarios_combobox.getValue() + '&cods_equipos=' + arrayEquipos + '&fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin;
+                            //Codigos de los grupos de equipos seleccionados
+                            var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+                            var gruposAFiltrar = [];
+                            for(i = 0; i < grupos_gridpanel.selModel.getCount(); i++){
+                                    gruposAFiltrar.push(gruposSeleccionados[i].json.gru_codigo);
+                            }
+                            var arrayGrupos = Ext.encode(gruposAFiltrar);
+                            
+                            var params = 'codigo_operario=' + operarios_combobox.getValue() + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos + '&fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin;
                             window.location = getAbsoluteUrl('exportacion_datos', 'exportar') + '?' + params;
                         }
                     }

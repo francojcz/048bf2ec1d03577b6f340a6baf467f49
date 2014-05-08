@@ -3,15 +3,25 @@ Ext.onReady(function(){
         redirigirSiSesionExpiro();
         if (campoAnho.getValue() != '') {
             
+            //Cambios: 24 de febrero de 2014
             //Codigos de los equipos seleccionados
             var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
             var equiposAFiltrar = [];
-            for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+            for(i = 0; i < maquinas_gridpanel.selModel.getCount(); i++){
                     equiposAFiltrar.push(equiposSeleccionados[i].json.codigo);
             }
-            var arrayEquipos = Ext.encode(equiposAFiltrar);            
+            var arrayEquipos = Ext.encode(equiposAFiltrar);
             
-            var params = '?anho=' + campoAnho.getValue() + '&codigo_operario=' + campoOperario.getValue() + '&cods_equipos=' + arrayEquipos + '&codigo_metodo=' + campoMetodo.getValue();
+//            //Cambios: 24 de febrero de 2014
+//            //Codigos de los grupos de equipos seleccionados
+            var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+            var gruposAFiltrar = [];
+            for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
+                    gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
+            }
+            var arrayGrupos = Ext.encode(gruposAFiltrar);  
+            
+            var params = '?anho=' + campoAnho.getValue() + '&codigo_operario=' + campoOperario.getValue() + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos+ '&codigo_metodo=' + campoMetodo.getValue();            
             
             var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "500", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/amline/");
@@ -104,8 +114,8 @@ Ext.onReady(function(){
     });    
     maquinas_datastore.load();
     
-    /**********************************************************************/
-//Cambios: 28 de febrero de 2014
+/**********************************************************************/
+//Cambios: 24 de febrero de 2014
 //Interfaz para seleccionar los equipos a filtrar en el reporte
 var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
         singleSelect:false
@@ -129,7 +139,7 @@ var maquinas_gridpanel = new Ext.grid.GridPanel({
         sm: maquina_selmodel
 });
 
-var win = new Ext.Window(
+var win_maquinas_anual = new Ext.Window(
 {
     layout : 'fit',
     width : 500,
@@ -143,7 +153,7 @@ var win = new Ext.Window(
           text : 'Aceptar',
           handler : function()
           {
-            win.hide();
+            win_maquinas_anual.hide();
         }
     }],
     listeners :
@@ -154,7 +164,74 @@ var win = new Ext.Window(
           }
     }
 });
-/**********************************************************************/    
+/**********************************************************************/
+//Cambios: 24 de febrero de 2014
+//Interfaz para seleccionar los grupos de equipos a filtrar en el reporte
+var grupos_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('graficos_anuales', 'listarGruposActivos'),
+        method: 'POST'
+    }),
+    reader: new Ext.data.JsonReader({
+        root: 'data'
+    }, [{
+        name: 'gru_codigo',
+        type: 'string'
+    }, {
+        name: 'gru_nombre',
+        type: 'string'
+    }])
+});    
+grupos_datastore.load();
+    
+var grupo_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false
+});
+
+var grupo_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+            grupo_selmodel,
+            { header: "Id", width: 30, dataIndex: 'gru_codigo', hidden:true},
+            { header: "Nombre del Grupo", width: 430, dataIndex: 'gru_nombre'}
+        ]
+});
+
+var grupos_gridpanel = new Ext.grid.GridPanel({
+        id: 'grupos_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: grupos_datastore,
+        cm: grupo_colmodel,
+        sm: grupo_selmodel
+});
+
+var win_grupos_anual = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 400,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Grupo de Equipos',
+    items : grupos_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win_grupos_anual.hide();
+        }
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
+    }
+});
+/**********************************************************************/   
     
     var metodos_datastore = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
@@ -278,7 +355,19 @@ var win = new Ext.Window(
                     iconCls: 'equipo',
                     handler: function(){
                         Ext.getBody().mask();
-                        win.show();
+                        win_maquinas_anual.show();
+                    }
+                }]
+            }, {
+                layout: 'form',
+                bodyStyle: 'padding-right:30px;',
+                items: [{
+                    xtype: 'button',
+                    text: 'Seleccionar Grupo de Equipos',
+                    iconCls: 'grupo',
+                    handler: function(){
+                        Ext.getBody().mask();
+                        win_grupos_anual.show();
                     }
                 }]
             }, {

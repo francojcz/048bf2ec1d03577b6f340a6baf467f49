@@ -17,5 +17,25 @@
  * @package    lib.model
  */
 class GrupoEquipoPeer extends BaseGrupoEquipoPeer {
+    
+    public static function listarGruposActivos()
+    {
+            $fila = 0;
+            $datos = array();
+            try{
+                    $conexion = new Criteria();
+                    $conexion->add(GrupoEquipoPeer::GRU_ELIMINADO, false);
+                    $grupos = GrupoEquipoPeer::doSelect($conexion);
 
+                    foreach($grupos as $temporal)
+                    {
+                            $datos[$fila]['gru_codigo'] = $temporal->getGruCodigo();
+                            $datos[$fila]['gru_nombre'] = $temporal->getGruNombre();
+                            $fila++;
+                    }
+                    $fila++;
+            }
+            catch (Exception $excepcion) { }
+            return $datos;
+    }
 } // GrupoEquipoPeer

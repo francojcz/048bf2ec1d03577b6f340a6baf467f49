@@ -425,7 +425,7 @@ var crud_columna_colmodel = new Ext.grid.ColumnModel({
     columns: [{
         id: 'col_codigo',
         header: "Id",
-        width: 30,
+        width: 40,
         dataIndex: 'col_codigo'
     }, {
         header: "C&oacute;digo Interno",

@@ -47,8 +47,8 @@ Ext.onReady(function(){
     });
     reporevent_maquina_codigo_datastore.load();
     
-    /**********************************************************************/
-//Cambios: 28 de febrero de 2014
+/**********************************************************************/
+//Cambios: 24 de febrero de 2014
 //Interfaz para seleccionar los equipos a filtrar en el reporte
 var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
         singleSelect:false
@@ -72,7 +72,7 @@ var maquinas_gridpanel = new Ext.grid.GridPanel({
         sm: maquina_selmodel
 });
 
-var win = new Ext.Window(
+var win_maquinas_evento = new Ext.Window(
 {
     layout : 'fit',
     width : 500,
@@ -86,7 +86,72 @@ var win = new Ext.Window(
           text : 'Aceptar',
           handler : function()
           {
-            win.hide();
+            win_maquinas_evento.hide();
+        }
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
+    }
+});
+/**********************************************************************/
+//Cambios: 24 de febrero de 2014
+//Interfaz para seleccionar los grupo de equipos a filtrar en el reporte
+var reporevent_grupo_codigo_datastore = new Ext.data.JsonStore({
+    id: 'reporevent_grupo_codigo_datastore',
+    url: getAbsoluteUrl('reporte_evento', 'listarGruposActivos'),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [{
+        name: 'gru_codigo',
+        type: 'string'
+    }, {
+        name: 'gru_nombre',
+        type: 'string'
+    }, ]
+});
+reporevent_grupo_codigo_datastore.load();
+    
+var grupo_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false
+});
+
+var grupo_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+            grupo_selmodel,
+            { header: "Id", width: 30, dataIndex: 'gru_codigo', hidden:true},
+            { header: "Nombre del Grupo", width: 430, dataIndex: 'gru_nombre'}
+        ]
+});
+
+var grupos_gridpanel = new Ext.grid.GridPanel({
+        id: 'grupos_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: reporevent_grupo_codigo_datastore,
+        cm: grupo_colmodel,
+        sm: grupo_selmodel
+});
+
+var win_grupos_evento = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 400,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Grupo de Equipos',
+    items : grupos_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win_grupos_evento.hide();
         }
     }],
     listeners :
@@ -98,6 +163,7 @@ var win = new Ext.Window(
     }
 });
 /**********************************************************************/  
+
     
     var reporevent_metodo_codigo_datastore = new Ext.data.JsonStore({
         id: 'reporevent_metodo_codigo_datastore',
@@ -212,7 +278,16 @@ var win = new Ext.Window(
                 style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     Ext.getBody().mask();
-                    win.show();
+                    win_maquinas_evento.show();
+                }
+            }, {
+                text: 'Seleccionar Grupo de Equipos',
+                xtype: 'button',
+                iconCls: 'grupo',
+                style: 'padding: 0px 0px 0px 20px',
+                handler: function(){
+                    Ext.getBody().mask();
+                    win_grupos_evento.show();
                 }
             }, {
                 text: 'Buscar',
@@ -236,10 +311,18 @@ var win = new Ext.Window(
                             equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
                     }
                     var arrayEquipos = Ext.encode(equiposAFiltrar);
+                    //Codigos de los grupos de equipos seleccionados
+                    var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+                    var gruposAFiltrar = [];
+                    for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
+                            gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
+                    }
+                    var arrayGrupos = Ext.encode(gruposAFiltrar);                    
                     
                     reporevent_datastore.reload({
                         params: {
                             cods_equipos: arrayEquipos,
+                            cods_grupos: arrayGrupos,
                             metodo_codigo: reporevent_metodo_codigo_combobox.getValue(),
                             analista_codigo: reporevent_analista_codigo_combobox.getValue(),
                             categoria_codigo: reporevent_categoriaevento_codigo_combobox.getValue(),
@@ -415,6 +498,14 @@ var win = new Ext.Window(
         }
         var arrayEquipos = Ext.encode(equiposAFiltrar);
         
+        //Codigos de los grupos de equipos seleccionados
+        var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+        var gruposAFiltrar = [];
+        for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
+                gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
+        }
+        var arrayGrupos = Ext.encode(gruposAFiltrar); 
+        
         var metodo_codigo = reporevent_metodo_codigo_combobox.getValue();
         var analista_codigo = reporevent_analista_codigo_combobox.getValue();
         var categoria_codigo = reporevent_categoriaevento_codigo_combobox.getValue();
@@ -429,7 +520,7 @@ var win = new Ext.Window(
             hasta = reporevent_hasta_fecha_datefield.getValue().format('Y-m-d');
         }
         
-        var params = '?cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
+        var params = '?cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         params += '&desde_fecha=' + desde + '&hasta_fecha=' + hasta + '&categoria_codigo=' + categoria_codigo;
         
         //tiempos

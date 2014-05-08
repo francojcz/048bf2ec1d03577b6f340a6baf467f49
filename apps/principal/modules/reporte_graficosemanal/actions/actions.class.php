@@ -24,7 +24,9 @@ class reporte_graficosemanalActions extends sfActions
 
 		$conexion = new Criteria();
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$dia,CRITERIA::EQUAL);
-		//Codigos de los equipos seleccionados
+                
+		//Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
@@ -32,6 +34,22 @@ class reporte_graficosemanalActions extends sfActions
                         $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
                     }
                 }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo(), CRITERIA::EQUAL);
+                        }                
+                    }
+                }
+                
 		if($metodo_codigo!='') {
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
                 }
@@ -49,7 +67,9 @@ class reporte_graficosemanalActions extends sfActions
 		$conexion = new Criteria();
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$anio.'-'.$mes.'-01',CRITERIA::GREATER_EQUAL);
 		$conexion->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA,$anio.'-'.$mes.'-31',CRITERIA::LESS_EQUAL);
-		//Codigos de los equipos seleccionados
+                
+		//Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
@@ -57,6 +77,22 @@ class reporte_graficosemanalActions extends sfActions
                         $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
                     }
                 }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo(), CRITERIA::EQUAL);
+                        }                
+                    }
+                }
+                
 		if($metodo_codigo!='') {
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
                 }
@@ -74,7 +110,9 @@ class reporte_graficosemanalActions extends sfActions
 		$conexion = new Criteria();
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha_inicio, CRITERIA::GREATER_EQUAL);
 		$conexion->addAnd(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha_fin, CRITERIA::LESS_EQUAL);
-		//Codigos de los equipos seleccionados
+                
+		//Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
@@ -82,6 +120,22 @@ class reporte_graficosemanalActions extends sfActions
                         $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
                     }
                 }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo(), CRITERIA::EQUAL);
+                        }                
+                    }
+                }
+                
 		if($metodo_codigo!='') {
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
                 }
@@ -683,7 +737,9 @@ class reporte_graficosemanalActions extends sfActions
                 $params = array();                   
                 $horasActivas = 0;                                    
                 $criteria = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
@@ -691,6 +747,22 @@ class reporte_graficosemanalActions extends sfActions
                         $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);                                        
                     }
                 }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
+                
                 $maquinas = MaquinaPeer::doSelect($criteria);
                 $tpnp_dia = 0;
                 $tnp_dia = 0;
@@ -766,12 +838,29 @@ class reporte_graficosemanalActions extends sfActions
 
             try{
                 $criteria = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);                                        
+                    }
+                }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
                     }
                 }
                 
@@ -880,14 +969,31 @@ class reporte_graficosemanalActions extends sfActions
                     $fecha_fin = $rango_fechas[$i]['fecha_fin'];
                     $datosInyecciones = $this->calcularInyeccionesSemana($fecha_inicio, $fecha_fin);
                     $criteria = new Criteria();
-                    //Codigos de los equipos seleccionados
+                    
+                    //Cambios: 24 de febrero de 2014
+                    //Se obtienen los códigos de los equipos seleccionados
                     $temp = $this->getRequestParameter('cods_equipos');
                     $cods_equipos = json_decode($temp);
                     if($cods_equipos != ''){
                         foreach ($cods_equipos as $cod_equipo) {
                             $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                         }
-                    }                       
+                    }
+                    
+                    //Cambios: 24 de febrero de 2014
+                    //Se obtienen los códigos de los grupos de equipos seleccionados
+                    $temp2 = $this->getRequestParameter('cods_grupos');
+                    $cods_grupos = json_decode($temp2);
+                    if($cods_grupos != ''){
+                        foreach ($cods_grupos as $cod_grupo) {
+                            $criteria1 = new Criteria();
+                            $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                            $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                            foreach ($grupoporequipo as $equipo) {
+                                $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                            }                
+                        }
+                    }
 
                     $tf_dia = $datosTiempos[$i]['TF'];
                     $to_dia = $datosTiempos[$i]['TO'];
@@ -979,7 +1085,9 @@ class reporte_graficosemanalActions extends sfActions
             
             try {
                 $criteria = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temporal = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temporal);
                 if($cods_equipos != ''){
@@ -987,6 +1095,22 @@ class reporte_graficosemanalActions extends sfActions
                         $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                     }
                 }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
+                
                 $datosTiempos = $this->calcularTiemposDiariosSemanaTorta($fecha_inicio, $fecha_fin);
 
                 $tp_sem = $datosTiempos['TP'];
@@ -1180,8 +1304,9 @@ class reporte_graficosemanalActions extends sfActions
             return array($ano, $mes, $dia);
         }
         
+        //Calcula la fecha de inicio y fin de cada semana
         public function rango($fecha_inicio, $fecha_fin) {
-            //Calculo de la fecha de inicio y fin de cada semana
+            
             $rango_fechas = array();
             $pos = 0;                 		               
             $posicionDia = date("w", strtotime($fecha_inicio));
@@ -1198,4 +1323,16 @@ class reporte_graficosemanalActions extends sfActions
             }
             return $rango_fechas;
         }
+        
+        public function executeListarGruposActivos(sfWebRequest $request)
+	{                
+		$salida = '({"total":"0", "results":""})';
+		$datos = GrupoEquipoPeer::listarGruposActivos();
+		$cant = count($datos);
+		if (count($datos)>0){
+			$jsonresult = json_encode($datos);
+			$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
+		}
+		return $this->renderText($salida);
+	}
 }

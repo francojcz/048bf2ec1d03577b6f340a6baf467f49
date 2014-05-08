@@ -35,14 +35,30 @@ class reporte_diarioActions extends sfActions
             $conexion -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha_dia, CRITERIA::EQUAL);
         }
 
-        //Codigos de los equipos seleccionados
-        $temp = $this->getRequestParameter('cods_equipos');
-        $cods_equipos = json_decode($temp);
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los equipos seleccionados
+        $temp1 = $this->getRequestParameter('cods_equipos');
+        $cods_equipos = json_decode($temp1);
         if($cods_equipos != ''){
             foreach ($cods_equipos as $cod_equipo) {
                 $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
             }
         }        
+        
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los grupos de equipos seleccionados
+        $temp2 = $this->getRequestParameter('cods_grupos');
+        $cods_grupos = json_decode($temp2);
+        if($cods_grupos != ''){
+            foreach ($cods_grupos as $cod_grupo) {
+                $criteria1 = new Criteria();
+                $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                foreach ($grupoporequipo as $equipo) {
+                    $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                }                
+            }
+        }
         
         if ($metodo_codigo != '-1' && $metodo_codigo != '')
         {
@@ -92,12 +108,28 @@ class reporte_diarioActions extends sfActions
         $criteria = new Criteria();
         $criteria -> add(RegistroUsoMaquinaPeer::RUM_FECHA, $fecha_dia);
                 
-        //Codigos de los equipos seleccionados
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los equipos seleccionados
         $temp = $this->getRequestParameter('cods_equipos');
         $cods_equipos = json_decode($temp);
         if($cods_equipos != ''){
             foreach ($cods_equipos as $cod_equipo) {
                 $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+            }
+        }
+        
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los grupos de equipos seleccionados
+        $temp2 = $this->getRequestParameter('cods_grupos');
+        $cods_grupos = json_decode($temp2);
+        if($cods_grupos != ''){
+            foreach ($cods_grupos as $cod_grupo) {
+                $criteria1 = new Criteria();
+                $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                foreach ($grupoporequipo as $equipo) {
+                    $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                }                
             }
         }
         
@@ -169,6 +201,22 @@ class reporte_diarioActions extends sfActions
                 $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
             }
         }
+        
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los grupos de equipos seleccionados
+        $temp2 = $this->getRequestParameter('cods_grupos');
+        $cods_grupos = json_decode($temp2);
+        if($cods_grupos != ''){
+            foreach ($cods_grupos as $cod_grupo) {
+                $criteria1 = new Criteria();
+                $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                foreach ($grupoporequipo as $equipo) {
+                    $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                }                
+            }
+        }        
+        
         $maquinas = MaquinaPeer::doSelect($conexion);
         $tpnp_dia = 0;
         $tnp_dia = 0;
@@ -279,7 +327,8 @@ class reporte_diarioActions extends sfActions
         $cantidadMaquinas = null;
 
         $criteria = new Criteria();
-        //Codigos de los equipos seleccionados
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los equipos seleccionados
         $temp = $this->getRequestParameter('cods_equipos');
         $cods_equipos = json_decode($temp);
         if($cods_equipos != ''){
@@ -287,6 +336,22 @@ class reporte_diarioActions extends sfActions
                 $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
             }
         }
+        
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los grupos de equipos seleccionados
+        $temp2 = $this->getRequestParameter('cods_grupos');
+        $cods_grupos = json_decode($temp2);
+        if($cods_grupos != ''){
+            foreach ($cods_grupos as $cod_grupo) {
+                $criteria1 = new Criteria();
+                $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                foreach ($grupoporequipo as $equipo) {
+                    $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                }                
+            }
+        }
+        
         $maquinas = MaquinaPeer::doSelect($criteria);
         $tpp_dia = 0;
         $tf_dia = 0;
@@ -355,6 +420,21 @@ class reporte_diarioActions extends sfActions
             }
         }
         
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los grupos de equipos seleccionados
+        $temp2 = $this->getRequestParameter('cods_grupos');
+        $cods_grupos = json_decode($temp2);
+        if($cods_grupos != ''){
+            foreach ($cods_grupos as $cod_grupo) {
+                $criteria1 = new Criteria();
+                $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                foreach ($grupoporequipo as $equipo) {
+                    $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                }                
+            }
+        }
+        
         if ($codigo_usuario != '-1' && $codigo_usuario != '')
         {
             $criteria -> add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $codigo_usuario);
@@ -418,6 +498,21 @@ class reporte_diarioActions extends sfActions
         if($cods_equipos != ''){
             foreach ($cods_equipos as $cod_equipo) {
                 $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
+            }
+        }
+        
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los grupos de equipos seleccionados
+        $temp2 = $this->getRequestParameter('cods_grupos');
+        $cods_grupos = json_decode($temp2);
+        if($cods_grupos != ''){
+            foreach ($cods_grupos as $cod_grupo) {
+                $criteria1 = new Criteria();
+                $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                foreach ($grupoporequipo as $equipo) {
+                    $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                }                
             }
         }
         
@@ -489,6 +584,21 @@ class reporte_diarioActions extends sfActions
             }
         }
         
+        //Cambios: 24 de febrero de 2014
+        //Se obtienen los códigos de los grupos de equipos seleccionados
+        $temp2 = $this->getRequestParameter('cods_grupos');
+        $cods_grupos = json_decode($temp2);
+        if($cods_grupos != ''){
+            foreach ($cods_grupos as $cod_grupo) {
+                $criteria1 = new Criteria();
+                $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                foreach ($grupoporequipo as $equipo) {
+                    $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                }                
+            }
+        }
+        
         if ($codigo_usuario != '-1' && $codigo_usuario != '')
         {
             $criteria -> add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $codigo_usuario);
@@ -545,8 +655,6 @@ class reporte_diarioActions extends sfActions
             $fields = array();
             $fields['codigo'] = $maquina -> getMaqCodigo();
             $fields['nombre'] = $maquina -> getMaqNombre();
-            //$maquina->getNombreCompleto();
-
             $data[] = $fields;
         }
 
@@ -601,16 +709,27 @@ class reporte_diarioActions extends sfActions
         $result['data'] = $data;
         return $this -> renderText(json_encode($result));
     }
+    
+    //Cambios: 24 de febrero de 2014
+    //La siguiente función lista los grupos de equipos activos
+    public function executeListarGruposActivos()
+    {
+        $criteria = new Criteria();
+        $criteria -> add(GrupoEquipoPeer::GRU_ELIMINADO, 0);
+        $grupos = GrupoEquipoPeer::doSelect($criteria);
 
-    /*public function obtenerTNPMetodo($registo1,$registro2){
-     $tnp=0;
+        $result = array();
+        $data = array();
 
-     $minutosFin = $this->getRumHoraFinTrabajo('H') + ($this->getRumHoraFinTrabajo('i')/60) + ($this->getRumHoraFinTrabajo('s')/3600);
-     //calcularPerdidaCambioMetodoAjusteMinutos por  getRumTiempoCambioModeloPerdi
-     $minutoCambioModelo=($this->getRumTiempoCambioModelo()+$this->calcularPerdidaCambioMetodoAjusteMinutos())/60;
-     $tiempoDeCorrida=$this->calcularTiempoCorridaHoras();
+        foreach ($grupos as $grupo)
+        {
+            $fields = array();
+            $fields['gru_codigo'] = $grupo -> getGruCodigo();
+            $fields['gru_nombre'] = $grupo -> getGruNombre();
+            $data[] = $fields;
+        }
 
-     $tnp= $minutosFin -$tiempoDeCorrida - $minutoCambioModelo;
-     return $tnp;
-     }*/
+        $result['data'] = $data;
+        return $this -> renderText(json_encode($result));
+    }
 }

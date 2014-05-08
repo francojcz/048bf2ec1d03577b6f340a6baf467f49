@@ -50,7 +50,7 @@ Ext.onReady(function(){
     
     
 /**********************************************************************/
-//Cambios: 28 de febrero de 2014
+//Cambios: 24 de febrero de 2014
 //Interfaz para seleccionar los equipos a filtrar en el reporte
 var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
         singleSelect:false
@@ -74,7 +74,7 @@ var maquinas_gridpanel = new Ext.grid.GridPanel({
         sm: maquina_selmodel
 });
 
-var win = new Ext.Window(
+var win_maquinas_mensual = new Ext.Window(
 {
     layout : 'fit',
     width : 500,
@@ -88,7 +88,7 @@ var win = new Ext.Window(
           text : 'Aceptar',
           handler : function()
           {
-            win.hide();
+            win_maquinas_mensual.hide();
         }
     }],
     listeners :
@@ -99,7 +99,72 @@ var win = new Ext.Window(
           }
     }
 });
-/**********************************************************************/    
+/**********************************************************************/
+//Cambios: 24 de febrero de 2014
+//Interfaz para seleccionar los grupos de equipos a filtrar en el reporte
+var reporgrafmens_grupo_codigo_datastore = new Ext.data.JsonStore({
+    id: 'reporgrafmens_grupo_codigo_datastore',
+    url: getAbsoluteUrl('reporte_graficomensual', 'listarGruposActivos'),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [{
+        name: 'gru_codigo',
+        type: 'string'
+    }, {
+        name: 'gru_nombre',
+        type: 'string'
+    }, ]
+});
+reporgrafmens_grupo_codigo_datastore.load();
+    
+var grupo_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false
+});
+
+var grupo_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+            grupo_selmodel,
+            { header: "Id", width: 30, dataIndex: 'gru_codigo', hidden:true},
+            { header: "Nombre del Grupo", width: 430, dataIndex: 'gru_nombre'}
+        ]
+});
+
+var grupos_gridpanel = new Ext.grid.GridPanel({
+        id: 'grupos_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: reporgrafmens_grupo_codigo_datastore,
+        cm: grupo_colmodel,
+        sm: grupo_selmodel
+});
+
+var win_grupos_mensual = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 400,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Grupo de Equipos',
+    items : grupos_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win_grupos_mensual.hide();
+        }
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
+    }
+});
+/**********************************************************************/  
     
     var reporgrafmens_metodo_codigo_datastore = new Ext.data.JsonStore({
         id: 'reporgrafmens_metodo_codigo_datastore',
@@ -222,7 +287,16 @@ var win = new Ext.Window(
                 style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     Ext.getBody().mask();
-                    win.show();
+                    win_maquinas_mensual.show();
+                }
+            }, {
+                text: 'Seleccionar Grupo de Equipos',
+                xtype: 'button',
+                iconCls: 'grupo',
+                style: 'padding: 0px 0px 0px 20px',
+                handler: function(){
+                    Ext.getBody().mask();
+                    win_grupos_mensual.show();
                 }
             }, {
                 text: 'Generar gr&aacute;ficos',
@@ -311,15 +385,25 @@ var win = new Ext.Window(
         var metodo_codigo = reporgrafmens_metodo_codigo_combobox.getValue();
         var analista_codigo = reporgrafmens_analista_codigo_combobox.getValue();
         
+        //Cambios: 24 de febrero de 2014
         //Codigos de los equipos seleccionados
         var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
         var equiposAFiltrar = [];
-        for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+        for(i = 0; i < maquinas_gridpanel.selModel.getCount(); i++){
                 equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
         }
-        var arrayEquipos = Ext.encode(equiposAFiltrar);        
+        var arrayEquipos = Ext.encode(equiposAFiltrar);
         
-        var params = '?mes=' + mes + '&anio=' + anio + '&cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
+        //Cambios: 24 de febrero de 2014
+        //Codigos de los grupos de equipos seleccionados
+        var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+        var gruposAFiltrar = [];
+        for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
+                gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
+        }
+        var arrayGrupos = Ext.encode(gruposAFiltrar); 
+        
+        var params = '?mes=' + mes + '&anio=' + anio + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         
         //tiempos
         var reporgrafmens_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");

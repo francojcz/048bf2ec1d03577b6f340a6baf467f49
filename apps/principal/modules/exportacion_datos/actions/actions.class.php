@@ -27,14 +27,30 @@ class exportacion_datosActions extends sfActions
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('codigo_operario'));
 		}
                 
-                //Codigos de los equipos seleccionados
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
                     }
-                } 
+                }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
                 
 		$fechaInferiorCerrada = $request->getParameter('fecha_inicio');
 		$fechaSuperiorCerrada = $request->getParameter('fecha_fin');
@@ -401,14 +417,30 @@ class exportacion_datosActions extends sfActions
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('codigo_operario'));
 		}
                 
-                //Codigos de los equipos seleccionados
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
                     }
-                } 
+                }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
                 
 		$fechaInferiorCerrada = $request->getParameter('fecha_inicio');
 		$fechaSuperiorCerrada = $request->getParameter('fecha_fin');
@@ -564,5 +596,26 @@ class exportacion_datosActions extends sfActions
 		$this->nombreEmpresa = $empresa->getEmpNombre();
 		$this->urlLogo = $empresa->getEmpLogoUrl();
 		$this->inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+	}
+        
+        //La siguiente función retorna una lista con los grupos de equipos activos
+        public function executeListarGruposActivos() {
+		$criteria = new Criteria();
+		$criteria->add(GrupoEquipoPeer::GRU_ELIMINADO, false);
+		$grupos = GrupoEquipoPeer::doSelect($criteria);
+
+		$result = array();
+		$data = array();
+
+		foreach($grupos as $grupo) {
+			$fields = array();
+			$fields['gru_codigo'] = $grupo->getGruCodigo();
+			$fields['gru_nombre'] = $grupo->getGruNombre();
+
+			$data[] = $fields;
+		}
+
+		$result['data'] = $data;
+		return $this->renderText(json_encode($result));
 	}
 }

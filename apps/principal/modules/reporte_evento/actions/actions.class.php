@@ -37,7 +37,8 @@ class reporte_eventoActions extends sfActions
 			else{$conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA,$hasta_fecha,CRITERIA::LESS_EQUAL);}
 		}
                               
-                //Codigos de los equipos seleccionados
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
@@ -45,6 +46,21 @@ class reporte_eventoActions extends sfActions
                         $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
                     }
                 } 
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo(), CRITERIA::EQUAL);
+                        }                
+                    }
+                }
                 
 		if($metodo_codigo!='') {
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
@@ -146,14 +162,30 @@ class reporte_eventoActions extends sfActions
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('analista_codigo'));
 		}
 
-		//Codigos de los equipos seleccionados
+		//Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo);
                     }
-                }   
+                }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
 
 		if($request->getParameter('metodo_codigo')!='') {
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $request->getParameter('metodo_codigo'));
@@ -228,14 +260,30 @@ class reporte_eventoActions extends sfActions
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $request->getParameter('analista_codigo'));
 		}
 
-		//Codigos de los equipos seleccionados
+		//Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $cod_equipo, CRITERIA::EQUAL);
                     }
-                }   
+                }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $criteria -> addOr(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO, $equipo->getGreqMaqCodigo(), CRITERIA::EQUAL);
+                        }                
+                    }
+                }
 
 		if($request->getParameter('metodo_codigo')!='') {
 			$criteria->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO, $request->getParameter('metodo_codigo'));
@@ -394,14 +442,31 @@ class reporte_eventoActions extends sfActions
 			if($desde_fecha!=''){$consulta.=" and rum_fecha>='".$desde_fecha."' "; }
 			if($hasta_fecha!=''){$consulta.=" and rum_fecha<='".$hasta_fecha."' "; }
                         
-                        //Codigos de los equipos seleccionados
+                        //Cambios: 24 de febrero de 2014
+                        //Se obtienen los códigos de los equipos seleccionados
                         $temp = $this->getRequestParameter('cods_equipos');
                         $cods_equipos = json_decode($temp);
                         if($cods_equipos != ''){
                             foreach ($cods_equipos as $cod_equipo) {                                
                                 $consulta.=" or rum_maq_codigo='".$cod_equipo."' ";
                             }
-                        }                        
+                        }
+                        
+                        //Cambios: 24 de febrero de 2014
+                        //Se obtienen los códigos de los grupos de equipos seleccionados
+                        $temp2 = $this->getRequestParameter('cods_grupos');
+                        $cods_grupos = json_decode($temp2);
+                        if($cods_grupos != ''){
+                            foreach ($cods_grupos as $cod_grupo) {
+                                $criteria1 = new Criteria();
+                                $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                                $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                                foreach ($grupoporequipo as $equipo) {
+                                    $consulta.=" or rum_maq_codigo='".$equipo->getGreqMaqCodigo()."' ";
+                                }                
+                            }
+                        }
+                        
 			if($metodo_codigo!=''){$consulta.=" and rum_met_codigo='".$metodo_codigo."' ";}
 			if($analista_codigo!=''){$consulta.=" and rum_usu_codigo='".$analista_codigo."' ";}
 			if($hasta_fecha!=''){$consulta.=" and rum_eliminado=false"; }
@@ -436,98 +501,112 @@ class reporte_eventoActions extends sfActions
 	public function executeListarAnalistas(sfWebRequest $request)
 	{
 
-		$salida='({"total":"0", "results":""})';
-		$datos=EmpleadoPeer::listarAnalistas();
-		$cant=count($datos);
-		if (count($datos)>0){
-			$jsonresult = json_encode($datos);
-			$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-		}
-		return $this->renderText($salida);	}
+            $salida='({"total":"0", "results":""})';
+            $datos=EmpleadoPeer::listarAnalistas();
+            $cant=count($datos);
+            if (count($datos)>0){
+                    $jsonresult = json_encode($datos);
+                    $salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
+            }
+            return $this->renderText($salida);	            
+        }
 
-		public function executeListarEquiposActivos(sfWebRequest $request)
-		{
-			$salida = '({"total":"0", "results":""})';
-			$datos = MaquinaPeer::listarEquiposActivos();
-			$cant = count($datos);
-			if (count($datos)>0){
-				$jsonresult = json_encode($datos);
-				$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-			}
-			return $this->renderText($salida);
-		}
+        public function executeListarEquiposActivos(sfWebRequest $request)
+        {
+                $salida = '({"total":"0", "results":""})';
+                $datos = MaquinaPeer::listarEquiposActivos();
+                $cant = count($datos);
+                if (count($datos)>0){
+                        $jsonresult = json_encode($datos);
+                        $salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
+                }
+                return $this->renderText($salida);
+        }
 
-		/**
-		 *@author:maryit sanchez
-		 *@date:6 de enero de 2011
-		 *Esta funcion retorna  un listado de los maquinas
-		 */
-		public function executeListarMaquinas(sfWebRequest $request)
-		{
-			$salida='({"total":"0", "results":""})';
-			$datos=MaquinaPeer::listarMaquinasBuenas();
-			$cant=count($datos);
-			if (count($datos)>0){
-				$jsonresult = json_encode($datos);
-				$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-			}
-			return $this->renderText($salida);
-		}
-
-
-		/**
-		 *@author:maryit sanchez
-		 *@date:6 de enero de 2011
-		 *Esta funcion retorna  un listado de los metodos
-		 */
-		public function executeListarMetodos(sfWebRequest $request)
-		{
-			$salida='({"total":"0", "results":""})';
-			$datos=MetodoPeer::listarMetodosActivos();
-			$cant=count($datos);
-			if ($cant>0){
-				$jsonresult = json_encode($datos);
-				$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
-			}
-			return $this->renderText($salida);
-		}
+        /**
+         *@author:maryit sanchez
+         *@date:6 de enero de 2011
+         *Esta funcion retorna  un listado de los maquinas
+         */
+        public function executeListarMaquinas(sfWebRequest $request)
+        {
+                $salida='({"total":"0", "results":""})';
+                $datos=MaquinaPeer::listarMaquinasBuenas();
+                $cant=count($datos);
+                if (count($datos)>0){
+                        $jsonresult = json_encode($datos);
+                        $salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
+                }
+                return $this->renderText($salida);
+        }
 
 
-		/**
-		 *@author:maryit sanchez
-		 *@date:22 de enero de 2011
-		 *Esta funcion retorna  un listado de las categorias de eventos
-		 */
-		public function executeListarCategoriaEventos(sfWebRequest $request)
-		{
-			$salida='({"total":"0", "results":""})';
-			$fila=0;
-			$datos;
-			try{
-				$conexion = new Criteria();
-                                $conexion->add(CategoriaEventoPeer::CAT_ELIMINADO,0);
-				$conexion->addAscendingOrderByColumn(CategoriaEventoPeer::CAT_NOMBRE);
-				$categorias = CategoriaEventoPeer::doSelect($conexion);
-					
-				foreach($categorias as $temporal)
-				{
-					$datos[$fila]['cat_codigo'] = $temporal->getCatCodigo();
-					$datos[$fila]['cat_nombre'] = $temporal->getCatNombre();
-					$fila++;
-				}
-				$datos[$fila]['cat_codigo']='';
-				$datos[$fila]['cat_nombre'] ='TODAS';
-				$fila++;
-					
-				if($fila>0){
-					$jsonresult = json_encode($datos);
-					$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
-				}
-			}
-			catch (Exception $excepcion)
-			{
-				//	return "({success: false, errors: { reason: 'Hubo una excepci&oacute;n en listar categorias ',error:'".$excepcion->getMessage()."'}})";
-			}
-			return $this->renderText($salida);
-		}
+        /**
+         *@author:maryit sanchez
+         *@date:6 de enero de 2011
+         *Esta funcion retorna  un listado de los metodos
+         */
+        public function executeListarMetodos(sfWebRequest $request)
+        {
+                $salida='({"total":"0", "results":""})';
+                $datos=MetodoPeer::listarMetodosActivos();
+                $cant=count($datos);
+                if ($cant>0){
+                        $jsonresult = json_encode($datos);
+                        $salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
+                }
+                return $this->renderText($salida);
+        }
+
+
+        /**
+         *@author:maryit sanchez
+         *@date:22 de enero de 2011
+         *Esta funcion retorna  un listado de las categorias de eventos
+         */
+        public function executeListarCategoriaEventos(sfWebRequest $request)
+        {
+                $salida='({"total":"0", "results":""})';
+                $fila=0;
+                $datos;
+                try{
+                        $conexion = new Criteria();
+                        $conexion->add(CategoriaEventoPeer::CAT_ELIMINADO,0);
+                        $conexion->addAscendingOrderByColumn(CategoriaEventoPeer::CAT_NOMBRE);
+                        $categorias = CategoriaEventoPeer::doSelect($conexion);
+
+                        foreach($categorias as $temporal)
+                        {
+                                $datos[$fila]['cat_codigo'] = $temporal->getCatCodigo();
+                                $datos[$fila]['cat_nombre'] = $temporal->getCatNombre();
+                                $fila++;
+                        }
+                        $datos[$fila]['cat_codigo']='';
+                        $datos[$fila]['cat_nombre'] ='TODAS';
+                        $fila++;
+
+                        if($fila>0){
+                                $jsonresult = json_encode($datos);
+                                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+                        }
+                }
+                catch (Exception $excepcion)
+                {
+                        //	return "({success: false, errors: { reason: 'Hubo una excepci&oacute;n en listar categorias ',error:'".$excepcion->getMessage()."'}})";
+                }
+                return $this->renderText($salida);
+        }
+
+        //La siguiente función lista los grupos de equipos activos
+        public function executeListarGruposActivos(sfWebRequest $request)
+        {
+                $salida = '({"total":"0", "results":""})';
+                $datos = GrupoEquipoPeer::listarGruposActivos();
+                $cant = count($datos);
+                if (count($datos)>0){
+                        $jsonresult = json_encode($datos);
+                        $salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
+                }
+                return $this->renderText($salida);
+        }
 }

@@ -50,7 +50,7 @@ Ext.onReady(function(){
     
     
 /**********************************************************************/
-//Cambios: 28 de febrero de 2014
+//Cambios: 24 de febrero de 2014
 //Interfaz para seleccionar los equipos a filtrar en el reporte
 var maquina_selmodel = new Ext.grid.CheckboxSelectionModel({
         singleSelect:false
@@ -74,7 +74,7 @@ var maquinas_gridpanel = new Ext.grid.GridPanel({
         sm: maquina_selmodel
 });
 
-var win = new Ext.Window(
+var win_maquinas_semanal = new Ext.Window(
 {
     layout : 'fit',
     width : 500,
@@ -88,7 +88,7 @@ var win = new Ext.Window(
           text : 'Aceptar',
           handler : function()
           {
-            win.hide();
+            win_maquinas_semanal.hide();
         }
     }],
     listeners :
@@ -99,8 +99,74 @@ var win = new Ext.Window(
           }
     }
 });
-/**********************************************************************/    
-    
+/**********************************************************************/
+//Cambios: 24 de febrero de 2014
+//Interfaz para seleccionar los grupos de equipos a filtrar en el reporte
+var reporgrafseman_grupo_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporgrafseman_grupo_codigo_datastore',
+        url: getAbsoluteUrl('reporte_graficosemanal', 'listarGruposActivos'),
+        root: 'results',
+        totalProperty: 'total',
+        fields: [{
+            name: 'gru_codigo',
+            type: 'string'
+        }, {
+            name: 'gru_nombre',
+            type: 'string'
+        }, ]
+    });
+reporgrafseman_grupo_codigo_datastore.load();
+
+var grupo_selmodel = new Ext.grid.CheckboxSelectionModel({
+        singleSelect:false
+});
+
+var grupo_colmodel = new Ext.grid.ColumnModel({
+        defaults:{sortable: true, locked: false, resizable: true},
+        columns:[
+            grupo_selmodel,
+            { header: "Id", width: 30, dataIndex: 'gru_codigo', hidden:true},
+            { header: "Nombre del Grupo", width: 430, dataIndex: 'gru_nombre'}
+        ]
+});
+
+var grupos_gridpanel = new Ext.grid.GridPanel({
+        id: 'grupos_gridpanel',
+        stripeRows:true,
+        frame: true,
+        ds: reporgrafseman_grupo_codigo_datastore,
+        cm: grupo_colmodel,
+        sm: grupo_selmodel
+});
+
+var win_grupos_semanal = new Ext.Window(
+{
+    layout : 'fit',
+    width : 500,
+    height : 400,
+    closeAction : 'hide',
+    plain : true,
+    title : 'Grupo de Equipos',
+    items : grupos_gridpanel,
+    buttons : [
+    {
+          text : 'Aceptar',
+          handler : function()
+          {
+            win_grupos_semanal.hide();
+        }
+    }],
+    listeners :
+    {
+          hide : function()
+          {
+            Ext.getBody().unmask();
+          }
+    }
+});
+/**********************************************************************/
+
+
     var reporgrafseman_metodo_codigo_datastore = new Ext.data.JsonStore({
         id: 'reporgrafseman_metodo_codigo_datastore',
         url: getAbsoluteUrl('reporte_graficosemanal', 'listarMetodos'),
@@ -134,7 +200,7 @@ var win = new Ext.Window(
     });    
     
 /**********************************************************************/
-//Cambios: 6 de marzo de 2014
+//Cambios: 24 de febrero de 2014
 //Interfaz reporte semanal
 var fechaInicioField = new Ext.form.DateField({
     xtype: 'datefield',
@@ -187,7 +253,16 @@ var fechaFinField = new Ext.form.DateField({
                 style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     Ext.getBody().mask();
-                    win.show();
+                    win_maquinas_semanal.show();
+                }
+            }, {
+                text: 'Seleccionar Grupo de Equipos',
+                xtype: 'button',
+                iconCls: 'grupo',
+                style: 'padding: 0px 0px 0px 20px',
+                handler: function(){
+                    Ext.getBody().mask();
+                    win_grupos_semanal.show();
                 }
             }, {
                 text: 'Generar gr&aacute;ficos',
@@ -284,7 +359,15 @@ var fechaFinField = new Ext.form.DateField({
         }
         var arrayEquipos = Ext.encode(equiposAFiltrar);
         
-        var params = '?fecha_inicio=' + fecha_inicio + '&fecha_fin=' + fecha_fin + '&cods_equipos=' + arrayEquipos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
+        //Codigos de los grupos seleccionados
+        var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+        var gruposAFiltrar = [];
+        for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
+                gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
+        }
+        var arrayGrupos = Ext.encode(gruposAFiltrar);
+        
+        var params = '?fecha_inicio=' + fecha_inicio + '&fecha_fin=' + fecha_fin + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         
         //tiempos
         var reporgrafseman_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");

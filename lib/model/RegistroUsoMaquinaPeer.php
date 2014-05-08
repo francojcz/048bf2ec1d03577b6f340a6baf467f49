@@ -1239,10 +1239,10 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             //Cambios: 24 de febrero de 2014
             /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
                pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */        
-//            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
-//            if($tpnp_temp > 0) {
-//                $sumatoria += $tpnp_temp;
-//            }
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($tpnp_temp > 0) {
+                $sumatoria += $tpnp_temp;
+            }
             //Se quitó la columna fallas de la interfaz de ingreso de datos
 //            $sumatoria += $registro -> getRumFallas();
         }
@@ -1261,10 +1261,10 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             //Cambios: 24 de febrero de 2014
             /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
                pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */        
-//            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
-//            if($tpnp_temp > 0) {
-//                $sumatoria += $tpnp_temp;
-//            }
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($tpnp_temp > 0) {
+                $sumatoria += $tpnp_temp;
+            }
             //Se quitó la columna fallas de la interfaz de ingreso de datos
 //            $sumatoria += $registro -> getRumFallas();
         }
@@ -1283,10 +1283,10 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             //Cambios: 24 de febrero de 2014
             /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
                pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */        
-//            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
-//            if($tpnp_temp > 0) {
-//                $sumatoria += $tpnp_temp;
-//            }
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($tpnp_temp > 0) {
+                $sumatoria += $tpnp_temp;
+            }
 //          //Se quitó la columna fallas de la interfaz de ingreso de datos
 //          $sumatoria += $registro -> getRumFallas();
         }

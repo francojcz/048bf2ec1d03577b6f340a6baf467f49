@@ -142,12 +142,28 @@ class graficos_anualesActions extends sfActions
 		$reinyeccionesDiciembre = 0;
                 
                 $conexion = new Criteria();
-                //Codigos de los equipos seleccionados
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
                     }
                 }
 
@@ -397,12 +413,29 @@ class graficos_anualesActions extends sfActions
 		$muestrasReanalizadasDiciembre = 0;
                 
                 $conexion = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                    }
+                }
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
                     }
                 }
                 
@@ -631,14 +664,32 @@ class graficos_anualesActions extends sfActions
 		$perdidasVelocidadAnual = 0;
                 
                 $conexion = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                     }
-                }                
+                }     
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
+                
                 $maquinas = MaquinaPeer::doSelect($conexion);
 
                 foreach($maquinas as $maquina) {
@@ -814,14 +865,32 @@ class graficos_anualesActions extends sfActions
 		$perdidasVelocidadDiciembre = 0;
 
                 $conexion = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                     }
-                }                
+                }       
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
+                
                 $maquinas = MaquinaPeer::doSelect($conexion);
 
                 foreach($maquinas as $maquina) {
@@ -1090,14 +1159,32 @@ class graficos_anualesActions extends sfActions
 		$numeroReinyecciones = 0;
 
                 $conexion = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                     }
-                }                
+                }      
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
+                
                 $maquinas = MaquinaPeer::doSelect($conexion);
 
                 foreach($maquinas as $maquina) {
@@ -1421,14 +1508,32 @@ class graficos_anualesActions extends sfActions
 		$numeroReinyeccionesDiciembre = 0;
                 
                 $conexion = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                     }
-                }                
+                } 
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
+                
                 $maquinas = MaquinaPeer::doSelect($conexion);
 
                 foreach($maquinas as $maquina) {
@@ -2002,14 +2107,32 @@ class graficos_anualesActions extends sfActions
 		$tiempoCalendarioDiciembre = 0;
 
                 $conexion = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                     }
-                }                
+                }            
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
+                
                 $maquinas = MaquinaPeer::doSelect($conexion);
 
                 foreach($maquinas as $maquina) {
@@ -2274,14 +2397,32 @@ class graficos_anualesActions extends sfActions
 		$tiempoCalendario = 0;
 
                 $conexion = new Criteria();
-                //Codigos de los equipos seleccionados
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los equipos seleccionados
                 $temp = $this->getRequestParameter('cods_equipos');
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
                         $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
                     }
-                }                
+                }              
+                
+                //Cambios: 24 de febrero de 2014
+                //Se obtienen los códigos de los grupos de equipos seleccionados
+                $temp2 = $this->getRequestParameter('cods_grupos');
+                $cods_grupos = json_decode($temp2);
+                if($cods_grupos != ''){
+                    foreach ($cods_grupos as $cod_grupo) {
+                        $criteria1 = new Criteria();
+                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                        foreach ($grupoporequipo as $equipo) {
+                            $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                        }                
+                    }
+                }
+                
                 $maquinas = MaquinaPeer::doSelect($conexion);
 
                 foreach($maquinas as $maquina) {
@@ -2309,4 +2450,27 @@ class graficos_anualesActions extends sfActions
 	executeIndex(sfWebRequest $request) {
 
 	}
+        
+        //Cambios: 24 de febrero de 2014
+        //La siguiente función lista los grupos de equipos activos
+        public function executeListarGruposActivos() {
+		$criteria = new Criteria();
+		$criteria->add(GrupoEquipoPeer::GRU_ELIMINADO, false);
+		$grupos = GrupoEquipoPeer::doSelect($criteria);
+
+		$result = array();
+		$data = array();
+
+		foreach($grupos as $grupo) {
+			$fields = array();
+			$fields['gru_codigo'] = $grupo->getGruCodigo();
+			$fields['gru_nombre'] = $grupo->getGruNombre();
+
+			$data[] = $fields;
+		}
+
+		$result['data'] = $data;
+		return $this->renderText(json_encode($result));
+	}        
+        
 }
