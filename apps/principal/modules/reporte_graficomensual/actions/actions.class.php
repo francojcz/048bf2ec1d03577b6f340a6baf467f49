@@ -712,12 +712,12 @@ class reporte_graficomensualActions extends sfActions
 	{
 		$user = $this->getUser();
 		$codigo_usuario = $user->getAttribute('usu_codigo');
-		$criteria = new Criteria();
-		$criteria->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
-		$operario = EmpleadoPeer::doSelectOne($criteria);
-		$criteria = new Criteria();
-		$criteria->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
-		$empresa = EmpresaPeer::doSelectOne($criteria);
+		$criteria1 = new Criteria();
+		$criteria1->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+		$operario = EmpleadoPeer::doSelectOne($criteria1);
+		$criteria2 = new Criteria();
+		$criteria2->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+		$empresa = EmpresaPeer::doSelectOne($criteria2);
 
 		$inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
 
@@ -1216,6 +1216,50 @@ class reporte_graficomensualActions extends sfActions
 			$salida= '({"total":"'.$cant.'","results":'.$jsonresult.'})';
 		}
 		return $this->renderText($salida);
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total de tiempos de los indicadores por mes
+        public function executeConsolidadoIndicadoresMes(sfWebRequest $request)
+	{            
+            $user = $this->getUser();
+            $codigo_usuario = $user->getAttribute('usu_codigo');
+            $criteria1 = new Criteria();
+            $criteria1->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+            $operario = EmpleadoPeer::doSelectOne($criteria1);
+            $criteria2 = new Criteria();
+            $criteria2->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+            $empresa = EmpresaPeer::doSelectOne($criteria2);
+
+            $inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+
+            $anio = $this->getRequestParameter('anio');
+            $mes = $this->getRequestParameter('mes');
+
+            $datos_ind = $this->calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio);                
+            $indicadores = array('TPP', 'TNP', 'TPNP', 'TO');
+            
+            //Se calcula la suma de horas de los cuatro indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]]+$datos_ind[$indicadores[2]]+$datos_ind[$indicadores[3]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['mes_indicador'] = $indicadores[$i];
+                $datos[$fila]['mes_horas'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');
+                //Se calcula el porcentaje para cada indicador
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['mes_porcentaje'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
 	}
 
 }

@@ -706,7 +706,8 @@ class graficos_anualesActions extends sfActions
 		echo "Retrabajos;".round($retrabajosAnual,2)."\n";
 		return $this->renderText("Pérdidas de velocidad;".round($perdidasVelocidadAnual,2)."\n");
 	}
-	public function executeGenerarConfiguracionGraficoPerdidasLineas() {
+
+        public function executeGenerarConfiguracionGraficoPerdidasLineas() {
 		$this->renderText('<?xml version="1.0" encoding="UTF-8"?>');
 		$this->renderText('<settings>');
 		$this->renderText('<grid>
@@ -2298,7 +2299,7 @@ class graficos_anualesActions extends sfActions
 		$this->renderText('<settings>');
 		$this->renderText('<data_type>csv</data_type>');
 		$this->renderText('<pie>');
-		$this->renderText('<x>245</x>
+		$this->renderText('<x>200</x>
     <y>190</y>                     
     <inner_radius>40</inner_radius>
     <height>20</height>            
@@ -2347,8 +2348,8 @@ class graficos_anualesActions extends sfActions
     ');
 		$this->renderText('<legend>
     <enabled>true</enabled>        
-    <x>50</x>                     
-    <y>300</y>                     
+    <x>70</x>                     
+    <y>330</y>                     
     <max_columns>4</max_columns>   
     <values>                       
     <enabled></enabled>          
@@ -2471,6 +2472,108 @@ class graficos_anualesActions extends sfActions
 
 		$result['data'] = $data;
 		return $this->renderText(json_encode($result));
-	}        
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total de tiempos de los indicadores por ano
+        public function executeConsolidadoIndicadoresAno(sfWebRequest $request) {
+            $ano = $request->getParameter('ano');
+
+            $params = array();
+            if($request->getParameter('codigo_operario')!='-1') {
+                    $params['codigo_operario'] = $request->getParameter('codigo_operario');
+            }
+            if($request->getParameter('codigo_metodo')!='-1') {
+                    $params['codigo_metodo'] = $request->getParameter('codigo_metodo');
+            }
+
+            $user = $this->getUser();
+            $codigo_usuario = $user->getAttribute('usu_codigo');
+            $criteria1 = new Criteria();
+            $criteria1->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+            $operario = EmpleadoPeer::doSelectOne($criteria1);
+            $criteria2 = new Criteria();
+            $criteria2->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+            $empresa = EmpresaPeer::doSelectOne($criteria2);
+
+            $inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+
+            $TNPAnual = 0;
+            $TPPAnual = 0;
+            $TPNPAnual = 0;
+            $TFAnual = 0;
+            $TOAnual = 0;
+            $tiempoCalendario = 0;
+
+            $conexion = new Criteria();
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {
+                    $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                }
+            }              
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los grupos de equipos seleccionados
+            $temp2 = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp2);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {
+                    $criteria1 = new Criteria();
+                    $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                    $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                    foreach ($grupoporequipo as $equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                    }                
+                }
+            }
+
+            $maquinas = MaquinaPeer::doSelect($conexion);
+
+            foreach($maquinas as $maquina) {
+                    $codigoTemporalMaquina = $maquina->getMaqCodigo();
+
+                    $TNPAnual += round(RegistroUsoMaquinaPeer::calcularTNPAnhoEnHoras($codigoTemporalMaquina, $ano, $params), 2);
+                    $TPPAnual += round(RegistroUsoMaquinaPeer::calcularTPPAnhoEnHoras($codigoTemporalMaquina, $ano, $params), 2);
+                    $TPNPAnual += round(RegistroUsoMaquinaPeer::calcularTPNPAnhoEnHoras($codigoTemporalMaquina, $ano, $params, $inyeccionesEstandarPromedio), 2);
+                    $tiempoCalendario += $maquina->calcularNumeroHorasActivasDelAño($ano);
+            }
+
+            $TFAnual += RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $TPPAnual, $TNPAnual);
+            $TOAnual += RegistroUsoMaquinaPeer::calcularTODiaMesAño($TFAnual, $TPNPAnual);
+
+            $datos_ind = array();            
+            $datos_ind['TNP'] = $TNPAnual/24;
+            $datos_ind['TPP'] = $TPPAnual/24;
+            $datos_ind['TPNP'] = $TPNPAnual/24;
+            $datos_ind['TO'] = $TOAnual/24;
+            $indicadores = array('TNP', 'TPP', 'TPNP', 'TO');
+            
+            //Se calcula la suma de horas de los cuatro indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]]+$datos_ind[$indicadores[2]]+$datos_ind[$indicadores[3]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['ano_indicador'] = $indicadores[$i];
+                $datos[$fila]['ano_horas'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');
+                //Se calcula el porcentaje para cada indicador
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['ano_porcentaje'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);    
+	}
         
 }

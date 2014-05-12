@@ -43,16 +43,16 @@ class ingreso_datosActions extends sfActions
 
         $deficitTiempo = null;
 
-        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
-//        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE); 
-        if ($tiempoDisponible < 0)
-        {
-            $deficitTiempo = 0 - ($tiempoDisponible * 60);
-        } else
-        {
-            return $this -> renderText('1');
-        }
-//        return $this -> renderText('Disp. '.$t[0].'-TNP '.$t[1].'-TPP '.$t[2].'-TPNP '.$t[3].'- TO'.$t[4].'');
+//        $tiempoDisponible = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE);
+        $t = RegistroUsoMaquinaPeer::calcularTiempoDisponibleMinutos($codigoMaquina, $fecha, $inyeccionesEstandarPromedio, TRUE); 
+//        if ($tiempoDisponible < 0)
+//        {
+//            $deficitTiempo = 0 - ($tiempoDisponible * 60);
+//        } else
+//        {
+//            return $this -> renderText('1');
+//        }
+        return $this -> renderText('Disp. '.$t[0].'-TNP '.$t[1].'-TPP '.$t[2].'-TPNP '.$t[3].'- TO'.$t[4].'');
 
         $registroSegundoDia = new RegistroUsoMaquina();
         $datetimeSegundoDia = new DateTime('@' . ($registro -> getRumFecha('U') + 86400));
@@ -262,7 +262,7 @@ class ingreso_datosActions extends sfActions
     }
 
     //Configuración Gráfico en Minutos
-    public function executeGenerarConfiguracionGrafico(sfWebRequest $request)
+    public function executeGenerarConfiguracionGraficoMinutos(sfWebRequest $request)
     {
         $this -> renderText('<?xml version="1.0" encoding="UTF-8"?>');
         $this -> renderText('<settings>');
@@ -443,7 +443,7 @@ class ingreso_datosActions extends sfActions
     }
     
     //Configuración Gráfico en Horas
-    public function executeGenerarConfiguracionGrafico1(sfWebRequest $request)
+    public function executeGenerarConfiguracionGraficoHoras(sfWebRequest $request)
     {
         $this -> renderText('<?xml version="1.0" encoding="UTF-8"?>');
         $this -> renderText('<settings>');
@@ -682,6 +682,12 @@ class ingreso_datosActions extends sfActions
             
             $minutosTiempoParadaProgramada = 0;
             $minutosTiempoParadaProgramada += $registro -> getRumTiempoCambioModelo();
+            //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
+            if($tpnp_temp < 0) {
+                $minutosTiempoParadaProgramada += $tpnp_temp;
+            }
             if(round($minutosTiempoParadaProgramada, 2) != 0.00) {
                 $tiempos[] = round($minutosTiempoParadaProgramada, 2);
                 $orden_tiempos[] = 'TPP';
@@ -689,12 +695,10 @@ class ingreso_datosActions extends sfActions
             
             $minutosTiempoParadaNoProgramada1 = 0;
             //Cambios: 24 de febrero de 2014
-            /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
-               pues los tiempos negativos se toman como ahorros y ya se incluyen dentro de los TNP*/
-            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
             if($tpnp_temp > 0) {
                 $minutosTiempoParadaNoProgramada1 += $tpnp_temp;
-            }            
+            }
             if(round($minutosTiempoParadaNoProgramada1, 2) != 0.00) {
                 $tiempos[] = round($minutosTiempoParadaNoProgramada1, 2);
                 $orden_tiempos[] = 'TPNP';
@@ -784,7 +788,7 @@ class ingreso_datosActions extends sfActions
                     }
                                         
                     /* Guardar los tiempos divididos y el tiempo del evento en el arreglo $tiempos.
-                       Lo mismo con el orden de los tiempos*/
+                       Lo mismo con el orden de los tiempos */
                     $tiempo1 = $hora_inicio - ($total - $tiempos[$j]);
                     $tiempo2 = $tiempos[$j] - $tiempo1;                    
                     $tiempos[$j] = round($tiempo1, 2);
@@ -806,7 +810,7 @@ class ingreso_datosActions extends sfActions
     }
     
     //Generación de Datos Gráfico en Minutos
-    public function executeGenerarDatosGrafico(sfWebRequest $request)
+    public function executeGenerarDatosGraficoMinutos(sfWebRequest $request)
     {
         $codigoMaquina = $request -> getParameter('codigo_maquina');        
         $fecha = $request -> getParameter('fecha');
@@ -822,7 +826,7 @@ class ingreso_datosActions extends sfActions
     }
     
     //Generación de Datos Gráfico en Horas
-    public function executeGenerarDatosGrafico1(sfWebRequest $request)
+    public function executeGenerarDatosGraficoHoras(sfWebRequest $request)
     {
         $codigoMaquina = $request -> getParameter('codigo_maquina');        
         $fecha = $request -> getParameter('fecha');

@@ -98,7 +98,7 @@ var form_interfazsuperadmin = function(){
                                 }
                             }]
                         }, {
-                            title: 'Eliminar certificado',
+                            title: 'Eliminar certificados',
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',
                             items: [{

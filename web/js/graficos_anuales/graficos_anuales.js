@@ -12,8 +12,8 @@ Ext.onReady(function(){
             }
             var arrayEquipos = Ext.encode(equiposAFiltrar);
             
-//            //Cambios: 24 de febrero de 2014
-//            //Codigos de los grupos de equipos seleccionados
+            //Cambios: 24 de febrero de 2014
+            //Codigos de los grupos de equipos seleccionados
             var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
             var gruposAFiltrar = [];
             for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
@@ -22,6 +22,18 @@ Ext.onReady(function(){
             var arrayGrupos = Ext.encode(gruposAFiltrar);  
             
             var params = '?anho=' + campoAnho.getValue() + '&codigo_operario=' + campoOperario.getValue() + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos+ '&codigo_metodo=' + campoMetodo.getValue();            
+            
+            //Cambios: 24 de febrero de 2014
+            //Se cargan los datos de la tabla de consolidados anual
+            indanual_datastore.load({
+                params: {
+                    'ano' : campoAnho.getValue(),
+                    'codigo_operario' : campoOperario.getValue(),
+                    'cods_equipos' : arrayEquipos,
+                    'cods_grupos' : arrayGrupos,
+                    'codigo_metodo' : campoMetodo.getValue()
+                }
+            });
             
             var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "500", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/amline/");
@@ -32,7 +44,7 @@ Ext.onReady(function(){
                 so.write("flashcontent1");
             }
             
-            var so = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "500", "400", "8", "#FFFFFF");
+            var so = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "430", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/ampie/");
             so.addParam("wmode", "opaque");
             so.addVariable("settings_file", encodeURIComponent(getAbsoluteUrl('graficos_anuales', 'generarConfiguracionTortaTiempos')));
@@ -93,7 +105,7 @@ Ext.onReady(function(){
             so.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('graficos_anuales', 'generarDatosGraficoInyeccionesLineas' + params)));
             if (Ext.get('flashcontent8')) {
                 so.write("flashcontent8");
-            }
+            }            
         }
     }
     
@@ -324,6 +336,61 @@ var win_grupos_anual = new Ext.Window(
         width: 130
     });
     
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el consolidado de tiempos por indicador
+var indanual_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('graficos_anuales', 'consolidadoIndicadoresAno'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'ano_indicador',
+        type: 'string'
+    }, {
+        name: 'ano_horas',
+        type: 'string'
+    }, {
+        name: 'ano_porcentaje',
+        type: 'string'
+    }])
+});
+
+var indanual_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 95,
+        align : 'center',
+        dataIndex: 'ano_indicador'
+    }, {
+        header: "Días",
+        width: 95,
+        align : 'center',
+        dataIndex: 'ano_horas'
+    }, {
+        header: "Porcentaje",
+        width: 95,
+        align : 'center',
+        dataIndex: 'ano_porcentaje'
+    }, ]
+});
+
+var indanual_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado tiempos / Año',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: indanual_datastore,
+    cm: indanual_colmodel,
+    width: 310,
+    height: 395
+});
+/*********************************************************************************/
+    
     var panelGraficoTiemposAnual = new Ext.FormPanel({
         renderTo: 'panel_graficos_anuales',
         border: true,
@@ -378,6 +445,32 @@ var win_grupos_anual = new Ext.Window(
                     iconCls: 'reload',
                     handler: function(){
                         renderizarGraficos();
+                        //Cambios: 24 de febrero de 2014
+                        //Codigos de los equipos seleccionados
+                        var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+                        var equiposAFiltrar = [];
+                        for(i = 0; i < maquinas_gridpanel.selModel.getCount(); i++){
+                                equiposAFiltrar.push(equiposSeleccionados[i].json.codigo);
+                        }
+                        var arrayEquipos = Ext.encode(equiposAFiltrar);
+
+                        //Cambios: 24 de febrero de 2014
+                        //Codigos de los grupos de equipos seleccionados
+                        var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+                        var gruposAFiltrar = [];
+                        for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
+                                gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
+                        }
+                        var arrayGrupos = Ext.encode(gruposAFiltrar);  
+                        indanual_datastore.load({
+                            params: {
+                                'ano' : campoAnho.getValue(),
+                                'codigo_operario' : campoOperario.getValue(),
+                                'cods_equipos' : arrayEquipos,
+                                'cods_grupos' : arrayGrupos,
+                                'codigo_metodo' : campoMetodo.getValue()
+                            }
+                        });
                     }
                 }]
             }]
@@ -392,7 +485,7 @@ var win_grupos_anual = new Ext.Window(
                 }, {
                     id: 'flashcontent2',
                     border: true
-                }]
+                }, indanual_gridpanel]
             }, {
                 title: 'Indicadores',
                 layout: 'column',

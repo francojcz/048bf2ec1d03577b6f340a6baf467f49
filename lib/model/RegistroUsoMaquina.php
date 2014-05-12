@@ -19,7 +19,16 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
 {
     public function calcularTPPHoras()
     {
-        return $this -> getRumTiempoCambioModelo() / 60;
+        //Cambios: 24 de febrero de 2014
+        $TPP = $this -> getRumTiempoCambioModelo();
+        //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
+        $tpnp_temp = $this -> calcularPerdidaCambioMetodoAjusteMinutos();
+        //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
+        if($tpnp_temp < 0) {
+            $TPP += $tpnp_temp;
+        }
+        
+        return ($TPP/60);
     }
 
     public function calcularCalidad($inyeccionesEstandarPromedio)
@@ -67,13 +76,7 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
     /* Se incluyen las pérdidas a los TPNP del método siempre y cuando sean positivos,
        pues los tiempos negativos se toman como ahorros y se van a mostrar de manera independiente */
     public function calcularTPNPMinutosConPerdidasAlistamiento($inyeccionesEstandarPromedio)
-    {
-        $TPNP = $this -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio);
-        //Cambios: 24 de febrero de 2014
-        /* No se tienen en cuenta los retrabajos ya que estos se incluyen en la duración de los eventos,
-           pues los retrabajos o reinyecciones se ingresan ahora como evento */
-        $TPNP += $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
-        
+    {        
         //Pérdidas positivas en el alistaminto
         $tpnp_temp = $this ->calcularPerdidaCambioMetodoAjusteMinutos();
         if($tpnp_temp > 0) {

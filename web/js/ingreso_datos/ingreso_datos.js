@@ -383,8 +383,8 @@ Ext.onReady(function()
                 var so = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "100%", "160", "8", "#FFFFFF");
                 so.addVariable("path", urlWeb + "flash/amcolumn/");
                 so.addParam("wmode", "opaque");
-                so.addVariable("settings_file", encodeURIComponent(getAbsoluteUrl('ingreso_datos', 'generarConfiguracionGrafico?codigo_maquina=' + maquina_combobox.getValue() + '&fecha=' + Ext.util.Format.date(fechaField.getValue(), 'Y-m-d'))));
-                so.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('ingreso_datos', 'generarDatosGrafico?codigo_maquina=' + maquina_combobox.getValue() + '&fecha=' + Ext.util.Format.date(fechaField.getValue(), 'Y-m-d'))));
+                so.addVariable("settings_file", encodeURIComponent(getAbsoluteUrl('ingreso_datos', 'generarConfiguracionGraficoMinutos?codigo_maquina=' + maquina_combobox.getValue() + '&fecha=' + Ext.util.Format.date(fechaField.getValue(), 'Y-m-d'))));
+                so.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('ingreso_datos', 'generarDatosGraficoMinutos?codigo_maquina=' + maquina_combobox.getValue() + '&fecha=' + Ext.util.Format.date(fechaField.getValue(), 'Y-m-d'))));
                 so.addVariable("preloader_color", "#999999");
                 so.write("flashcontent");
             }
@@ -395,8 +395,8 @@ Ext.onReady(function()
                 var so1 = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "100%", "160", "8", "#FFFFFF");
                 so1.addVariable("path", urlWeb + "flash/amcolumn/");
                 so1.addParam("wmode", "opaque");
-                so1.addVariable("settings_file", encodeURIComponent(getAbsoluteUrl('ingreso_datos', 'generarConfiguracionGrafico1?codigo_maquina=' + maquina_combobox.getValue() + '&fecha=' + Ext.util.Format.date(fechaField.getValue(), 'Y-m-d'))));
-                so1.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('ingreso_datos', 'generarDatosGrafico1?codigo_maquina=' + maquina_combobox.getValue() + '&fecha=' + Ext.util.Format.date(fechaField.getValue(), 'Y-m-d'))));
+                so1.addVariable("settings_file", encodeURIComponent(getAbsoluteUrl('ingreso_datos', 'generarConfiguracionGraficoHoras?codigo_maquina=' + maquina_combobox.getValue() + '&fecha=' + Ext.util.Format.date(fechaField.getValue(), 'Y-m-d'))));
+                so1.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('ingreso_datos', 'generarDatosGraficoHoras?codigo_maquina=' + maquina_combobox.getValue() + '&fecha=' + Ext.util.Format.date(fechaField.getValue(), 'Y-m-d'))));
                 so1.addVariable("preloader_color", "#999999");
                 so1.write("flashcontent1");
             }

@@ -14,8 +14,7 @@ Ext.onReady(function(){
         }, ]
     });
     reporgrafseman_analista_codigo_datastore.load();
-    
-    
+
     var reporgrafseman_analista_codigo_combobox = new Ext.form.ComboBox({
         xtype: 'combo',
         store: reporgrafseman_analista_codigo_datastore,
@@ -271,11 +270,78 @@ var fechaFinField = new Ext.form.DateField({
                 style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     reporgrafseman_cargardatosreportes();
+                    indsemanal_datastore.load({
+                        params: {
+                            'fecha_inicio': fechaInicioField.getRawValue(),
+                            'fecha_fin': fechaFinField.getRawValue()
+                        }
+                    });
                 }
             }]
         }],
         renderTo: 'div_form_reporte_graficosemanal'
     });
+    
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el consolidado de tiempos por indicador
+var indsemanal_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficosemanal', 'consolidadoIndicadoresSemana'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'sem_indicador',
+        type: 'string'
+    }, {
+        name: 'sem_horas',
+        type: 'string'
+    }, {
+        name: 'sem_porcentaje',
+        type: 'string'
+    }])
+});
+indsemanal_datastore.load({
+    params: {
+        'fecha_inicio': fechaInicioField.getRawValue(),
+        'fecha_fin': fechaFinField.getRawValue()
+    }
+});
+
+var indsemanal_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 95,
+        align : 'center',
+        dataIndex: 'sem_indicador'
+    }, {
+        header: "Horas",
+        width: 93,
+        align : 'center',
+        dataIndex: 'sem_horas'
+    }, {
+        header: "Porcentaje",
+        width: 93,
+        align : 'center',
+        dataIndex: 'sem_porcentaje'
+    }, ]
+});
+
+var indsemanal_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado tiempos / Semana',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: indsemanal_datastore,
+    cm: indsemanal_colmodel,
+    width: 300,
+    height: 370
+});
+/*********************************************************************************/
     
     var reporgrafseman_reportes_tabpanel = new Ext.TabPanel({
         frame: true,
@@ -291,7 +357,7 @@ var fechaFinField = new Ext.form.DateField({
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficosemanal_tiempos_torta'
-            }]
+            }, indsemanal_gridpanel]
         }, {
             xtype: 'panel',
             title: 'Indicadores',
@@ -369,7 +435,7 @@ var fechaFinField = new Ext.form.DateField({
         
         var params = '?fecha_inicio=' + fecha_inicio + '&fecha_fin=' + fecha_fin + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         
-        //tiempos
+        //Tiempos
         var reporgrafseman_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
         reporgrafseman_tiempos_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafseman_tiempos_dispersion.addParam("wmode", "opaque");
@@ -378,15 +444,18 @@ var fechaFinField = new Ext.form.DateField({
         reporgrafseman_tiempos_dispersion.addVariable("loading_data", "... CARGANDO ...");
         reporgrafseman_tiempos_dispersion.write("div_reporte_graficosemanal_tiempos_dispersion");
         
-        var reporgrafseman_tiempos_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "520", "400", "8");
+        //Cambios: 24 de febrero de 2014
+        //Para modificar el margen entre el gráfico de líneas y el de torta, cambiar el valor 430
+        var reporgrafseman_tiempos_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "430", "400", "8");
         reporgrafseman_tiempos_torta.addVariable("path", urlWeb + "flash/ampie/");
         reporgrafseman_tiempos_torta.addParam("wmode", "opaque");
         reporgrafseman_tiempos_torta.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/ampie_st_grafico_tiempos_torta.php');
         reporgrafseman_tiempos_torta.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficosemanal', 'generarDatosGraficoTiemposTorta') + params));
         reporgrafseman_tiempos_torta.addVariable("loading_data", "... CARGANDO ...");
-        reporgrafseman_tiempos_torta.write("div_reporte_graficosemanal_tiempos_torta");
+        reporgrafseman_tiempos_torta.write("div_reporte_graficosemanal_tiempos_torta");       
+               
         
-        //indicadores
+        //Indicadores
         var reporgrafseman_indicadores_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
         reporgrafseman_indicadores_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafseman_indicadores_dispersion.addParam("wmode", "opaque");

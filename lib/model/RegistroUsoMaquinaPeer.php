@@ -486,14 +486,19 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $TNP += round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
             $TNP -= $minutosActuales;
 
-            $TPP += $registro -> getRumTiempoCambioModelo();            
+            $TPP += $registro -> getRumTiempoCambioModelo();
+            //Cambios: 24 de febrero de 2014
+            //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
+            if($tpnp_temp < 0) {
+                $TPP += $tpnp_temp;
+            }
 
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
             
             //Cambios: 24 de febrero de 2014
-            /* Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos,
-               pues los tiempos negativos se toman como ahorros y se deben sumar al tiempo disponible */
-            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
             if($tpnp_temp > 0) {
                 $TPNP += $tpnp_temp;
             } else {
@@ -517,16 +522,16 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);
         }
 
-        $tiempoDisponible = 1440 + $ahorros - $TNP - $TPP - $TPNP - $TO;
+        $tiempoDisponible = 1440 - $TNP - $TPP - $TPNP - $TO;
 
         if ($tiempoExcedente || $tiempoDisponible >= 0)
         {
-//            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
-            return $tiempoDisponible;
+            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
+//            return $tiempoDisponible;
         } else
         {
-//            return array(0, 0, 0, 0, 0);
-            return 0;
+            return array(0, 0, 0, 0, 0);
+//            return 0;
         }
     }
 
@@ -1323,7 +1328,16 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $sumatoria = 0;
         foreach ($registros as $registro)
         {
-            $sumatoria += $registro -> getRumTiempoCambioModelo();
+            //Cambios: 24 de febrero de 2014
+            $TPP = $registro -> getRumTiempoCambioModelo();
+            //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
+            if($tpnp_temp < 0) {
+                $TPP += ($tpnp_temp);
+            }
+        
+            $sumatoria += $TPP;
         }
 
         return ($sumatoria / 60);
@@ -1336,7 +1350,16 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $sumatoria = 0;
         foreach ($registros as $registro)
         {
-            $sumatoria += $registro -> getRumTiempoCambioModelo();
+            //Cambios: 24 de febrero de 2014
+            $TPP = $registro -> getRumTiempoCambioModelo();
+            //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
+            if($tpnp_temp < 0) {
+                $TPP += ($tpnp_temp);
+            }
+        
+            $sumatoria += $TPP;
         }
 
         return ($sumatoria / 60);
@@ -1349,7 +1372,16 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $sumatoria = 0;
         foreach ($registros as $registro)
         {
-            $sumatoria += $registro -> getRumTiempoCambioModelo();
+            //Cambios: 24 de febrero de 2014
+            $TPP = $registro -> getRumTiempoCambioModelo();
+            //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
+            if($tpnp_temp < 0) {
+                $TPP += ($tpnp_temp);
+            }
+        
+            $sumatoria += $TPP;
         }
 
         return ($sumatoria / 60);

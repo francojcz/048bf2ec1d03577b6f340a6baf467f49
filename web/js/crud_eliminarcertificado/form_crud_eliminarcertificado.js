@@ -59,7 +59,7 @@ var crud_certificado_gridpanel = new Ext.grid.GridPanel({
         emptyMsg: "No hay computadores certificados aun"
     }),
     tbar: [{
-        text: 'Eliminar computador',
+        text: 'Eliminar certificado',
         tooltip: 'Eliminar',
         iconCls: 'eliminar',
         handler: crud_certificado_eliminar
@@ -88,7 +88,7 @@ function crud_certificado_eliminar(){
     if (cant_record > 0) {
         var record = crud_certificado_gridpanel.getSelectionModel().getSelected();
         if (record.get('com_nombre') != '') {        
-            Ext.Msg.confirm('Eliminar computador', "Realmente desea eliminar este computador?", function(btn){
+            Ext.Msg.confirm('Eliminar certificado', "Realmente desea eliminar este computador?", function(btn){
                 if (btn == 'yes') {                
                     subirDatosAjax(getAbsoluteUrl('crud_eliminarcertificado', 'eliminarCertificado'), {
                         com_nombre: record.get('com_nombre')

@@ -1335,4 +1335,43 @@ class reporte_graficosemanalActions extends sfActions
 		}
 		return $this->renderText($salida);
 	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total de tiempos de los indicadores por semana
+        public function executeConsolidadoIndicadoresSemana(sfWebRequest $request)
+	{            
+            //Fecha de inicio y fin de cada semana
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+            
+            //Día de inicio y fin del ranto total de semanas
+            $fecha_in = $rango_fechas[0]['fecha_inicio'];
+            $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
+
+            $datos_ind = $this->calcularTiemposDiariosSemanaTorta($fecha_in, $fecha_fn);
+            $indicadores = array('TPP', 'TNP', 'TPNP', 'TO');
+            
+            //Se calcula la suma de horas de los cuatro indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]]+$datos_ind[$indicadores[2]]+$datos_ind[$indicadores[3]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['sem_indicador'] = $indicadores[$i];
+                $datos[$fila]['sem_horas'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');
+                //Se calcula el porcentaje para cada indicador
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['sem_porcentaje'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
 }

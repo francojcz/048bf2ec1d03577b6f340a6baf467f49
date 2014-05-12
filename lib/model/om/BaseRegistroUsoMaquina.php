@@ -712,7 +712,7 @@ abstract class BaseRegistroUsoMaquina extends BaseObject  implements Persistent 
 	 */
 	public function getRumTiempoCambioModelo()
 	{
-		return $this->rum_tiempo_cambio_modelo;
+            return $this->rum_tiempo_cambio_modelo;
 	}
 
 	/**

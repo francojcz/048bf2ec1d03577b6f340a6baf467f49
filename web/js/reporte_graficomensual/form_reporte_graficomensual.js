@@ -305,12 +305,79 @@ var win_grupos_mensual = new Ext.Window(
                 style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     reporgrafmens_cargardatosreportes();
+                    indmensual_datastore.load({
+                        params: {
+                            'mes': reporgrafmens_mes_combobox.getValue(),
+                            'anio': reporgrafmens_anio.getValue()
+                        }
+                    });
                 }
             }]
         }],
         renderTo: 'div_form_reporte_graficomensual'
     });
-    
+
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el consolidado de tiempos por indicador
+var indmensual_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficomensual', 'consolidadoIndicadoresMes'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'mes_indicador',
+        type: 'string'
+    }, {
+        name: 'mes_horas',
+        type: 'string'
+    }, {
+        name: 'mes_porcentaje',
+        type: 'string'
+    }])
+});
+indmensual_datastore.load({
+    params: {
+        'mes': reporgrafmens_mes_combobox.getValue(),
+        'anio': reporgrafmens_anio.getValue()
+    }
+});
+
+var indmensual_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 95,
+        align : 'center',
+        dataIndex: 'mes_indicador'
+    }, {
+        header: "Horas",
+        width: 93,
+        align : 'center',
+        dataIndex: 'mes_horas'
+    }, {
+        header: "Porcentaje",
+        width: 93,
+        align : 'center',
+        dataIndex: 'mes_porcentaje'
+    }, ]
+});
+
+var indmensual_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado tiempos / Mes',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: indmensual_datastore,
+    cm: indmensual_colmodel,
+    width: 300,
+    height: 370
+});
+/*********************************************************************************/
+
     var reporgrafmens_reportes_tabpanel = new Ext.TabPanel({
         frame: true,
         items: [{
@@ -325,7 +392,7 @@ var win_grupos_mensual = new Ext.Window(
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficomensual_tiempos_torta'
-            }]
+            }, indmensual_gridpanel]
         }, {
             xtype: 'panel',
             title: 'Indicadores',
@@ -405,7 +472,7 @@ var win_grupos_mensual = new Ext.Window(
         
         var params = '?mes=' + mes + '&anio=' + anio + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         
-        //tiempos
+        //Tiempos
         var reporgrafmens_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
         reporgrafmens_tiempos_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafmens_tiempos_dispersion.addParam("wmode", "opaque");
@@ -414,13 +481,16 @@ var win_grupos_mensual = new Ext.Window(
         reporgrafmens_tiempos_dispersion.addVariable("loading_data", "... CARGANDO ...");
         reporgrafmens_tiempos_dispersion.write("div_reporte_graficomensual_tiempos_dispersion");
         
-        var reporgrafmens_tiempos_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "520", "400", "8");
+        //Cambios: 24 de febrero de 2014
+        //Para modificar el margen entre el gráfico de líneas y el de torta, cambiar el valor 430
+        var reporgrafmens_tiempos_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "430", "400", "8");
         reporgrafmens_tiempos_torta.addVariable("path", urlWeb + "flash/ampie/");
         reporgrafmens_tiempos_torta.addParam("wmode", "opaque");
         reporgrafmens_tiempos_torta.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/ampie_st_grafico_tiempos_torta.php');
         reporgrafmens_tiempos_torta.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficomensual', 'generarDatosGraficoTiemposTorta') + params));
         reporgrafmens_tiempos_torta.addVariable("loading_data", "... CARGANDO ...");
         reporgrafmens_tiempos_torta.write("div_reporte_graficomensual_tiempos_torta");
+        
         
         //indicadores
         var reporgrafmens_indicadores_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");

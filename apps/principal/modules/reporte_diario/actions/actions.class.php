@@ -190,7 +190,6 @@ class reporte_diarioActions extends sfActions
         $dia = $dateTime -> format('d');
         $mes = $dateTime -> format('m');
         $año = $dateTime -> format('Y');
-
         
         $conexion = new Criteria();
         //Codigos de los equipos seleccionados
@@ -243,13 +242,10 @@ class reporte_diarioActions extends sfActions
         $datos[0]['rdtiemp_TPNP_dia'] = round($tpnp_dia, 2);
         $datos[0]['rdtiemp_TF_dia'] = round($tf_dia, 2);
         $datos[0]['rdtiemp_TO_dia'] = round($to_dia, 2);
-        //		}
-
-        //		if($fila>0){
+        
         $jsonresult = json_encode($datos);
         $salida = '({"total":"' . $fila . '","results":' . $jsonresult . '})';
-        //		}
-
+        
         return $this -> renderText($salida);
     }
 
