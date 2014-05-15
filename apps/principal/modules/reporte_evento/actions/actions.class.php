@@ -99,6 +99,7 @@ class reporte_eventoActions extends sfActions
 
 				if($registro_uso_maquinas){
 					$datos[$fila]['evrg_maquina'] = $registro_uso_maquinas->obtenerMaquina();
+                                        $datos[$fila]['evrg_grupo'] = $registro_uso_maquinas->obtenerGrupo();
 					$datos[$fila]['evrg_analista'] = $registro_uso_maquinas->obtenerAnalista();
 					$datos[$fila]['evrg_metodo'] =  $registro_uso_maquinas->obtenerMetodo();
 					$datos[$fila]['evrg_fecha'] = $registro_uso_maquinas->getRumFecha();

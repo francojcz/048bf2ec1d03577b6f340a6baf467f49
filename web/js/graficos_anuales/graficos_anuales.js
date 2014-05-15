@@ -35,6 +35,20 @@ Ext.onReady(function(){
                 }
             });
             
+            //Obtener el nombre de los equipos seleccionados
+            maqanual_datastore.load({
+                params: {
+                    'cods_equipos' : arrayEquipos
+                }
+            });
+
+            //Obtener el nombre de los equipos seleccionados
+            gruanual_datastore.load({
+                params: {
+                    'cods_grupos' : arrayGrupos
+                }
+            });
+            
             var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "500", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/amline/");
             so.addParam("wmode", "opaque");
@@ -387,7 +401,81 @@ var indanual_gridpanel = new Ext.grid.GridPanel({
     ds: indanual_datastore,
     cm: indanual_colmodel,
     width: 310,
-    height: 395
+    height: 150
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var maqanual_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('graficos_anuales', 'equiposSeleccionados'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'maq_anu_nombre',
+        type: 'string'
+    }])
+});
+
+var maqanual_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Nombre equipo",
+        width: 130,
+        align : 'left',
+        dataIndex: 'maq_anu_nombre'
+    }]
+});
+
+var maqanual_gridpanel = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqanual_datastore,
+    cm: maqanual_colmodel,
+    width: 155,
+    height: 250
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var gruanual_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('graficos_anuales', 'gruposSeleccionados'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'gru_anu_nombre',
+        type: 'string'
+    }])
+});
+
+var gruanual_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Nombre grupo",
+        width: 130,
+        align : 'left',
+        dataIndex: 'gru_anu_nombre'
+    }]
+});
+
+var gruanual_gridpanel = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: gruanual_datastore,
+    cm: gruanual_colmodel,
+    width: 155,
+    height: 250
 });
 /*********************************************************************************/
     
@@ -445,6 +533,7 @@ var indanual_gridpanel = new Ext.grid.GridPanel({
                     iconCls: 'reload',
                     handler: function(){
                         renderizarGraficos();
+                        
                         //Cambios: 24 de febrero de 2014
                         //Codigos de los equipos seleccionados
                         var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
@@ -461,7 +550,9 @@ var indanual_gridpanel = new Ext.grid.GridPanel({
                         for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
                                 gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
                         }
-                        var arrayGrupos = Ext.encode(gruposAFiltrar);  
+                        var arrayGrupos = Ext.encode(gruposAFiltrar);
+                        
+                        //Recargar datos consolidado de tiempos indicadores
                         indanual_datastore.load({
                             params: {
                                 'ano' : campoAnho.getValue(),
@@ -471,21 +562,41 @@ var indanual_gridpanel = new Ext.grid.GridPanel({
                                 'codigo_metodo' : campoMetodo.getValue()
                             }
                         });
+                        
+                        //Obtener el nombre de los equipos seleccionados
+                        maqanual_datastore.load({
+                            params: {
+                                'cods_equipos' : arrayEquipos
+                            }
+                        });
+                        
+                        //Obtener el nombre de los equipos seleccionados
+                        gruanual_datastore.load({
+                            params: {
+                                'cods_grupos' : arrayGrupos
+                            }
+                        });
                     }
                 }]
             }]
         }, new Ext.TabPanel({
             activeTab: 0,
             items: [{
+                xtype: 'panel',
                 title: 'Tiempos',
                 layout: 'column',
+                autoScroll: true,
+                monitorResize: true,
                 items: [{
                     id: 'flashcontent1',
                     border: true
                 }, {
                     id: 'flashcontent2',
                     border: true
-                }, indanual_gridpanel]
+                }, 
+                indanual_gridpanel,
+                maqanual_gridpanel,
+                gruanual_gridpanel]
             }, {
                 title: 'Indicadores',
                 layout: 'column',

@@ -325,6 +325,9 @@ Ext.onReady(function(){
             name: 'rum_col_maquina',
             type: 'string'
         }, {
+            name: 'rum_col_grupo',
+            type: 'string'
+        }, {
             name: 'rum_col_metodo',
             type: 'string'
         }, {
@@ -444,6 +447,11 @@ Ext.onReady(function(){
             width: 150,
             align : 'center',
             dataIndex: 'rum_col_maquina'
+        }, {
+            header: "Grupo Equipo",
+            width: 150,
+            align : 'center',
+            dataIndex: 'rum_col_grupo'
         }]
     });
     

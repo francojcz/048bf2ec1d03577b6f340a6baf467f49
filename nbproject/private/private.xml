@@ -5,9 +5,13 @@
             <url>apps/principal/modules/reporte_columnas/actions/actions.class.php</url>
             <bookmark id="1">
                 <name/>
-                <line>1010</line>
+                <line>1014</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/xampplite/htdocs/tpmlabs/web/js/graficos_anuales/graficos_anuales.js</file>
+        <file>file:/C:/xampplite/htdocs/tpmlabs/web/js/reporte_graficosemanal/form_reporte_graficosemanal.js</file>
+    </open-files>
 </project-private>

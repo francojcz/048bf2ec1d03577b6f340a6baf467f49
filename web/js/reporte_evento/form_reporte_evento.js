@@ -353,6 +353,9 @@ var win_grupos_evento = new Ext.Window(
             name: 'evrg_maquina',
             type: 'string'
         }, {
+            name: 'evrg_grupo',
+            type: 'string'
+        }, {
             name: 'evrg_analista',
             type: 'string'
         }, {
@@ -395,6 +398,11 @@ var win_grupos_evento = new Ext.Window(
             width: 110,
             align : 'center',
             dataIndex: 'evrg_maquina'
+        }, {
+            header: "Grupo Equipo",
+            width: 110,
+            align : 'center',
+            dataIndex: 'evrg_grupo'
         }, {
             header: "Analista",
             width: 110,

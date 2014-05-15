@@ -796,6 +796,10 @@ class reporte_graficosemanalActions extends sfActions
         /**************************************Reporte de tiempos del mes *******************/
 	public function executeGenerarDatosGraficoTiemposTorta(sfWebRequest $request)
 	{            
+            //Códigos de los equipos seleccionados
+            $cod_equipos = $this->getRequestParameter('cods_equipos');
+            //Códigos de los grupos seleccionados
+            $cod_grupos = $this->getRequestParameter('cods_grupos');
             //Fecha de inicio y fin de cada semana
             $fecha_inicio = $this->getRequestParameter('fecha_inicio');
             $fecha_fin = $this->getRequestParameter('fecha_fin');
@@ -805,7 +809,7 @@ class reporte_graficosemanalActions extends sfActions
             $fecha_in = $rango_fechas[0]['fecha_inicio'];
             $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
 
-            $datos=$this->calcularTiemposDiariosSemanaTorta($fecha_in, $fecha_fn);
+            $datos=$this->calcularTiemposDiariosSemanaTorta($fecha_in, $fecha_fn, $cod_equipos, $cod_grupos);
             $indicadores_tiempo=array('TPP', 'TNP', 'TPNP', 'TO');
             $indicadores_colores=array('47d552','ffdc44','ff5454','72a8cd');
 
@@ -823,7 +827,7 @@ class reporte_graficosemanalActions extends sfActions
             return $this->renderText($xml);
 	}
 
-	public function calcularTiemposDiariosSemanaTorta($fecha_inicio, $fecha_fin)
+	public function calcularTiemposDiariosSemanaTorta($fecha_inicio, $fecha_fin, $cod_equipos, $cod_grupos)
 	{
             $datos = array();
             $params = array();
@@ -841,7 +845,7 @@ class reporte_graficosemanalActions extends sfActions
                 
                 //Cambios: 24 de febrero de 2014
                 //Se obtienen los códigos de los equipos seleccionados
-                $temp = $this->getRequestParameter('cods_equipos');
+                $temp = $cod_equipos;
                 $cods_equipos = json_decode($temp);
                 if($cods_equipos != ''){
                     foreach ($cods_equipos as $cod_equipo) {
@@ -851,7 +855,7 @@ class reporte_graficosemanalActions extends sfActions
                 
                 //Cambios: 24 de febrero de 2014
                 //Se obtienen los códigos de los grupos de equipos seleccionados
-                $temp2 = $this->getRequestParameter('cods_grupos');
+                $temp2 = $cod_grupos;
                 $cods_grupos = json_decode($temp2);
                 if($cods_grupos != ''){
                     foreach ($cods_grupos as $cod_grupo) {
@@ -883,7 +887,6 @@ class reporte_graficosemanalActions extends sfActions
                 $datos['TO'] = $to_sem;
                 $datos['TF'] = $tf_sem;
                 $datos['HorasActivas'] = $tiempoCalendario;
-
             }catch (Exception $excepcion)
             {
                     echo "(exeption: 'Excepci&oacute;n en reporte-calcularTiemposDiariosMes ',error:'".$excepcion->getMessage()."')";
@@ -1027,6 +1030,10 @@ class reporte_graficosemanalActions extends sfActions
 	/**************************************Reporte de indicadores barra del mes *******************/
 	public function executeGenerarDatosGraficoIndicadoresBarras(sfWebRequest $request)
 	{            
+            //Códigos de los equipos seleccionados
+            $cod_equipos = $this->getRequestParameter('cods_equipos');
+            //Códigos de los grupos seleccionados
+            $cod_grupos = $this->getRequestParameter('cods_grupos');
             //Calculo de la fecha de inicio y fin de cada semana                
             $fecha_inicio = $this->getRequestParameter('fecha_inicio');
             $fecha_fin = $this->getRequestParameter('fecha_fin');
@@ -1039,7 +1046,7 @@ class reporte_graficosemanalActions extends sfActions
             $fecha_ind = strtotime($fecha_inicio);
             $ano = date('Y', $fecha_ind);
 
-            $datos=$this->calcularIndicadoresDiariosSemanaBarras($fecha_in, $fecha_fn);
+            $datos=$this->calcularIndicadoresDiariosSemanaBarras($fecha_in, $fecha_fn, $cod_equipos, $cod_grupos);
             $datos_metas=$this->obtenerIndicadoresMetasMesBarras($ano);
             $indicadores_porcentaje=array(      'D',     'E',     'C',    'A',   'OEE',   'PTEE');
             $indicadores_descripcion=array('Disponibilidad','Eficiencia','Calidad','Aprovechamiento','Efectividad global','PTEE');
@@ -1078,40 +1085,13 @@ class reporte_graficosemanalActions extends sfActions
             return $this->renderText($xml);
 	}
 
-	public function calcularIndicadoresDiariosSemanaBarras($fecha_inicio, $fecha_fin)
+	public function calcularIndicadoresDiariosSemanaBarras($fecha_inicio, $fecha_fin, $cod_equipos, $cod_grupos)
 	{
             $datos = array();
             $datosInyecciones = array();
             
-            try {
-                $criteria = new Criteria();
-                
-                //Cambios: 24 de febrero de 2014
-                //Se obtienen los códigos de los equipos seleccionados
-                $temporal = $this->getRequestParameter('cods_equipos');
-                $cods_equipos = json_decode($temporal);
-                if($cods_equipos != ''){
-                    foreach ($cods_equipos as $cod_equipo) {
-                        $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
-                    }
-                }
-                
-                //Cambios: 24 de febrero de 2014
-                //Se obtienen los códigos de los grupos de equipos seleccionados
-                $temp2 = $this->getRequestParameter('cods_grupos');
-                $cods_grupos = json_decode($temp2);
-                if($cods_grupos != ''){
-                    foreach ($cods_grupos as $cod_grupo) {
-                        $criteria1 = new Criteria();
-                        $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
-                        $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
-                        foreach ($grupoporequipo as $equipo) {
-                            $criteria -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
-                        }                
-                    }
-                }
-                
-                $datosTiempos = $this->calcularTiemposDiariosSemanaTorta($fecha_inicio, $fecha_fin);
+            try {                                
+                $datosTiempos = $this->calcularTiemposDiariosSemanaTorta($fecha_inicio, $fecha_fin, $cod_equipos, $cod_grupos);
 
                 $tp_sem = $datosTiempos['TP'];
                 $tf_sem = $datosTiempos['TF'];
@@ -1340,16 +1320,20 @@ class reporte_graficosemanalActions extends sfActions
         //Calcula el consolidado total de tiempos de los indicadores por semana
         public function executeConsolidadoIndicadoresSemana(sfWebRequest $request)
 	{            
+            //Códigos de los equipos seleccionados
+            $cod_equipos = $this->getRequestParameter('cods_equipos');
+            //Códigos de los grupos seleccionados
+            $cod_grupos = $this->getRequestParameter('cods_grupos');
             //Fecha de inicio y fin de cada semana
             $fecha_inicio = $this->getRequestParameter('fecha_inicio');
             $fecha_fin = $this->getRequestParameter('fecha_fin');
             $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
             
-            //Día de inicio y fin del ranto total de semanas
+            //Día de inicio y fin del rango total de semanas
             $fecha_in = $rango_fechas[0]['fecha_inicio'];
             $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
 
-            $datos_ind = $this->calcularTiemposDiariosSemanaTorta($fecha_in, $fecha_fn);
+            $datos_ind = $this->calcularTiemposDiariosSemanaTorta($fecha_in, $fecha_fn, $cod_equipos, $cod_grupos);
             $indicadores = array('TPP', 'TNP', 'TPNP', 'TO');
             
             //Se calcula la suma de horas de los cuatro indicadores para el cálculo del porcentaje
@@ -1367,6 +1351,62 @@ class reporte_graficosemanalActions extends sfActions
                 $datos[$fila]['sem_porcentaje'] = number_format($porcentaje, 2, ',', '.');
                 $fila++;
             }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
+                
+        //Cambios: 24 de febrero de 2014
+        //Retorna el nombre de los equipos seleccionados
+        public function executeEquiposSeleccionados(sfWebRequest $request)
+	{           
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {                    
+                    $equipo = MaquinaPeer::retrieveByPK($cod_equipo);
+                    $datos[$fila]['maq_sem_nombre'] = $equipo->getMaqNombre();
+                    $fila++;
+                }
+            }
+            
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Retorna el nombre de los grupos de equipos seleccionados
+        public function executeGruposSeleccionados(sfWebRequest $request)
+	{           
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {                    
+                    $grupo = GrupoEquipoPeer::retrieveByPK($cod_grupo);
+                    $datos[$fila]['gru_sem_nombre'] = $grupo->getGruNombre();
+                    $fila++;
+                }
+            }
+            
             if($fila>0){
                 $jsonresult = json_encode($datos);
                 $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';

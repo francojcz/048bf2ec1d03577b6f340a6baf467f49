@@ -347,6 +347,9 @@ var rdtiemp_datastore = new Ext.data.Store({
         name: 'rdtiemp_maquina',
         type: 'string'
     }, {
+        name: 'rdtiemp_grupo',
+        type: 'string'
+    }, {
         name: 'rdtiemp_metodo',
         type: 'string'
     }, {
@@ -419,6 +422,12 @@ var rdtiemp_colmodel = new Ext.grid.ColumnModel({
         dataIndex: 'rdtiemp_maquina',
         header: 'Equipo',
         tooltip: 'Equipo que llev&oacute; a cabo el m&eacute;todo',
+        width: 100,
+        renderer: generarRenderer('#bfbfbf', '#000000')
+    }, {
+        dataIndex: 'rdtiemp_grupo',
+        header: 'Grupo Equipo',
+        tooltip: 'Grupo al cual pertenece el equipo que llev&oacute; a cabo el m&eacute;todo',
         width: 100,
         renderer: generarRenderer('#bfbfbf', '#000000')
     }, {
@@ -557,6 +566,9 @@ var rdindic_datastore = new Ext.data.Store({
         name: 'rdindic_maquina',
         type: 'string'
     }, {
+        name: 'rdindic_grupo',
+        type: 'string'
+    }, {
         name: 'rdindic_metodo',
         type: 'string'
     }, {
@@ -614,6 +626,12 @@ var rdindic_colmodel = new Ext.grid.ColumnModel({
         dataIndex: 'rdindic_maquina',
         header: 'Equipo',
         tooltip: 'Equipo que llev&oacute; a cabo el m&eacute;todo',
+        width: 100,
+        renderer: generarRenderer('#bfbfbf', '#000000')
+    }, {
+        dataIndex: 'rdindic_grupo',
+        header: 'Grupo Equipo',
+        tooltip: 'Grupo al cual pertenece el equipo que llev&oacute; a cabo el m&eacute;todo',
         width: 100,
         renderer: generarRenderer('#bfbfbf', '#000000')
     }, {
@@ -717,6 +735,9 @@ var rdperdi_fields = [{
     name: 'nombre_maquina'
 }, {
     type: 'string',
+    name: 'nombre_grupo'
+}, {
+    type: 'string',
     name: 'nombre_metodo'
 }, {
     type: 'string',
@@ -765,6 +786,13 @@ var rdperdi_columns = [{
     dataIndex: 'nombre_maquina',
     header: 'Equipo',
     tooltip: 'Equipo que llev&oacute; a cabo el m&eacute;todo',
+    width: 150,
+    align: 'center',
+    renderer: generarRenderer('#bfbfbf', '#000000')
+}, {
+    dataIndex: 'nombre_grupo',
+    header: 'Grupo Equipo',
+    tooltip: 'Grupo al cual pertenece el equipo que llev&oacute; a cabo el m&eacute;todo',
     width: 150,
     align: 'center',
     renderer: generarRenderer('#bfbfbf', '#000000')
@@ -862,10 +890,16 @@ var rdahor_fields = [{
     name: 'ahor_nombre_maquina'
 }, {
     type: 'string',
+    name: 'ahor_nombre_grupo'
+}, {
+    type: 'string',
     name: 'ahor_nombre_metodo'
 }, {
     type: 'string',
-    name: 'ahorros'
+    name: 'ahorros_alistamiento'
+}, {
+    type: 'string',
+    name: 'ahorros_metodo'
 }, {
     type: 'string',
     name: 'ahorros_dia'
@@ -896,6 +930,13 @@ var rdahor_columns = [{
     align: 'center',
     renderer: generarRenderer('#bfbfbf', '#000000')
 }, {
+    dataIndex: 'ahor_nombre_grupo',
+    header: 'Grupo Equipo',
+    tooltip: 'Grupo al cual pertenece el equipo que llev&oacute; a cabo el m&eacute;todo',
+    width: 150,
+    align: 'center',
+    renderer: generarRenderer('#bfbfbf', '#000000')
+}, {
     dataIndex: 'ahor_nombre_metodo',
     header: 'M&eacute;todo ',
     tooltip: 'M&eacute;todo ',
@@ -903,7 +944,14 @@ var rdahor_columns = [{
     align: 'center',
     renderer: generarRenderer('#bfbfbf', '#000000')
 } , {
-    dataIndex: 'ahorros',
+    dataIndex: 'ahorros_alistamiento',
+    header: 'Ahorros<br>(Min)<br>Alistamiento',
+    tooltip: 'Ahorros (Minutos) del alistamiento',
+    width: 110,
+    align: 'center',
+    renderer: generarRenderer('#e1de98', '#000000')
+}, {
+    dataIndex: 'ahorros_metodo',
     header: 'Ahorros<br>(Min)<br>Método',
     tooltip: 'Ahorros (Minutos) del método',
     width: 110,
@@ -940,6 +988,9 @@ rdmuin_fields = [{
 }, {
     type: 'string',
     name: 'nombre_maquina'
+}, {
+    type: 'string',
+    name: 'nombre_grupo'
 }, {
     type: 'string',
     name: 'nombre_metodo'
@@ -991,6 +1042,13 @@ var rdmuin_columns = [{
     dataIndex: 'nombre_maquina',
     header: 'Equipo',
     tooltip: 'Equipo que llev&oacute; a cabo el m&eacute;todo',
+    width: 150,
+    align: 'center',
+    renderer: generarRenderer('#bfbfbf', '#000000')
+}, {
+    dataIndex: 'nombre_grupo',
+    header: 'Grupo Equipo',
+    tooltip: 'Grupo al cual pertenece el equipo que llev&oacute; a cabo el m&eacute;todo',
     width: 150,
     align: 'center',
     renderer: generarRenderer('#bfbfbf', '#000000')

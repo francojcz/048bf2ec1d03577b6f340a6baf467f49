@@ -199,6 +199,7 @@ class reporte_columnasActions extends sfActions
                 <Column ss:AutoFitWidth="0" ss:Width="120"/>
                 <Column ss:AutoFitWidth="0" ss:Width="120"/>
                 <Column ss:AutoFitWidth="0" ss:Width="100"/>
+                <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Row ss:AutoFitHeight="0" ss:Height="40">                
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Fecha</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">C&oacute;digo Interno</Data></Cell>
@@ -214,6 +215,7 @@ class reporte_columnasActions extends sfActions
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Observaciones</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Método</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Equipo</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Grupo Equipo</Data></Cell>
                </Row>');
                 
                 foreach($registros as $registro) {
@@ -252,7 +254,8 @@ class reporte_columnasActions extends sfActions
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumPresion(), 2, '.', '').'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumObservacionesCol().'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMetodo().'</Data></Cell>
-                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>                            
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerGrupo().'</Data></Cell>
                             </Row>');
                             
                         }                        			
@@ -331,7 +334,8 @@ class reporte_columnasActions extends sfActions
                             if($temporal->getRumColCodigo() != '') {
                                 $datos[$fila]['rum_col_fecha'] = $temporal->getRumFecha();
                                 $datos[$fila]['rum_col_metodo'] = $temporal->obtenerMetodo();
-                                $datos[$fila]['rum_col_maquina'] = $temporal->obtenerMaquina();                                                                				
+                                $datos[$fila]['rum_col_maquina'] = $temporal->obtenerMaquina();
+                                $datos[$fila]['rum_col_grupo'] = $temporal->obtenerGrupo();
 
                                 //Información de columna
                                 $columna  = ColumnaPeer::retrieveByPk($temporal->getRumColCodigo());                                

@@ -138,18 +138,22 @@ class exportacion_datosActions extends sfActions
   </Style>
  </Styles>
  <Worksheet ss:Name="Hoja1"> 
-  <Table ss:ExpandedColumnCount="38" ss:ExpandedRowCount="'.((count($registros)*2)+1).'" x:FullColumns="1"
+  <Table ss:ExpandedColumnCount="39" ss:ExpandedRowCount="'.((count($registros)*2)+1).'" x:FullColumns="1"
    x:FullRows="1" ss:DefaultRowHeight="15">');
-		$this->renderText('
+ $this->renderText('
     <Column ss:AutoFitWidth="0" ss:Width="78.75"/>
-    <Column ss:AutoFitWidth="0" ss:Width="90"/>
-    <Column ss:AutoFitWidth="0" ss:Width="36" ss:Span="14"/>
+    <Column ss:AutoFitWidth="0" ss:Width="100"/>
+    <Column ss:AutoFitWidth="0" ss:Width="80"/>
+    <Column ss:AutoFitWidth="0" ss:Width="80"/>
+    <Column ss:AutoFitWidth="0" ss:Width="35" ss:Span="12"/>
     <Column ss:Index="18" ss:AutoFitWidth="0" ss:Width="45"/>
     <Column ss:Index="19" ss:AutoFitWidth="0" ss:Width="45"/>    
-    <Column ss:AutoFitWidth="0" ss:Width="36" ss:Span="13"/>    
+    <Column ss:AutoFitWidth="0" ss:Width="36" ss:Span="13"/>
     <Row ss:AutoFitHeight="0" ss:Height="53.25">
     <Cell ss:StyleID="s73"><Data ss:Type="String">Fecha registro</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Método</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">Equipo</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">Grupo Equipo</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Tiempo entre métodos</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Cambio método y ajuste</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Tiempo corrida   S. S.</Data></Cell>
@@ -162,8 +166,7 @@ class exportacion_datosActions extends sfActions
     <Cell ss:StyleID="s73"><Data ss:Type="String">No. de inyecc. stnd. 5</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">No. de inyecc. stnd. 6</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">No. de inyecc. stnd. 7</Data></Cell>
-    <Cell ss:StyleID="s73"><Data ss:Type="String">No. de inyecc. stnd. 8</Data></Cell>
-    
+    <Cell ss:StyleID="s73"><Data ss:Type="String">No. de inyecc. stnd. 8</Data></Cell>    
     <Cell ss:StyleID="s73"><Data ss:Type="String">Tiempo corrida producto</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">No. de muestras producto</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">No. inyecc. x muestra</Data></Cell>
@@ -181,13 +184,11 @@ class exportacion_datosActions extends sfActions
     <Cell ss:StyleID="s73"><Data ss:Type="String">No. inyecc. x muestra</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Tiempo corrida uniform.</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">No. de muestras uniform.</Data></Cell>
-    <Cell ss:StyleID="s73"><Data ss:Type="String">No. inyecc. x muestra</Data></Cell>
-    
+    <Cell ss:StyleID="s73"><Data ss:Type="String">No. inyecc. x muestra</Data></Cell>    
     <Cell ss:StyleID="s73"><Data ss:Type="String">Hora inicio de corrida</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Hora fin de corrida</Data></Cell>
     <Cell ss:StyleID="s73"><Data ss:Type="String">Lote</Data></Cell>
-    <Cell ss:StyleID="s73"><Data ss:Type="String">Observaciones</Data></Cell>
-    
+    <Cell ss:StyleID="s73"><Data ss:Type="String">Observaciones</Data></Cell>    
    </Row>');
 
 		$horasFin = 0;
@@ -195,15 +196,15 @@ class exportacion_datosActions extends sfActions
 		$segundosFin = 0;
 
 		foreach($registros as $index => $registro) {
-			$fields = array();
-
-			//			$registro = new RegistroUsoMaquina();
+                        $fields = array();
 
 			$metodo = MetodoPeer::retrieveByPK($registro->getRumMetCodigo());
 
 			$this->renderText('<Row>
 			<Cell ss:StyleID="s65"><Data ss:Type="String">'.$registro->getRumFecha('d-m-Y').'</Data></Cell>
 			<Cell ss:StyleID="s64"><Data ss:Type="String">'.$metodo->getMetNombre().'</Data></Cell>
+                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>
+                        <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerGrupo().'</Data></Cell>
 			<Cell ss:StyleID="s65"><Data ss:Type="String">'.$registro->getRumTiempoEntreModelo('H:i:s').'</Data></Cell>
 			<Cell ss:StyleID="s66"><Data ss:Type="Number">'.number_format($registro->getRumTiempoCambioModelo(), 2).'</Data></Cell>
 			<Cell ss:StyleID="s68"><Data ss:Type="Number">'.number_format($registro->getRumTiempoCorridaSistema(), 2).'</Data></Cell>
@@ -228,14 +229,14 @@ class exportacion_datosActions extends sfActions
 			<Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumMuestrasMateriaPrima(), 2, '.', '').'</Data></Cell>
 			<Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuestraMateri(), 2, '.', '').'</Data></Cell>
 			<Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumTcPureza(), 2, '.', '').'</Data></Cell>
-      <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumMuestrasPureza(), 2, '.', '').'</Data></Cell>
-      <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuestraPureza(), 2, '.', '').'</Data></Cell>
-      <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumTcDisolucion(), 2, '.', '').'</Data></Cell>
-      <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumMuestrasDisolucion(), 2, '.', '').'</Data></Cell>
-      <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuestraDisolu(), 2, '.', '').'</Data></Cell>
-      <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumTcUniformidad(), 2, '.', '').'</Data></Cell>
-      <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumMuestrasUniformidad(), 2, '.', '').'</Data></Cell>
-      <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuestraUnifor(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumMuestrasPureza(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuestraPureza(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumTcDisolucion(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumMuestrasDisolucion(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuestraDisolu(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumTcUniformidad(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumMuestrasUniformidad(), 2, '.', '').'</Data></Cell>
+                        <Cell ss:StyleID="s72"><Data ss:Type="Number">'.number_format($registro->getRumNumInyecXMuestraUnifor(), 2, '.', '').'</Data></Cell>
 			
 			<Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraInicioTrabajo('H:i:s').'</Data></Cell>
 			<Cell ss:StyleID="s74"><Data ss:Type="String">'.$registro->getRumHoraFinTrabajo('H:i:s').'</Data></Cell>			
@@ -246,6 +247,8 @@ class exportacion_datosActions extends sfActions
 			$this->renderText('<Row>
       <Cell ss:StyleID="s65"><Data ss:Type="String">'.$registro->getRumFecha('d-m-Y').'</Data></Cell>
       <Cell ss:StyleID="s64"><Data ss:Type="String">'.$metodo->getMetNombre().'</Data></Cell>
+      <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>
+      <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerGrupo().'</Data></Cell>
       <Cell ss:StyleID="s65"><Data ss:Type="String">'.number_format(round($registro->calcularTiempoEntreMetodosHoras($horasFin, $minutosFin, $segundosFin),2), 2).'</Data></Cell>
       <Cell ss:StyleID="s69"><Data ss:Type="Number">'.number_format($registro->calcularPerdidaCambioMetodoAjusteMinutos(), 2).'</Data></Cell>
       <Cell ss:StyleID="s69"><Data ss:Type="Number">'.number_format($registro->getRumTiempoCorridaSistema(), 2).'</Data></Cell>
@@ -466,6 +469,8 @@ class exportacion_datosActions extends sfActions
 			$fields['id_registro_uso_maquina'] = $registro->getRumCodigo();
 			$metodo = MetodoPeer::retrieveByPK($registro->getRumMetCodigo());
 			$fields['nombre_metodo'] = $metodo->getMetNombre();
+                        $fields['nombre_equipo'] = $registro->obtenerMaquina();
+                        $fields['nombre_grupo'] = $registro->obtenerGrupo();
 			$fields['fecha_metodo'] = $registro->getRumFecha('d-m-Y');
 			$fields['tiempo_entre_metodos'] = $registro->getRumTiempoEntreModelo('H:i:s');
 			$fields['cambio_metodo_ajuste'] = number_format($registro->getRumTiempoCambioModelo(), 2, '.', '');
@@ -520,6 +525,8 @@ class exportacion_datosActions extends sfActions
 
 			$fields['id_registro_uso_maquina'] = $registro->getRumCodigo();
 			$fields['nombre_metodo'] = $metodo->getMetNombre();
+                        $fields['nombre_equipo'] = $registro->obtenerMaquina();
+                        $fields['nombre_grupo'] = $registro->obtenerGrupo();
 			$fields['tiempo_entre_metodos'] = number_format(round($registro->calcularTiempoEntreMetodosHoras($horasFin, $minutosFin, $segundosFin),2), 2);
 			$fields['cambio_metodo_ajuste'] = number_format($registro->calcularPerdidaCambioMetodoAjusteMinutos(), 2);
 			$fields['tiempo_corrida_ss'] = number_format($registro->getRumTiempoCorridaSistema(), 2);

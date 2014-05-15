@@ -270,10 +270,42 @@ var fechaFinField = new Ext.form.DateField({
                 style: 'padding: 0px 0px 0px 20px',
                 handler: function(){
                     reporgrafseman_cargardatosreportes();
+                    
+                    //Codigos de los equipos seleccionados
+                    var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+                    var equiposAFiltrar = [];
+                    for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+                            equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
+                    }
+                    var arrayEquipos = Ext.encode(equiposAFiltrar);
+                    
+                    //Codigos de los grupos seleccionados
+                    var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+                    var gruposAFiltrar = [];
+                    for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
+                            gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
+                    }
+                    var arrayGrupos = Ext.encode(gruposAFiltrar);
+                    
+                    //Recargar datos consolidado de tiempos indicadores
                     indsemanal_datastore.load({
                         params: {
                             'fecha_inicio': fechaInicioField.getRawValue(),
-                            'fecha_fin': fechaFinField.getRawValue()
+                            'fecha_fin': fechaFinField.getRawValue(),
+                            'cods_equipos': arrayEquipos,
+                            'cods_grupos': arrayGrupos
+                        }
+                    });
+                    //Obtener el nombre de los equipos seleccionados
+                    maqsemanal_datastore.load({
+                        params: {
+                            'cods_equipos': arrayEquipos
+                        }
+                    });
+                    //Obtener el nombre de los grupos de equipos seleccionados
+                    grusemanal_datastore.load({
+                        params: {
+                            'cods_grupos': arrayGrupos
                         }
                     });
                 }
@@ -305,10 +337,29 @@ var indsemanal_datastore = new Ext.data.Store({
         type: 'string'
     }])
 });
+
+//Codigos de los equipos seleccionados
+var equiposSeleccionados = maquinas_gridpanel.selModel.getSelections();
+var equiposAFiltrar = [];
+for(i = 0; i< maquinas_gridpanel.selModel.getCount(); i++){
+        equiposAFiltrar.push(equiposSeleccionados[i].json.maq_codigo);
+}
+var arrayEquipos = Ext.encode(equiposAFiltrar);
+//Codigos de los grupos seleccionados
+var gruposSeleccionados = grupos_gridpanel.selModel.getSelections();
+var gruposAFiltrar = [];
+for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
+        gruposAFiltrar.push(gruposSeleccionados[j].json.gru_codigo);
+}
+var arrayGrupos = Ext.encode(gruposAFiltrar);
+
+//Recargar datos
 indsemanal_datastore.load({
     params: {
         'fecha_inicio': fechaInicioField.getRawValue(),
-        'fecha_fin': fechaFinField.getRawValue()
+        'fecha_fin': fechaFinField.getRawValue(),
+        'cods_equipos': arrayEquipos,
+        'cods_grupos': arrayGrupos
     }
 });
 
@@ -328,18 +379,106 @@ var indsemanal_colmodel = new Ext.grid.ColumnModel({
         width: 93,
         align : 'center',
         dataIndex: 'sem_porcentaje'
-    }, ]
+    }]
 });
 
 var indsemanal_gridpanel = new Ext.grid.GridPanel({
-    title: 'Consolidado tiempos / Semana',
+    title: 'Consolidado de tiempos / Semana',
     region: 'center',
     stripeRows: true,
     frame: true,
     ds: indsemanal_datastore,
     cm: indsemanal_colmodel,
     width: 300,
-    height: 370
+    height: 120
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var maqsemanal_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficosemanal', 'equiposSeleccionados'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'maq_sem_nombre',
+        type: 'string'
+    }])
+});
+
+//Obtener el nombre de los equipos seleccionados
+maqsemanal_datastore.load({
+    params: {
+        'cods_equipos': arrayEquipos
+    }
+});
+
+var maqsemanal_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Nombre equipo",
+        width: 130,
+        align : 'left',
+        dataIndex: 'maq_sem_nombre'
+    }]
+});
+
+var maqsemanal_gridpanel = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqsemanal_datastore,
+    cm: maqsemanal_colmodel,
+    width: 150,
+    height: 220
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var grusemanal_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficosemanal', 'gruposSeleccionados'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'gru_sem_nombre',
+        type: 'string'
+    }])
+});
+
+//Obtener el nombre de los grupos seleccionados
+grusemanal_datastore.load({
+    params: {
+        'cods_grupos': arrayGrupos
+    }
+});
+
+var grusemanal_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Nombre grupo",
+        width: 130,
+        align : 'left',
+        dataIndex: 'gru_sem_nombre'
+    }]
+});
+
+var grusemanal_gridpanel = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: grusemanal_datastore,
+    cm: grusemanal_colmodel,
+    width: 150,
+    height: 220
 });
 /*********************************************************************************/
     
@@ -357,7 +496,10 @@ var indsemanal_gridpanel = new Ext.grid.GridPanel({
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficosemanal_tiempos_torta'
-            }, indsemanal_gridpanel]
+            },
+            indsemanal_gridpanel,
+            maqsemanal_gridpanel,
+            grusemanal_gridpanel]
         }, {
             xtype: 'panel',
             title: 'Indicadores',

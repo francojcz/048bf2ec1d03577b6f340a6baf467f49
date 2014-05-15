@@ -280,7 +280,7 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         
     //Cambios: 24 de febrero de 2014
     //Calcula los ahorros en tiempos de alistamiento por método
-    public function calcularAhorrosMetodoMinutos()
+    public function calcularAhorrosAlistamientoMinutos()
     {        
         $ahorros = 0;
         //Cambios: 24 de febrero de 2014
@@ -291,6 +291,19 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         }
 
         return $ahorros;
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula los ahorros en tiempos de alistamiento por método
+    public function calcularAhorrosMetodoMinutos($TF, $TO, $TPNP)
+    {        
+        $ahorro = (($TO+$TPNP) - $TF)*60;
+        if(round($ahorro) > 0) {
+            return $ahorro;
+        }
+        else {
+            return 0;
+        }
     }
     
     //Cambios: 24 de febrero de 2014
@@ -443,6 +456,23 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         }
         return $codigo;
     }
+    
+    //Cambios: 24 de febrero de 2014
+    //Se obtiene el grupo al cual pertenece el equipo
+    public function obtenerGrupo()
+    {
+        $cod_maquina = $this -> getRumMaqCodigo();
+        $criteria = new Criteria();
+        $criteria->add(GrupoPorEquipoPeer::GREQ_MAQ_CODIGO, $cod_maquina);
+        $grupo_equipo = GrupoPorEquipoPeer::doSelectOne($criteria);
+        if ($grupo_equipo)
+        {
+            $cod_grupo = $grupo_equipo ->getGreqGruCodigo();
+            $grupo = GrupoEquipoPeer::retrieveByPK($cod_grupo);            
+            return $grupo->getGruNombre();
+        }
+        return '';
+    }
 
     public function obtenerTiempoInyeccionMaquina()
     {
@@ -544,6 +574,21 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         $tpnp = ($defectos + $paros_menores) / 60;
 
         return $tpnp;
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula la duración de los eventos ocurridos en un corrida analítica
+    public function calcularDuracionEventos($rum_codigo) {
+        $duracion = 0;
+        $criteria = new Criteria();
+        $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $rum_codigo);
+        $eventos = EventoEnRegistroPeer::doSelect($criteria);
+        
+        foreach ($eventos as $evento) {
+            $duracion += $evento->getEvrgDuracion();
+        }
+        
+        return $duracion;
     }
 
 } // RegistroUsoMaquina

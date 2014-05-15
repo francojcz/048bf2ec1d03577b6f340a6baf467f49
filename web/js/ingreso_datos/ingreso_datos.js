@@ -2122,6 +2122,9 @@ Ext.onReady(function()
             case '1':
                 mensaje = 'Su perfil no está autorizado para modificar registros con antigüedad superior a un (1) día';
                 break;
+            case 'Ahorro_TF':
+                mensaje = 'Verifique que la hora de finalización ingresada sea correcta';
+                break;
         }
         if(mensaje != null)
         {

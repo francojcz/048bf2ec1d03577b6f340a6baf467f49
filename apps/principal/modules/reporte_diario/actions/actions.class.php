@@ -142,10 +142,24 @@ class reporte_diarioActions extends sfActions
             $criteria -> add(RegistroUsoMaquinaPeer::RUM_USU_CODIGO, $analista_codigo);
         }
         $criteria -> add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, FALSE);
+        $criteria -> addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_MAQ_CODIGO);
         $criteria -> addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_TIEMPO_ENTRE_MODELO);
         $registros = RegistroUsoMaquinaPeer::doSelect($criteria);
+        
+        //Cambios: 24 de febrero de 2014
+        //Guarda el código del equipo
+        $codigo_maq = '';
         foreach ($registros as $registro)
         {
+            //Cambios: 24 de febrero de 2014
+            /* Verifica si el código del equipo anterior es igual al código actual. Si es diferente, 
+             * el tiempo de inicio de la corrida se iguala a cero. */
+            if($codigo_maq != $registro->getRumMaqCodigo()) {
+                $horasFin = 0;
+                $minutosFin = 0;
+                $segundosFin = 0;
+                $codigo_maq = $registro->getRumMaqCodigo();
+            }
             $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
             $tp = $registro -> obtenerTPMetodo($maq_tiempo_inyeccion);
             $tf = $registro -> obtenerTFMetodo();
@@ -153,6 +167,7 @@ class reporte_diarioActions extends sfActions
             $fecha_dia = $registro -> getRumFecha();
 
             $datos[$fila]['rdtiemp_maquina'] = $registro -> obtenerMaquina();
+            $datos[$fila]['rdtiemp_grupo'] = $registro -> obtenerGrupo();
             $datos[$fila]['rdtiemp_analista'] = $registro -> obtenerAnalista();
             $datos[$fila]['rdtiemp_metodo'] = $registro -> obtenerMetodo();
             $datos[$fila]['rdtiemp_fecha'] = $registro -> getRumFecha();
@@ -169,10 +184,9 @@ class reporte_diarioActions extends sfActions
             $datos[$fila]['observaciones'] = $registro -> getRumObservaciones();
 
             $horasFin = $registro -> getRumHoraFinTrabajo('H');
- 
             $minutosFin = $registro -> getRumHoraFinTrabajo('i');
             $segundosFin = $registro -> getRumHoraFinTrabajo('s');
-
+            
             $fila++;
         }
 
@@ -273,6 +287,7 @@ class reporte_diarioActions extends sfActions
             $to = $temporal -> obtenerTPMetodo($maq_tiempo_inyeccion);
 
             $datos[$fila]['rdindic_maquina'] = $temporal -> obtenerMaquina();
+            $datos[$fila]['rdindic_grupo'] = $temporal -> obtenerGrupo();
             $datos[$fila]['rdindic_analista'] = $temporal -> obtenerAnalista();
             $datos[$fila]['rdindic_metodo'] = $temporal -> obtenerMetodo();
             $datos[$fila]['rdindic_fecha'] = $temporal -> getRumFecha();
@@ -457,8 +472,9 @@ class reporte_diarioActions extends sfActions
         {
             $fields = array();
 
-            $fields['nombre_operario'] = $registro -> obtenerAnalista();
             $fields['nombre_maquina'] = $registro -> obtenerMaquina();
+            $fields['nombre_grupo'] = $registro -> obtenerGrupo();
+            $fields['nombre_operario'] = $registro -> obtenerAnalista();
             $fields['nombre_metodo'] = $registro -> obtenerMetodo();
 
             $tiempoCorrida = round($registro -> calcularTiempoCorridaHoras(), 2);
@@ -538,8 +554,9 @@ class reporte_diarioActions extends sfActions
         {
             $fields = array();
 
-            $fields['nombre_operario'] = $registro -> obtenerAnalista();
             $fields['nombre_maquina'] = $registro -> obtenerMaquina();
+            $fields['nombre_grupo'] = $registro -> obtenerGrupo();
+            $fields['nombre_operario'] = $registro -> obtenerAnalista();            
             $fields['nombre_metodo'] = $registro -> obtenerMetodo();
 
             $tiempoCorrida = round($registro -> calcularTiempoCorridaHoras(), 2);
@@ -616,21 +633,34 @@ class reporte_diarioActions extends sfActions
 
         $result = array();
         $data = array();
+        $ahorros_dia = 0;
 
         foreach ($registros as $registro)
         {
             $fields = array();
 
-            $fields['ahor_nombre_operario'] = $registro -> obtenerAnalista();
             $fields['ahor_nombre_maquina'] = $registro -> obtenerMaquina();
+            $fields['ahor_nombre_grupo'] = $registro -> obtenerGrupo();
+            $fields['ahor_nombre_operario'] = $registro -> obtenerAnalista();            
             $fields['ahor_nombre_metodo'] = $registro -> obtenerMetodo();
             
-            $fields['ahorros'] = number_format(round($registro -> calcularAhorrosMetodoMinutos(), 2), 2);
+            $ahorros_alistamiento = number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);;
+            $fields['ahorros_alistamiento'] = $ahorros_alistamiento;
+            $ahorros_dia += $ahorros_alistamiento;
+                        
+            $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+            $TF = $registro -> obtenerTFMetodo();
+            $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
+            $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
+            
+            $ahorros_metodo = number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+            $fields['ahorros_metodo'] = $ahorros_metodo;
+            $ahorros_dia += $ahorros_metodo;
 
             $data[] = $fields;
         }
         
-        $data[0]['ahorros_dia'] = number_format(round(RegistroUsoMaquinaPeer::contarAhorrosDiaEnMinutos($registros), 2), 2);
+        $data[0]['ahorros_dia'] = $ahorros_dia;
         
         $result['data'] = $data;
         return $this -> renderText(json_encode($result));

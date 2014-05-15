@@ -2576,4 +2576,60 @@ class graficos_anualesActions extends sfActions
             return $this->renderText($salida);    
 	}
         
+         //Cambios: 24 de febrero de 2014
+        //Retorna el nombre de los equipos seleccionados
+        public function executeEquiposSeleccionados(sfWebRequest $request)
+	{           
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {                    
+                    $equipo = MaquinaPeer::retrieveByPK($cod_equipo);
+                    $datos[$fila]['maq_anu_nombre'] = $equipo->getMaqNombre();
+                    $fila++;
+                }
+            }
+            
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Retorna el nombre de los grupos de equipos seleccionados
+        public function executeGruposSeleccionados(sfWebRequest $request)
+	{           
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {                    
+                    $grupo = GrupoEquipoPeer::retrieveByPK($cod_grupo);
+                    $datos[$fila]['gru_anu_nombre'] = $grupo->getGruNombre();
+                    $fila++;
+                }
+            }
+            
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
+        
 }

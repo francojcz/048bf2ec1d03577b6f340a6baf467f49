@@ -710,6 +710,11 @@ class reporte_graficomensualActions extends sfActions
 	/**************************************Reporte de tiempos del mes *******************/
 	public function executeGenerarDatosGraficoTiemposTorta(sfWebRequest $request)
 	{
+                //Códigos de los equipos seleccionados
+                $cod_equipos = $this->getRequestParameter('cods_equipos');
+                //Códigos de los grupos seleccionados
+                $cod_grupos = $this->getRequestParameter('cods_grupos');
+                //Fecha de inicio y fin de cada semana
 		$user = $this->getUser();
 		$codigo_usuario = $user->getAttribute('usu_codigo');
 		$criteria1 = new Criteria();
@@ -726,7 +731,7 @@ class reporte_graficomensualActions extends sfActions
 		$anio=$this->getRequestParameter('anio');
 		$mes=$this->getRequestParameter('mes');
 
-		$datos=$this->calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio);
+		$datos=$this->calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio,$cod_equipos,$cod_grupos);
 		$indicadores_tiempo=array('TPP', 'TNP', 'TPNP', 'TO');
 		$indicadores_colores=array('47d552','ffdc44','ff5454','72a8cd');
 
@@ -744,7 +749,7 @@ class reporte_graficomensualActions extends sfActions
 		return $this->renderText($xml);
 	}
 
-	public function calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio)
+	public function calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio, $cod_equipos, $cod_grupos)
 	{
 		$datos;
 		$tp_mes = 0;
@@ -761,7 +766,7 @@ class reporte_graficomensualActions extends sfActions
                         
                         //Cambios: 24 de febrero de 2014
                         //Se obtienen los códigos de los equipos seleccionados
-                        $temp = $this->getRequestParameter('cods_equipos');
+                        $temp = $cod_equipos;
                         $cods_equipos = json_decode($temp);
                         if($cods_equipos != ''){
                             foreach ($cods_equipos as $cod_equipo) {
@@ -771,7 +776,7 @@ class reporte_graficomensualActions extends sfActions
                         
                         //Cambios: 24 de febrero de 2014
                         //Se obtienen los códigos de los grupos de equipos seleccionados
-                        $temp2 = $this->getRequestParameter('cods_grupos');
+                        $temp2 = $cod_grupos;
                         $cods_grupos = json_decode($temp2);
                         if($cods_grupos != ''){
                             foreach ($cods_grupos as $cod_grupo) {
@@ -1051,7 +1056,7 @@ class reporte_graficomensualActions extends sfActions
 			$cantidadDias = RegistroUsoMaquinaPeer::calcularNumeroDiasDelMes($mes, $anio);
 			$cantidadHoras = $cantidadDias * $cantidadMaquinas * 24;
 
-			$datosTiempos = $this->calcularTiemposDiariosMesTorta($anio, $mes, 8);
+			$datosTiempos = $this->calcularTiemposDiariosMesTorta($anio, $mes, 8, $temp, $temp2);
 
 			$tp_mes = $datosTiempos['TP'];
 			$tpp_mes = $datosTiempos['TPP'];
@@ -1222,6 +1227,11 @@ class reporte_graficomensualActions extends sfActions
         //Calcula el consolidado total de tiempos de los indicadores por mes
         public function executeConsolidadoIndicadoresMes(sfWebRequest $request)
 	{            
+            //Códigos de los equipos seleccionados
+            $cod_equipos = $this->getRequestParameter('cods_equipos');
+            //Códigos de los grupos seleccionados
+            $cod_grupos = $this->getRequestParameter('cods_grupos');
+            //Fecha de inicio y fin de cada semana
             $user = $this->getUser();
             $codigo_usuario = $user->getAttribute('usu_codigo');
             $criteria1 = new Criteria();
@@ -1236,7 +1246,7 @@ class reporte_graficomensualActions extends sfActions
             $anio = $this->getRequestParameter('anio');
             $mes = $this->getRequestParameter('mes');
 
-            $datos_ind = $this->calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio);                
+            $datos_ind = $this->calcularTiemposDiariosMesTorta($anio,$mes,$inyeccionesEstandarPromedio,$cod_equipos, $cod_grupos);                
             $indicadores = array('TPP', 'TNP', 'TPNP', 'TO');
             
             //Se calcula la suma de horas de los cuatro indicadores para el cálculo del porcentaje
@@ -1254,6 +1264,62 @@ class reporte_graficomensualActions extends sfActions
                 $datos[$fila]['mes_porcentaje'] = number_format($porcentaje, 2, ',', '.');
                 $fila++;
             }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Retorna el nombre de los equipos seleccionados
+        public function executeEquiposSeleccionados(sfWebRequest $request)
+	{           
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {                    
+                    $equipo = MaquinaPeer::retrieveByPK($cod_equipo);
+                    $datos[$fila]['maq_men_nombre'] = $equipo->getMaqNombre();
+                    $fila++;
+                }
+            }
+            
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Retorna el nombre de los grupos de equipos seleccionados
+        public function executeGruposSeleccionados(sfWebRequest $request)
+	{           
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {                    
+                    $grupo = GrupoEquipoPeer::retrieveByPK($cod_grupo);
+                    $datos[$fila]['gru_men_nombre'] = $grupo->getGruNombre();
+                    $fila++;
+                }
+            }
+            
             if($fila>0){
                 $jsonresult = json_encode($datos);
                 $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';

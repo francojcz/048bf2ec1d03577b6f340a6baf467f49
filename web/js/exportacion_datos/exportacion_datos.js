@@ -9,6 +9,12 @@ Ext.onReady(function(){
         name: 'nombre_metodo'
     }, {
         type: 'string',
+        name: 'nombre_equipo'
+    }, {
+        type: 'string',
+        name: 'nombre_grupo'
+    }, {
+        type: 'string',
         name: 'tiempo_entre_metodos'
     }, {
         type: 'string',
@@ -566,10 +572,24 @@ var win_grupos_exportacion = new Ext.Window(
 		width: 90,
 		align: 'center'//,
 		//renderer: generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
-	},{
+    }, {
         dataIndex: 'nombre_metodo',
-        header: 'Método ',
-        tooltip: 'Método ',
+        header: 'Método',
+        tooltip: 'Método',
+        columnWidth: 60,
+        align: 'center',
+        renderer: generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    }, {
+        dataIndex: 'nombre_equipo',
+        header: 'Equipo',
+        tooltip: 'Equipo',
+        columnWidth: 60,
+        align: 'center',
+        renderer: generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
+    }, {
+        dataIndex: 'nombre_grupo',
+        header: 'Grupo Equipo',
+        tooltip: 'Grupo Equipo',
         columnWidth: 60,
         align: 'center',
         renderer: generarRenderer('#bfbfbf', '#000000', '#bfbfbf', '#000000')
