@@ -58,7 +58,7 @@ Ext.onReady(function(){
                 so.write("flashcontent1");
             }
             
-            var so = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "430", "400", "8", "#FFFFFF");
+            var so = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "420", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/ampie/");
             so.addParam("wmode", "opaque");
             so.addVariable("settings_file", encodeURIComponent(getAbsoluteUrl('graficos_anuales', 'generarConfiguracionTortaTiempos')));
@@ -377,17 +377,17 @@ var indanual_datastore = new Ext.data.Store({
 var indanual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
-        width: 95,
+        width: 100,
         align : 'center',
         dataIndex: 'ano_indicador'
     }, {
         header: "Días",
-        width: 95,
+        width: 100,
         align : 'center',
         dataIndex: 'ano_horas'
     }, {
         header: "Porcentaje",
-        width: 95,
+        width: 100,
         align : 'center',
         dataIndex: 'ano_porcentaje'
     }, ]
@@ -400,7 +400,7 @@ var indanual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: indanual_datastore,
     cm: indanual_colmodel,
-    width: 310,
+    width: 320,
     height: 150
 });
 /*********************************************************************************/
@@ -424,7 +424,7 @@ var maqanual_datastore = new Ext.data.Store({
 var maqanual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Nombre equipo",
-        width: 130,
+        width: 285,
         align : 'left',
         dataIndex: 'maq_anu_nombre'
     }]
@@ -437,8 +437,8 @@ var maqanual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: maqanual_datastore,
     cm: maqanual_colmodel,
-    width: 155,
-    height: 250
+    width: 320,
+    height: 120
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -461,7 +461,7 @@ var gruanual_datastore = new Ext.data.Store({
 var gruanual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Nombre grupo",
-        width: 130,
+        width: 285,
         align : 'left',
         dataIndex: 'gru_anu_nombre'
     }]
@@ -474,8 +474,8 @@ var gruanual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: gruanual_datastore,
     cm: gruanual_colmodel,
-    width: 155,
-    height: 250
+    width: 320,
+    height: 120
 });
 /*********************************************************************************/
     
@@ -580,6 +580,7 @@ var gruanual_gridpanel = new Ext.grid.GridPanel({
                 }]
             }]
         }, new Ext.TabPanel({
+            frame: true,
             activeTab: 0,
             items: [{
                 xtype: 'panel',
@@ -594,9 +595,13 @@ var gruanual_gridpanel = new Ext.grid.GridPanel({
                     id: 'flashcontent2',
                     border: true
                 }, 
-                indanual_gridpanel,
-                maqanual_gridpanel,
-                gruanual_gridpanel]
+                {
+                    xtype: 'panel',
+                    items: [
+                    indanual_gridpanel,
+                    maqanual_gridpanel,
+                    gruanual_gridpanel]
+                }]
             }, {
                 title: 'Indicadores',
                 layout: 'column',

@@ -660,7 +660,7 @@ class reporte_diarioActions extends sfActions
             $data[] = $fields;
         }
         
-        $data[0]['ahorros_dia'] = $ahorros_dia;
+        $data[0]['ahorros_dia'] = number_format($ahorros_dia, 2, '.', ',');
         
         $result['data'] = $data;
         return $this -> renderText(json_encode($result));
@@ -700,7 +700,6 @@ class reporte_diarioActions extends sfActions
             $fields = array();
             $fields['codigo'] = $maquina -> getMaqCodigo();
             $fields['nombre'] = $maquina -> getMaqNombre();
-            //$maquina->getNombreCompleto();
 
             $data[] = $fields;
         }

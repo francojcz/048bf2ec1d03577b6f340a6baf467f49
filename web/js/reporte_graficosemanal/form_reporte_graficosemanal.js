@@ -420,7 +420,7 @@ maqsemanal_datastore.load({
 var maqsemanal_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Nombre equipo",
-        width: 130,
+        width: 265,
         align : 'left',
         dataIndex: 'maq_sem_nombre'
     }]
@@ -433,8 +433,8 @@ var maqsemanal_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: maqsemanal_datastore,
     cm: maqsemanal_colmodel,
-    width: 150,
-    height: 220
+    width: 300,
+    height: 95
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -464,7 +464,7 @@ grusemanal_datastore.load({
 var grusemanal_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Nombre grupo",
-        width: 130,
+        width: 265,
         align : 'left',
         dataIndex: 'gru_sem_nombre'
     }]
@@ -477,8 +477,8 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: grusemanal_datastore,
     cm: grusemanal_colmodel,
-    width: 150,
-    height: 220
+    width: 300,
+    height: 95
 });
 /*********************************************************************************/
     
