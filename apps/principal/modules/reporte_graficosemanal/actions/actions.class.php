@@ -511,14 +511,14 @@ class reporte_graficosemanalActions extends sfActions
 //            }
 //            $xml.='</graph>';
 
-            $xml.='<graph color="#ff5454" title="Paros menores y reajustes" bullet="round" >';
+            $xml.='<graph color="#ff5454" title="Paros menores y fallas" bullet="round" >';
             for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
                     $numero_paros_dia=$datos[$diasmes]['paros'];
                     $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_paros_dia.'</value>';
             }
             $xml.='</graph>';
 
-            $xml.='<graph color="#47d552" title="Defectos y retrabajos" bullet="round" >';
+            $xml.='<graph color="#47d552" title="Reensayos" bullet="round" >';
             for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
                     $numero_retrabajos_dia=$datos[$diasmes]['retrabajos'];
                     $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_retrabajos_dia.'</value>';
@@ -607,13 +607,13 @@ class reporte_graficosemanalActions extends sfActions
             $fecha_in = $rango_fechas[0]['fecha_inicio'];
             $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
 
-            $datos=$this->calcularPerdidasMes($fecha_in,$fecha_fn,$inyeccionesEstandarPromedio);
+            $datos=$this->calcularPerdidasSemana($fecha_in,$fecha_fn,$inyeccionesEstandarPromedio);
 
             $xml='<?xml version="1.0"?>';
             $xml.='<pie>';
 //            $xml.='<slice title="Fallas " color="#72a8cd" pull_out="true">'.$datos['fallas'].'</slice>';
-            $xml.='<slice title="Paros Menores o Reajustes" color="#ff5454" pull_out="false">'.$datos['paros'].'</slice>';
-            $xml.='<slice title="Defectos y Retrabajos" color="#47d552" pull_out="false">'.$datos['retrabajos'].'</slice>';
+            $xml.='<slice title="Paros menores y fallas" color="#ff5454" pull_out="false">'.$datos['paros'].'</slice>';
+            $xml.='<slice title="Reensayos" color="#47d552" pull_out="false">'.$datos['retrabajos'].'</slice>';
             $xml.='<slice title="Pérdidas de velocidad" color="#47d599" pull_out="false">'.$datos['perdida_rendimiento'].'</slice>';
             $xml.='</pie>';
 
@@ -624,7 +624,7 @@ class reporte_graficosemanalActions extends sfActions
             return $this->renderText($xml);
 	}
 
-	public function calcularPerdidasMes($fecha_inicio, $fecha_fin, $inyeccionesEstandarPromedio)
+	public function calcularPerdidasSemana($fecha_inicio, $fecha_fin, $inyeccionesEstandarPromedio)
 	{
             $datos = array();
             try{
@@ -662,7 +662,7 @@ class reporte_graficosemanalActions extends sfActions
 
             }catch (Exception $excepcion)
             {
-                    return "(exeption: 'Excepci&oacute;n en reporte-calcularPerdidasMes ',error:'".$excepcion->getMessage()."')";
+                    return "(exeption: 'Excepci&oacute;n en reporte-calcularPerdidasSemana ',error:'".$excepcion->getMessage()."')";
             }
             return $datos;
 	}
@@ -1062,10 +1062,10 @@ class reporte_graficosemanalActions extends sfActions
             }
             $xml.='</series>';
             $xml.='<graphs>';
-            $xml.='<graph  title="Resultado Indicador " >';
+            $xml.='<graph  title="Resultado Indicador " color="F0A05F" >';
             for ($ind=0;$ind<6;$ind++){
                     $resultado=$datos[$indicadores_porcentaje[$ind]];
-                    $xml.='<value xid="'.$ind.'"  color="'.$indicadores_colores[$ind].'">'.$resultado.'</value>';			
+                    $xml.='<value xid="'.$ind.'" color="F0A05F">'.$resultado.'</value>';
             }
             $xml.='</graph>';
 
@@ -1317,49 +1317,6 @@ class reporte_graficosemanalActions extends sfActions
 	}
         
         //Cambios: 24 de febrero de 2014
-        //Calcula el consolidado total de tiempos de los indicadores por semana
-        public function executeConsolidadoIndicadoresSemana(sfWebRequest $request)
-	{            
-            //Códigos de los equipos seleccionados
-            $cod_equipos = $this->getRequestParameter('cods_equipos');
-            //Códigos de los grupos seleccionados
-            $cod_grupos = $this->getRequestParameter('cods_grupos');
-            //Fecha de inicio y fin de cada semana
-            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
-            $fecha_fin = $this->getRequestParameter('fecha_fin');
-            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
-            
-            //Día de inicio y fin del rango total de semanas
-            $fecha_in = $rango_fechas[0]['fecha_inicio'];
-            $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
-
-            $datos_ind = $this->calcularTiemposDiariosSemanaTorta($fecha_in, $fecha_fn, $cod_equipos, $cod_grupos);
-            $indicadores = array('TPP', 'TNP', 'TPNP', 'TO');
-            
-            //Se calcula la suma de horas de los cuatro indicadores para el cálculo del porcentaje
-            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]]+$datos_ind[$indicadores[2]]+$datos_ind[$indicadores[3]];
-            
-            $salida = '({"total":"0", "results":""})';
-            $fila = 0;
-            $datos = array();
-            
-            for($i=0; $i<sizeof($indicadores); $i++) {
-                $datos[$fila]['sem_indicador'] = $indicadores[$i];
-                $datos[$fila]['sem_horas'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');
-                //Se calcula el porcentaje para cada indicador
-                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
-                $datos[$fila]['sem_porcentaje'] = number_format($porcentaje, 2, ',', '.');
-                $fila++;
-            }
-            if($fila>0){
-                $jsonresult = json_encode($datos);
-                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
-            }
-            
-            return $this->renderText($salida);                        
-	}
-                
-        //Cambios: 24 de febrero de 2014
         //Retorna el nombre de los equipos seleccionados
         public function executeEquiposSeleccionados(sfWebRequest $request)
 	{           
@@ -1414,4 +1371,142 @@ class reporte_graficosemanalActions extends sfActions
             
             return $this->renderText($salida);                        
 	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total por tiempo (TP - TPNP - TO - TNP)
+        public function executeConsolidadoTiemposSemana(sfWebRequest $request)
+	{            
+            //Códigos de los equipos seleccionados
+            $cod_equipos = $this->getRequestParameter('cods_equipos');
+            //Códigos de los grupos seleccionados
+            $cod_grupos = $this->getRequestParameter('cods_grupos');
+            //Fecha de inicio y fin de cada semana
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+            
+            //Día de inicio y fin del rango total de semanas
+            $fecha_in = $rango_fechas[0]['fecha_inicio'];
+            $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
+
+            $datos_ind = $this->calcularTiemposDiariosSemanaTorta($fecha_in, $fecha_fn, $cod_equipos, $cod_grupos);
+            $indicadores = array('TPP', 'TNP', 'TPNP', 'TO');
+            
+            //Se calcula la suma de horas de los cuatro indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]]+$datos_ind[$indicadores[2]]+$datos_ind[$indicadores[3]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['sem_tiempo'] = $indicadores[$i];
+                $datos[$fila]['sem_horas'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');
+                //Se calcula el porcentaje para cada indicador
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['sem_porcentaje'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
+        
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total por indicador (D - E - C - A - OEE - PTEE)
+        public function executeConsolidadoIndicadoresSemana(sfWebRequest $request)
+	{            
+            //Códigos de los equipos seleccionados
+            $cod_equipos = $this->getRequestParameter('cods_equipos');
+            //Códigos de los grupos seleccionados
+            $cod_grupos = $this->getRequestParameter('cods_grupos');
+            //Fecha de inicio y fin de cada semana
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+            
+            //Día de inicio y fin del rango total de semanas
+            $fecha_in = $rango_fechas[0]['fecha_inicio'];
+            $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
+            
+            //Obtener el año del las fechas seleccionadas
+            $fecha_ind = strtotime($fecha_inicio);            
+            $ano = date('Y', $fecha_ind);
+            
+            $datos_ind = $this->calcularIndicadoresDiariosSemanaBarras($fecha_in, $fecha_fn, $cod_equipos, $cod_grupos);
+            $datos_metas = $this->obtenerIndicadoresMetasMesBarras($ano);
+            $indicadores = array('D', 'E', 'C', 'A', 'OEE', 'PTEE');
+            $ind_nombres = array('Disponibilidad', 'Eficiencia', 'Calidad', 'Aprovechamiento', 'OEE', 'PTEE');
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['sem_indicador'] = $ind_nombres[$i];
+                $datos[$fila]['sem_actual'] = $datos_ind[$indicadores[$i]];
+                $datos[$fila]['sem_meta'] = $datos_metas[$indicadores[$i]];
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
+        
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total por indicador (Paros - Reensayos - Pérdidas)
+        public function executeConsolidadoPerdidasSemana(sfWebRequest $request)
+	{            
+            $user = $this->getUser();
+            $codigo_usuario = $user->getAttribute('usu_codigo');
+            $conexion = new Criteria();
+            $conexion->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+            $operario = EmpleadoPeer::doSelectOne($conexion);
+            $criteria = new Criteria();
+            $criteria->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+            $empresa = EmpresaPeer::doSelectOne($criteria);
+            $inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+            
+            //Fecha de inicio y fin de cada semana
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+            
+            //Día de inicio y fin del rango total de semanas
+            $fecha_in = $rango_fechas[0]['fecha_inicio'];
+            $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
+            
+            $datos_ind = $this->calcularPerdidasSemana($fecha_in, $fecha_fn, $inyeccionesEstandarPromedio);
+            $indicadores = array('paros', 'retrabajos', 'perdida_rendimiento');
+            $ind_nombres = array('Paros menores', 'Reensayos', 'Pérd. velocidad');
+            
+            //Se calcula la suma de horas de los tres indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]]+$datos_ind[$indicadores[2]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['sem_perdida'] = $ind_nombres[$i];
+                $datos[$fila]['sem_horas_perd'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');                
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['sem_porcentaje_perd'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	} 
 }

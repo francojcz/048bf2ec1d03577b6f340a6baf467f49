@@ -417,14 +417,14 @@ class reporte_graficomensualActions extends sfActions
 //		}
 //		$xml.='</graph>';
 
-		$xml.='<graph color="#ff5454" title="Paros menores y reajustes" bullet="round" >';
+		$xml.='<graph color="#ff5454" title="Paros menores y fallas" bullet="round" >';
 		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
 			$numero_paros_dia=$datos[$diasmes]['paros'];
 			$xml.='<value xid="'.$diasmes.'">'.$numero_paros_dia.'</value>';
 		}
 		$xml.='</graph>';
 
-		$xml.='<graph color="#47d552" title="Defectos y retrabajos" bullet="round" >';
+		$xml.='<graph color="#47d552" title="Reensayos" bullet="round" >';
 		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
 			$numero_retrabajos_dia=$datos[$diasmes]['retrabajos'];
 			$xml.='<value xid="'.$diasmes.'">'.$numero_retrabajos_dia.'</value>';
@@ -520,8 +520,8 @@ class reporte_graficomensualActions extends sfActions
 		$xml='<?xml version="1.0"?>';
 		$xml.='<pie>';
 //		$xml.='<slice title="Fallas " color="#72a8cd" pull_out="true">'.$datos['fallas'].'</slice>';
-		$xml.='<slice title="Paros Menores o Reajustes" color="#ff5454" pull_out="false">'.$datos['paros'].'</slice>';
-		$xml.='<slice title="Defectos y Retrabajos" color="#47d552" pull_out="false">'.$datos['retrabajos'].'</slice>';
+		$xml.='<slice title="Paros menores y fallas" color="#ff5454" pull_out="false">'.$datos['paros'].'</slice>';
+		$xml.='<slice title="Reensayos" color="#47d552" pull_out="false">'.$datos['retrabajos'].'</slice>';
 		$xml.='<slice title="Pérdidas de velocidad" color="#47d599" pull_out="false">'.$datos['perdida_rendimiento'].'</slice>';
 		$xml.='</pie>';
 
@@ -949,6 +949,10 @@ class reporte_graficomensualActions extends sfActions
 	/**************************************Reporte de indicadores barra del mes *******************/
 	public function executeGenerarDatosGraficoIndicadoresBarras(sfWebRequest $request)
 	{
+                //Códigos de los equipos seleccionados
+                $cod_equipos = $this->getRequestParameter('cods_equipos');
+                //Códigos de los grupos seleccionados
+                $cod_grupos = $this->getRequestParameter('cods_grupos');
 		$user = $this->getUser();
 		$codigo_usuario = $user->getAttribute('usu_codigo');
 		$criteria = new Criteria();
@@ -967,7 +971,7 @@ class reporte_graficomensualActions extends sfActions
 
 		$cant_dias=$this->obtenerCantidadDiasMes($mes,$anio);
 
-		$datos=$this->calcularIndicadoresDiariosMesBarras($anio,$mes,$cant_dias,$inyeccionesEstandarPromedio);
+		$datos=$this->calcularIndicadoresDiariosMesBarras($anio,$mes,$cant_dias,$cod_equipos,$cod_grupos,$inyeccionesEstandarPromedio);
 		$datos_metas=$this->obtenerIndicadoresMetasMesBarras($anio,$mes);
 		$indicadores_porcentaje=array(      'D',     'E',     'C',    'A',   'OEE',   'PTEE');
 		$indicadores_descripcion=array('Disponibilidad','Eficiencia','Calidad','Aprovechamiento','Efectividad global','PTEE');
@@ -984,11 +988,10 @@ class reporte_graficomensualActions extends sfActions
 		}
 		$xml.='</series>';
 		$xml.='<graphs>';
-		$xml.='<graph  title="Resultado Indicador " >';
+		$xml.='<graph  title="Resultado Indicador " color="F0A05F" >';
 		for ($ind=0;$ind<6;$ind++){
 			$resultado=$datos[$indicadores_porcentaje[$ind]];
-			$xml.='<value xid="'.$ind.'"  color="'.$indicadores_colores[$ind].'">'.$resultado.'</value>';
-			//$xml.='<value xid="'.$ind.'" color="">'.$resultado.'</value>';
+			$xml.='<value xid="'.$ind.'" color="F0A05F">'.$resultado.'</value>';
 		}
 		$xml.='</graph>';
 
@@ -1011,7 +1014,7 @@ class reporte_graficomensualActions extends sfActions
 		return $this->renderText($xml);
 	}
 
-	public function calcularIndicadoresDiariosMesBarras($anio,$mes,$cant_dias,$inyeccionesEstandarPromedio)
+	public function calcularIndicadoresDiariosMesBarras($anio,$mes,$cant_dias,$cod_equipos,$cod_grupos,$inyeccionesEstandarPromedio)
 	{
 		$datos;
 		$d_mes = 0;
@@ -1028,7 +1031,7 @@ class reporte_graficomensualActions extends sfActions
                         
                         //Cambios: 24 de febrero de 2014
                         //Se obtienen los códigos de los equipos seleccionados
-                        $temp = $this->getRequestParameter('cods_equipos');
+                        $temp = $cod_equipos;
                         $cods_equipos = json_decode($temp);
                         if($cods_equipos != ''){
                             foreach ($cods_equipos as $cod_equipo) {
@@ -1038,7 +1041,7 @@ class reporte_graficomensualActions extends sfActions
                         
                         //Cambios: 24 de febrero de 2014
                         //Se obtienen los códigos de los grupos de equipos seleccionados
-                        $temp2 = $this->getRequestParameter('cods_grupos');
+                        $temp2 = $cod_grupos;
                         $cods_grupos = json_decode($temp2);
                         if($cods_grupos != ''){
                             foreach ($cods_grupos as $cod_grupo) {
@@ -1224,8 +1227,8 @@ class reporte_graficomensualActions extends sfActions
 	}
         
         //Cambios: 24 de febrero de 2014
-        //Calcula el consolidado total de tiempos de los indicadores por mes
-        public function executeConsolidadoIndicadoresMes(sfWebRequest $request)
+        //Calcula el consolidado total de tiempos de los indicadores (TP -TPNP - TNO - TO) por mes
+        public function executeConsolidadoTiemposMes(sfWebRequest $request)
 	{            
             //Códigos de los equipos seleccionados
             $cod_equipos = $this->getRequestParameter('cods_equipos');
@@ -1257,7 +1260,7 @@ class reporte_graficomensualActions extends sfActions
             $datos = array();
             
             for($i=0; $i<sizeof($indicadores); $i++) {
-                $datos[$fila]['mes_indicador'] = $indicadores[$i];
+                $datos[$fila]['mes_tiempo'] = $indicadores[$i];
                 $datos[$fila]['mes_horas'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');
                 //Se calcula el porcentaje para cada indicador
                 $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
@@ -1271,6 +1274,100 @@ class reporte_graficomensualActions extends sfActions
             
             return $this->renderText($salida);                        
 	}
+        
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total por indicador (D - E - C - A - OEE - PTEE)
+        public function executeConsolidadoIndicadoresMes(sfWebRequest $request)
+	{            
+            //Códigos de los equipos seleccionados
+            $cod_equipos = $this->getRequestParameter('cods_equipos');
+            //Códigos de los grupos seleccionados
+            $cod_grupos = $this->getRequestParameter('cods_grupos');
+            //Fecha de inicio y fin de cada semana
+            $user = $this->getUser();
+            $codigo_usuario = $user->getAttribute('usu_codigo');
+            $criteria1 = new Criteria();
+            $criteria1->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+            $operario = EmpleadoPeer::doSelectOne($criteria1);
+            $criteria2 = new Criteria();
+            $criteria2->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+            $empresa = EmpresaPeer::doSelectOne($criteria2);
+
+            $inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+
+            $anio = $this->getRequestParameter('anio');
+            $mes = $this->getRequestParameter('mes');
+            $cant_dias = $this->obtenerCantidadDiasMes($mes,$anio);
+            
+            $datos_ind = $this->calcularIndicadoresDiariosMesBarras($anio, $mes, $cant_dias, $cod_equipos, $cod_grupos, $inyeccionesEstandarPromedio);
+            $datos_metas = $this->obtenerIndicadoresMetasMesBarras($anio);
+            $indicadores = array('D', 'E', 'C', 'A', 'OEE', 'PTEE');
+            $ind_nombres = array('Disponibilidad', 'Eficiencia', 'Calidad', 'Aprovechamiento', 'OEE', 'PTEE');
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['mes_indicador'] = $ind_nombres[$i];
+                $datos[$fila]['mes_actual'] = $datos_ind[$indicadores[$i]];
+                $datos[$fila]['mes_meta'] = $datos_metas[$indicadores[$i]];
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);
+	}
+        
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total por indicador (Paros - Reensayos - Pérdidas)
+        public function executeConsolidadoPerdidasMes(sfWebRequest $request)
+	{
+            $user = $this->getUser();
+            $codigo_usuario = $user->getAttribute('usu_codigo');
+            $criteria1 = new Criteria();
+            $criteria1->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+            $operario = EmpleadoPeer::doSelectOne($criteria1);
+            $criteria2 = new Criteria();
+            $criteria2->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+            $empresa = EmpresaPeer::doSelectOne($criteria2);
+
+            $inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+
+            $anio = $this->getRequestParameter('anio');
+            $mes = $this->getRequestParameter('mes');
+            
+            $datos_ind = $this->calcularPerdidasMes($anio, $mes, $inyeccionesEstandarPromedio);
+            $indicadores = array('paros', 'retrabajos', 'perdida_rendimiento');
+            $ind_nombres = array('Paros menores', 'Reensayos', 'Pérd. velocidad');
+            
+            //Se calcula la suma de horas de los tres indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]]+$datos_ind[$indicadores[2]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['mes_perdida'] = $ind_nombres[$i];
+                $datos[$fila]['mes_horas_perd'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');                
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;                
+                $datos[$fila]['mes_porcentaje_perd'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	} 
+        
         
         //Cambios: 24 de febrero de 2014
         //Retorna el nombre de los equipos seleccionados

@@ -287,13 +287,33 @@ var fechaFinField = new Ext.form.DateField({
                     }
                     var arrayGrupos = Ext.encode(gruposAFiltrar);
                     
-                    //Recargar datos consolidado de tiempos indicadores
-                    indsemanal_datastore.load({
+                    //Recargar datos consolidado de tiempos
+                    tiempossemanal_datastore.load({
                         params: {
                             'fecha_inicio': fechaInicioField.getRawValue(),
                             'fecha_fin': fechaFinField.getRawValue(),
                             'cods_equipos': arrayEquipos,
                             'cods_grupos': arrayGrupos
+                        }
+                    });
+                    //Recargar datos consolidado de indicadores
+                    indicadoressemanal_datastore.load({
+                        params: {
+                            'fecha_inicio': fechaInicioField.getRawValue(),
+                            'fecha_fin': fechaFinField.getRawValue(),
+                            'cods_equipos': arrayEquipos,
+                            'cods_grupos': arrayGrupos
+                        }
+                    });
+                    //Recargar datos consolidado de perdidas
+                    perdidassemanal_datastore.load({
+                        params: {
+                            'fecha_inicio': fechaInicioField.getRawValue(),
+                            'fecha_fin': fechaFinField.getRawValue(),
+                            'cods_equipos': arrayEquipos,
+                            'cods_grupos': arrayGrupos,
+                            'metodo_codigo': reporgrafseman_metodo_codigo_combobox.getValue(),
+                            'analista_codigo': reporgrafseman_analista_codigo_combobox.getValue()
                         }
                     });
                     //Obtener el nombre de los equipos seleccionados
@@ -313,13 +333,16 @@ var fechaFinField = new Ext.form.DateField({
         }],
         renderTo: 'div_form_reporte_graficosemanal'
     });
-    
+
+
+
+//TABLAS CONSOLIDADO TIEMPOS
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
-//Se agregó en la pestaña tiempos una tabla con el consolidado de tiempos por indicador
-var indsemanal_datastore = new Ext.data.Store({
+//Se agregó en la pestaña tiempos una tabla con el consolidado de tiempos
+var tiempossemanal_datastore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
-        url: getAbsoluteUrl('reporte_graficosemanal', 'consolidadoIndicadoresSemana'),
+        url: getAbsoluteUrl('reporte_graficosemanal', 'consolidadoTiemposSemana'),
         method: 'POST'
     }),
     baseParams: {},
@@ -327,7 +350,7 @@ var indsemanal_datastore = new Ext.data.Store({
         root: 'results',
         totalProperty: 'total'
     }, [{
-        name: 'sem_indicador',
+        name: 'sem_tiempo',
         type: 'string'
     }, {
         name: 'sem_horas',
@@ -354,7 +377,7 @@ for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
 var arrayGrupos = Ext.encode(gruposAFiltrar);
 
 //Recargar datos
-indsemanal_datastore.load({
+tiempossemanal_datastore.load({
     params: {
         'fecha_inicio': fechaInicioField.getRawValue(),
         'fecha_fin': fechaFinField.getRawValue(),
@@ -363,32 +386,32 @@ indsemanal_datastore.load({
     }
 });
 
-var indsemanal_colmodel = new Ext.grid.ColumnModel({        
+var tiempossemanal_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
         width: 95,
         align : 'center',
-        dataIndex: 'sem_indicador'
+        dataIndex: 'sem_tiempo'
     }, {
         header: "Horas",
         width: 93,
         align : 'center',
         dataIndex: 'sem_horas'
     }, {
-        header: "Porcentaje",
+        header: "Porcentaje (%)",
         width: 93,
         align : 'center',
         dataIndex: 'sem_porcentaje'
     }]
 });
 
-var indsemanal_gridpanel = new Ext.grid.GridPanel({
+var tiempossemanal_gridpanel = new Ext.grid.GridPanel({
     title: 'Consolidado de tiempos / Semana',
     region: 'center',
     stripeRows: true,
     frame: true,
-    ds: indsemanal_datastore,
-    cm: indsemanal_colmodel,
+    ds: tiempossemanal_datastore,
+    cm: tiempossemanal_colmodel,
     width: 300,
     height: 120
 });
@@ -426,7 +449,7 @@ var maqsemanal_colmodel = new Ext.grid.ColumnModel({
     }]
 });
 
-var maqsemanal_gridpanel = new Ext.grid.GridPanel({
+var maqsemanal_gridpanel_tiemp = new Ext.grid.GridPanel({
     title: 'Equipos seleccionados',
     region: 'center',
     stripeRows: true,
@@ -470,7 +493,7 @@ var grusemanal_colmodel = new Ext.grid.ColumnModel({
     }]
 });
 
-var grusemanal_gridpanel = new Ext.grid.GridPanel({
+var grusemanal_gridpanel_tiemp = new Ext.grid.GridPanel({
     title: 'Grupos seleccionados',
     region: 'center',
     stripeRows: true,
@@ -481,6 +504,202 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
     height: 95
 });
 /*********************************************************************************/
+
+
+
+
+
+//TABLAS CONSOLIDADO INDICADORES
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña indicadores una tabla con el consolidado del valor por indicador
+var indicadoressemanal_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficosemanal', 'consolidadoIndicadoresSemana'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'sem_indicador',
+        type: 'string'
+    }, {
+        name: 'sem_actual',
+        type: 'string'
+    }, {
+        name: 'sem_meta',
+        type: 'string'
+    }])
+});
+
+//Recargar datos
+indicadoressemanal_datastore.load({
+    params: {
+        'fecha_inicio': fechaInicioField.getRawValue(),
+        'fecha_fin': fechaFinField.getRawValue(),
+        'cods_equipos': arrayEquipos,
+        'cods_grupos': arrayGrupos
+    }
+});
+
+var indicadoressemanal_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 113,
+        align : 'center',
+        dataIndex: 'sem_indicador'
+    }, {
+        header: "Valor Actual (%)",
+        width: 93,
+        align : 'center',
+        dataIndex: 'sem_actual'
+    }, {
+        header: "Meta (%)",
+        width: 80,
+        align : 'center',
+        dataIndex: 'sem_meta'
+    }]
+});
+
+var indicadoressemanal_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado de indicadores / Semana',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: indicadoressemanal_datastore,
+    cm: indicadoressemanal_colmodel,
+    width: 305,
+    height: 160
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña indicadores una tabla con el nombre de los equipos seleccionados
+var maqsemanal_gridpanel_ind = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqsemanal_datastore,
+    cm: maqsemanal_colmodel,
+    width: 305,
+    height: 75
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña indicadores una tabla con el nombre de los equipos seleccionados
+var grusemanal_gridpanel_ind = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: grusemanal_datastore,
+    cm: grusemanal_colmodel,
+    width: 305,
+    height: 75
+});
+/*********************************************************************************/
+
+
+
+
+
+//TABLAS CONSOLIDADO PÉRDIDAS
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña pérdidas una tabla con el consolidado del valor por indicador
+var perdidassemanal_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficosemanal', 'consolidadoPerdidasSemana'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'sem_perdida',
+        type: 'string'
+    }, {
+        name: 'sem_horas_perd',
+        type: 'string'
+    }, {
+        name: 'sem_porcentaje_perd',
+        type: 'string'
+    }])
+});
+
+//Recargar datos
+perdidassemanal_datastore.load({
+params: {
+    'fecha_inicio': fechaInicioField.getRawValue(),
+    'fecha_fin': fechaFinField.getRawValue(),
+    'cods_equipos': arrayEquipos,
+    'cods_grupos': arrayGrupos,
+    'metodo_codigo': reporgrafseman_metodo_codigo_combobox.getValue(),
+    'analista_codigo': reporgrafseman_analista_codigo_combobox.getValue()
+}
+});
+
+var perdidassemanal_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 108,
+        align : 'center',
+        dataIndex: 'sem_perdida'
+    }, {
+        header: "Horas",
+        width: 87,
+        align : 'center',
+        dataIndex: 'sem_horas_perd'
+    }, {
+        header: "Porcentaje (%)",
+        width: 88,
+        align : 'center',
+        dataIndex: 'sem_porcentaje_perd'
+    }]
+});
+
+var perdidassemanal_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado de pérdidas / Semana',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: perdidassemanal_datastore,
+    cm: perdidassemanal_colmodel,
+    width: 300,
+    height: 97
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var maqsemanal_gridpanel_perd = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqsemanal_datastore,
+    cm: maqsemanal_colmodel,
+    width: 300,
+    height: 105
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var grusemanal_gridpanel_perd = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: grusemanal_datastore,
+    cm: grusemanal_colmodel,
+    width: 300,
+    height: 105
+});
+/*********************************************************************************/
+
+
     
     var reporgrafseman_reportes_tabpanel = new Ext.TabPanel({
         frame: true,
@@ -497,9 +716,9 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficosemanal_tiempos_torta'
             },
-            indsemanal_gridpanel,
-            maqsemanal_gridpanel,
-            grusemanal_gridpanel]
+            tiempossemanal_gridpanel,
+            maqsemanal_gridpanel_tiemp,
+            grusemanal_gridpanel_tiemp]
         }, {
             xtype: 'panel',
             title: 'Indicadores',
@@ -512,7 +731,16 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficosemanal_indicadores_barras'
-            }]
+            },
+            {
+                xtype: 'panel',
+                items: [
+                    indicadoressemanal_gridpanel,
+                    maqsemanal_gridpanel_ind,
+                    grusemanal_gridpanel_ind
+                ]
+            }            
+            ]
         }, {
             xtype: 'panel',
             title: 'P&eacute;rdidas',
@@ -525,6 +753,14 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficosemanal_perdidas_torta'
+            },
+            {
+                xtype: 'panel',
+                items: [
+                    perdidassemanal_gridpanel,
+                    maqsemanal_gridpanel_perd,
+                    grusemanal_gridpanel_perd
+                ]
             }]
         }, {
             xtype: 'panel',
@@ -595,10 +831,10 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
         reporgrafseman_tiempos_torta.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficosemanal', 'generarDatosGraficoTiemposTorta') + params));
         reporgrafseman_tiempos_torta.addVariable("loading_data", "... CARGANDO ...");
         reporgrafseman_tiempos_torta.write("div_reporte_graficosemanal_tiempos_torta");       
-               
+        
         
         //Indicadores
-        var reporgrafseman_indicadores_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
+        var reporgrafseman_indicadores_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "490", "400", "8", "#FFFFFF");
         reporgrafseman_indicadores_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafseman_indicadores_dispersion.addParam("wmode", "opaque");
         reporgrafseman_indicadores_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/amline_st_grafico_indicadores.php');
@@ -606,7 +842,7 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
         reporgrafseman_indicadores_dispersion.addVariable("loading_data", "... CARGANDO ...");
         reporgrafseman_indicadores_dispersion.write("div_reporte_graficosemanal_indicadores_dispersion");        
         
-        var reporgrafseman_indicadores_barras = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "520", "400", "8", "#FFFFFF");
+        var reporgrafseman_indicadores_barras = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "520", "400", "0", "#FFFFFF");
         reporgrafseman_indicadores_barras.addVariable("path", urlWeb + "flash/amcolumn/");
         reporgrafseman_indicadores_barras.addParam("wmode", "opaque");
         reporgrafseman_indicadores_barras.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/amcolumn_st_grafico_indicadores_barras.php');
@@ -614,8 +850,9 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
         reporgrafseman_indicadores_barras.addVariable("loading_data", "... CARGANDO ...");
         reporgrafseman_indicadores_barras.write("div_reporte_graficosemanal_indicadores_barras");
         
-        //perdidas
-        var reporgrafseman_perdida_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
+        
+        //Pérdidas
+        var reporgrafseman_perdida_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "490", "400", "8", "#FFFFFF");
         reporgrafseman_perdida_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafseman_perdida_dispersion.addParam("wmode", "opaque");
         reporgrafseman_perdida_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/amline_st_grafico_perdidas.php');
@@ -623,7 +860,7 @@ var grusemanal_gridpanel = new Ext.grid.GridPanel({
         reporgrafseman_perdida_dispersion.addVariable("loading_data", "... CARGANDO ...");
         reporgrafseman_perdida_dispersion.write("div_reporte_graficosemanal_perdidas_dispersion");
         
-        var reporgrafseman_tiempo_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "520", "400", "8", "#FFFFFF");
+        var reporgrafseman_tiempo_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "490", "390", "8", "#FFFFFF");
         reporgrafseman_tiempo_torta.addVariable("path", urlWeb + "flash/ampie/");
         reporgrafseman_tiempo_torta.addParam("wmode", "opaque");//turco ee
         reporgrafseman_tiempo_torta.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/ampie_st_grafico_perdidas_torta.php');

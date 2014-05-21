@@ -30,7 +30,7 @@
       </text> 
     </label>
 	<label lid='2'>
-      <x>90%</x> 
+      <x>88%</x> 
       <y>338</y>
       <width>40</width>
       <align>right</align> 

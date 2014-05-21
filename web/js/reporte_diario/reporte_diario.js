@@ -805,29 +805,29 @@ var rdperdi_columns = [{
     renderer: generarRenderer('#bfbfbf', '#000000')
 }, {
     dataIndex: 'paros_menores',
-    header: 'Paros menores<br>(Min)<br>Método',
-    tooltip: 'Paros menores (Minutos)',
-    width: 90,
+    header: 'Paros menores y fallas<br>(Min)<br>Método',
+    tooltip: 'Paros menores y fallas (Minutos)',
+    width: 130,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'paros_menores_dia',
-    header: 'Paros menores<br>(Min)<br>Día',
-    tooltip: 'Paros menores (Minutos) del día',
-    width: 90,
+    header: 'Paros menores y fallas<br>(Min)<br>Día',
+    tooltip: 'Paros menores y fallas (Minutos) del día',
+    width: 130,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'retrabajos',
-    header: 'Retrabajos<br>(Min)<br>Método',
-    tooltip: 'Retrabajos (Minutos)',
+    header: 'Reensayos<br>(Min)<br>Método',
+    tooltip: 'Reensayos (Minutos)',
     width: 70,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'retrabajos_dia',
-    header: 'Retrabajos<br>(Min)<br>Día',
-    tooltip: 'Retrabajos (Minutos) del día',
+    header: 'Reensayos<br>(Min)<br>Día',
+    tooltip: 'Reensayos (Minutos) del día',
     width: 70,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')

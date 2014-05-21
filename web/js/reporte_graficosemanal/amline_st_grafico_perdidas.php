@@ -30,12 +30,12 @@
       </text> 
     </label>
     <label lid='2'>
-      <x>91%</x> 
+      <x>86%</x> 
       <y>290</y>
       <width>50</width>
       <align>right</align> 
       <text>
-        <![CDATA[<b>Semana</b>]]>
+        <![CDATA[<b>Sem.</b>]]>
       </text> 
     </label>
 	<label lid='1'>

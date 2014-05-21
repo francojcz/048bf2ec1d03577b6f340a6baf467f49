@@ -322,13 +322,33 @@ var win_grupos_mensual = new Ext.Window(
                     }
                     var arrayGrupos = Ext.encode(gruposAFiltrar);
                     
-                    //Recargar datos consolidado de tiempos indicadores
-                    indmensual_datastore.load({
+                    //Recargar datos consolidado de tiempos
+                    tiemposmensual_datastore.load({
                         params: {
                             'mes': reporgrafmens_mes_combobox.getValue(),
                             'anio': reporgrafmens_anio.getValue(),
                             'cods_equipos': arrayEquipos,
                             'cods_grupos': arrayGrupos
+                        }
+                    });
+                    //Recargar datos consolidado de indicadores
+                    indicadoresmensual_datastore.load({
+                        params: {
+                            'mes': reporgrafmens_mes_combobox.getValue(),
+                            'anio': reporgrafmens_anio.getValue(),
+                            'cods_equipos': arrayEquipos,
+                            'cods_grupos': arrayGrupos
+                        }
+                    });
+                    //Recargar datos consolidado de indicadores
+                    perdidasmensual_datastore.load({
+                        params: {
+                            'mes': reporgrafmens_mes_combobox.getValue(),
+                            'anio': reporgrafmens_anio.getValue(),
+                            'cods_equipos': arrayEquipos,
+                            'cods_grupos': arrayGrupos,
+                            'metodo_codigo': reporgrafmens_metodo_codigo_combobox.getValue(),
+                            'analista_codigo': reporgrafmens_analista_codigo_combobox.getValue()
                         }
                     });
                     
@@ -351,12 +371,16 @@ var win_grupos_mensual = new Ext.Window(
         renderTo: 'div_form_reporte_graficomensual'
     });
 
+
+
+
+//TABLAS CONSOLIDADO TIEMPOS
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
 //Se agregó en la pestaña tiempos una tabla con el consolidado de tiempos por indicador
-var indmensual_datastore = new Ext.data.Store({
+var tiemposmensual_datastore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
-        url: getAbsoluteUrl('reporte_graficomensual', 'consolidadoIndicadoresMes'),
+        url: getAbsoluteUrl('reporte_graficomensual', 'consolidadoTiemposMes'),
         method: 'POST'
     }),
     baseParams: {},
@@ -364,7 +388,7 @@ var indmensual_datastore = new Ext.data.Store({
         root: 'results',
         totalProperty: 'total'
     }, [{
-        name: 'mes_indicador',
+        name: 'mes_tiempo',
         type: 'string'
     }, {
         name: 'mes_horas',
@@ -392,7 +416,7 @@ for(j = 0; j < grupos_gridpanel.selModel.getCount(); j++){
 var arrayGrupos = Ext.encode(gruposAFiltrar); 
 
 //Recargar datos
-indmensual_datastore.load({
+tiemposmensual_datastore.load({
     params: {
         'mes': reporgrafmens_mes_combobox.getValue(),
         'anio': reporgrafmens_anio.getValue(),
@@ -401,32 +425,32 @@ indmensual_datastore.load({
     }
 });
 
-var indmensual_colmodel = new Ext.grid.ColumnModel({        
+var tiemposmensual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
         width: 95,
         align : 'center',
-        dataIndex: 'mes_indicador'
+        dataIndex: 'mes_tiempo'
     }, {
         header: "Horas",
         width: 93,
         align : 'center',
         dataIndex: 'mes_horas'
     }, {
-        header: "Porcentaje",
+        header: "Porcentaje (%)",
         width: 93,
         align : 'center',
         dataIndex: 'mes_porcentaje'
     }, ]
 });
 
-var indmensual_gridpanel = new Ext.grid.GridPanel({
+var tiemposmensual_gridpanel = new Ext.grid.GridPanel({
     title: 'Consolidado tiempos / Mes',
     region: 'center',
     stripeRows: true,
     frame: true,
-    ds: indmensual_datastore,
-    cm: indmensual_colmodel,
+    ds: tiemposmensual_datastore,
+    cm: tiemposmensual_colmodel,
     width: 300,
     height: 120
 });
@@ -464,7 +488,7 @@ var maqmensual_colmodel = new Ext.grid.ColumnModel({
     }]
 });
 
-var maqmensual_gridpanel = new Ext.grid.GridPanel({
+var maqmensual_gridpanel_tiemp = new Ext.grid.GridPanel({
     title: 'Equipos seleccionados',
     region: 'center',
     stripeRows: true,
@@ -508,7 +532,7 @@ var grumensual_colmodel = new Ext.grid.ColumnModel({
     }]
 });
 
-var grumensual_gridpanel = new Ext.grid.GridPanel({
+var grumensual_gridpanel_tiemp = new Ext.grid.GridPanel({
     title: 'Grupos seleccionados',
     region: 'center',
     stripeRows: true,
@@ -519,6 +543,202 @@ var grumensual_gridpanel = new Ext.grid.GridPanel({
     height: 95
 });
 /*********************************************************************************/
+
+
+
+
+
+//TABLAS CONSOLIDADO INDICADORES
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña indicadores una tabla con el consolidado del valor por indicador
+var indicadoresmensual_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficomensual', 'consolidadoIndicadoresMes'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'mes_indicador',
+        type: 'string'
+    }, {
+        name: 'mes_actual',
+        type: 'string'
+    }, {
+        name: 'mes_meta',
+        type: 'string'
+    }])
+});
+
+//Recargar datos
+indicadoresmensual_datastore.load({
+    params: {
+        'mes': reporgrafmens_mes_combobox.getValue(),
+        'anio': reporgrafmens_anio.getValue(),
+        'cods_equipos': arrayEquipos,
+        'cods_grupos': arrayGrupos
+    }
+});
+
+var indicadoresmensual_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 110,
+        align : 'center',
+        dataIndex: 'mes_indicador'
+    }, {
+        header: "Valor Actual (%)",
+        width: 93,
+        align : 'center',
+        dataIndex: 'mes_actual'
+    }, {
+        header: "Meta (%)",
+        width: 78,
+        align : 'center',
+        dataIndex: 'mes_meta'
+    }, ]
+});
+
+var indicadoresmensual_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado indicadores / Mes',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: indicadoresmensual_datastore,
+    cm: indicadoresmensual_colmodel,
+    width: 300,
+    height: 160
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña indicadores una tabla con el nombre de los equipos seleccionados
+var maqmensual_gridpanel_ind = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqmensual_datastore,
+    cm: maqmensual_colmodel,
+    width: 300,
+    height: 75
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña indicadores una tabla con el nombre de los equipos seleccionados
+var grumensual_gridpanel_ind = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: grumensual_datastore,
+    cm: grumensual_colmodel,
+    width: 300,
+    height: 75
+});
+/*********************************************************************************/
+
+
+
+
+
+//TABLAS CONSOLIDADO PÉRDIDAS
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña pérdidas una tabla con el consolidado del valor por indicador
+var perdidasmensual_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficomensual', 'consolidadoPerdidasMes'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'mes_perdida',
+        type: 'string'
+    }, {
+        name: 'mes_horas_perd',
+        type: 'string'
+    }, {
+        name: 'mes_porcentaje_perd',
+        type: 'string'
+    }])
+});
+
+//Recargar datos
+perdidasmensual_datastore.load({
+    params: {
+        'mes': reporgrafmens_mes_combobox.getValue(),
+        'anio': reporgrafmens_anio.getValue(),
+        'cods_equipos': arrayEquipos,
+        'cods_grupos': arrayGrupos,
+        'metodo_codigo': reporgrafmens_metodo_codigo_combobox.getValue(),
+        'analista_codigo': reporgrafmens_analista_codigo_combobox.getValue()
+    }
+});
+
+var perdidasmensual_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 108,
+        align : 'center',
+        dataIndex: 'mes_perdida'
+    }, {
+        header: "Horas",
+        width: 85,
+        align : 'center',
+        dataIndex: 'mes_horas_perd'
+    }, {
+        header: "Porcentaje (%)",
+        width: 88,
+        align : 'center',
+        dataIndex: 'mes_porcentaje_perd'
+    }]
+});
+
+var perdidasmensual_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado de pérdidas / Mes',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: perdidasmensual_datastore,
+    cm: perdidasmensual_colmodel,
+    width: 300,
+    height: 97
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var maqmensual_gridpanel_perd = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqmensual_datastore,
+    cm: maqmensual_colmodel,
+    width: 300,
+    height: 105
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var grumensual_gridpanel_perd = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: grumensual_datastore,
+    cm: grumensual_colmodel,
+    width: 300,
+    height: 105
+});
+/*********************************************************************************/
+
+
 
     var reporgrafmens_reportes_tabpanel = new Ext.TabPanel({
         frame: true,
@@ -535,9 +755,9 @@ var grumensual_gridpanel = new Ext.grid.GridPanel({
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficomensual_tiempos_torta'
             }, 
-            indmensual_gridpanel,
-            maqmensual_gridpanel,
-            grumensual_gridpanel]
+            tiemposmensual_gridpanel,
+            maqmensual_gridpanel_tiemp,
+            grumensual_gridpanel_tiemp]
         }, {
             xtype: 'panel',
             title: 'Indicadores',
@@ -550,6 +770,13 @@ var grumensual_gridpanel = new Ext.grid.GridPanel({
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficomensual_indicadores_barras'
+            },{
+                xtype: 'panel',
+                items: [
+                    indicadoresmensual_gridpanel,
+                    maqmensual_gridpanel_ind,
+                    grumensual_gridpanel_ind
+                ]
             }]
         }, {
             xtype: 'panel',
@@ -563,6 +790,14 @@ var grumensual_gridpanel = new Ext.grid.GridPanel({
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficomensual_perdidas_torta'
+            },
+            {
+                xtype: 'panel',
+                items: [
+                    perdidasmensual_gridpanel,
+                    maqmensual_gridpanel_perd,
+                    grumensual_gridpanel_perd
+                ]
             }]
         }, {
             xtype: 'panel',
@@ -637,8 +872,8 @@ var grumensual_gridpanel = new Ext.grid.GridPanel({
         reporgrafmens_tiempos_torta.write("div_reporte_graficomensual_tiempos_torta");
         
         
-        //indicadores
-        var reporgrafmens_indicadores_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
+        //Indicadores
+        var reporgrafmens_indicadores_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "485", "400", "8", "#FFFFFF");
         reporgrafmens_indicadores_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafmens_indicadores_dispersion.addParam("wmode", "opaque");
         reporgrafmens_indicadores_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/amline_st_grafico_indicadores.php');
@@ -654,8 +889,9 @@ var grumensual_gridpanel = new Ext.grid.GridPanel({
         reporgrafmens_indicadores_barras.addVariable("loading_data", "... CARGANDO ...");
         reporgrafmens_indicadores_barras.write("div_reporte_graficomensual_indicadores_barras");
         
-        //perdidas
-        var reporgrafmens_perdida_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
+        
+        //Pérdidas
+        var reporgrafmens_perdida_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "510", "400", "8", "#FFFFFF");
         reporgrafmens_perdida_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafmens_perdida_dispersion.addParam("wmode", "opaque");
         reporgrafmens_perdida_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/amline_st_grafico_perdidas.php');
@@ -663,7 +899,7 @@ var grumensual_gridpanel = new Ext.grid.GridPanel({
         reporgrafmens_perdida_dispersion.addVariable("loading_data", "... CARGANDO ...");
         reporgrafmens_perdida_dispersion.write("div_reporte_graficomensual_perdidas_dispersion");
         
-        var reporgrafmens_tiempo_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "520", "400", "8", "#FFFFFF");
+        var reporgrafmens_tiempo_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "500", "390", "8", "#FFFFFF");
         reporgrafmens_tiempo_torta.addVariable("path", urlWeb + "flash/ampie/");
         reporgrafmens_tiempo_torta.addParam("wmode", "opaque");//turco ee
         reporgrafmens_tiempo_torta.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/ampie_st_grafico_perdidas_torta.php');

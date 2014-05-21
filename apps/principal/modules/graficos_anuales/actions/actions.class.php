@@ -572,7 +572,7 @@ class graficos_anualesActions extends sfActions
 		$this->renderText('<data_type>csv</data_type>');
 		$this->renderText('<pie>');
 		$this->renderText('<x>245</x>
-    <y>140</y>                     
+    <y>150</y>                     
     <inner_radius>40</inner_radius>
     <height>20</height>            
     <angle>30</angle>
@@ -618,10 +618,10 @@ class graficos_anualesActions extends sfActions
     </label>
     </labels>
     ');
-		$this->renderText('<legend>
+    $this->renderText('<legend>
     <enabled>true</enabled>        
     <x>100</x>                     
-    <y>270</y>                     
+    <y>300</y>                     
     <max_columns>2</max_columns>   
     <values>                       
     <enabled></enabled>          
@@ -702,8 +702,8 @@ class graficos_anualesActions extends sfActions
                 }
 
 //		echo "Fallas;".round($fallasAnual,2)."\n";
-		echo "Paros menores y reajustes;".round($parosMenoresAnual,2)."\n";
-		echo "Retrabajos;".round($retrabajosAnual,2)."\n";
+		echo "Paros menores y fallas;".round($parosMenoresAnual,2)."\n";
+		echo "Reensayos;".round($retrabajosAnual,2)."\n";
 		return $this->renderText("Pérdidas de velocidad;".round($perdidasVelocidadAnual,2)."\n");
 	}
 
@@ -963,7 +963,7 @@ class graficos_anualesActions extends sfActions
 //          <value xid="10">'.round($fallasNoviembre, 2).'</value>
 //          <value xid="11">'.round($fallasDiciembre, 2).'</value>
 //        </graph>'); 
-		$this->renderText('<graph color="#ff5454" title="Paros menores y reajustes" bullet="round">
+		$this->renderText('<graph color="#ff5454" title="Paros menores y fallas" bullet="round">
               <value xid="0">'.round($parosMenoresEnero, 2).'</value>
               <value xid="1">'.round($parosMenoresFebrero, 2).'</value>
               <value xid="2">'.round($parosMenoresMarzo, 2).'</value>
@@ -977,7 +977,7 @@ class graficos_anualesActions extends sfActions
               <value xid="10">'.round($parosMenoresNoviembre, 2).'</value>
               <value xid="11">'.round($parosMenoresDiciembre, 2).'</value>
             </graph>');
-		$this->renderText('<graph color="#47d552" title="Retrabajos" bullet="round">
+		$this->renderText('<graph color="#47d552" title="Reensayos" bullet="round">
               <value xid="0">'.round($retrabajosEnero, 2).'</value>
               <value xid="1">'.round($retrabajosFebrero, 2).'</value>
               <value xid="2">'.round($retrabajosMarzo, 2).'</value>
@@ -2475,8 +2475,8 @@ class graficos_anualesActions extends sfActions
 	}
         
         //Cambios: 24 de febrero de 2014
-        //Calcula el consolidado total de tiempos de los indicadores por ano
-        public function executeConsolidadoIndicadoresAno(sfWebRequest $request) {
+        //Calcula el consolidado total de tiempos de los indicadores (TP - TNP - TPNP - TO) por ano
+        public function executeConsolidadoTiemposAno(sfWebRequest $request) {
             $ano = $request->getParameter('ano');
 
             $params = array();
@@ -2561,7 +2561,7 @@ class graficos_anualesActions extends sfActions
             $datos = array();
             
             for($i=0; $i<sizeof($indicadores); $i++) {
-                $datos[$fila]['ano_indicador'] = $indicadores[$i];
+                $datos[$fila]['ano_tiempo'] = $indicadores[$i];
                 $datos[$fila]['ano_horas'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');
                 //Se calcula el porcentaje para cada indicador
                 $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
@@ -2576,7 +2576,282 @@ class graficos_anualesActions extends sfActions
             return $this->renderText($salida);    
 	}
         
-         //Cambios: 24 de febrero de 2014
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total de indicadores (D - E - C - A - OEE - PTEE) por ano
+        public function executeConsolidadoIndicadoresAno(sfWebRequest $request) {
+            $anho = $request->getParameter('ano');
+
+            $params = array();
+            if($request->getParameter('codigo_operario')!='-1') {
+                    $params['codigo_operario'] = $request->getParameter('codigo_operario');
+            }
+            if($request->getParameter('codigo_metodo')!='-1') {
+                    $params['codigo_metodo'] = $request->getParameter('codigo_metodo');
+            }
+
+            $user = $this->getUser();
+            $codigo_usuario = $user->getAttribute('usu_codigo');
+            $criteria = new Criteria();
+            $criteria->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+            $operario = EmpleadoPeer::doSelectOne($criteria);
+            $criteria = new Criteria();
+            $criteria->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+            $empresa = EmpresaPeer::doSelectOne($criteria);
+
+            $inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+
+            $TNPAnual = 0;
+            $TPPAnual = 0;
+            $TPNPAnual = 0;
+            $TFAnual = 0;
+            $TOAnual = 0;
+            $TPAnual = 0;
+
+            $tiempoCalendario = 0;
+
+            $numeroInyecciones = 0;
+            $numeroReinyecciones = 0;
+
+            $conexion = new Criteria();
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {
+                    $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                }
+            }      
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los grupos de equipos seleccionados
+            $temp2 = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp2);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {
+                    $criteria1 = new Criteria();
+                    $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                    $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                    foreach ($grupoporequipo as $equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                    }                
+                }
+            }
+
+            $maquinas = MaquinaPeer::doSelect($conexion);
+
+            foreach($maquinas as $maquina) {
+                    $codigoTemporalMaquina = $maquina->getMaqCodigo();
+
+                    $TNPAnual += RegistroUsoMaquinaPeer::calcularTNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params);
+                    $TPPAnual += RegistroUsoMaquinaPeer::calcularTPPAnhoEnHoras($codigoTemporalMaquina, $anho, $params);
+                    $TPNPAnual += RegistroUsoMaquinaPeer::calcularTPNPAnhoEnHoras($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                    $tiempoCalendario += $maquina->calcularNumeroHorasActivasDelAño($anho);
+                    $TPAnual += RegistroUsoMaquinaPeer::calcularTPAnhoEnHoras($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                    $numeroInyecciones += RegistroUsoMaquinaPeer::contarNumeroInyeccionesObligatoriasAño($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                    $numeroReinyecciones += RegistroUsoMaquinaPeer::contarNumeroReinyeccionesAño($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+            }
+            $TFAnual = RegistroUsoMaquinaPeer::calcularTFDiaMesAño($tiempoCalendario, $TPPAnual, $TNPAnual);
+            $TOAnual = RegistroUsoMaquinaPeer::calcularTODiaMesAño($TFAnual, $TPNPAnual);
+
+            $DAnual = RegistroUsoMaquinaPeer::calcularDisponibilidad($TOAnual, $TFAnual);
+            $EAnual = RegistroUsoMaquinaPeer::calcularEficiencia($TPAnual, $TOAnual);
+            $CAnual = RegistroUsoMaquinaPeer::calcularCalidad($numeroInyecciones, $numeroReinyecciones);
+            $OEEAnual = RegistroUsoMaquinaPeer::calcularEfectividadGlobalEquipo($DAnual, $EAnual, $CAnual);
+            $AAnual = RegistroUsoMaquinaPeer::calcularAprovechamiento($TFAnual, $tiempoCalendario);
+            $PTEEAnual = RegistroUsoMaquinaPeer::calcularProductividadTotalEfectiva($AAnual, $OEEAnual);
+
+            $criteria = new Criteria();
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_EMP_CODIGO, $empresa->getEmpCodigo());
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_IND_CODIGO, 7);
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_ANIO, $anho);
+            $meta = MetaAnualXIndicadorPeer::doSelectOne($criteria);
+            $metaAnualDisponibilidad = 0;
+            if($meta) {
+                    $metaAnualDisponibilidad = $meta->getMeaValor();
+            }            
+
+            $criteria = new Criteria();
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_EMP_CODIGO, $empresa->getEmpCodigo());
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_IND_CODIGO, 8);
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_ANIO, $anho);
+            $meta = MetaAnualXIndicadorPeer::doSelectOne($criteria);
+            $metaAnualEficiencia = 0;
+            if($meta) {
+                    $metaAnualEficiencia = $meta->getMeaValor();
+            }
+
+            $criteria = new Criteria();
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_EMP_CODIGO, $empresa->getEmpCodigo());
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_IND_CODIGO, 9);
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_ANIO, $anho);
+            $meta = MetaAnualXIndicadorPeer::doSelectOne($criteria);
+            $metaAnualCalidad = 0;
+            if($meta) {
+                    $metaAnualCalidad = $meta->getMeaValor();
+            }
+
+            $criteria = new Criteria();
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_EMP_CODIGO, $empresa->getEmpCodigo());
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_IND_CODIGO, 10);
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_ANIO, $anho);
+            $meta = MetaAnualXIndicadorPeer::doSelectOne($criteria);
+            $metaAnualAprovechamiento = 0;
+            if($meta) {
+                    $metaAnualAprovechamiento = $meta->getMeaValor();
+            }            
+
+            $criteria = new Criteria();
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_EMP_CODIGO, $empresa->getEmpCodigo());
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_IND_CODIGO, 11);
+            $criteria->add(MetaAnualXIndicadorPeer::MEA_ANIO, $anho);
+            $meta = MetaAnualXIndicadorPeer::doSelectOne($criteria);
+            $metaAnualOEE = 0;
+            if($meta) {
+                    $metaAnualOEE = $meta->getMeaValor();
+            }
+
+            $metaAnualPTEE = ($metaAnualAprovechamiento * $metaAnualOEE) / 100;
+
+            //Guarda el valor actual del indicador
+            $datos_ind = array();            
+            $datos_ind['D'] = round($DAnual, 2);
+            $datos_ind['E'] = round($EAnual, 2);
+            $datos_ind['C'] = round($CAnual, 2);
+            $datos_ind['A'] = round($AAnual, 2);
+            $datos_ind['OEE'] = round($OEEAnual, 2);
+            $datos_ind['PTEE'] = round($PTEEAnual, 2);
+            //Guarda el valor meta del indicador
+            $datos_meta = array();            
+            $datos_meta['D'] = round($metaAnualDisponibilidad, 2);
+            $datos_meta['E'] = round($metaAnualEficiencia, 2);
+            $datos_meta['C'] = round($metaAnualCalidad, 2);
+            $datos_meta['A'] = round($metaAnualAprovechamiento, 2);
+            $datos_meta['OEE'] = round($metaAnualOEE, 2);
+            $datos_meta['PTEE'] = round($metaAnualPTEE, 2);
+            
+            $indicadores = array('D', 'E', 'C', 'A', 'OEE', 'PTEE');            
+            $ind_nombres = array('Disponibilidad', 'Eficiencia', 'Calidad', 'Aprovechamiento', 'OEE', 'PTEE');
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['ano_indicador'] = $ind_nombres[$i];
+                $datos[$fila]['ano_actual'] = $datos_ind[$indicadores[$i]];
+                $datos[$fila]['ano_meta'] = $datos_meta[$indicadores[$i]];
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);    
+	}
+        
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total de indicadores (Paros - Reensayos - Pérdidas) por ano
+        public function executeConsolidadoPerdidasAno(sfWebRequest $request) {
+            $anho = $request->getParameter('ano');
+            $params = array();
+            if($request->getParameter('codigo_operario')!='-1') {
+                    $params['codigo_operario'] = $request->getParameter('codigo_operario');
+            }
+            if($request->getParameter('codigo_metodo')!='-1') {
+                    $params['codigo_metodo'] = $request->getParameter('codigo_metodo');
+            }
+
+            $user = $this->getUser();
+            $codigo_usuario = $user->getAttribute('usu_codigo');
+            $criteria = new Criteria();
+            $criteria->add(EmpleadoPeer::EMPL_USU_CODIGO, $codigo_usuario);
+            $operario = EmpleadoPeer::doSelectOne($criteria);
+            $criteria = new Criteria();
+            $criteria->add(EmpresaPeer::EMP_CODIGO, $operario->getEmplEmpCodigo());
+            $empresa = EmpresaPeer::doSelectOne($criteria);
+
+            $inyeccionesEstandarPromedio = $empresa->getEmpInyectEstandarPromedio();
+
+//		$fallasAnual = 0;
+            $parosMenoresAnual = 0;
+            $retrabajosAnual = 0;
+            $perdidasVelocidadAnual = 0;
+
+            $conexion = new Criteria();
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {
+                    $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                }
+            }     
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los grupos de equipos seleccionados
+            $temp2 = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp2);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {
+                    $criteria1 = new Criteria();
+                    $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                    $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                    foreach ($grupoporequipo as $equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                    }                
+                }
+            }
+
+            $maquinas = MaquinaPeer::doSelect($conexion);
+
+            foreach($maquinas as $maquina) {
+                    $codigoTemporalMaquina = $maquina->getMaqCodigo();
+
+//                        $fallasAnual += RegistroUsoMaquinaPeer::contarFallasAñoEnDias($codigoTemporalMaquina, $anho, $params);
+                    $parosMenoresAnual += RegistroUsoMaquinaPeer::contarParosMenoresIncluyendoCambioMetodoAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                    $retrabajosAnual += RegistroUsoMaquinaPeer::contarRetrabajosAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+                    $perdidasVelocidadAnual += RegistroUsoMaquinaPeer::contarPerdidasVelocidadAñoEnDias($codigoTemporalMaquina, $anho, $params, $inyeccionesEstandarPromedio);
+            }
+
+            $datos_ind = array();
+            $datos_ind['paros'] = round($parosMenoresAnual, 2);
+            $datos_ind['retrabajos'] = round($retrabajosAnual, 2);
+            $datos_ind['perdida_rendimiento'] = round($perdidasVelocidadAnual, 2);
+            
+            $indicadores = array('paros', 'retrabajos', 'perdida_rendimiento');
+            $ind_nombres = array('Paros menores', 'Reensayos', 'Pérd. velocidad');
+            
+            //Se calcula la suma de horas de los tres indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]]+$datos_ind[$indicadores[2]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['ano_perdida'] = $ind_nombres[$i];
+                $datos[$fila]['ano_dias_perd'] = $datos_ind[$indicadores[$i]];
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['ano_porcentaje_perd'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);    
+	}        
+        
+        
+        //Cambios: 24 de febrero de 2014
         //Retorna el nombre de los equipos seleccionados
         public function executeEquiposSeleccionados(sfWebRequest $request)
 	{           

@@ -8,10 +8,10 @@
 	<border_alpha>100</border_alpha>
   </background>
   <pie>
-  	<radius>30%</radius>
+  <radius>30%</radius>
     <inner_radius>50</inner_radius>
     <height>20</height>
-	<angle>30</angle> 
+    <angle>30</angle> 
     <hover_brightness>-10</hover_brightness>
     <gradient>radial</gradient>
     <gradient_ratio>0,0,0,-50,0,0,0,-50</gradient_ratio> 
