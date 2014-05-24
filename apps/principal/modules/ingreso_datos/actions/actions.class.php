@@ -1115,8 +1115,8 @@ class ingreso_datosActions extends sfActions
             //Se verifica si el evento ocurrió en un tiempo de alistamiento.  Si así fue, no se le suma nada
             if(($hora_inicio>=$tiempo_inicio) && ($hora_inicio<=$tiempo_fin)){
                 $hora_fin_total = $hora_fin;
-            } 
-            //Sumar a la hora de fin el tiempo de la corrida
+            }
+             //Sumar a la hora de fin el tiempo de la corrida
             else {
                 $hora_fin_total = $this->calcularHoraFin($registro, $hora_fin, '+');            
             }            
@@ -1127,7 +1127,7 @@ class ingreso_datosActions extends sfActions
         }
         
         //Cambios: 24 de febrero de 2014
-        //Calculo de la duración del evento
+        //Cálculo de la duración del evento
         $horaInicio = $hora_inicio_total;
         $horaFin = $hora_fin_total;
         $horas1 = date('H', strtotime($horaInicio));

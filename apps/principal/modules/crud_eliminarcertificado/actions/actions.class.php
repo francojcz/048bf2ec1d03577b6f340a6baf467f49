@@ -72,7 +72,7 @@ class crud_eliminarcertificadoActions extends sfActions
 
                         if($computador){
                                 $computador->delete();
-                                $salida = "({success: true, mensaje:'El computador fue eliminado exitosamente'})";
+                                $salida = "({success: true, mensaje:'El certificado fue eliminado exitosamente'})";
                         }
                     } else {
                         $salida = "({success: false,  errors: { reason: 'No ha seleccionado ning&uacute;n computador'}})";
@@ -80,7 +80,7 @@ class crud_eliminarcertificadoActions extends sfActions
                 }
                 catch (Exception $excepcion)
                 {
-                    $salida= "({success: false, errors: { reason: 'Hubo una excepci&oacute;n en computador al tratar de eliminar ',error:'".$excepcion->getMessage()."'}})";
+                    $salida= "({success: false, errors: { reason: 'Hubo una excepci&oacute;n en certificado al tratar de eliminar ',error:'".$excepcion->getMessage()."'}})";
                 }
 
                 return $this->renderText($salida);

@@ -174,8 +174,7 @@ class crud_empresaActions extends sfActions
 				$conexion->add(EmpleadoPeer::EMPL_EMP_CODIGO, $emp_codigo);
 				$empleados = EmpleadoPeer::doCount($conexion);
 				
-				if($empleados==0){
-				
+				if($empleados==0){				
 					$empresa  = EmpresaPeer::retrieveByPk($emp_codigo);
 					if($empresa){
 						$empresa->delete();
