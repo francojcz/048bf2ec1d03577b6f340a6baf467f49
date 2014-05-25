@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
+    <title>Guia de Usuario</title>
+    <link rel="stylesheet" href="../../estilos/estilos.css" type="text/css">
+  </head>
+  <body>
+    <div align="center">
+      <table style="width: 1386px; height: 32px;" borderdark="#000000" bordercolorlight="#FFFFFF"
+        border="0" cellpadding="5" cellspacing="0">
+        <tbody>
+          <tr bordercolor="" bgcolor="">
+            <td class="barra" height="">
+              <p class="blanco"><big><br>
+                  <big><a name="inicio"></a> Eliminar Certificados</big><br>
+                  <br>
+                </big> </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <big><span style="font-weight: bold;"><br>
+          MANUAL DE USUARIO<br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs -
+          ELIMINAR CERTIFICADOS</span></big><br>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><big><br>
+            <br>
+          </big>
+          <div style="text-align: justify;"><big> </big></div>
+        </div>
+        <div style="text-align: justify;"><big>Cuando el usuario selecciona la
+            opción Eliminar certificados ubicada en el menú principal, el
+            sistema desplegará una pantalla como la que se muestra en la Figura
+            1. En esta pantalla el usuario podrá </big><big>eliminar
+            certificados de computadores que actualmente no se encuentran en
+            uso.</big><big></big><br>
+          <big> </big><br>
+          <big>Para llevar a cabo el proceso de eliminación de un certificado,
+            debe seleccionar un computador de la lista de de computadores
+            registrados (1) y pulsar el botón <span style="font-weight: bold;">Eliminar
+              certificado </span>(2).&nbsp; El sistema desplegará un mensaje de
+            confirmación en el cual el usuario debe pulsar el botón <span style="font-weight: bold;">Si</span>
+            (3) para dar continuación al proceso de eliminación del
+            certificado.&nbsp; Luego el sistema le mostrará un breve mensaje en
+            el que le informará el éxito de la eliminación.<br>
+            <br>
+            <br>
+          </big><big> </big> </div>
+      </div>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><img title="Eliminar certificado" alt="Eliminar certificado"
+            src="../imagenes/superadmin/5_eliminar_certificado.png"></div>
+        <div style="text-align: center;"> Figura 1. Pantalla para la eliminación
+          de certificados.<br>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

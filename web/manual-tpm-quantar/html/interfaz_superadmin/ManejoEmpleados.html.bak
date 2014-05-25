@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
+    <title>Guia de Usuario</title>
+    <link rel="stylesheet" href="../../estilos/estilos.css" type="text/css">
+  </head>
+  <body>
+    <div align="center">
+      <table style="width: 1386px; height: 32px;" borderdark="#000000" bordercolorlight="#FFFFFF"
+        border="0" cellpadding="5" cellspacing="0">
+        <tbody>
+          <tr bordercolor="" bgcolor="">
+            <td class="barra" height="">
+              <p class="blanco"><big><br>
+                  <big><a name="inicio"></a> Manejo de administradores</big><br>
+                  <br>
+                </big> </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <big><span style="font-weight: bold;"><br>
+          MANUAL DE USUARIO<br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs&nbsp; -
+          MANEJO DE ADMINISTRADORES</span></big><br>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><big><br>
+            <br>
+          </big></div>
+        <div style="text-align: justify;"><big>Cuando el usuario selecciona la
+            opción Manejo de administradores ubicada en menú principal, el
+            sistema le desplegará una pantalla como la que se muestra en la
+            Figura 1.&nbsp; En esta pantalla el usuario podrá registrar,
+            eliminar y actualizar la información de los usuarios con perfil
+            administrador, además de asociarlos con las empresas previamente
+            registradas.</big><br>
+        </div>
+        <big> <br>
+        </big> </div>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><img title="Administradores" alt="Administradores"
+            src="../imagenes/superadmin/4_empleados.png"></div>
+        <div style="text-align: center;"> Figura 1. Pantalla de manejo de
+          empleados<br>
+        </div>
+        <div style="text-align: center;">
+          <div style="text-align: justify;"><br>
+          </div>
+          <div style="text-align: left;">
+            <div style="text-align: justify;"><big><span style="font-weight: bold;">Agregar
+                  administrador</span></big><br>
+              <big> </big><br>
+              <big> Para agregar un usuario administrador pulse el botón <span
+                  style="font-weight: bold;">Agregar</span>, diligencie el
+                formulario ubicado al lado derecho de la interfaz para el manejo
+                de administradores y pulse el botón <span style="font-weight: bold;">Guardar</span>.&nbsp;
+                Los datos del usuario que se deben ingresar para su registro se
+                describen a continuación:</big><big><span style="font-weight: bold;"></span><br>
+              </big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;">
+                  <ul style="text-align: justify;">
+                    <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                          style="font-weight: bold;">Login de usuario</span>:
+                        Ingrese el login de usuario&nbsp; (es un campo
+                        obligatorio).</big></li>
+                    <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                          style="font-weight: bold;">Password</span>: Ingrese el
+                        password del usuario el cual debe tener como mínimo 8
+                        caracteres<span class="Apple-converted-space"> </span></big><big>(es
+                        un campo obligatorio)</big><big>.</big></li>
+                    <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                          style="font-weight: bold;">Repetir password</span>:&nbsp;
+                        Repita el password<span class="Apple-converted-space">&nbsp;</span></big><big>(es
+                        un campo obligatorio)</big><big>.</big></li>
+                    <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                          style="font-weight: bold;">Perfil</span>:&nbsp;
+                        Seleccione un perfil de usuario.&nbsp; Un perfil de
+                        usuario define las funcionalidades a las cuales tiene
+                        acceso cada persona.&nbsp; Para esta interfaz, el único
+                        perfil disponible es el perfil Administrador el cual
+                        tiene asignado una serie de tareas dentro de las cuales
+                        se encuentran: </big><big>manejo de métodos, manejo de
+                        equipos, manejo de empleados, además de tener la
+                        posibilidad de visualizar los reportes que permitirán la
+                        toma de decisiones importantes para la empresa cliente </big><span
+                        class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                          class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>(es
+                            un campo obligatorio).</big></span></span></li>
+                    <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                          style="font-weight: bold;">Habilitado</span>:
+                        Seleccione si el usuario está habilitado o
+                        deshabilitado.&nbsp; Tenga en cuenta que los usuarios
+                        deshabilitados no podrán ingresar al sistema<span class="Apple-converted-space">&nbsp;</span></big><big>(es
+                        un campo obligatorio).</big></li>
+                  </ul>
+                  <big>Nota: El login y el password deben ser entregados a los
+                    usuarios con perfil administrador para que estos ingresen al
+                    sistema.<br>
+                    <br>
+                    &nbsp;También se deben ingresar los siguientes datos del
+                    empleado:</big></span></span><big></big><br>
+              <big> </big> </div>
+            <ul style="text-align: justify;">
+              <li><big><span style="font-weight: bold;">Nombre</span>: Ingrese
+                  el nombre del empleado (es un campo obligatorio).</big></li>
+              <li><big><span style="font-weight: bold;">Apellidos</span>:
+                  Ingrese los apellidos del empleado </big><big>(es un campo
+                  obligatorio)</big><big>.</big></li>
+              <li><big><span style="font-weight: bold;">Tipo identificación</span>:
+                </big><big>Seleccione el tipo</big><big> de identificación</big><big>
+                  del empleado (es un campo obligatorio).</big></li>
+              <li><big><span style="font-weight: bold;">Número identificación</span>:
+                </big><big> Ingrese el número de identificación&nbsp;</big><big>(es
+                  un campo obligatorio).</big></li>
+              <li><big><span style="font-weight: bold;">Empresa</span>:
+                  Seleccione la empresa a la cual pertenece el empleado, la cual
+                  debe haber sido registrada previamente en el sistema.<br>
+                </big></li>
+              <li><big><span style="font-weight: bold;">Escoger foto</span>:
+                  Utilícelo para subir al sistema una foto del usuario (es
+                  opcional)<br>
+                </big></li>
+            </ul>
+            <div style="text-align: justify;"> <br>
+              <br>
+              <big> <span style="font-weight: bold;">Actualizar</span></big><br>
+              <big> </big><br>
+              <big> Para actualizar la información de un usuario, seleccione el
+                empleado que desea actualizar de la lista de usuarios
+                registrados, actualice la información del usuario haciendo uso
+                del formulario ubicado al lado derecho de la interfaz para el
+                manejo de administradores y pulse el botón <span style="font-weight: bold;">Actualizar</span>.&nbsp;
+                El sistema desplegara una pequeña ventana donde debe ingresar la
+                razón de la actualización de la información del usuario.&nbsp;
+                Una vez ingresada dicha razón, debe pulsar el botón <span style="font-weight: bold;">Aceptar</span>.&nbsp;
+                Luego el sistema le mostrará un breve mensaje en el que
+                informará del éxito de la actualización.<br>
+                <br>
+                Recuerde que:<br>
+              </big>
+              <ul>
+                <li><big> El login de usuario no puede ser modificado porque es
+                    utilizado para identificarlo al momento de loguearse en la
+                    herramienta.</big></li>
+                <li><big>El password no se puede visualizar por cuestiones de
+                    seguridad, aunque usted lo puede cambiar pero no será
+                    posible la recuperación del password anterior.</big></li>
+              </ul>
+              <big> </big> <big> </big><br>
+              <br>
+              <big> <span style="font-weight: bold;">Deshabilitar</span></big><br>
+              <big><span style="font-weight: bold;"> </span></big><br>
+              <big><span style="font-weight: bold;"> </span> </big><big>Para
+                deshabilitar </big><big>un usuario,</big><big> seleccione de</big><big>
+                la lista de usuarios registrados el usuario de interés y<span style="font-weight: bold;"></span>
+                en el formulario ubicado al lado derecho de la interfaz
+                seleccione en el campo <span style="font-weight: bold;">Habilitado</span>
+                la opción <span style="font-weight: bold;">No</span>; luego
+                pulse el botón <span style="font-weight: bold;">Actualizar</span>.
+              </big><big>El sistema desplegará una peque</big><big>ñ</big><big>a
+                ventana en donde debe ingresar la razón de la actualizacion de
+                la información del usuario.&nbsp; Una vez ingresada dicha razón,
+                debe pulsar el botón&nbsp;<span style="font-weight: bold;">Aceptar</span>.</big><big>
+              </big><big> Luego el sistema le mostrará un breve mensaje en el
+                que informará del éxito de la operación.&nbsp; Recuerde que los
+                usuarios deshabilitados no podrán ingresar al sistema.</big><big>
+              </big><big style="font-weight: bold;"> </big></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
+    <title>Guia de Usuario</title>
+    <link rel="stylesheet" href="../../estilos/estilos.css" type="text/css">
+  </head>
+  <body>
+    <div align="center">
+      <table style="width: 1386px; height: 32px;" borderdark="#000000" bordercolorlight="#FFFFFF"
+        border="0" cellpadding="5" cellspacing="0">
+        <tbody>
+          <tr bordercolor="" bgcolor="">
+            <td class="barra" height="">
+              <p class="blanco"><big><br>
+                  <big><a name="inicio"></a> Manejo de indicadores</big><br>
+                  <br>
+                </big>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <big><span style="font-weight: bold;"><br>
+          MANUAL DE USUARIO<br>
+        </span></big>
+      <big><span style="font-weight: bold;">TPM-QLabs - INDICADOR</span></big><br>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><big><br>
+            <br>
+          </big></div>
+        <div style="text-align: justify;"><big>Cuando el usuario selecciona la
+            opción Indicador ubicada en el menú principal, el sistema desplegará
+            una pantalla como la que se
+            muestra en la Figura 1. En esta pantalla el usuario podrá visualizar
+            y actualizar la información de l</big><big>os indicadores
+            registrados en el sistema.<br>
+            &nbsp;<br>
+          </big></div>
+        <big>Esta información se utiliza para plantear las metas de las empresas
+          y generar los reportes.<br>
+          <br>
+        </big>
+      </div>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><img title="Indicador" alt="Indicador"
+            src="../imagenes/superadmin/8_maestra_indicador.png"></div>
+        <div style="text-align: center;">
+          Figura 1. Pantalla de manejo de indicadores.<br>
+        </div>
+        <div style="text-align: center;"><big style="font-weight: bold;"><br>
+          </big>
+          <div style="text-align: left;"><big><br>
+            </big><big>
+              <span style="font-weight: bold;">Actualizar</span><br>
+              <br>
+            </big>
+            <div style="text-align: justify;"><big>
+                Para actualizar la información de un indicador, debe dar <span
+                  style="font-weight: bold;">doble clic </span>sobre el </big><big>indicador</big><big>
+                que desea modificar</big><big>, luego editar la información
+                sobre el campo de texto ubicado en la columna Nombre y pulsar el
+                botón <span style="font-weight: bold;">Guardar</span>.&nbsp; El
+                sistema desplegará una pequeña ventana donde debe ingresar la
+                razón de la actualización de la información del indicador.&nbsp;
+                Una vez ingresada&nbsp; dicha razón, debe pulsar el botón <span
+                  style="font-weight: bold;">Aceptar</span>.&nbsp; Luego el
+                sistema le mostrará </big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>un
+                    breve mensaje en el que le informará del éxito de la
+                    actualización.&nbsp; Sin embargo, no es recomendable
+                    realizar cambios sobre la información de esta tabla ya que
+                    el realizar cambios en los nombres de los indicadores o en
+                    sus unidades no tendrá implicaciones
+                    sobre los reportes.</big></span></span></div>
+            <big><br>
+            </big><big style="font-weight: bold;">
+            </big></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

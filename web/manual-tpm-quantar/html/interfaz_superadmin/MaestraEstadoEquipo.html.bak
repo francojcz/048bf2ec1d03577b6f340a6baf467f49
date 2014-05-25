@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
+    <title>Guia de Usuario</title>
+    <link rel="stylesheet" href="../../estilos/estilos.css" type="text/css">
+  </head>
+  <body>
+    <div align="center">
+      <table style="width: 1386px; height: 32px;" borderdark="#000000" bordercolorlight="#FFFFFF"
+        border="0" cellpadding="5" cellspacing="0">
+        <tbody>
+          <tr bordercolor="" bgcolor="">
+            <td class="barra" height="">
+              <p class="blanco"><big><br>
+                  <big><a name="inicio"></a> Manejo de estados</big><br>
+                  <br>
+                </big> </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <big><span style="font-weight: bold;"><br>
+          MANUAL DE USUARIO<br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs - ESTADOS
+          DEL EQUIPO</span></big><br>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><big><br>
+            <br>
+          </big></div>
+        <div style="text-align: justify;"><big>Cuando el usuario selecciona la
+            opción Estado del equipo ubicada en el menú principal, el sistema le
+            desplegará una pantalla como la que se muestra en la Figura 1.&nbsp;
+            En esta pantalla el usuario podrá </big><big>crear, </big><big>visualizar,
+            actualizar, eliminar y restablecer los estados de los equipos o
+            máquinas. Es importante que usted sea consciente de que la
+            información registrada en esta interfaz es parte de la información
+            base del sistema y el hecho de eliminar algún registro puede alterar
+            el funcionamiento normal del sistema.&nbsp; Por lo tanto, es
+            recomendable que esta pantalla sólo se utilice para agregar y
+            modificar datos.</big></div>
+        <div style="text-align: justify;"><big> </big><br>
+          <big> La información ingresada en esta interfaz es utilizada para
+            definir el estado de un equipo del sistema.</big></div>
+        <big> <br>
+        </big> </div>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><img title="Estado" alt="Estado" src="../imagenes/superadmin/7_maestra_estado.png"></div>
+        <div style="text-align: center;"> Figura 1. Pantalla de manejo de
+          estados del equipo.<br>
+        </div>
+        <div style="text-align: center;"><big style="font-weight: bold;"><br>
+            <br>
+          </big>
+          <div style="text-align: left;"><big><span style="font-weight: bold;">Agregar
+                estado</span><br>
+              <br>
+            </big>
+            <div style="text-align: justify;"><big> Para agregar un estado pulse
+                el botón <span style="font-weight: bold;">Agregar</span> (1), a
+                continuación diligencie el nombre del nuevo estado en la fila
+                que aparece al inicio de la lista (2) y pulse el botón <span style="font-weight: bold;">Guardar
+                  </span>(3).&nbsp; En caso de querer cancelar el proceso de
+                registro de un nuevo estado debe pulsar el botón <span style="font-weight: bold;">Cancelar
+                  </span>(4).&nbsp; En la Figura 2 se muestra el proceso a
+                realizar para agregar un nuevo estado.<br>
+                <br>
+              </big></div>
+            <div style="text-align: center;"><big> <img title="Agregar estado"
+                  alt="Agregar estado" src="../imagenes/superadmin/7_maestra_estado_crear.png"></big><br>
+              <big> </big></div>
+            <div style="text-align: center;">Figura 2. Pantalla de agregar un
+              nuevo estado. <big> </big></div>
+            <ul>
+            </ul>
+            <big> <br>
+              <br>
+              <span style="font-weight: bold;">Actualizar</span><br>
+              <br>
+            </big>
+            <div style="text-align: justify;"><big> Para actualizar la
+                información de un estado, debe dar<span style="font-weight: bold;">
+                  doble clic </span>sobre el estado que desea modificar,&nbsp;</big><big>luego
+                editar la información sobre el campo de texto ubicado en la
+                columna nombre (1) y pulsar el botón <span style="font-weight: bold;">Guardar</span>.&nbsp;
+                El sistema desplegará una pequeña ventana donde debe ingresar la
+                razón de la actualización de la información del estado
+                (2).&nbsp; Una vez ingresada dicha razón, debe pulsar el botón <span
+                  style="font-weight: bold;">Aceptar </span>(3).&nbsp; </big><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>Luego
+el
+                    sistema le mostrará un breve mensaje en el que le informará
+                    del éxito de la actualización. En la Figura 3 se muestra la
+                    pantalla para llevar a cabo el proceso de actualización de
+                    un estado.</big></span></span><br>
+              <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"></span></span></div>
+            <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>
+                  <br>
+                </big></span></span> <big> </big>
+            <div style="text-align: center;"><img title="Actualizar estado" alt="Actualizar estado"
+                src="../imagenes/superadmin/7_maestra_estado_actualizar.png"><br>
+              Figura 3. Pantalla para modificar un estado. </div>
+            <big> <br>
+              <br>
+              <span style="font-weight: bold;">Eliminar<br>
+                <br>
+              </span></big>
+            <div style="text-align: justify;"><big><span style="font-weight: bold;">
+                </span> </big><big>Para eliminar </big><big>un estado,
+                seleccione de la lista de estados registrados el estado que
+                desea eliminar</big><big> (1) y pulse el botón <span style="font-weight: bold;">Eliminar
+                  </span>(2).&nbsp; E</big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>l
+                    sistema desplegará una pequeña ventana donde le preguntará
+                    si realmente desea eliminar el estado en donde debe
+                    seleccionar la opción <span style="font-weight: bold;">Si </span>(3),
+                    luego el sistema le preguntará la razón por la cual desea
+                    eliminarlo, digite la razón y pulse el botón <span style="font-weight: bold;">Aceptar</span>.&nbsp;
+                    El sistema le mostrará un breve mensaje en el que le
+                    informará del éxito de la eliminación.&nbsp; En el listado
+                    de estados eliminados denotado por una estrella blanca (4)
+                    podrá observar el registro que eliminó anteriormente.&nbsp;
+                    En la Figura 4 se muestra la
+                    pantalla para llevar a cabo la eliminación de un estado.</big></span></span><br>
+              <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"></span></span></div>
+            <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>
+                  <br>
+                </big></span></span>
+            <div style="text-align: center;"><img title="Eliminar estado" alt="Eliminar estado"
+                src="../imagenes/superadmin/7_maestra_estado_eliminar.png"><br>
+              Figura 4. Pantalla para eliminar un estado. <br>
+              <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"></span></span></div>
+            <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big><br>
+                  <br>
+                  <span style="font-weight: bold;">Restablecer<br>
+                    <br>
+                  </span></big></span></span>
+            <div style="text-align: justify;"><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big><span
+                      style="font-weight: bold;"> </span>Si se ha eliminado un
+                    estado, usted tiene la posibilidad de recuperar la
+                    información seleccionando la opción para ver los estados
+                    eliminados denotada por la estrella blanca (1), luego
+                    seleccione de la lista de estados eliminados el estado que
+                    desea recuperar (2) y pulse el botón <span style="font-weight: bold;">Restablecer</span>
+                    (3).&nbsp; El sistema le preguntará la razón por la cual
+                    usted desea restablecer el estado, digite la razón (4) y
+                    pulse el botón <span style="font-weight: bold;">Aceptar </span>(5).&nbsp;
+                    Luego el sistema le mostrará un breve mensaje en el que le
+                    informará sobre el éxito del proceso de restablecimiento.&nbsp;
+                    Si el estado se ha restablecido con éxito, volverá a
+                    aparecer en la lista de estados activos denotada por la
+                    estrella amarilla (6).&nbsp; En la Figura 5 se muestra la
+                    pantalla para llevar a cabo el proceso de restablecimiento
+                    de un estado.</big></span></span></div>
+            <big> </big><big><br>
+            </big>
+            <div style="text-align: center;"><big> </big><img title="Restablecer estado"
+                alt="Restablecer estado" src="../imagenes/superadmin/7_maestra_estado_restablecer.png"><br>
+              Figura 5. Pantalla para restablecer un estado eliminado.<br>
+              <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"></span></span>
+              <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"></span></span></div>
+            <big> </big><big style="font-weight: bold;"> </big></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

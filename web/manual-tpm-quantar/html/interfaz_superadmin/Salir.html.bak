@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
+    <title>Guia de Usuario</title>
+    <link rel="stylesheet" href="../../estilos/estilos.css" type="text/css">
+  </head>
+  <body>
+    <div align="center">
+      <table style="width: 1386px; height: 32px;" borderdark="#000000" bordercolorlight="#FFFFFF"
+        border="0" cellpadding="5" cellspacing="0">
+        <tbody>
+          <tr bordercolor="" bgcolor="">
+            <td class="barra" height="">
+              <p class="blanco"><big><br>
+                  <big><a name="inicio"></a> Salir</big><br>
+                  <br>
+                </big>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <big><span style="font-weight: bold;"><br>
+          MANUAL DE USUARIO<br>
+        </span></big>
+      <big><span style="font-weight: bold;">TPM-QLabs - SALIR</span></big><br>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><big><br>
+            <br>
+          </big></div>
+        <div style="text-align: justify;"><big>En cualquier momento el usuario
+            puede salir del sistema.&nbsp; Para salir del sistema el usuario
+            debe dar clic en la opción <span style="font-weight: bold;">Salir </span>(1)
+            ubicada en el menú principal y se mostrará una pequeña ventana la
+            cual confirma con una pregunta su deseo de salir del sistema; si la
+            opción seleccionada es <span style="font-weight: bold;">Si </span>el
+            sistema lo llevará de nuevo a la pantalla de inicio de sesión del
+            sistema.<br>
+            <br>
+            En la Figura 1 se muestran los pasos a llevar a cabo para salir del
+            sistema.<br>
+          </big></div>
+        <big>
+          <br>
+        </big>
+      </div>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><img title="Salir" alt="Salir" src="../imagenes/superadmin/11_salir.png"></div>
+        <div style="text-align: center;">
+          Figura 1. Pantalla para el proceso de salida del sistema.<big style="font-weight: bold;"><br>
+          </big></div>
+      </div>
+    </div>
+  </body>
+</html>
