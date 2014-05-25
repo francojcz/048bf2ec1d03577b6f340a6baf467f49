@@ -497,10 +497,6 @@ Ext.onReady(function()
             type : 'string'
         },
         {
-            name : 'hora_inicio_corregida',
-            type : 'string'
-        },
-        {
             name : 'hora_fin_corregida',
             type : 'string'
         }])
@@ -801,8 +797,7 @@ Ext.onReady(function()
                     rowEditor.startEditing(0);
                 }
             }
-        }, '-',
-        {
+        }, '-', {
             text : 'Eliminar evento',
             iconCls : 'eliminar',
             handler : function()
@@ -835,7 +830,7 @@ Ext.onReady(function()
             dataIndex : 'id_evento',
             header : 'Nombre del evento',
             tooltip : 'Nombre del evento',
-            width : 270,
+            width : 290,
             align : 'center',
             editor : new Ext.form.ComboBox(
             {
@@ -850,21 +845,18 @@ Ext.onReady(function()
             renderer : function(valor)
             {
                 var index = eventos_datastore_renderer.find('codigo', valor);
-                if(index != -1)
-                {
+                if(index != -1) {
                     var record = eventos_datastore_renderer.getAt(index);
                     return record.get('nombre');
-                } else
-{
+                }else {
                     return '';
                 }
             }
-        },
-        {
+        }, {
             dataIndex : 'hora_inicio',
             header : 'Hora inicio',
             tooltip : 'Hora en la cual inició el evento',
-            width : 70,
+            width : 80,
             align : 'center',
             editor : new Ext.form.TimeField(
             {        
@@ -873,12 +865,11 @@ Ext.onReady(function()
                 maxValue : '23:59',
                 increment : 30
             })
-        },
-        {
+        }, {
             dataIndex : 'hora_fin',
             header : 'Hora fin',
             tooltip : 'Hora en la cual finalizó el evento',
-            width : 70,
+            width : 80,
             align : 'center',
             editor : new Ext.form.TimeField(
             {
@@ -887,29 +878,19 @@ Ext.onReady(function()
                 maxValue : '23:59',
                 increment : 30
             })
-        },
-        {
-            dataIndex : 'hora_inicio_corregida',
-            header : 'Hora inicio<br>corregida',
-            tooltip : 'Hora inicio corregida (min.)',
-            width : 70,
-            align : 'center'
-        },
-        {
+        }, {
             dataIndex : 'hora_fin_corregida',
             header : 'Hora fin<br>corregida',
             tooltip : 'Hora fin corregida (min.)',
-            width : 70,
+            width : 80,
             align : 'center'
-        },
-        {
+        }, {
             dataIndex : 'evrg_duracion',
             header : 'Duración<br>(min.)',
             tooltip : 'Duración del evento (min.)',
-            width : 70,
+            width : 80,
             align : 'center'
-        },
-        {
+        }, {
             dataIndex : 'observaciones',
             header : 'Observaciones',
             tooltip : 'Cualquier detalle adicional',

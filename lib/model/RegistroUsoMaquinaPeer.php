@@ -56,6 +56,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 		
@@ -103,6 +104,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -145,6 +147,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -182,6 +185,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -219,6 +223,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -256,6 +261,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -293,6 +299,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -342,6 +349,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         $datetimeHoraFinSegundoDia = new DateTime('@' . round($tiempoATrasladar, 0));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFinSegundoDia -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFinSegundoDia -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -383,6 +391,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -419,6 +428,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -526,12 +536,12 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         if ($tiempoExcedente || $tiempoDisponible >= 0)
         {
-            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
-//            return $tiempoDisponible;
+//            return array(round($tiempoDisponible), $TNP, $TPP, $TPNP, $TO);
+            return $tiempoDisponible;
         } else
         {
-            return array(0, 0, 0, 0, 0);
-//            return 0;
+//            return array(0, 0, 0, 0, 0);
+            return 0;
         }
     }
 
