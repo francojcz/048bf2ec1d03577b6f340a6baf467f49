@@ -737,19 +737,19 @@ class ingreso_datosActions extends sfActions
             }
             
             //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
-//            if($registro->getRumHoraInicioTrabajo() != '') {
-//                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
-//                $TF = ($registro->obtenerTFMetodo())*60;
-//                $TO = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
-//                $TPNP = $registro->calcularDuracionEventos($registro->getRumCodigo());
-//                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
-//                $ahorro = $TF - $TO - $TPNP;
-//                if(round($ahorro) < 0) {
-//                    $tiempos[] = $ahorro;
-//                    $orden_tiempos[] = 'TPNP';
-//                }
-//            }
-                        
+            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='') && ($registro->getRumHoraInicioTrabajo()!='00:00:00')) {
+                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                $TF = ($registro->obtenerTFMetodo())*60;
+                $TO = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+                $TPNP = $registro->calcularDuracionEventos($registro->getRumCodigo());
+                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+                $ahorro = $TF - $TO - $TPNP;
+                if(round($ahorro) < 0) {
+                    $tiempos[] = round($ahorro, 2);
+                    $orden_tiempos[] = 'TPNP';
+                }
+            }
+            
             $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);
             
             //Cambios: 24 de febrero de 2014

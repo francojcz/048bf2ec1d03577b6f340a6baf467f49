@@ -304,7 +304,7 @@ var maestra_grupoporequipo_gridpanel = new Ext.grid.GridPanel({
         sm: maestra_grupoporequipo_pertenece_selmodel,
         height: 395,
         tbar:[maestra_grupoporequipo_maq_codigo,                
-            {text:'Agregar a equipo',iconCls:'agregar',
+            {text:'Agregar equipo',iconCls:'agregar',
                     handler:function(){
 
                             if(maestra_grupoporequipo_maq_codigo.getValue()!='' && maestra_grupo_codigo.getValue()!='' ){

@@ -2623,7 +2623,7 @@ Ext.onReady(function()
                     }]
                 },
                 {
-                    width : '150',
+                    width : '100',
                     layout : 'form',
                     padding : '0px 0px 0px 10px',
                     hideLabel : true,

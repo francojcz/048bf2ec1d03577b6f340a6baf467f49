@@ -19,7 +19,7 @@ class graficos_anualesActions extends sfActions
     </x>                           
     </grid>');
 		$this->renderText('<values>
-    <x>                                
+    <x>
       <rotate>45</rotate>              
     </x>                               
     </values>');
@@ -591,7 +591,7 @@ class graficos_anualesActions extends sfActions
     </animation>');
 		$this->renderText('<data_labels>
     <show>                                     
-    <![CDATA[{percents}%]]>        
+        <![CDATA[{title}: {percents}%]]> 
     </show>                                    
     </data_labels>');
 		$this->renderText('<balloon>
