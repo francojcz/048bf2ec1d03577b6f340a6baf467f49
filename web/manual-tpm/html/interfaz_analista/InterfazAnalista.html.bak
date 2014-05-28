@@ -22,7 +22,7 @@
       </table>
       <big><span style="font-weight: bold;"><br>
           MANUAL DE USUARIO<br>
-        </span></big> <big><span style="font-weight: bold;">TPM-QLabs&nbsp; -
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs -
           INTERFAZ ANALISTA</span></big><br>
       <div style="text-align: left; width: 1266px;">
         <div style="text-align: center;"><big><br>
@@ -41,18 +41,23 @@
           seleccionada, la fecha, el enlace para acceso a reportes, entre otros.</big><big><br>
           (3) <span style="font-weight: bold;">Barra de botones</span>:
           Contiene los botones para registrar nuevas corridas y manejar eventos.<br>
-          (4)&nbsp;</big><big><span style="font-weight: bold;">Área de trabajo</span>:
+          (4) <span style="font-weight: bold;">Barra de pestañas: </span>Contiene
+          las pestañas que dividien el área de trabajo en información de método,
+          de muestras y de columnas.<br>
+          (5)&nbsp;</big><big><span style="font-weight: bold;">Área de trabajo</span>:
           Área de trabajo para ingresar los datos de las corridas analíticas.</big><big><br>
-        </big><big>(5) <span style="font-weight: bold;">Ayudas</span>: Ayudas
+        </big><big>(6) <span style="font-weight: bold;">Ayudas</span>: Ayudas
           conceptuales sobre los indicadores.</big><big><br>
-        </big><big>(6) <span style="font-weight: bold;">Gráfica de tiempos</span>:
+        </big><big>(7) <span style="font-weight: bold;">Gráfica de tiempos</span>:
           Gráficos.</big>
         <ol>
         </ol>
         <br>
         <big> </big> </div>
-      <div style="text-align: left; width: 1239px;"> <img title="Analista" alt="Analista"
-          src="../imagenes/analista/1_partes.png">
+      <div style="text-align: left; width: 1239px;">
+        <div style="text-align: center;"><img title="Ingreso de datos" alt="Ingreso de datos"
+            src="../imagenes/analista/1_partes.png"><br>
+        </div>
         <div style="text-align: center;"> Figura 1. Pantalla principal del
           analista.</div>
       </div>

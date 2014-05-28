@@ -15,30 +15,25 @@
               <p class="blanco"><big><br>
                   <big><a name="inicio"></a> Interfaz Administrador</big><br>
                   <br>
-                </big>
-              </p>
+                </big> </p>
             </td>
           </tr>
         </tbody>
       </table>
       <big><span style="font-weight: bold;"><br>
           MANUAL DE USUARIO<br>
-        </span></big>
-      <big><span style="font-weight: bold;">TPM-QLabs&nbsp; - INTERFAZ&nbsp;
-          ADMINISTRADOR</span></big><br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs&nbsp; -
+          INTERFAZ&nbsp; ADMINISTRADOR</span></big><br>
       <div style="text-align: left;">
         <div style="text-align: center;"><big><br>
             <br>
           </big></div>
         <div style="text-align: justify;"><big>Una vez hayamos digitado
-            correctamente la clave y la
-            contraseña, el usuario administrador ingresara a una pantalla como
-            se muestra en la Figura 1.</big><br>
+            correctamente la clave y la contraseña, el usuario administrador
+            ingresará a una pantalla como se muestra en la Figura 1.</big><br>
         </div>
-        <big>
-          <br>
-        </big>
-      </div>
+        <big> <br>
+        </big> </div>
       <div style="text-align: left;">
         <div style="text-align: center;"><img title="Administrador" alt="Administrador"
             src="../imagenes/admin/1_area_partes.png"></div>
@@ -57,8 +52,7 @@
                 administrador.<br>
                 (3) <span style="font-weight: bold;">Área de trabajo</span> que
                 muestra información según el menú que seleccione el usuario.</big><br>
-              <big>
-              </big></div>
+              <big> </big></div>
             &nbsp;&nbsp;&nbsp; </div>
           <br>
           <big style="font-weight: bold;"><br>

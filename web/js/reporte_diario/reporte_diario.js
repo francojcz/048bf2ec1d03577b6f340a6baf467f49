@@ -945,22 +945,22 @@ var rdahor_columns = [{
     renderer: generarRenderer('#bfbfbf', '#000000')
 } , {
     dataIndex: 'ahorros_alistamiento',
-    header: 'Ahorros<br>(Min)<br>Alistamiento',
-    tooltip: 'Ahorros (Minutos) del alistamiento',
+    header: 'Ahorros<br>Alistamiento<br>(Min)',
+    tooltip: 'Ahorros  del alistamiento (Minutos)',
     width: 110,
     align: 'center',
     renderer: generarRenderer('#e1de98', '#000000')
 }, {
     dataIndex: 'ahorros_metodo',
     header: 'Ahorros<br>(Min)<br>Método',
-    tooltip: 'Ahorros (Minutos) del método',
+    tooltip: 'Ahorros del método (Minutos)',
     width: 110,
     align: 'center',
     renderer: generarRenderer('#e1de98', '#000000')
 }, {
     dataIndex: 'ahorros_dia',
-    header: 'Ahorros<br>(Min)<br>Día',
-    tooltip: 'Ahorros (Minutos) del día',
+    header: 'Ahorros<br>Día<br>(Min)',
+    tooltip: 'Ahorros del día (Minutos)',
     width: 110,
     align: 'center',
     renderer: generarRenderer('#e1de98', '#000000')
@@ -1061,29 +1061,29 @@ var rdmuin_columns = [{
     renderer: generarRenderer('#bfbfbf', '#000000')
 }, {
     dataIndex: 'numero_muestras',
-    header: 'No. Lotes<br>analizadas<br>Método',
-    tooltip: 'N&uacute;mero de muestras analizadas',
+    header: 'No. Lotes<br>analizados<br>Método',
+    tooltip: 'N&uacute;mero de lotes analizados',
     width: 80,
     align: 'center',
     renderer: generarRenderer('#e1de98', '#000000')
 }, {
     dataIndex: 'numero_muestras_dia',
-    header: 'No. Lotes<br>analizadas<br>Día',
-    tooltip: 'N&uacute;mero de muestras analizadas en el día',
+    header: 'No. Lotes<br>analizados<br>Día',
+    tooltip: 'N&uacute;mero de lotes analizados en el día',
     width: 80,
     align: 'center',
     renderer: generarRenderer('#e1de98', '#000000')
 }, {
     dataIndex: 'numero_muestras_reanalizadas',
-    header: 'No. Lotes<br>reanalizadas<br>Método',
-    tooltip: 'N&uacute;mero de muestras reanalizadas',
+    header: 'No. Lotes<br>reanalizados<br>Método',
+    tooltip: 'N&uacute;mero de lotes reanalizados',
     width: 80,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'numero_muestras_reanalizadas_dia',
-    header: 'No. Lotes<br>reanalizadas<br>Día',
-    tooltip: 'N&uacute;mero de muestras reanalizadas en el día',
+    header: 'No. Lotes<br>reanalizados<br>Día',
+    tooltip: 'N&uacute;mero de muestras reanalizados en el día',
     width: 80,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')

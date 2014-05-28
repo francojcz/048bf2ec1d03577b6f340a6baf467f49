@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>Guia de Usuario</title>
+    <link rel="stylesheet" href="../../estilos/estilos.css" type="text/css">
+  </head>
+  <body>
+    <div align="center">
+      <table style="width: 1386px; height: 32px;" borderdark="#000000" bordercolorlight="#FFFFFF"
+        border="0" cellpadding="5" cellspacing="0">
+        <tbody>
+          <tr bordercolor="" bgcolor="">
+            <td class="barra" height="">
+              <p class="blanco"><big><br>
+                  <big><a name="inicio"></a> Manejo de grupo de equipos</big><br>
+                  <br>
+                </big> </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <big><span style="font-weight: bold;"><br>
+          MANUAL DE USUARIO<br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs&nbsp; -
+          MANEJO DE GRUPO DE EQUIPOS</span></big><br>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><big><br>
+            <br>
+          </big></div>
+        <div style="text-align: justify;"><big>Cuando el usuario selecciona del
+            menú la opción <span style="font-weight: bold;">Grupo de Equipos</span>,
+            el sistema le desplegará una pantalla como la que se muestra en la
+            Figura 1. En esta pantalla el usuario podrá </big><big>crear</big><big>,
+            actualizar, eliminar, visualizar y restablecer los grupos de equipos</big><big>.</big></div>
+        <big> <br>
+        </big> </div>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><img title="Grupos" alt="Grupos" src="../imagenes/admin/4_grupos.png"></div>
+        <div style="text-align: center;"> Figura 1. Pantalla para el manejo de
+          grupo de equipos.<br>
+        </div>
+        <div style="text-align: center;"><big style="font-weight: bold;"><br>
+            <br>
+          </big>
+          <div style="text-align: left;"><big><span style="font-weight: bold;">Agregar
+                grupo</span><br>
+              <br>
+            </big>
+            <div style="text-align: justify;"><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; font-size: medium; "><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-align: justify; "><big>Para
+                    agregar un</big><big><span class="Apple-converted-space">&nbsp;</span>tipo
+                    de identificación<span class="Apple-converted-space">&nbsp;</span></big><big>pulse
+                    el botón<span class="Apple-converted-space">&nbsp;</span><span
+                      style="font-weight: bold; ">Agregar</span>, a continuación
+                    diligencie el nombre del nuevo<span class="Apple-converted-space">&nbsp;</span></big><big>tipo
+                    de identificación<span class="Apple-converted-space">&nbsp;</span></big><big>en
+                    la fila que aparece al inicio de la lista y pulse el botón<span
+                      class="Apple-converted-space">&nbsp;</span><span style="font-weight: bold; ">Guardar</span>.&nbsp;
+                    En caso de querer cancelar el proceso de registro de un
+                    nuevo tipo de identificación debe pulsar el botón<span style="font-weight: bold; ">
+                      Cancelar</span>.</big></span></span><big></big></div>
+            <big><br>
+              <br>
+            </big><big> <span style="font-weight: bold;">Actualizar</span><br>
+              <br>
+            </big>
+            <div style="text-align: justify;"><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; font-size: medium; "><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-align: justify; "><big>Para
+                    actualizar la información de un</big><big><span class="Apple-converted-space">
+                    </span>grupo de equipos</big><big>, debe dar<span style="font-weight: bold; "><span
+                        class="Apple-converted-space">&nbsp;</span>doble clic<span
+                        class="Apple-converted-space">&nbsp;</span></span>sobre
+                    el</big><big><span class="Apple-converted-space"> </span>grupo
+                    de equipos<span class="Apple-converted-space"> </span></big><big>que
+                    desea modificar</big><big>, luego editar la información
+                    sobre el campo de texto ubicado en la columna Nombre y
+                    pulsar el botón<span class="Apple-converted-space">&nbsp;</span><span
+                      style="font-weight: bold; ">Guardar</span>.&nbsp; El
+                    sistema desplegará una pequeña ventana donde debe ingresar
+                    la razón de la actualización de la información del grupo de
+                    equipos.&nbsp; Una vez ingresada dicha razón, debe pulsar el
+                    botón<span style="font-weight: bold; "><span class="Apple-converted-space">&nbsp;</span>Aceptar</span>.&nbsp;<span
+                      class="Apple-converted-space">&nbsp;</span></big><span class="Apple-style-span"
+                    style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium; "><span
+                      class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-align: left; "><big>Luego
+                        el sistema le mostrará un breve mensaje en el que le
+                        informará del éxito de la actualización.<span class="Apple-converted-space">&nbsp;</span></big></span></span></span></span><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big></big></span></span></div>
+            <big><br>
+              <br>
+              <span style="font-weight: bold;">Eliminar<br>
+                <br>
+              </span></big>
+            <div style="text-align: justify;"><big><span style="font-weight: bold;">
+                </span> </big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; font-size: medium; "><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-align: justify; "><big>Para
+                    eliminar<span class="Apple-converted-space">&nbsp;</span></big><big>un</big><big><span
+                      class="Apple-converted-space"> </span>grupo de equipos</big><big>,
+                    seleccione de la lista de grupos registrados el grupo de
+                    equipos que desea eliminar</big><big><span class="Apple-converted-space">&nbsp;</span>y
+                    pulse el botón <span style="font-weight: bold; ">Eliminar</span>.&nbsp;
+                    El</big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium; "><span
+                      class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-align: left; "><big><span
+                          class="Apple-converted-space">&nbsp;</span>sistema
+                        desplegará una pequeña ventana donde le preguntará si
+                        realmente desea eliminar el</big></span></span><big><span
+                      class="Apple-converted-space"> grupo de equipos e</span>n
+                    donde debe seleccionar la opción<span class="Apple-converted-space">&nbsp;</span><span
+                      style="font-weight: bold; ">Si</span>, luego el sistema le
+                    preguntará la razón por la cual desea eliminarlo,<span class="Apple-converted-space">&nbsp;</span></big><span
+                    class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium; "><span
+                      class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-align: left; "><big>digite
+                        la razón y pulse el botón<span class="Apple-converted-space"><span
+                            class="Apple-converted-space">&nbsp;</span></span><span
+                          style="font-weight: bold; ">Aceptar</span>.&nbsp; El
+                        sistema le mostrará un breve mensaje en el que le
+                        informará del éxito de la eliminación.&nbsp; En el
+                        listado de grupos de equipos eliminados denotado por una
+                        estrella blanca podrá observar el grupo de equipos que
+                        eliminó anteriormente</big></span></span></span></span>.<br>
+              <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"></span></span></div>
+            <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big><br>
+                  <br>
+                  <span style="font-weight: bold;">Restablecer<br>
+                    <br>
+                  </span></big></span></span>
+            <div style="text-align: justify;"><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big><span
+                      style="font-weight: bold;"> </span>Bajo el supuesto de
+                    que usted haya eliminado un&nbsp;</big></span></span><big>evento</big><big>
+              </big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>
+                    sin querer,&nbsp; usted tiene la posibilidad de recuperar la
+                    información seleccionando la opción para ver los&nbsp;</big></span></span><big>eventos</big><big>
+              </big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>
+                    eliminados (estrella blanca), seleccione de la lista el </big></span></span><big>evento</big><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>
+                    que desea recuperar y pulse el botón<span class="Apple-converted-space">&nbsp;</span><span
+                      style="font-weight: bold;">Restablecer</span>, el sistema
+                    le preguntará porque razón desea restablecerlo</big></span></span><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>,</big></span></span><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>
+                    digite la razón y pulse el botón<span class="Apple-converted-space">
+                    </span><span style="font-weight: bold;">Aceptar</span>.</big><big><span
+                      class="Apple-converted-space">&nbsp; </span>Luego el
+                    sistema le mostrara un breve mensaje en el que informa si se
+                    ha restablecido con éxito</big></span></span><span class="Apple-style-span"
+                style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>.</big></span></span></div>
+            <big> </big><big><br>
+              <br>
+              <span style="font-weight: bold;">Agregar equipo</span><br>
+              <br>
+            </big>
+            <div style="text-align: justify;"><big></big><big>Para agregar un
+                equipo a un grupo de equipos, seleccione el grupo de equipos (1)
+                y en el formulario que se encuentra ubicado al lado lado derecho<span
+                  style="font-weight: bold;"> </span></big><big>de la interfaz
+                seleccione el nombre del equipo (2) y</big><big> pulse el botón
+                <span style="font-weight: bold;">Agregar equipo </span>(3), tal
+                y como se evidencia en la Figura 2.&nbsp; Una vez realizados los
+                anteriores pasos, el sistema mostrará un mensaje en el que le
+                informará del éxito de la operación.&nbsp; <br>
+              </big></div>
+            <big> <br>
+            </big>
+            <div style="text-align: center;"><big> </big><img title="Agregar equipo"
+                alt="Agregar equipo" src="../imagenes/admin/4_grupos_agregar_equipo.png"></div>
+            <div style="text-align: center;">Figura 2. Pantalla para agregar un
+              equipo a un grupo.</div>
+            <big><br>
+              <br>
+              <span style="font-weight: bold;">Quitar equipo<br>
+                <br>
+              </span></big>
+            <div style="text-align: justify;"><big><span style="font-weight: bold;">
+                </span> Esta funcionalidad permite eliminar un equipo de un
+                grupo de equipos.&nbsp; Para llevar a cabo este proceso,
+                seleccione un
+                grupo de equipos de la lista de grupos registrados (1), luego
+                seleccione de la lista de equipos ubicada al lado derecho de la
+                interfaz el equipo que desea eliminar (2) y pulse el botón de <span
+                  style="font-weight: bold;">Quitar
+                  grupo </span>(3), tal y como se evidencia en la Figura 3.</big></div>
+            <big> <br>
+            </big>
+            <div style="text-align: center;"><big><img title="Evento-Categoria"
+                  alt="Evento-Categoria" src="../imagenes/admin/6_evento_categoria_quitar.png"></big><br>
+              <div style="text-align: center;">Figura 3 Pantalla para quitar una
+                equipo de un grupo.</div>
+              <br>
+              <big> </big><big style="font-weight: bold;"> </big></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

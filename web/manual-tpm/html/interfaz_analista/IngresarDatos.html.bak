@@ -50,14 +50,15 @@
         <big><br>
         </big> <big> </big> </div>
       <div style="text-align: left;">
-        <div style="text-align: center;"><img title="Equipo" alt="Equipo" src="../imagenes/analista/4-1_ingreso_selec_equipo.png"><br>
+        <div style="text-align: center;"><img title="Seleccionar equipo" alt="Seleccionar equipo"
+            src="../imagenes/analista/4-1_ingreso_selec_equipo.png"><br>
           Figura 1. Selección del equipo.<br>
           <br>
           <br>
           <div style="text-align: left;"><big><span style="font-weight: bold;"><a
                   name="Agregar_método"></a>Agregar método<br>
                 <br>
-              </span>Ubique en la pantalla la lista que despleg los métodos
+              </span>Ubique en la pantalla la lista que desplega los métodos
               registrados en el sistema (1), seleccione el método con el cual va
               a trabajar y pulse el botón <span style="font-weight: bold;">Agregar
                 Registro</span> (2), tal y como se muestra en la </big><big>Figura
@@ -65,28 +66,29 @@
               <br>
             </big> </div>
         </div>
-        <div style="text-align: center;"><img title="Método" alt="Método" src="../imagenes/analista/4-2_ingreso_selec_metodo.png"><br>
+        <div style="text-align: center;"><img title="Agregar registro" alt="Agregar registro"
+            src="../imagenes/analista/4-2_ingreso_selec_metodo.png"><br>
           <div style="text-align: left;">
-            <div style="text-align: center;"> Figura 2.Selección del método y
+            <div style="text-align: center;"> Figura 2. Selección del método y
               agregar registro.<br>
               <br>
               <br>
             </div>
             <div style="text-align: center;">
-              <div style="text-align: justify;"><big>Una vez se haya seleccionado
-                  y registrado el método, en la pantalla se despliega el método
-                  con su respectiva información.&nbsp; Tenga en cuenta que si el
-                  primer registro corresponde a una continuación de una corrida
-                  del día anterior resultante de una división de registro, el <span
-                    style="font-weight: bold;">Tiempo entre cambio de método </span>(1)
-                  se </big><big>registrará en cero (0)</big><big> pues la
-                  máquina viene trabajando en este método desde el día anterior
-                  pero si el registro no corresponde a una continuación de
-                  corrida, se registrará el tiempo entre el cambio de método,
-                  tal y como se muestra en la Figura 3.</big></div>
+              <div style="text-align: justify;"><big>Una vez se haya
+                  seleccionado y registrado el método, en la pantalla se
+                  despliega el método con su respectiva información.&nbsp; Tenga
+                  en cuenta que si el primer registro corresponde a una
+                  continuación de una corrida del día anterior resultante de una
+                  división de registro, el <span style="font-weight: bold;">Tiempo
+                    entre cambio de método </span>se </big><big>registrará en
+                  cero (0)</big><big> pues la máquina viene trabajando en este
+                  método desde el día anterior pero si el registro no
+                  corresponde a una continuación de corrida, se registrará el
+                  tiempo entre el cambio de método, tal y como se muestra en la
+                  Figura 3.</big></div>
               <big><br>
-              </big><img title="Comportamiento del Sistema" alt="Comportamiento del Sistema"
-                src="../imagenes/analista/4-4_corrida_dia_anterior_no.png"><br>
+              </big><img title="Corrida anterior" alt="Corrida anterior" src="../imagenes/analista/4-4_corrida_dia_anterior_no.png"><br>
               Figura 3. Comportamiento del sistema cuando se ha registrado un
               método.<br>
             </div>
@@ -105,14 +107,13 @@
                 muestra el resultado de la edición de varias celdas. Observe que
                 en la parte inferior de la pantalla hay dos gráficos que le
                 indicarán la productividad del día en término de minutos y
-                horas.&nbsp; Debe estar atento a que en las gráficas no aparezcan
-                valores negativos, ya que esto puede ser un indicador de datos
-                mal ingresados. Recuerde utilizarla barra de desplazamiento (1)
-                para registrar todos los datos de la corrida.</big></div>
+                horas.&nbsp; Recuerde utilizar las tres pestañas en las cuales
+                se ha catalogado la información (1) para el ingreso de datos:
+                Información de método, Información de muestras e Información de
+                Columnas.</big></div>
             <div style="text-align: center;"><big> <small><br>
-                  <br>
+                  <img title="Ingreso Datos" alt="Ingreso Datos" src="../imagenes/analista/4-6_ingreso.png"><br>
                   Figura 4. Ingreso de corridas analiticas<br>
-                  <br>
                 </small></big> <big> </big><big style="font-weight: bold;"> </big></div>
           </div>
         </div>

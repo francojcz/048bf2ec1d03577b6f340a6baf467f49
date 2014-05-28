@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>Guia de Usuario</title>
+    <link rel="stylesheet" href="../../estilos/estilos.css" type="text/css">
+  </head>
+  <body>
+    <div align="center">
+      <table style="width: 1231px; height: 69px;" borderdark="#000000" bordercolorlight="#FFFFFF"
+        border="0" cellpadding="5" cellspacing="0">
+        <tbody>
+          <tr bordercolor="" bgcolor="">
+            <td class="barra" height="">
+              <p class="blanco"><big><br>
+                  <big><a name="inicio"></a> Manejo de tamaños de partícula</big><br>
+                  <br>
+                </big> </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <big><span style="font-weight: bold;"><br>
+          MANUAL DE USUARIO<br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs&nbsp; -
+          MANEJO DE TAMAÑOS DE PARTÍCULA</span></big><br>
+      <br>
+      <br>
+      <div style="text-align: left;">
+        <div style="text-align: justify;"><big>Cuando el usuario selecciona del
+            menú la opción <span style="font-weight: bold;">Tamaño de Partícula</span>,
+            el sistema desplegará una pantalla como la que se muestra en la
+            Figura 1.&nbsp; En esta pantalla el usuario podrá </big><big>crear,
+          </big><big>actualizar, eliminar, visualizar y restablecer tamaños de
+            partícula</big><big>.</big></div>
+        <big> </big><big><br>
+        </big> </div>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><img title="Modelos" alt="Modelos" src="../imagenes/admin/11_modelos.png"></div>
+        <div style="text-align: center;"> Figura 1. Pantalla para el manejo de
+          tamaños de partícula.<br>
+        </div>
+        <div style="text-align: center;"><big style="font-weight: bold;"><br>
+            <br>
+          </big>
+          <div style="text-align: left;"><big><span style="font-weight: bold;">Agregar
+                modelo</span><br>
+              <br>
+            </big>
+            <div style="text-align: justify;">
+              <div style="text-align: justify;"><big> Para agregar un modelo </big><big>pulse
+                  el botón <span style="font-weight: bold;">Agregar</span>, el
+                  sistema desplegará en la parte superior de la lista una nueva
+                  fila en la cual debe diligenciar el nombre del nuevo modelo y
+                </big><big>luego pulsar el botón <span style="font-weight: bold;">Guardar</span>.&nbsp;
+                  El sistema mostrará un breve mensaje en el que le informará si
+                  ha creado con éxito el nuevo modelo.</big></div>
+              <big> <br>
+              </big></div>
+            <big> </big> <big><br>
+              <span style="font-weight: bold;">Actualizar</span><br>
+            </big>
+            <div style="text-align: justify;"><big> </big><br>
+              <big> Para actualizar un modelo </big><big>debe dar<span style="font-weight: bold;">
+                  doble clic </span>sobre el modelo </big><big>que desea
+                modificar</big><big>, edite el nombre y pulse el botón <span style="font-weight: bold;">Guardar</span>.&nbsp;
+                El sistema le preguntará porque razón desea actualizar esta
+                información, digite la razón y pulse el botón <span style="font-weight: bold;">Aceptar</span>.&nbsp;
+                </big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>Luego
+                    el sistema le mostrará un breve mensaje en el que le
+                    informará sobre el éxito de la actualización.</big></span></span></div>
+            <big><span style="font-weight: bold;"><br>
+                <br>
+                Eliminar<br>
+                <br>
+              </span></big>
+            <div style="text-align: justify;"><big><span style="font-weight: bold;">
+                </span> </big><big>Para eliminar </big><big>un modelo</big><big>,
+                seleccione de la lista de modelos registrados </big><big>el
+                modelo que desea eliminar</big><big> y pulse el botón <span style="font-weight: bold;">Eliminar</span>.&nbsp;
+                E</big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>l
+                    sistema desplegará una pequeña ventana donde le preguntará
+                    si realmente desea eliminar el modelo </big></span></span><big>en
+                donde el usuario debe seleccionar la opción <strong>Si</strong></big><big></big><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>,
+                    luego el sistema le preguntará porqué razón desea
+                    eliminarlo, digite la razón y pulse el botón<span class="Apple-converted-space">
+                    </span><span style="font-weight: bold;">Aceptar</span>.&nbsp;
+                    El sistema le mostrará un breve mensaje en el que le
+                    informará del éxito de la eliminación.&nbsp; En el listado
+                    de modelos eliminados </big></span></span><span class="Apple-style-span"
+                style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>denotado
+                    por una estrella blanca </big></span></span><span class="Apple-style-span"
+                style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>podrá
+                    observar el registro que eliminó anteriormente.</big></span></span><br>
+              <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"></span></span></div>
+            <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big></big></span></span><span
+              class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big><br>
+                  <br>
+                  <span style="font-weight: bold;">Restablecer<br>
+                    <br>
+                  </span></big></span></span>
+            <div style="text-align: justify;"><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big><span
+                      style="font-weight: bold;"> </span>Si se ha eliminado un
+                    modelo</big></span></span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>,
+                    usted tiene la posibilidad de recuperar la información
+                    seleccionando la opción para ver los modelos&nbsp;</big></span></span><big></big><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>eliminados
+                    denotada por la estrella blanca, luego seleccione de la
+                    lista de modelos eliminados el modelo que desea recuperar y
+                    pulse el botón<span class="Apple-converted-space">&nbsp;</span><span
+                      style="font-weight: bold;">Restablecer</span>.&nbsp; El
+                    sistema le preguntará porqué razón usted desea restablecer
+                    el modelo</big></span></span><big></big><span class="Apple-style-span"
+                style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>,</big></span></span><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>
+                    digite la razón y pulse el botón<span class="Apple-converted-space">
+                      <span style="font-weight: bold;">A</span></span><span style="font-weight: bold;">ceptar</span>.</big><big><span
+                      class="Apple-converted-space">&nbsp; </span>Luego el
+                    sistema le mostrará un breve mensaje en el que le informará
+                    si el modelo se ha restablecido con éxito</big></span></span><span
+                class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>.&nbsp;
+                    Si el modelo se ha restablecido con éxito volverá a aparecer
+                    en la lista de modelos activos denotada con una estrella
+                    amarilla.</big></span></span><br>
+              <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                  class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"></span></span></div>
+            <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+                class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;"><big>
+                </big></span></span></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -15,45 +15,36 @@
               <p class="blanco"><big><br>
                   <big><a name="inicio"></a> Interfaz Analista</big><br>
                   <br>
-                </big>
-              </p>
+                </big> </p>
             </td>
           </tr>
         </tbody>
       </table>
       <big><span style="font-weight: bold;"><br>
           MANUAL DE USUARIO<br>
-        </span></big>
-      <big><span style="font-weight: bold;">TPM-QLabs&nbsp; - HISTORIAL DE
-          CAMBIOS</span></big><br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs -
+          HISTORIAL DE CAMBIOS</span></big><br>
       <div style="text-align: left;">
         <div style="text-align: center;"><big><br>
           </big>
           <div style="text-align: left;"><big style="font-weight: bold;">Historial
               de cambios</big><br>
           </div>
-          <big>
-            <br>
+          <big> <br>
           </big></div>
         <div style="text-align: justify;"><big>El administrador del sistema
-            puede realizar cambios
-            sobre los datos ingresados por los analistas.&nbsp; Una vez realizado
-            algún cambio, el sistema le preguntará la causa de dicho cambio y
-            esta información
-            quedará guardada en el sistema.&nbsp; Mediante la opción Historial,
-            es posible observar los cambios que han sido realizados hasta la
-            fecha.</big></div>
-        <big>
-          <br>
+            puede realizar cambios sobre los datos ingresados por los
+            analistas.&nbsp; Una vez realizado algún cambio, el sistema le
+            preguntará la causa de dicho cambio y esta información quedará
+            guardada en el sistema.&nbsp; Mediante la opción Historial, es
+            posible observar los cambios que han sido realizados hasta la fecha.</big></div>
+        <big> <br>
         </big>
-        <div style="text-align: justify;"><big>
-            Para visualizar esta información, debe seleccionar la corrida (1) y
-            pulsar el botón
-            Historial (2).&nbsp; Luego el sistema desplegará un listado de los
-            cambios que se han
-            realizado, detallando la siguiente información.</big><br>
-          <big>
-          </big></div>
+        <div style="text-align: justify;"><big> Para visualizar esta
+            información, debe seleccionar la corrida y pulsar el botón
+            Historial.&nbsp; Luego el sistema desplegará un listado de los
+            cambios que se han realizado, detallando la siguiente información.</big><br>
+          <big> </big></div>
         <ul style="text-align: justify;">
           <li><big>Login del usuario que realiza el cambio.</big></li>
           <li><big>Nombre del campo que modificó.</big></li>
@@ -64,22 +55,15 @@
           <li><big>Razón por la cual realizó el cambio.</big></li>
         </ul>
         <div style="text-align: justify;"><big>En la Figura 1 se mustra un
-            ejemplo del historial de cambios
-            para un método específico.&nbsp; Para cerrar la ventana se debe
-            pulsar el
-            botón Aceptar (3)<span style="font-weight: bold;"></span>.</big></div>
-        <big>
-        </big><br>
+            ejemplo del historial de cambios para un método específico.&nbsp;
+            Para cerrar la ventana se debe pulsar el botón Aceptar (3)<span style="font-weight: bold;"></span>.</big></div>
         <br>
-        <big>
-        </big>
-      </div>
+        <big> </big> </div>
       <div style="text-align: left;">
-        <div style="text-align: center;"><img style="width: 1044px; height: 431px;"
-            alt="pantalla historial cambios" src="../imagenes/analista/5-historial-de-cambio.png"><br>
+        <div style="text-align: center;"><br>
         </div>
-        <div style="text-align: center;">
-          Figura 1. Pantalla de historial de cambios.<br>
+        <div style="text-align: center;"> Figura 1. Pantalla de historial de
+          cambios.<br>
           <br>
         </div>
       </div>
