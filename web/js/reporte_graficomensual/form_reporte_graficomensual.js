@@ -428,17 +428,17 @@ tiemposmensual_datastore.load({
 var tiemposmensual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
-        width: 95,
+        width: 75,
         align : 'center',
         dataIndex: 'mes_tiempo'
     }, {
         header: "Horas",
-        width: 93,
+        width: 83,
         align : 'center',
         dataIndex: 'mes_horas'
     }, {
         header: "Porcentaje (%)",
-        width: 93,
+        width: 85,
         align : 'center',
         dataIndex: 'mes_porcentaje'
     }, ]
@@ -451,7 +451,7 @@ var tiemposmensual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: tiemposmensual_datastore,
     cm: tiemposmensual_colmodel,
-    width: 300,
+    width: 270,
     height: 120
 });
 /*********************************************************************************/
@@ -482,7 +482,7 @@ maqmensual_datastore.load({
 var maqmensual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Nombre equipo",
-        width: 265,
+        width: 230,
         align : 'left',
         dataIndex: 'maq_men_nombre'
     }]
@@ -495,8 +495,8 @@ var maqmensual_gridpanel_tiemp = new Ext.grid.GridPanel({
     frame: true,
     ds: maqmensual_datastore,
     cm: maqmensual_colmodel,
-    width: 300,
-    height: 95
+    width: 270,
+    height: 85
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -526,7 +526,7 @@ grumensual_datastore.load({
 var grumensual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Nombre grupo",
-        width: 265,
+        width: 230,
         align : 'left',
         dataIndex: 'gru_men_nombre'
     }]
@@ -539,8 +539,8 @@ var grumensual_gridpanel_tiemp = new Ext.grid.GridPanel({
     frame: true,
     ds: grumensual_datastore,
     cm: grumensual_colmodel,
-    width: 300,
-    height: 95
+    width: 270,
+    height: 85
 });
 /*********************************************************************************/
 
@@ -586,7 +586,7 @@ indicadoresmensual_datastore.load({
 var indicadoresmensual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
-        width: 110,
+        width: 87,
         align : 'center',
         dataIndex: 'mes_indicador'
     }, {
@@ -596,7 +596,7 @@ var indicadoresmensual_colmodel = new Ext.grid.ColumnModel({
         dataIndex: 'mes_actual'
     }, {
         header: "Meta (%)",
-        width: 78,
+        width: 70,
         align : 'center',
         dataIndex: 'mes_meta'
     }, ]
@@ -609,7 +609,7 @@ var indicadoresmensual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: indicadoresmensual_datastore,
     cm: indicadoresmensual_colmodel,
-    width: 300,
+    width: 270,
     height: 160
 });
 /*********************************************************************************/
@@ -622,8 +622,8 @@ var maqmensual_gridpanel_ind = new Ext.grid.GridPanel({
     frame: true,
     ds: maqmensual_datastore,
     cm: maqmensual_colmodel,
-    width: 300,
-    height: 75
+    width: 270,
+    height: 70
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -635,8 +635,8 @@ var grumensual_gridpanel_ind = new Ext.grid.GridPanel({
     frame: true,
     ds: grumensual_datastore,
     cm: grumensual_colmodel,
-    width: 300,
-    height: 75
+    width: 270,
+    height: 70
 });
 /*********************************************************************************/
 
@@ -684,17 +684,17 @@ perdidasmensual_datastore.load({
 var perdidasmensual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
-        width: 108,
+        width: 91,
         align : 'center',
         dataIndex: 'mes_perdida'
     }, {
         header: "Horas",
-        width: 85,
+        width: 70,
         align : 'center',
         dataIndex: 'mes_horas_perd'
     }, {
         header: "Porcentaje (%)",
-        width: 88,
+        width: 85,
         align : 'center',
         dataIndex: 'mes_porcentaje_perd'
     }]
@@ -707,7 +707,7 @@ var perdidasmensual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: perdidasmensual_datastore,
     cm: perdidasmensual_colmodel,
-    width: 300,
+    width: 270,
     height: 97
 });
 /*********************************************************************************/
@@ -720,8 +720,8 @@ var maqmensual_gridpanel_perd = new Ext.grid.GridPanel({
     frame: true,
     ds: maqmensual_datastore,
     cm: maqmensual_colmodel,
-    width: 300,
-    height: 105
+    width: 270,
+    height: 97
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -733,8 +733,8 @@ var grumensual_gridpanel_perd = new Ext.grid.GridPanel({
     frame: true,
     ds: grumensual_datastore,
     cm: grumensual_colmodel,
-    width: 300,
-    height: 105
+    width: 270,
+    height: 97
 });
 /*********************************************************************************/
 

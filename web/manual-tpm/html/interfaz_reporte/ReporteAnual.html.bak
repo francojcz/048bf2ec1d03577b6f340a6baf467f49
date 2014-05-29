@@ -15,16 +15,15 @@
               <p class="blanco"><big><br>
                   <big><a name="inicio"></a> Reporte anual</big><br>
                   <br>
-                </big>
-              </p>
+                </big> </p>
             </td>
           </tr>
         </tbody>
       </table>
       <big><span style="font-weight: bold;"><br>
           MANUAL DE USUARIO<br>
-        </span></big>
-      <big><span style="font-weight: bold;">TPM-QLabs&nbsp; - REPORTE ANUAL</span></big><br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs - REPORTE
+          ANUAL</span></big><br>
       <br>
       <div style="text-align: left;">
         <div style="text-align: center;"><big><br>
@@ -32,27 +31,35 @@
         <big><span style="font-weight: bold;">Reporte anual</span><br>
           <br>
         </big>
-        <div style="text-align: justify;"><big>
-            El reporte anual mediante la opción multireporte, le muestra
-            información de tiempos, indicadores, pérdidas y muestras e
-            inyecciones
-            en gráficos de torta, barras y de dispersión para un año específico,
-            tal y como se evidencia en las Figuras 1, 2, 3 y 4.</big></div>
-        <div style="text-align: justify;"><big>
-          </big><br>
-          <big>
-            Para configurar el reporte anual generado, seleccione además del
-            año, alguno de los criterios disponibles tales como equipo, analista
-            y/o método y pulse el botón <span style="font-weight: bold;">Generar
-              gráficos</span>.</big></div>
-        <big>
-          <br>
+        <div style="text-align: justify;"><big> El reporte anual mediante la
+            opción multireporte, le muestra información de tiempos, indicadores,
+            pérdidas y muestras e inyecciones en gráficos de torta, barras y de
+            dispersión para un año específico, tal y como se evidencia en las
+            Figuras 1, 2, 3 y 4.</big></div>
+        <div style="text-align: justify;"><big> </big><br>
+          <big> Para configurar el reporte anual generado, seleccione además del
+            año, alguno de los criterios disponibles tales como los equipos,
+            grupo de equipos, el analista y/o método. &nbsp;</big><big></big><big>Para
+            seleccionar los equipos, el usuario debe dar clic en el botón <span
+              style="font-weight: bold;">Seleccionar Equipos</span> y se
+            desplegará una interfaz con los equipos disponibles.&nbsp; A
+            continuación el usuario debe seleccionar los equipos de su interés y
+            dar clic en el botón <span style="font-weight: bold;">Aceptar</span>,
+            tal y como se muestra en la Figura 5.&nbsp; </big><big>Para
+            seleccionar los grupos de equipos, el usuario debe dar clic en el
+            botón <span style="font-weight: bold;">Seleccionar Grupo de Equipos</span>
+            y se desplegará una interfaz con los grupos de equipos
+            registrados.&nbsp; El usuario debe seleccionar de los grupos de
+            equipos disponibles, aquellos grupos de equipos que son de su
+            interés y dar clic en el botón <span style="font-weight: bold;">Aceptar</span>,
+            tal y como se muestra en la Figura 6.&nbsp; </big><big>Una vez
+            seleccionado alguno de los anteriores criterios, debe dar clic en el
+            botón <span style="font-weight: bold;">Generar gráficos</span>.</big></div>
+        <big> <br>
           <br>
           <span style="font-weight: bold;">Reporte anual de tiempos<br>
             <br>
-          </span>
-        </big>
-      </div>
+          </span> </big> </div>
       <div style="text-align: left;">
         <div style="text-align: center;"><img title="Tiempos" alt="Tiempos" src="../imagenes/reportes/5_reporte_anual.png"></div>
         <div style="text-align: center;">Figura 1.&nbsp; Pantalla de reporte
@@ -70,7 +77,7 @@
           </big>Figura 2.&nbsp; Pantalla de reporte anual indicadores.<br>
           <br>
           <div style="text-align: left;"><big><span style="font-weight: bold;"><br>
-                Reporte&nbsp; anual de pérdidas</span><br>
+                Reporte anual de pérdidas</span><br>
               <br>
             </big></div>
           <img title="Pérdidas" alt="Pérdidas" src="../imagenes/reportes/5_reporte_anual_perdidas.png"><br>
@@ -79,11 +86,40 @@
           <br>
           <br>
           <div style="text-align: left;"><big><span style="font-weight: bold;">Reporte
-                anual de muestras e inyecciones</span><br>
+                anual de lotes e inyecciones</span><br>
               <br>
             </big></div>
-          <img title="Muestras e Inyecciones" alt="Muestras e Inyecciones" src="../imagenes/reportes/5_reporte_anual_muestrainyeciones.png"><br>
-          Figura 4. Pantalla reporte anual de muestras e inyecciones.<br>
+          <img title="Lotes e inyecciones" alt="Lotes e inyecciones" src="../imagenes/reportes/5_reporte_anual_muestrainyeciones.png"><br>
+          Figura 4. Pantalla reporte anual de lotes e inyecciones.<br>
+          <br>
+          <br>
+          <br>
+          <div style="text-align: left;"><big><span style="font-weight: bold;">Interfaz
+                para la selección de equipos</span></big></div>
+          <big><span style="font-weight: bold;"></span></big> <big><span style="font-weight: bold;">
+              <br>
+            </span></big>
+          <div style="text-align: left;"><big><span style="font-weight: bold;">
+              </span>A continuación se muestra la intefaz en la cual puede
+              seleccionar los equipos para configurar el reporte diario.</big></div>
+          <div style="text-align: center;"><br>
+          </div>
+          <div style="text-align: center;"><img title="Equipos" alt="Equipos" src="file:///C:/Users/Frank/Desktop/Archivos/Manuales%20Versi%C3%B3n%20Lafrancol/manual-tpm/html/imagenes/reportes/10_seleccion_equipos.png"></div>
+          <big><small>Figura 5. Pantalla para seleccionar equipos.</small></big><br>
+          <br>
+          <br>
+          <div style="text-align: left;"><big><span style="font-weight: bold;"><br>
+                Interfaz para la selección de grupos de equipos<br>
+                <br>
+              </span></big><big>A continuación se muestra la intefaz en la cual
+              puede seleccionar los grupos de equipos para configurar el reporte
+              diario.<br>
+            </big></div>
+          <div style="text-align: center;"><br>
+          </div>
+          <img title="Grupos" alt="Grupos" src="file:///C:/Users/Frank/Desktop/Archivos/Manuales%20Versi%C3%B3n%20Lafrancol/manual-tpm/html/imagenes/reportes/10_seleccion_grupos.png">
+          <div style="text-align: center;"><big><small>Figura 6. Pantalla para
+                seleccionar los grupos de equipos.</small></big></div>
         </div>
       </div>
     </div>

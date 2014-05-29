@@ -36,6 +36,24 @@
             indicadores, pérdidas, lotes e inyecciones y ahorros durante un día
             específico, tal y como se muestra en las Figuras 1, 2, 3, 4 y 5.</big></div>
         <big> <br>
+        </big>
+        <div style="text-align: justify;"><big>Para configurar el reporte diario
+            es posible seleccionar el analista, la fecha, los equipos y los
+            grupos de equipos registrados en el sistema.&nbsp; Para seleccionar
+            los equipos, el usuario debe dar clic en el botón <span style="font-weight: bold;">Seleccionar
+              Equipos</span> y se desplegará una interfaz con los equipos
+            disponibles.&nbsp; A continuación el usuario debe seleccionar los
+            equipos de su interés y dar clic en el botón <span style="font-weight: bold;">Aceptar</span>,
+            tal y como se muestra en la Figura 7.&nbsp; </big><big>Para
+            seleccionar los grupos de equipos, el usuario debe dar clic en el
+            botón <span style="font-weight: bold;">Seleccionar Grupo de Equipos</span>
+            y se desplegará una interfaz con los grupos de equipos
+            registrados.&nbsp; El usuario debe seleccionar de los grupos de
+            equipos disponibles, aquellos grupos de equipos que son de su
+            interés y dar clic en el botón <span style="font-weight: bold;">Aceptar</span>,
+            tal y como se muestra en la Figura 8.<br>
+          </big></div>
+        <big> <br>
           <br>
           <span style="font-weight: bold;">Reporte diario de tiempos<br>
           </span>&nbsp;<br>
@@ -314,11 +332,43 @@
               en la Figura 6.<br>
               <br>
             </big>
-            <div style="text-align: center;"><img title="Ayudas" alt="Ayudas" src="../imagenes/reportes/2_ayudas.png"></div>
+            <div style="text-align: center;"><big> </big><img title="Ayudas" alt="Ayudas"
+                src="../imagenes/reportes/2_ayudas.png"></div>
             <div style="text-align: center;"><big><small>Figura 6. Pantalla de
                   ayudas conceptuales.</small></big><br>
               <br>
-              <big style="font-weight: bold;"> </big></div>
+              <br>
+              <br>
+              <div style="text-align: left;"><big><span style="font-weight: bold;">Interfaz
+                    para la selección de equipos<br>
+                    <br>
+                  </span>A continuación se muestra la intefaz en la cual puede
+                  seleccionar los equipos para configurar el reporte diario.</big><br>
+                <div style="text-align: center;"><br>
+                </div>
+                <div style="text-align: center;"><img title="Equipos" alt="Equipos"
+                    src="../imagenes/reportes/10_seleccion_equipos.png"></div>
+                <div style="text-align: center;"><big><small>Figura 7. Pantalla
+                      para seleccionar equipos.</small></big><br>
+                  <br>
+                  <br>
+                  <div style="text-align: left;"><big><span style="font-weight: bold;"><br>
+                        Interfaz para la selección de grupos de equipos<br>
+                        <br>
+                      </span></big><big>A continuación se muestra la intefaz en
+                      la cual puede seleccionar los grupos de equipos para
+                      configurar el reporte diario.<br>
+                    </big></div>
+                  <div style="text-align: center;"><br>
+                  </div>
+                  <div style="text-align: center;"><img title="Equipos" alt="Equipos"
+                      src="file:///C:/Users/Frank/Desktop/Archivos/Manuales%20Versi%C3%B3n%20Lafrancol/manual-tpm/html/imagenes/reportes/10_seleccion_equipos.png"></div>
+                  <div style="text-align: center;"><big><small>Figura 8.
+                        Pantalla para seleccionar los grupos de equipos.</small></big></div>
+                  <br>
+                  <big style="font-weight: bold;"> </big></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

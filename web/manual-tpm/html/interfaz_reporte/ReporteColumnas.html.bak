@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>Guia de Usuario</title>
+    <link rel="stylesheet" href="../../estilos/estilos.css" type="text/css">
+  </head>
+  <body>
+    <div align="center">
+      <table style="width: 1386px; height: 32px;" borderdark="#000000" bordercolorlight="#FFFFFF"
+        border="0" cellpadding="5" cellspacing="0">
+        <tbody>
+          <tr bordercolor="" bgcolor="">
+            <td class="barra" height="">
+              <p class="blanco"><big><br>
+                  <big><a name="inicio"></a> Reporte columnas</big><br>
+                  <br>
+                </big> </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <big><span style="font-weight: bold;"><br>
+          MANUAL DE USUARIO<br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs - REPORTE
+          COLUMNAS</span></big><br>
+      <br>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><big><br>
+          </big></div>
+        <big><span style="font-weight: bold;">Reporte columnas</span><br>
+          <br>
+        </big>
+        <div style="text-align: justify;"><big> El reporte de columnas permite
+            visualizar la tendencia de los tiempos de retención, platos
+            teóricos, factor de cola, resolución y presión de sistema, de las columnas
+            registradas en el sistema teniendo en cuenta un método específico.&nbsp;
+            Al lado derecho de la interfaz del reporte de columnas se muestran
+            cinco gráficos, cada uno en una pestaña diferente y un gráfico por
+            cada una de las tendencias descritas anteriormente. &nbsp;Además,
+            también se muestra un listado de todas las columnas utilizadas con
+            sus respectivas caracteristicas.&nbsp; </big><big>En las Figuras 1,
+            2, 3, 4 y 5 se muestra la interfaz del reporte de columnas para cada
+            gráfico de tendencia que ofrece el reporte de columnas.<br>
+          </big></div>
+        <big> </big><big><br>
+          <br>
+        </big><big></big> </div>
+      <div style="text-align: left;">
+        <div style="text-align: center;"><img title="Tiempo de retención" alt="Tiempo de retención"
+            src="../imagenes/reportes/9_reporte_columna_tiempo.png"></div>
+        <div style="text-align: center;">Figura 1.&nbsp; Pantalla de reporte de
+          columnas con gráfico de&nbsp; tiempo de retención (tr)<br>
+        </div>
+        <div style="text-align: center;"><br>
+          <br>
+          <div style="text-align: center;"> <big> </big><big> </big><big></big><br>
+            <img title="Platos teóricos" alt="Platos teóricos" src="../imagenes/reportes/9_reporte_columna_platos.png"><br>
+          </div>
+          Figura 2.&nbsp; Pantalla de reporte de
+          columnas con gráfico de platos teóricos (N)<br>
+          <br>
+          <br>
+          <br>
+          <img title="Factor de Cola" alt="Factor de Cola" src="../imagenes/reportes/9_reporte_columna_factor.png"><br>
+          Figura 3.&nbsp; Pantalla de reporte de
+          columnas con gráfico de factor de cola (T)<br>
+          <br>
+          <br>
+          <img title="Resolución" alt="Resolución" src="../imagenes/reportes/9_reporte_columna_resolucion.png"><br>
+          Figura 4.&nbsp; Pantalla de reporte de
+          columnas con gráfico de resolución (R)<br>
+          <br>
+          <br>
+          <br>
+          Figura 5.&nbsp; Pantalla de reporte de
+          columnas con gráfico de presión de sistema (psi) </div>
+      </div>
+    </div>
+  </body>
+</html>

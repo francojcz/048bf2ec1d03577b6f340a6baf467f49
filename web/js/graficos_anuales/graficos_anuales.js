@@ -407,17 +407,17 @@ var tiemposanual_datastore = new Ext.data.Store({
 var tiemposanual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
-        width: 100,
+        width: 75,
         align : 'center',
         dataIndex: 'ano_tiempo'
     }, {
         header: "Días",
-        width: 100,
+        width: 83,
         align : 'center',
         dataIndex: 'ano_horas'
     }, {
         header: "Porcentaje (%)",
-        width: 100,
+        width: 85,
         align : 'center',
         dataIndex: 'ano_porcentaje'
     }, ]
@@ -430,7 +430,7 @@ var tiemposanual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: tiemposanual_datastore,
     cm: tiemposanual_colmodel,
-    width: 320,
+    width: 270,
     height: 150
 });
 /*********************************************************************************/
@@ -454,7 +454,7 @@ var maqanual_datastore = new Ext.data.Store({
 var maqanual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Nombre equipo",
-        width: 265,
+        width: 230,
         align : 'left',
         dataIndex: 'maq_anu_nombre'
     }]
@@ -467,8 +467,8 @@ var maqanual_gridpanel_tiemp = new Ext.grid.GridPanel({
     frame: true,
     ds: maqanual_datastore,
     cm: maqanual_colmodel,
-    width: 320,
-    height: 125
+    width: 270,
+    height: 105
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -491,7 +491,7 @@ var gruanual_datastore = new Ext.data.Store({
 var gruanual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Nombre grupo",
-        width: 265,
+        width: 230,
         align : 'left',
         dataIndex: 'gru_anu_nombre'
     }]
@@ -504,8 +504,8 @@ var gruanual_gridpanel_tiemp = new Ext.grid.GridPanel({
     frame: true,
     ds: gruanual_datastore,
     cm: gruanual_colmodel,
-    width: 320,
-    height: 125
+    width: 270,
+    height: 105
 });
 /*********************************************************************************/
 
@@ -541,7 +541,7 @@ var indicadoresanual_datastore = new Ext.data.Store({
 var indicadoresanual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
-        width: 112,
+        width: 87,
         align : 'center',
         dataIndex: 'ano_indicador'
     }, {
@@ -564,7 +564,7 @@ var indicadoresanual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: indicadoresanual_datastore,
     cm: indicadoresanual_colmodel,
-    width: 300,
+    width: 270,
     height: 190
 });
 /*********************************************************************************/
@@ -577,8 +577,8 @@ var maqanual_gridpanel_ind = new Ext.grid.GridPanel({
     frame: true,
     ds: maqanual_datastore,
     cm: maqanual_colmodel,
-    width: 300,
-    height: 105
+    width: 270,
+    height: 90
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -590,8 +590,8 @@ var gruanual_gridpanel_ind = new Ext.grid.GridPanel({
     frame: true,
     ds: gruanual_datastore,
     cm: gruanual_colmodel,
-    width: 300,
-    height: 105
+    width: 270,
+    height: 90
 });
 /*********************************************************************************/
 
@@ -627,17 +627,17 @@ var perdidasanual_datastore = new Ext.data.Store({
 var perdidasanual_colmodel = new Ext.grid.ColumnModel({        
     columns: [{
         header: "Indicador",
-        width: 114,
+        width: 91,
         align : 'center',
         dataIndex: 'ano_perdida'
     }, {
         header: "Días",
-        width: 87,
+        width: 70,
         align : 'center',
         dataIndex: 'ano_dias_perd'
     }, {
         header: "Porcentaje (%)",
-        width: 87,
+        width: 85,
         align : 'center',
         dataIndex: 'ano_porcentaje_perd'
     }, ]
@@ -650,8 +650,8 @@ var perdidasanual_gridpanel = new Ext.grid.GridPanel({
     frame: true,
     ds: perdidasanual_datastore,
     cm: perdidasanual_colmodel,
-    width: 310,
-    height: 128
+    width: 270,
+    height: 130
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -663,8 +663,8 @@ var maqanual_gridpanel_perd = new Ext.grid.GridPanel({
     frame: true,
     ds: maqanual_datastore,
     cm: maqanual_colmodel,
-    width: 310,
-    height: 135
+    width: 270,
+    height: 115
 });
 /*********************************************************************************/
 //Cambios: 24 de febrero de 2014
@@ -676,8 +676,8 @@ var gruanual_gridpanel_perd = new Ext.grid.GridPanel({
     frame: true,
     ds: gruanual_datastore,
     cm: gruanual_colmodel,
-    width: 310,
-    height: 135
+    width: 270,
+    height: 115
 });
 /*********************************************************************************/
 
