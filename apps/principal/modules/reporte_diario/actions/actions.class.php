@@ -644,7 +644,7 @@ class reporte_diarioActions extends sfActions
             $fields['ahor_nombre_operario'] = $registro -> obtenerAnalista();            
             $fields['ahor_nombre_metodo'] = $registro -> obtenerMetodo();
             
-            $ahorros_alistamiento = number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);;
+            $ahorros_alistamiento = number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
             $fields['ahorros_alistamiento'] = $ahorros_alistamiento;
             $ahorros_dia += $ahorros_alistamiento;
                         

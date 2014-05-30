@@ -79,7 +79,7 @@
       <align>center</align>
       <text_size>13</text_size> 
       <text>
-        <![CDATA[<b>Consolidado pérdidas por semana (TPNP)</b>]]>
+        <![CDATA[<b>Consolidado pérdidas / Semana (TPNP)</b>]]>
       </text> 
     </label>
   </labels>

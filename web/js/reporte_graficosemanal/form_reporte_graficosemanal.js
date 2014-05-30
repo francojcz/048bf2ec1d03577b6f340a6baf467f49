@@ -293,7 +293,9 @@ var fechaFinField = new Ext.form.DateField({
                             'fecha_inicio': fechaInicioField.getRawValue(),
                             'fecha_fin': fechaFinField.getRawValue(),
                             'cods_equipos': arrayEquipos,
-                            'cods_grupos': arrayGrupos
+                            'cods_grupos': arrayGrupos,
+                            'metodo_codigo': reporgrafseman_metodo_codigo_combobox.getValue(),
+                            'analista_codigo': reporgrafseman_analista_codigo_combobox.getValue()
                         }
                     });
                     //Recargar datos consolidado de indicadores
@@ -302,11 +304,24 @@ var fechaFinField = new Ext.form.DateField({
                             'fecha_inicio': fechaInicioField.getRawValue(),
                             'fecha_fin': fechaFinField.getRawValue(),
                             'cods_equipos': arrayEquipos,
-                            'cods_grupos': arrayGrupos
+                            'cods_grupos': arrayGrupos,
+                            'metodo_codigo': reporgrafseman_metodo_codigo_combobox.getValue(),
+                            'analista_codigo': reporgrafseman_analista_codigo_combobox.getValue()
                         }
                     });
                     //Recargar datos consolidado de perdidas
                     perdidassemanal_datastore.load({
+                        params: {
+                            'fecha_inicio': fechaInicioField.getRawValue(),
+                            'fecha_fin': fechaFinField.getRawValue(),
+                            'cods_equipos': arrayEquipos,
+                            'cods_grupos': arrayGrupos,
+                            'metodo_codigo': reporgrafseman_metodo_codigo_combobox.getValue(),
+                            'analista_codigo': reporgrafseman_analista_codigo_combobox.getValue()
+                        }
+                    });
+                    //Recargar datos consolidado de ahorros
+                    ahorrossemanal_datastore.load({
                         params: {
                             'fecha_inicio': fechaInicioField.getRawValue(),
                             'fecha_fin': fechaFinField.getRawValue(),
@@ -382,7 +397,9 @@ tiempossemanal_datastore.load({
         'fecha_inicio': fechaInicioField.getRawValue(),
         'fecha_fin': fechaFinField.getRawValue(),
         'cods_equipos': arrayEquipos,
-        'cods_grupos': arrayGrupos
+        'cods_grupos': arrayGrupos,
+        'metodo_codigo': reporgrafseman_metodo_codigo_combobox.getValue(),
+        'analista_codigo': reporgrafseman_analista_codigo_combobox.getValue()
     }
 });
 
@@ -540,7 +557,9 @@ indicadoressemanal_datastore.load({
         'fecha_inicio': fechaInicioField.getRawValue(),
         'fecha_fin': fechaFinField.getRawValue(),
         'cods_equipos': arrayEquipos,
-        'cods_grupos': arrayGrupos
+        'cods_grupos': arrayGrupos,
+        'metodo_codigo': reporgrafseman_metodo_codigo_combobox.getValue(),
+        'analista_codigo': reporgrafseman_analista_codigo_combobox.getValue()
     }
 });
 
@@ -700,6 +719,102 @@ var grusemanal_gridpanel_perd = new Ext.grid.GridPanel({
 /*********************************************************************************/
 
 
+
+
+
+//TABLAS CONSOLIDADO AHORROS
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña ahorros una tabla con el consolidado de ahorros
+var ahorrossemanal_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficosemanal', 'consolidadoAhorrosSemana'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'sem_ahorro',
+        type: 'string'
+    }, {
+        name: 'sem_horas_ahorro',
+        type: 'string'
+    }, {
+        name: 'sem_porcentaje_ahorro',
+        type: 'string'
+    }])
+});
+
+//Recargar datos
+ahorrossemanal_datastore.load({
+    params: {
+        'fecha_inicio': fechaInicioField.getRawValue(),
+        'fecha_fin': fechaFinField.getRawValue(),
+        'cods_equipos': arrayEquipos,
+        'cods_grupos': arrayGrupos,
+        'metodo_codigo': reporgrafseman_metodo_codigo_combobox.getValue(),
+        'analista_codigo': reporgrafseman_analista_codigo_combobox.getValue()
+    }
+});
+
+var ahorrossemanal_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Ahorro",
+        width: 90,
+        align : 'center',
+        dataIndex: 'sem_ahorro'
+    }, {
+        header: "Horas",
+        width: 65,
+        align : 'center',
+        dataIndex: 'sem_horas_ahorro'
+    }, {
+        header: "Porcentaje (%)",
+        width: 85,
+        align : 'center',
+        dataIndex: 'sem_porcentaje_ahorro'
+    }]
+});
+
+var ahorrossemanal_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado de ahorros / Semana',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: ahorrossemanal_datastore,
+    cm: ahorrossemanal_colmodel,
+    width: 270,
+    height: 80
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña ahorros una tabla con el nombre de los equipos seleccionados
+var maqsemanal_gridpanel_ahorro = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqsemanal_datastore,
+    cm: maqsemanal_colmodel,
+    width: 270,
+    height: 105
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña ahorros una tabla con el nombre de los equipos seleccionados
+var grusemanal_gridpanel_ahorro = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: grusemanal_datastore,
+    cm: grusemanal_colmodel,
+    width: 270,
+    height: 105
+});
+/*********************************************************************************/
     
     var reporgrafseman_reportes_tabpanel = new Ext.TabPanel({
         frame: true,
@@ -774,6 +889,27 @@ var grusemanal_gridpanel_perd = new Ext.grid.GridPanel({
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficosemanal_inyecciones_dispersion'
+            }]
+        }, {
+            xtype: 'panel',
+            title: 'Ahorros',
+            layout: 'column',
+            autoScroll: true,
+            monitorResize: true,
+            items: [{
+                columnWidth: '.5',
+                contentEl: 'div_reporte_graficosemanal_ahorros_dispersion'
+            }, {
+                columnWidth: '.5',
+                contentEl: 'div_reporte_graficosemanal_ahorros_torta'
+            },
+            {
+                xtype: 'panel',
+                items: [
+                    ahorrossemanal_gridpanel,
+                    maqsemanal_gridpanel_ahorro,
+                    grusemanal_gridpanel_ahorro
+                ]
             }]
         }],
         activeTab: 0,
@@ -867,7 +1003,8 @@ var grusemanal_gridpanel_perd = new Ext.grid.GridPanel({
         reporgrafseman_tiempo_torta.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficosemanal', 'generarDatosGraficoPerdidasTorta') + params));
         reporgrafseman_tiempo_torta.write("div_reporte_graficosemanal_perdidas_torta");
         
-        //muestras
+        
+        //Lotes e inyecciones
         var reporgrafseman_muestras_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
         reporgrafseman_muestras_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafseman_muestras_dispersion.addParam("wmode", "opaque");
@@ -881,6 +1018,26 @@ var grusemanal_gridpanel_perd = new Ext.grid.GridPanel({
         reporgrafseman_inyecciones_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/amline_st_grafico_inyecciones.php');
         reporgrafseman_inyecciones_dispersion.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficosemanal', 'generarDatosGraficoInyecciones') + params));
         reporgrafseman_inyecciones_dispersion.write("div_reporte_graficosemanal_inyecciones_dispersion");
+        
+        
+        //Ahorros
+        //Cambios: 24 de febrero de 2014
+        //Se agrega la pestaña ahorros al reporte semanal
+        var reporgrafseman_ahorros_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "490", "400", "8", "#FFFFFF");
+        reporgrafseman_ahorros_dispersion.addVariable("path", urlWeb + "flash/amline/");
+        reporgrafseman_ahorros_dispersion.addParam("wmode", "opaque");
+        reporgrafseman_ahorros_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/amline_st_grafico_ahorros.php');
+        reporgrafseman_ahorros_dispersion.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficosemanal', 'generarDatosGraficoAhorros') + params));
+        reporgrafseman_ahorros_dispersion.addVariable("loading_data", "... CARGANDO ...");
+        reporgrafseman_ahorros_dispersion.write("div_reporte_graficosemanal_ahorros_dispersion");
+                
+        var reporgrafseman_ahorros_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "390", "390", "8");
+        reporgrafseman_ahorros_torta.addVariable("path", urlWeb + "flash/ampie/");
+        reporgrafseman_ahorros_torta.addParam("wmode", "opaque");
+        reporgrafseman_ahorros_torta.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/ampie_st_grafico_ahorros_torta.php');
+        reporgrafseman_ahorros_torta.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficosemanal', 'generarDatosGraficoAhorrosTorta') + params));
+        reporgrafseman_ahorros_torta.addVariable("loading_data", "... CARGANDO ...");
+        reporgrafseman_ahorros_torta.write("div_reporte_graficosemanal_ahorros_torta");   
     }
     
     reporgrafseman_cargardatosreportes();

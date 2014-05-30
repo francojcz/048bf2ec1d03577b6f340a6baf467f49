@@ -328,7 +328,9 @@ var win_grupos_mensual = new Ext.Window(
                             'mes': reporgrafmens_mes_combobox.getValue(),
                             'anio': reporgrafmens_anio.getValue(),
                             'cods_equipos': arrayEquipos,
-                            'cods_grupos': arrayGrupos
+                            'cods_grupos': arrayGrupos,
+                            'metodo_codigo': reporgrafmens_metodo_codigo_combobox.getValue(),
+                            'analista_codigo': reporgrafmens_analista_codigo_combobox.getValue()
                         }
                     });
                     //Recargar datos consolidado de indicadores
@@ -337,11 +339,24 @@ var win_grupos_mensual = new Ext.Window(
                             'mes': reporgrafmens_mes_combobox.getValue(),
                             'anio': reporgrafmens_anio.getValue(),
                             'cods_equipos': arrayEquipos,
-                            'cods_grupos': arrayGrupos
+                            'cods_grupos': arrayGrupos,
+                            'metodo_codigo': reporgrafmens_metodo_codigo_combobox.getValue(),
+                            'analista_codigo': reporgrafmens_analista_codigo_combobox.getValue()
                         }
                     });
-                    //Recargar datos consolidado de indicadores
+                    //Recargar datos consolidado de perdidas
                     perdidasmensual_datastore.load({
+                        params: {
+                            'mes': reporgrafmens_mes_combobox.getValue(),
+                            'anio': reporgrafmens_anio.getValue(),
+                            'cods_equipos': arrayEquipos,
+                            'cods_grupos': arrayGrupos,
+                            'metodo_codigo': reporgrafmens_metodo_codigo_combobox.getValue(),
+                            'analista_codigo': reporgrafmens_analista_codigo_combobox.getValue()
+                        }
+                    });
+                    //Recargar datos consolidado de ahorros
+                    ahorrosmensual_datastore.load({
                         params: {
                             'mes': reporgrafmens_mes_combobox.getValue(),
                             'anio': reporgrafmens_anio.getValue(),
@@ -421,7 +436,9 @@ tiemposmensual_datastore.load({
         'mes': reporgrafmens_mes_combobox.getValue(),
         'anio': reporgrafmens_anio.getValue(),
         'cods_equipos': arrayEquipos,
-        'cods_grupos': arrayGrupos
+        'cods_grupos': arrayGrupos,
+        'metodo_codigo': reporgrafmens_metodo_codigo_combobox.getValue(),
+        'analista_codigo': reporgrafmens_analista_codigo_combobox.getValue()
     }
 });
 
@@ -579,7 +596,9 @@ indicadoresmensual_datastore.load({
         'mes': reporgrafmens_mes_combobox.getValue(),
         'anio': reporgrafmens_anio.getValue(),
         'cods_equipos': arrayEquipos,
-        'cods_grupos': arrayGrupos
+        'cods_grupos': arrayGrupos,
+        'metodo_codigo': reporgrafmens_metodo_codigo_combobox.getValue(),
+        'analista_codigo': reporgrafmens_analista_codigo_combobox.getValue()
     }
 });
 
@@ -740,6 +759,103 @@ var grumensual_gridpanel_perd = new Ext.grid.GridPanel({
 
 
 
+
+
+//TABLAS CONSOLIDADO AHORROS
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña ahorros una tabla con el consolidado del valor por indicador
+var ahorrosmensual_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('reporte_graficomensual', 'consolidadoAhorrosMes'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'mes_ahorro',
+        type: 'string'
+    }, {
+        name: 'mes_horas_ahorro',
+        type: 'string'
+    }, {
+        name: 'mes_porcentaje_ahorro',
+        type: 'string'
+    }])
+});
+
+//Recargar datos
+ahorrosmensual_datastore.load({
+    params: {
+        'mes': reporgrafmens_mes_combobox.getValue(),
+        'anio': reporgrafmens_anio.getValue(),
+        'cods_equipos': arrayEquipos,
+        'cods_grupos': arrayGrupos,
+        'metodo_codigo': reporgrafmens_metodo_codigo_combobox.getValue(),
+        'analista_codigo': reporgrafmens_analista_codigo_combobox.getValue()
+    }
+});
+
+var ahorrosmensual_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 91,
+        align : 'center',
+        dataIndex: 'mes_ahorro'
+    }, {
+        header: "Horas",
+        width: 70,
+        align : 'center',
+        dataIndex: 'mes_horas_ahorro'
+    }, {
+        header: "Porcentaje (%)",
+        width: 85,
+        align : 'center',
+        dataIndex: 'mes_porcentaje_ahorro'
+    }]
+});
+
+var ahorrosmensual_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado de ahorros / Mes',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: ahorrosmensual_datastore,
+    cm: ahorrosmensual_colmodel,
+    width: 270,
+    height: 80
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña ahorros una tabla con el nombre de los equipos seleccionados
+var maqmensual_gridpanel_ahorro = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqmensual_datastore,
+    cm: maqmensual_colmodel,
+    width: 270,
+    height: 105
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña tiempos una tabla con el nombre de los equipos seleccionados
+var grumensual_gridpanel_ahorro = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: grumensual_datastore,
+    cm: grumensual_colmodel,
+    width: 270,
+    height: 105
+});
+/*********************************************************************************/
+
+
     var reporgrafmens_reportes_tabpanel = new Ext.TabPanel({
         frame: true,
         items: [{
@@ -811,6 +927,26 @@ var grumensual_gridpanel_perd = new Ext.grid.GridPanel({
             }, {
                 columnWidth: '.5',
                 contentEl: 'div_reporte_graficomensual_inyecciones_dispersion'
+            }]
+        }, {
+            xtype: 'panel',
+            title: 'Ahorros',
+            layout: 'column',
+            autoScroll: true,
+            monitorResize: true,
+            items: [{
+                columnWidth: '.5',
+                contentEl: 'div_reporte_graficomensual_ahorros_dispersion'
+            }, {
+                columnWidth: '.5',
+                contentEl: 'div_reporte_graficomensual_ahorros_torta'
+            }, {
+                xtype: 'panel',
+                items: [
+                    ahorrosmensual_gridpanel,
+                    maqmensual_gridpanel_ahorro,
+                    grumensual_gridpanel_ahorro
+                ]
             }]
         }],
         activeTab: 0,
@@ -906,7 +1042,8 @@ var grumensual_gridpanel_perd = new Ext.grid.GridPanel({
         reporgrafmens_tiempo_torta.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficomensual', 'generarDatosGraficoPerdidasTorta') + params));
         reporgrafmens_tiempo_torta.write("div_reporte_graficomensual_perdidas_torta");
         
-        //muestras
+        
+        //Lotes e inyecciones
         var reporgrafmens_muestras_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
         reporgrafmens_muestras_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafmens_muestras_dispersion.addParam("wmode", "opaque");
@@ -920,6 +1057,26 @@ var grumensual_gridpanel_perd = new Ext.grid.GridPanel({
         reporgrafmens_inyecciones_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/amline_st_grafico_inyecciones.php');
         reporgrafmens_inyecciones_dispersion.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficomensual', 'generarDatosGraficoInyecciones') + params));
         reporgrafmens_inyecciones_dispersion.write("div_reporte_graficomensual_inyecciones_dispersion");
+        
+        
+        //Ahorros
+        //Cambios: 24 de febrero de 2014
+        //Se agrega la pestaña ahorros al reporte mensual
+        var reporgrafmens_ahorros_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "505", "400", "8", "#FFFFFF");
+        reporgrafmens_ahorros_dispersion.addVariable("path", urlWeb + "flash/amline/");
+        reporgrafmens_ahorros_dispersion.addParam("wmode", "opaque");
+        reporgrafmens_ahorros_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/amline_st_grafico_ahorros.php');
+        reporgrafmens_ahorros_dispersion.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficomensual', 'generarDatosGraficoAhorros') + params));
+        reporgrafmens_ahorros_dispersion.addVariable("loading_data", "... CARGANDO ...");
+        reporgrafmens_ahorros_dispersion.write("div_reporte_graficomensual_ahorros_dispersion");
+        
+        var reporgrafmens_ahorros_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "400", "400", "8");
+        reporgrafmens_ahorros_torta.addVariable("path", urlWeb + "flash/ampie/");
+        reporgrafmens_ahorros_torta.addParam("wmode", "opaque");
+        reporgrafmens_ahorros_torta.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/ampie_st_grafico_ahorros_torta.php');
+        reporgrafmens_ahorros_torta.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('reporte_graficomensual', 'generarDatosGraficoAhorrosTorta') + params));
+        reporgrafmens_ahorros_torta.addVariable("loading_data", "... CARGANDO ...");
+        reporgrafmens_ahorros_torta.write("div_reporte_graficomensual_ahorros_torta");
     }
     
     reporgrafmens_cargardatosreportes();

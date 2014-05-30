@@ -1424,5 +1424,182 @@ class reporte_graficomensualActions extends sfActions
             
             return $this->renderText($salida);                        
 	}
+        
+        
+        //Cambios: 24 de febrero de 2014
+        //Reporte de ahorros del mes para el gráfico de dispersión
+        public function executeGenerarDatosGraficoAhorros(sfWebRequest $request)
+	{
+		//$anio='2011';
+		//$mes='02';
+		$anio=$this->getRequestParameter('anio');
+		$mes=$this->getRequestParameter('mes');
+		$cant_dias=$this->obtenerCantidadDiasMes($mes,$anio);
 
+		$datos=$this->calcularAhorrosDiariosMes($anio, $mes, $cant_dias);
+
+		$xml='<?xml version="1.0"?>';
+		$xml.='<chart>';
+
+		$xml.='<series>';
+		for($diasmes=1;$diasmes<$cant_dias;$diasmes++)
+		{
+                    $xml.='<value xid="'.$diasmes.'">'.$diasmes.'</value>';
+		}
+		$xml.='</series>';
+
+		$xml.='<graphs>';
+
+		$xml.='<graph color="#59b4b4" title="Ahorros alistamiento" bullet="round" >';
+		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
+                    $numero_alistamiento_dia=$datos[$diasmes]['ahorros_alistamiento'];
+                    $xml.='<value xid="'.$diasmes.'">'.$numero_alistamiento_dia.'</value>';
+		}
+		$xml.='</graph>';
+
+		$xml.='<graph color="#e68a00" title="Ahorros método" bullet="round" >';
+		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
+                    $numero_metodo_dia=$datos[$diasmes]['ahorros_metodo'];
+                    $xml.='<value xid="'.$diasmes.'">'.$numero_metodo_dia.'</value>';
+		}
+		$xml.='</graph>';
+
+                $xml.='</graphs>';
+		$xml.='</chart>';
+
+		$this->getRequest()->setRequestFormat('xml');
+		$response = $this->getResponse();
+		$response->setContentType('text/xml');
+		$response->setHttpHeader('Content-length', strlen($xml), true);
+		return $this->renderText($xml);
+	}
+
+        //Cambios: 24 de febrero de 2014
+        //Calcula los ahorros por alistamiento y por método para cada día del mes
+	public function calcularAhorrosDiariosMes($anio, $mes, $cant_dias)
+	{
+		$datos = array();
+		try{
+			for($dia=1; $dia<$cant_dias; $dia++) {
+                            $ahorros_alistamiento= 0;
+                            $ahorros_metodo= 0;
+
+                            $conexion=$this->obtenerConexionDia($anio.'-'.$mes.'-'.$dia);
+                            $registro_uso_maquina = RegistroUsoMaquinaPeer::doSelect($conexion);
+
+                            foreach($registro_uso_maquina as $registro)
+                            {
+                                //Ahorros alistamiento
+                                $ahorros_alistamiento += number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
+
+                                //Ahorros método
+                                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                                $TF = $registro -> obtenerTFMetodo();
+                                $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
+                                $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
+                                $ahorros_metodo += number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+                            }
+                            $datos[$dia]['ahorros_alistamiento'] = round($ahorros_alistamiento/60, 2);
+                            $datos[$dia]['ahorros_metodo'] = round($ahorros_metodo/60, 2);
+					
+			}
+		}catch (Exception $excepcion)
+		{
+			return "(exeption: 'Excepci&oacute;n en reporte-calcularFallas ',error:'".$excepcion->getMessage()."')";
+		}
+		return $datos;
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Reporte de ahorros del mes  para el gráfico de torta
+	public function executeGenerarDatosGraficoAhorrosTorta(sfWebRequest $request)
+	{
+            //$anio='2011';
+            //$mes='01';
+            $anio=$this->getRequestParameter('anio');
+            $mes=$this->getRequestParameter('mes');
+
+            $datos=$this->calcularAhorrosMes($anio, $mes);
+
+            $xml='<?xml version="1.0"?>';
+            $xml.='<pie>';
+            $xml.='<slice title="Ahorros alistamiento" color="#59b4b4" pull_out="false">'.$datos['ahorros_alistamiento'].'</slice>';
+            $xml.='<slice title="Ahorros método" color="#e68a00" pull_out="false">'.$datos['ahorros_metodo'].'</slice>';		
+            $xml.='</pie>';
+
+            $this->getRequest()->setRequestFormat('xml');
+            $response = $this->getResponse();
+            $response->setContentType('text/xml');
+            $response->setHttpHeader('Content-length', strlen($xml), true);
+            return $this->renderText($xml);
+	}
+
+        //Cambios: 24 de febrero de 2014
+        //Calcula los ahorros por alistamiento y por método para un mes específico
+	public function calcularAhorrosMes($anio, $mes)
+	{
+            $datos = array();
+            try {
+                $ahorros_alistamiento = 0;
+                $ahorros_metodo = 0;
+
+                $conexion = $this->obtenerConexionMes($anio,$mes);
+                $registro_uso_maquina = RegistroUsoMaquinaPeer::doSelect($conexion);
+
+                foreach($registro_uso_maquina as $registro)
+                {      
+                    //Ahorros alistamiento
+                    $ahorros_alistamiento += number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
+
+                    //Ahorros método
+                    $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                    $TF = $registro -> obtenerTFMetodo();
+                    $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
+                    $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
+                    $ahorros_metodo += number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+                }
+                $datos['ahorros_alistamiento']=round(($ahorros_alistamiento/60),2);
+                $datos['ahorros_metodo']=round($ahorros_metodo/60,2);
+            }catch (Exception $excepcion)
+            {
+                return "(exeption: 'Excepci&oacute;n en reporte-calcularAhorrosMes ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
+	}        
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total por indicador (A. alistamiento - A. método)
+	public function executeConsolidadoAhorrosMes(sfWebRequest $request)
+	{
+            //$anio='2011';
+            //$mes='01';
+            $anio = $this->getRequestParameter('anio');
+            $mes = $this->getRequestParameter('mes');
+
+            $datos_ind = $this->calcularAhorrosMes($anio, $mes);
+
+            $indicadores = array('ahorros_alistamiento', 'ahorros_metodo');
+            $ind_nombres = array('Alistamiento', 'Método');
+            
+            //Se calcula la suma de horas de los dos indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['mes_ahorro'] = $ind_nombres[$i];
+                $datos[$fila]['mes_horas_ahorro'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');                
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['mes_porcentaje_ahorro'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida); 
+	}
 }

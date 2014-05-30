@@ -547,11 +547,13 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
             return $tf;
         }
 
-        if ($minutosInicio == 0)
-        {
-            $tf = 0;
-            return $tf;
-        }
+        //Cambios: 24 de febrero de 2014
+        //Se comentó esta línea pues cuando un método inicia a las 00:00:00 no siempre tiene TF=0
+//        if ($minutosInicio == 0)
+//        {
+//            $tf = 0;
+//            return $tf;
+//        }
 
         $tf = round($minutosFin - $minutosInicio, 2);
 

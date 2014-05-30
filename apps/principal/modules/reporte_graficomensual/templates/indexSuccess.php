@@ -18,3 +18,6 @@
 
 <div id="div_reporte_graficomensual_muestras_dispersion" ></div>
 <div id="div_reporte_graficomensual_inyecciones_dispersion" ></div>
+
+<div id="div_reporte_graficomensual_ahorros_dispersion"></div>
+<div id="div_reporte_graficomensual_ahorros_torta"></div>

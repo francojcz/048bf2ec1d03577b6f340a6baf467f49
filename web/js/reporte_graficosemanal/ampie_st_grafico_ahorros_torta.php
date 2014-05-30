@@ -70,7 +70,7 @@
       <align>center</align>
       <text_size>13</text_size> 
       <text>
-        <![CDATA[<b>Consolidado de tiempos para cálculo OEE / Semana</b>]]>
+        <![CDATA[<b>Consolidado de ahorros / Semana</b>]]>
       </text> 
     </label>
   </labels>

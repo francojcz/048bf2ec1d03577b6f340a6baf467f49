@@ -1464,7 +1464,7 @@ class reporte_graficosemanalActions extends sfActions
         //Cambios: 24 de febrero de 2014
         //Calcula el consolidado total por indicador (Paros - Reensayos - Pérdidas)
         public function executeConsolidadoPerdidasSemana(sfWebRequest $request)
-	{            
+	{
             $user = $this->getUser();
             $codigo_usuario = $user->getAttribute('usu_codigo');
             $conexion = new Criteria();
@@ -1508,5 +1508,202 @@ class reporte_graficosemanalActions extends sfActions
             }
             
             return $this->renderText($salida);                        
-	} 
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Reporte de ahorros de la semana para el gráfico de dispersión
+	public function executeGenerarDatosGraficoAhorros(sfWebRequest $request)
+	{
+            //Calculo de la fecha de inicio y fin de cada semana                
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+
+            //Calculo de indicadores por semana
+            //Se calculan los indicadores por día pero se van sumando de acuerdo con el rango de cada semana
+            $datos = array();
+            for($i=0; $i<sizeof($rango_fechas); $i++) {
+                $fecha_inicio = $rango_fechas[$i]['fecha_inicio'];
+                $fecha_fin = $rango_fechas[$i]['fecha_fin'];
+                $fecha = $this->fecha($fecha_inicio);
+                $temp = $this->calcularAhorrosDiarios($fecha[0], $fecha[1], $fecha[2]);
+                $datos[$i]['ahorros_alistamiento'] = $temp['ahorros_alistamiento'];
+                $datos[$i]['ahorros_metodo'] = $temp['ahorros_metodo'];
+                while($fecha_inicio < $fecha_fin) {
+                    $fecha_inicio = date('Y-m-d',strtotime('+1 day', strtotime($fecha_inicio)));
+                    $fecha = $this->fecha($fecha_inicio);
+                    $temp = $this->calcularAhorrosDiarios($fecha[0], $fecha[1], $fecha[2]);
+                    $datos[$i]['ahorros_alistamiento'] += $temp['ahorros_alistamiento'];
+                    $datos[$i]['ahorros_metodo'] += $temp['ahorros_metodo'];
+                }
+            }
+
+            $xml='<?xml version="1.0"?>';
+            $xml.='<chart>';
+            $xml.='<series>';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'</value>';
+            }
+            $xml.='</series>';
+
+            $xml.='<graphs>';
+
+            $xml.='<graph color="#59b4b4" title="Ahorros alistamiento" bullet="round" >';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++) {
+                    $numero_alistamiento_dia=$datos[$diasmes]['ahorros_alistamiento'];
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_alistamiento_dia.'</value>';
+            }
+            $xml.='</graph>';
+
+            $xml.='<graph color="#e68a00" title="Ahorros método" bullet="round" >';
+            for($diasmes=0; $diasmes<sizeof($rango_fechas); $diasmes++){
+                    $numero_metodo_dia=$datos[$diasmes]['ahorros_metodo'];
+                    $xml.='<value xid="'.$this->mes($rango_fechas[$diasmes]['fecha_inicio']).'">'.$numero_metodo_dia.'</value>';
+            }
+            $xml.='</graph>';
+
+            $xml.='</graphs>';
+            $xml.='</chart>';
+
+            $this->getRequest()->setRequestFormat('xml');
+            $response = $this->getResponse();
+            $response->setContentType('text/xml');
+            $response->setHttpHeader('Content-length', strlen($xml), true);
+            return $this->renderText($xml);
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula los ahorros por alistamiento y por método de un día específico
+        public function calcularAhorrosDiarios($ano, $mes, $dia)
+	{
+            $datos = array();
+
+            try{
+                $ahorros_alistamiento = 0;
+                $ahorros_metodo = 0;
+                
+                $conexion=$this->obtenerConexionDia($ano.'-'.$mes.'-'.$dia);
+                $registros_uso_maquina = RegistroUsoMaquinaPeer::doSelect($conexion);
+
+                foreach($registros_uso_maquina as $registro)
+                {                   
+                    //Ahorros alistamiento
+                    $ahorros_alistamiento += number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
+                    
+                    //Ahorros método
+                    $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                    $TF = $registro -> obtenerTFMetodo();
+                    $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
+                    $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
+                    $ahorros_metodo += number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+                }
+                $datos['ahorros_alistamiento'] = round($ahorros_alistamiento/60, 2);
+                $datos['ahorros_metodo'] = round($ahorros_metodo/60, 2);
+            }catch (Exception $excepcion)
+            {
+                return "(exeption: 'Excepci&oacute;n en reporte-calcularAhorros ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Reporte de ahorros de la semana para el gráfico de torta
+	public function executeGenerarDatosGraficoAhorrosTorta(sfWebRequest $request)
+	{
+            //Calculo de la fecha de inicio y fin de cada semana                
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+
+            //Día de inicio y fin del ranto total de semanas
+            $fecha_in = $rango_fechas[0]['fecha_inicio'];
+            $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
+
+            $datos=$this->calcularAhorrosSemana($fecha_in, $fecha_fn);
+
+            $xml='<?xml version="1.0"?>';
+            $xml.='<pie>';
+            $xml.='<slice title="Ahorros alistamiento" color="#59b4b4" pull_out="false">'.$datos['ahorros_alistamiento'].'</slice>';
+            $xml.='<slice title="Ahorros método" color="#e68a00" pull_out="false">'.$datos['ahorros_metodo'].'</slice>';            
+            $xml.='</pie>';
+
+            $this->getRequest()->setRequestFormat('xml');
+            $response = $this->getResponse();
+            $response->setContentType('text/xml');
+            $response->setHttpHeader('Content-length', strlen($xml), true);
+            return $this->renderText($xml);
+	}
+
+        //Cambios: 24 de febrero de 2014
+        //Calcula los ahorros por alistamiento y por método de una semana específica
+	public function calcularAhorrosSemana($fecha_inicio, $fecha_fin)
+	{
+            $datos = array();
+            try {
+                $ahorros_alistamiento = 0;
+                $ahorros_metodo = 0;
+
+                $conexion = $this->obtenerConexionSemana($fecha_inicio, $fecha_fin);
+                $registros_uso_maquina = RegistroUsoMaquinaPeer::doSelect($conexion);
+
+                foreach($registros_uso_maquina as $registro)
+                {
+                    //Ahorros alistamiento
+                    $ahorros_alistamiento += number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
+
+                    //Ahorros método
+                    $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                    $TF = $registro -> obtenerTFMetodo();
+                    $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
+                    $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
+                    $ahorros_metodo += number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+                }
+                $datos['ahorros_alistamiento'] = round(($ahorros_alistamiento/60),2);
+                $datos['ahorros_metodo'] = round($ahorros_metodo/60,2);
+            } catch (Exception $excepcion)
+            {
+                return "(exeption: 'Excepci&oacute;n en reporte-calcularAhorrosSemana ',error:'".$excepcion->getMessage()."')";
+            }
+            return $datos;
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total por indicador (A. alistamiento - A. método)
+        public function executeConsolidadoAhorrosSemana(sfWebRequest $request)
+	{
+            //Calculo de la fecha de inicio y fin de cada semana                
+            $fecha_inicio = $this->getRequestParameter('fecha_inicio');
+            $fecha_fin = $this->getRequestParameter('fecha_fin');
+            $rango_fechas = $this->rango($fecha_inicio, $fecha_fin);
+
+            //Día de inicio y fin del ranto total de semanas
+            $fecha_in = $rango_fechas[0]['fecha_inicio'];
+            $fecha_fn = $rango_fechas[sizeof($rango_fechas)-1]['fecha_fin'];
+
+            $datos_ind=$this->calcularAhorrosSemana($fecha_in, $fecha_fn);            
+            
+            $indicadores = array('ahorros_alistamiento', 'ahorros_metodo');
+            $ind_nombres = array('Alistamiento', 'Método');
+            
+            //Se calcula la suma de horas de los dos indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['sem_ahorro'] = $ind_nombres[$i];
+                $datos[$fila]['sem_horas_ahorro'] = number_format($datos_ind[$indicadores[$i]], 2, ',', '.');                
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['sem_porcentaje_ahorro'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);                        
+	}
 }

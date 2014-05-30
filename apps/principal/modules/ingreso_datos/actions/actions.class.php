@@ -737,7 +737,7 @@ class ingreso_datosActions extends sfActions
             }
             
             //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
-            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='') && ($registro->getRumHoraInicioTrabajo()!='00:00:00')) {
+            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
                 $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
                 $TF = ($registro->obtenerTFMetodo())*60;
                 $TO = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;

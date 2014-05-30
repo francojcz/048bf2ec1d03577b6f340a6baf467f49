@@ -26,7 +26,7 @@
       <align>center</align>
       <text_size>13</text_size>
       <text> 
-        <![CDATA[<b>Tendencia tiempos para cálculo OEE / Día</b>]]>
+        <![CDATA[<b>Tendencia ahorros (tiempo) / Día</b>]]>
       </text> 
     </label>
 	<label lid='2'>
