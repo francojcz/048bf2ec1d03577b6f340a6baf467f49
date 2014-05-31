@@ -59,6 +59,18 @@ Ext.onReady(function(){
                 }
             });
             
+            //Cambios: 24 de febrero de 2014
+            //Se cargan los datos de la tabla consolidados pérdidas
+            ahorrosanual_datastore.load({
+                params: {
+                    'ano' : campoAnho.getValue(),
+                    'codigo_operario' : campoOperario.getValue(),
+                    'cods_equipos' : arrayEquipos,
+                    'cods_grupos' : arrayGrupos,
+                    'codigo_metodo' : campoMetodo.getValue()
+                }
+            });
+            
             
             
             //Obtener el nombre de los equipos seleccionados
@@ -75,6 +87,7 @@ Ext.onReady(function(){
                 }
             });
             
+            //Tiempos
             var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "500", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/amline/");
             so.addParam("wmode", "opaque");
@@ -93,6 +106,8 @@ Ext.onReady(function(){
                 so.write("flashcontent2");
             }
             
+            
+            //Indicadores
             var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "480", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/amline/");
             so.addParam("wmode", "opaque");
@@ -111,6 +126,8 @@ Ext.onReady(function(){
                 so.write("flashcontent4");
             }
             
+            
+            //Pérdidas
             var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "500", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/amline/");
             so.addParam("wmode", "opaque");
@@ -129,6 +146,8 @@ Ext.onReady(function(){
                 so.write("flashcontent6");
             }
             
+            
+            //Lotes e inyecciones            
             var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "500", "400", "8", "#FFFFFF");
             so.addVariable("path", urlWeb + "flash/amline/");
             so.addParam("wmode", "opaque");
@@ -145,7 +164,27 @@ Ext.onReady(function(){
             so.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('graficos_anuales', 'generarDatosGraficoInyeccionesLineas' + params)));
             if (Ext.get('flashcontent8')) {
                 so.write("flashcontent8");
-            }            
+            }
+            
+            
+            //Ahorros
+            var so = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "500", "400", "8", "#FFFFFF");
+            so.addVariable("path", urlWeb + "flash/amline/");
+            so.addParam("wmode", "opaque");
+            so.addVariable("settings_file", encodeURIComponent(getAbsoluteUrl('graficos_anuales', 'generarConfiguracionGraficoAhorrosLineas')));
+            so.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('graficos_anuales', 'generarDatosGraficoAhorrosLineas' + params)));
+            if (Ext.get('flashcontent9')) {
+                so.write("flashcontent9");
+            }
+            
+            var so = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "430", "400", "8", "#FFFFFF");
+            so.addVariable("path", urlWeb + "flash/ampie/");
+            so.addParam("wmode", "opaque");
+            so.addVariable("settings_file", encodeURIComponent(getAbsoluteUrl('graficos_anuales', 'generarConfiguracionTortaAhorros')));
+            so.addVariable("data_file", encodeURIComponent(getAbsoluteUrl('graficos_anuales', 'generarDatosTortaAhorros' + params)));
+            if (Ext.get('flashcontent10')) {
+                so.write("flashcontent10");
+            }
         }
     }
     
@@ -682,6 +721,91 @@ var gruanual_gridpanel_perd = new Ext.grid.GridPanel({
 /*********************************************************************************/
 
 
+
+
+
+//TABLAS CONSOLIDADO AHORROS
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña ahorros una tabla con el consolidado del valor por indicador
+var ahorrosanual_datastore = new Ext.data.Store({
+    proxy: new Ext.data.HttpProxy({
+        url: getAbsoluteUrl('graficos_anuales', 'consolidadoAhorrosAno'),
+        method: 'POST'
+    }),
+    baseParams: {},
+    reader: new Ext.data.JsonReader({
+        root: 'results',
+        totalProperty: 'total'
+    }, [{
+        name: 'ano_ahorro',
+        type: 'string'
+    }, {
+        name: 'ano_dias_ahorro',
+        type: 'string'
+    }, {
+        name: 'ano_porcentaje_ahorro',
+        type: 'string'
+    }])
+});
+
+var ahorrosanual_colmodel = new Ext.grid.ColumnModel({        
+    columns: [{
+        header: "Indicador",
+        width: 91,
+        align : 'center',
+        dataIndex: 'ano_ahorro'
+    }, {
+        header: "Días",
+        width: 70,
+        align : 'center',
+        dataIndex: 'ano_dias_ahorro'
+    }, {
+        header: "Porcentaje (%)",
+        width: 85,
+        align : 'center',
+        dataIndex: 'ano_porcentaje_ahorro'
+    }, ]
+});
+
+var ahorrosanual_gridpanel = new Ext.grid.GridPanel({
+    title: 'Consolidado ahorros / Año',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: ahorrosanual_datastore,
+    cm: ahorrosanual_colmodel,
+    width: 270,
+    height: 110
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña pérdidas una tabla con el nombre de los equipos seleccionados
+var maqanual_gridpanel_ahorro = new Ext.grid.GridPanel({
+    title: 'Equipos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: maqanual_datastore,
+    cm: maqanual_colmodel,
+    width: 270,
+    height: 125
+});
+/*********************************************************************************/
+//Cambios: 24 de febrero de 2014
+//Se agregó en la pestaña pérdidas una tabla con el nombre de los equipos seleccionados
+var gruanual_gridpanel_ahorro = new Ext.grid.GridPanel({
+    title: 'Grupos seleccionados',
+    region: 'center',
+    stripeRows: true,
+    frame: true,
+    ds: gruanual_datastore,
+    cm: gruanual_colmodel,
+    width: 270,
+    height: 125
+});
+/*********************************************************************************/
+
     
     var panelGraficoTiemposAnual = new Ext.FormPanel({
         renderTo: 'panel_graficos_anuales',
@@ -851,6 +975,23 @@ var gruanual_gridpanel_perd = new Ext.grid.GridPanel({
                 }, {
                     id: 'flashcontent8',
                     border: true
+                }]
+            }, {
+                title: 'Ahorros',
+                layout: 'column',
+                items: [{
+                    id: 'flashcontent9',
+                    border: true
+                }, {
+                    id: 'flashcontent10',
+                    border: true
+                }, {
+                    xtype: 'panel',
+                    items: [
+                        ahorrosanual_gridpanel,
+                        maqanual_gridpanel_ahorro,
+                        gruanual_gridpanel_ahorro
+                    ]
                 }]
             }],
             listeners: {

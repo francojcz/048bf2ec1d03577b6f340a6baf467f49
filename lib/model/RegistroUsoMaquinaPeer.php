@@ -1608,5 +1608,74 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         }
         return $cant_dias + 1;
     }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula los ahorros en el tiempo de alistamiento en días
+    public static function contarAhorrosAlistamientoMesEnDias($codigoMaquina, $mes, $año, $params)
+    {
+        return (RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnHoras($codigoMaquina, $mes, $año, $params) / 24);
+    }
 
-} // RegistroUsoMaquinaPeer
+    public static function contarAhorrosAlistamientoMesEnHoras($codigoMaquina, $mes, $año, $params)
+    {
+        $ahorros_alistamiento = 0;
+
+        $registros = RegistroUsoMaquinaPeer::consultarRegistrosMes($codigoMaquina, $mes, $año, $params);
+
+        foreach ($registros as $registro)
+        {
+            //Ahorros alistamiento
+            $ahorros_alistamiento += number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
+        }
+
+        return ($ahorros_alistamiento / 60);
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula los ahorros en en el tiempo operativo del método en término de días
+    public static function contarAhorrosMetodoMesEnDias($codigoMaquina, $mes, $año, $params)
+    {
+        return (RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnHoras($codigoMaquina, $mes, $año, $params) / 24);
+    }
+
+    public static function contarAhorrosMetodoMesEnHoras($codigoMaquina, $mes, $año, $params)
+    {
+        $ahorros_metodo = 0;
+
+        $registros = RegistroUsoMaquinaPeer::consultarRegistrosMes($codigoMaquina, $mes, $año, $params);
+
+        foreach ($registros as $registro)
+        {
+            //Ahorros método
+            $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+            $TF = $registro -> obtenerTFMetodo();
+            $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
+            $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
+            $ahorros_metodo += number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+        }
+
+        return ($ahorros_metodo / 60);
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula el total de ahorros de año
+    public static function contarAhorrosAlistamientoAñoEnDias($codigoMaquina, $año, $params)
+    {
+        $sumatoria = 0;
+        for($i=1; $i<=12; $i++) {
+            $sumatoria += (RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnHoras($codigoMaquina, $i, $año, $params)) / 24;
+        }
+        return $sumatoria;
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula el total de ahorros de año
+    public static function contarAhorrosMetodoAñoEnDias($codigoMaquina, $año, $params)
+    {
+        $sumatoria = 0;
+        for($i=1; $i<=12; $i++) {
+            $sumatoria += (RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnHoras($codigoMaquina, $i, $año, $params)) / 24;
+        }
+        return $sumatoria;
+    }
+}

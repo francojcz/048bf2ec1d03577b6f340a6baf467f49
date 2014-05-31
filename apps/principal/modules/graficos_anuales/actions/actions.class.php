@@ -571,7 +571,7 @@ class graficos_anualesActions extends sfActions
 		$this->renderText('<settings>');
 		$this->renderText('<data_type>csv</data_type>');
 		$this->renderText('<pie>');
-		$this->renderText('<x>245</x>
+		$this->renderText('<x>220</x>
     <y>150</y>                     
     <inner_radius>40</inner_radius>
     <height>20</height>            
@@ -2907,4 +2907,429 @@ class graficos_anualesActions extends sfActions
             return $this->renderText($salida);                        
 	}
         
+        
+        //Cambios: 24 de febrero de 2014
+        //Reporte de ahorros del ano para el gráfico de dispersión
+        public function executeGenerarConfiguracionGraficoAhorrosLineas() {
+            $this->renderText('<?xml version="1.0" encoding="UTF-8"?>');
+            $this->renderText('<settings>');
+            $this->renderText('<grid>
+            <x>                            
+            <approx_count>10</approx_count>
+            </x>                           
+            </grid>');
+                        $this->renderText('<values>
+            <x>                                
+              <rotate>45</rotate>              
+            </x>                               
+            </values>');
+                        $this->renderText('<indicator>
+            <enabled>true</enabled>                      
+            <zoomable>false</zoomable>                   
+            </indicator>');   
+                        $this->renderText('<legend>
+            <graph_on_off>true</graph_on_off>
+            <values>                     
+            <text><![CDATA[]]></text>  
+            </values>                   
+            </legend>');
+            require_once(dirname(__FILE__).'/../../../../../config/variablesGenerales.php');
+            $this->renderText('<export_as_image>
+            <file>'.$urlWeb.'flash/amline/export.php</file>     
+            <color>#CC0000</color>                      
+            <alpha>50</alpha>                           
+            </export_as_image>');
+                        $this->renderText('<help>
+            <button>                               
+            </button>                              
+            <balloon>                              
+            <text><![CDATA[]]></text>            
+            </balloon>                             
+            </help>');
+		$this->renderText('<labels>
+	    <label>
+	    <x>0</x>
+	    <y>15</y>
+	    <text_color>000000</text_color>
+	    <text_size>13</text_size>
+	    <align>center</align>
+	    <text>
+	    <![CDATA[<b>Tendencia ahorros (tiempo) / Mes</b>]]>
+	    </text>        
+	    </label>
+	    <label lid="1">
+	      <x>10</x> 
+	      <y>50%</y>
+	      <rotate>true</rotate> 
+	      <width>100</width>
+	      <align>left</align>
+	      <text>
+	        <![CDATA[<b>Días</b>]]>
+	      </text> 
+              </label>
+            </labels>');
+                        $this->renderText('<guides>
+            <max_min></max_min>          
+            <guide>                      
+            <axis>right</axis>         
+            </guide>                     
+            </guides>');
+            return $this->renderText('</settings>');
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula los ahorros por alistamiento y por método de un mes específico
+	public function executeGenerarDatosGraficoAhorrosLineas(sfWebRequest $request) {
+            $anho = $request->getParameter('anho');
+
+            $params = array();
+            if($request->getParameter('codigo_operario')!='-1') {
+                    $params['codigo_operario'] = $request->getParameter('codigo_operario');
+            }
+            if($request->getParameter('codigo_metodo')!='-1') {
+                    $params['codigo_metodo'] = $request->getParameter('codigo_metodo');
+            }            
+
+            $this->renderText('<?xml version="1.0" encoding="UTF-8"?>
+            <chart>
+              <series>
+                <value xid="0">Enero</value>
+                <value xid="1">Febrero</value>
+                <value xid="2">Marzo</value>
+                <value xid="3">Abril</value>
+                <value xid="4">Mayo</value>
+                <value xid="5">Junio</value>
+                <value xid="6">Julio</value>
+                <value xid="7">Agosto</value>
+                <value xid="8">Septiembre</value>
+                <value xid="9">Octubre</value>
+                <value xid="10">Noviembre</value>
+                <value xid="11">Diciembre</value>
+              </series>
+            <graphs>');
+
+            $ahorrosAlistamientoEnero = 0;
+            $ahorrosAlistamientoFebrero = 0;
+            $ahorrosAlistamientoMarzo = 0;
+            $ahorrosAlistamientoAbril = 0;
+            $ahorrosAlistamientoMayo = 0;
+            $ahorrosAlistamientoJunio = 0;
+            $ahorrosAlistamientoJulio = 0;
+            $ahorrosAlistamientoAgosto = 0;
+            $ahorrosAlistamientoSeptiembre = 0;
+            $ahorrosAlistamientoOctubre = 0;
+            $ahorrosAlistamientoNoviembre = 0;
+            $ahorrosAlistamientoDiciembre = 0;
+
+            $ahorrosMetodoEnero = 0;
+            $ahorrosMetodoFebrero = 0;
+            $ahorrosMetodoMarzo = 0;
+            $ahorrosMetodoAbril = 0;
+            $ahorrosMetodoMayo = 0;
+            $ahorrosMetodoJunio = 0;
+            $ahorrosMetodoJulio = 0;
+            $ahorrosMetodoAgosto = 0;
+            $ahorrosMetodoSeptiembre = 0;
+            $ahorrosMetodoOctubre = 0;
+            $ahorrosMetodoNoviembre = 0;
+            $ahorrosMetodoDiciembre = 0;
+
+            $conexion = new Criteria();
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {
+                    $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                }
+            }       
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los grupos de equipos seleccionados
+            $temp2 = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp2);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {
+                    $criteria1 = new Criteria();
+                    $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                    $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                    foreach ($grupoporequipo as $equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                    }                
+                }
+            }
+
+            $maquinas = MaquinaPeer::doSelect($conexion);
+
+            foreach($maquinas as $maquina) {
+                $codigoTemporalMaquina = $maquina->getMaqCodigo();
+
+                $ahorrosAlistamientoEnero += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 1, $anho, $params);
+                $ahorrosAlistamientoFebrero += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 2, $anho, $params);
+                $ahorrosAlistamientoMarzo += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 3, $anho, $params);
+                $ahorrosAlistamientoAbril += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 4, $anho, $params);
+                $ahorrosAlistamientoMayo += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 5, $anho, $params);
+                $ahorrosAlistamientoJunio += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 6, $anho, $params);
+                $ahorrosAlistamientoJulio += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 7, $anho, $params);
+                $ahorrosAlistamientoAgosto += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 8, $anho, $params);
+                $ahorrosAlistamientoSeptiembre += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 9, $anho, $params);
+                $ahorrosAlistamientoOctubre += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 10, $anho, $params);
+                $ahorrosAlistamientoNoviembre += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 11, $anho, $params);
+                $ahorrosAlistamientoDiciembre += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoMesEnDias($codigoTemporalMaquina, 12, $anho, $params);
+
+                $ahorrosMetodoEnero += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 1, $anho, $params);
+                $ahorrosMetodoFebrero += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 2, $anho, $params);
+                $ahorrosMetodoMarzo += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 3, $anho, $params);
+                $ahorrosMetodoAbril += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 4, $anho, $params);
+                $ahorrosMetodoMayo += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 5, $anho, $params);
+                $ahorrosMetodoJunio += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 6, $anho, $params);
+                $ahorrosMetodoJulio += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 7, $anho, $params);
+                $ahorrosMetodoAgosto += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 8, $anho, $params);
+                $ahorrosMetodoSeptiembre += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 9, $anho, $params);
+                $ahorrosMetodoOctubre += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 10, $anho, $params);
+                $ahorrosMetodoNoviembre += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 11, $anho, $params);
+                $ahorrosMetodoDiciembre += RegistroUsoMaquinaPeer::contarAhorrosMetodoMesEnDias($codigoTemporalMaquina, 12, $anho, $params);                    
+            }            
+            $this->renderText('<graph color="#5cd65c" title="Ahorros alistamiento" bullet="round">
+              <value xid="0">'.round($ahorrosAlistamientoEnero, 2).'</value>
+              <value xid="1">'.round($ahorrosAlistamientoFebrero, 2).'</value>
+              <value xid="2">'.round($ahorrosAlistamientoMarzo, 2).'</value>
+              <value xid="3">'.round($ahorrosAlistamientoAbril, 2).'</value>
+              <value xid="4">'.round($ahorrosAlistamientoMayo, 2).'</value>
+              <value xid="5">'.round($ahorrosAlistamientoJunio, 2).'</value>
+              <value xid="6">'.round($ahorrosAlistamientoJulio, 2).'</value>
+              <value xid="7">'.round($ahorrosAlistamientoAgosto, 2).'</value>
+              <value xid="8">'.round($ahorrosAlistamientoSeptiembre, 2).'</value>
+              <value xid="9">'.round($ahorrosAlistamientoOctubre, 2).'</value>
+              <value xid="10">'.round($ahorrosAlistamientoNoviembre, 2).'</value>
+              <value xid="11">'.round($ahorrosAlistamientoDiciembre, 2).'</value>
+            </graph>');
+            $this->renderText('<graph color="#33add6" title="Ahorros método" bullet="round">
+              <value xid="0">'.round($ahorrosMetodoEnero, 2).'</value>
+              <value xid="1">'.round($ahorrosMetodoFebrero, 2).'</value>
+              <value xid="2">'.round($ahorrosMetodoMarzo, 2).'</value>
+              <value xid="3">'.round($ahorrosMetodoAbril, 2).'</value>
+              <value xid="4">'.round($ahorrosMetodoMayo, 2).'</value>
+              <value xid="5">'.round($ahorrosMetodoJunio, 2).'</value>
+              <value xid="6">'.round($ahorrosMetodoJulio, 2).'</value>
+              <value xid="7">'.round($ahorrosMetodoAgosto, 2).'</value>
+              <value xid="8">'.round($ahorrosMetodoSeptiembre, 2).'</value>
+              <value xid="9">'.round($ahorrosMetodoOctubre, 2).'</value>
+              <value xid="10">'.round($ahorrosMetodoNoviembre, 2).'</value>
+              <value xid="11">'.round($ahorrosMetodoDiciembre, 2).'</value>
+            </graph>');
+            return $this->renderText('</graphs></chart>');
+            return $this->renderText('');
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Reporte de ahorros del ano para el gráfico de torta
+        public function executeGenerarConfiguracionTortaAhorros() {
+            $this->renderText('<settings>');
+            $this->renderText('<data_type>csv</data_type>');
+            $this->renderText('<pie>');
+            $this->renderText('<x>220</x>
+            <y>150</y>                     
+            <inner_radius>40</inner_radius>
+            <height>20</height>            
+            <angle>30</angle>
+            <colors>#5cd65c,#33add6</colors>
+            <hover_brightness>-10</hover_brightness>                
+            <gradient>radial</gradient>                             
+            <gradient_ratio>0,0,0,-50,0,0,0,-50</gradient_ratio>');
+            $this->renderText('</pie>');
+            $this->renderText('<animation>
+            <start_time>2</start_time>                 
+            <start_effect>regular</start_effect>       
+            <start_alpha>0</start_alpha>               
+            <sequenced>true</sequenced>                
+            <pull_out_on_click>true</pull_out_on_click>
+            <pull_out_time>1.5</pull_out_time>         
+            </animation>');
+            $this->renderText('<data_labels>
+            <show>                                     
+                <![CDATA[{title}: {percents}%]]> 
+            </show>                                    
+            </data_labels>');
+            $this->renderText('<balloon>
+            <alpha>80</alpha>                   
+            <show>                              
+            <![CDATA[{title}: {value} días ({percents}%) <br>{description}]]>
+            </show>                             
+            <max_width>300</max_width>          
+            <corner_radius>5</corner_radius>    
+            <border_width>3</border_width>      
+            <border_alpha>50</border_alpha>     
+            <border_color>#000000</border_color>
+            </balloon>
+            <labels>
+            <label>
+            <x>0</x>
+            <y>12</y>
+            <text_color>000000</text_color>
+            <text_size>13</text_size>
+            <align>center</align>
+            <text>
+            <![CDATA[<b>Consolidado ahorros por año</b>]]>
+            </text>        
+            </label>
+            </labels>
+            ');
+            $this->renderText('<legend>
+            <enabled>true</enabled>        
+            <x>100</x>                     
+            <y>300</y>                     
+            <max_columns>2</max_columns>   
+            <values>                       
+            <enabled></enabled>          
+            <width></width>              
+            <text><![CDATA[]]></text>    
+            </values>                     
+            </legend>');
+            require_once(dirname(__FILE__).'/../../../../../config/variablesGenerales.php');
+            $this->renderText('<export_as_image>
+            <file>'.$urlWeb.'flash/ampie/export.php</file>     
+            <color>#CC0000</color>                      
+            <alpha>50</alpha>                           
+            </export_as_image>');
+            return $this->renderText('</settings>');
+	}
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula los ahorros por alistamiento y por método para el gráfico consolidado
+	public function executeGenerarDatosTortaAhorros(sfWebRequest $request) {
+            $anho = $request->getParameter('anho');
+            $params = array();
+            if($request->getParameter('codigo_operario')!='-1') {
+                    $params['codigo_operario'] = $request->getParameter('codigo_operario');
+            }
+            if($request->getParameter('codigo_metodo')!='-1') {
+                    $params['codigo_metodo'] = $request->getParameter('codigo_metodo');
+            }
+
+            $ahorros_alistamiento = 0;
+            $ahorros_metodo = 0;
+
+            $conexion = new Criteria();
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {
+                    $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                }
+            }     
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los grupos de equipos seleccionados
+            $temp2 = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp2);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {
+                    $criteria1 = new Criteria();
+                    $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                    $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                    foreach ($grupoporequipo as $equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                    }                
+                }
+            }
+
+            $maquinas = MaquinaPeer::doSelect($conexion);
+
+            foreach($maquinas as $maquina) {
+                    $codigoTemporalMaquina = $maquina->getMaqCodigo();
+
+                    $ahorros_alistamiento += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoAñoEnDias($codigoTemporalMaquina, $anho, $params);
+                    $ahorros_metodo += RegistroUsoMaquinaPeer::contarAhorrosMetodoAñoEnDias($codigoTemporalMaquina, $anho, $params);                    
+            }
+
+            echo "Ahorros alistamiento;".round($ahorros_alistamiento,2)."\n";
+            return $this->renderText("Ahorros método;".round($ahorros_metodo,2)."\n");
+	}
+        
+        
+        //Cambios: 24 de febrero de 2014
+        //Calcula el consolidado total de ahorros (Alistamiento - Método) por ano
+        public function executeConsolidadoAhorrosAno(sfWebRequest $request) {
+            $anho = $request->getParameter('ano');
+            $params = array();
+            if($request->getParameter('codigo_operario')!='-1') {
+                    $params['codigo_operario'] = $request->getParameter('codigo_operario');
+            }
+            if($request->getParameter('codigo_metodo')!='-1') {
+                    $params['codigo_metodo'] = $request->getParameter('codigo_metodo');
+            }
+
+            $ahorros_alistamiento = 0;
+            $ahorros_metodo = 0;
+
+            $conexion = new Criteria();
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los equipos seleccionados
+            $temp = $this->getRequestParameter('cods_equipos');
+            $cods_equipos = json_decode($temp);
+            if($cods_equipos != ''){
+                foreach ($cods_equipos as $cod_equipo) {
+                    $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $cod_equipo);
+                }
+            }     
+
+            //Cambios: 24 de febrero de 2014
+            //Se obtienen los códigos de los grupos de equipos seleccionados
+            $temp2 = $this->getRequestParameter('cods_grupos');
+            $cods_grupos = json_decode($temp2);
+            if($cods_grupos != ''){
+                foreach ($cods_grupos as $cod_grupo) {
+                    $criteria1 = new Criteria();
+                    $criteria1->add(GrupoPorEquipoPeer::GREQ_GRU_CODIGO, $cod_grupo);
+                    $grupoporequipo = GrupoPorEquipoPeer::doSelect($criteria1);
+                    foreach ($grupoporequipo as $equipo) {
+                        $conexion -> addOr(MaquinaPeer::MAQ_CODIGO, $equipo->getGreqMaqCodigo());
+                    }                
+                }
+            }
+
+            $maquinas = MaquinaPeer::doSelect($conexion);
+
+            foreach($maquinas as $maquina) {
+                    $codigoTemporalMaquina = $maquina->getMaqCodigo();
+
+                    $ahorros_alistamiento += RegistroUsoMaquinaPeer::contarAhorrosAlistamientoAñoEnDias($codigoTemporalMaquina, $anho, $params);
+                    $ahorros_metodo += RegistroUsoMaquinaPeer::contarAhorrosMetodoAñoEnDias($codigoTemporalMaquina, $anho, $params);                    
+            }
+
+            $datos_ind = array();
+            $datos_ind['ahorros_alistamiento'] = round($ahorros_alistamiento, 2);
+            $datos_ind['ahorros_metodo'] = round($ahorros_metodo, 2);
+            
+            $indicadores = array('ahorros_alistamiento', 'ahorros_metodo');
+            $ind_nombres = array('Alistamiento', 'Método');
+            
+            //Se calcula la suma de horas de los dos indicadores para el cálculo del porcentaje
+            $total_horas = $datos_ind[$indicadores[0]]+$datos_ind[$indicadores[1]];
+            
+            $salida = '({"total":"0", "results":""})';
+            $fila = 0;
+            $datos = array();
+            
+            for($i=0; $i<sizeof($indicadores); $i++) {
+                $datos[$fila]['ano_ahorro'] = $ind_nombres[$i];
+                $datos[$fila]['ano_dias_ahorro'] = $datos_ind[$indicadores[$i]];
+                $porcentaje = (($datos_ind[$indicadores[$i]]*100))/$total_horas;
+                $datos[$fila]['ano_porcentaje_ahorro'] = number_format($porcentaje, 2, ',', '.');
+                $fila++;
+            }
+            if($fila>0){
+                $jsonresult = json_encode($datos);
+                $salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+            }
+            
+            return $this->renderText($salida);    
+	}        
 }

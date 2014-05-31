@@ -946,13 +946,13 @@ var rdahor_columns = [{
 } , {
     dataIndex: 'ahorros_alistamiento',
     header: 'Ahorros<br>Alistamiento<br>(Min)',
-    tooltip: 'Ahorros  del alistamiento (Minutos)',
+    tooltip: 'Ahorros del alistamiento (Minutos)',
     width: 110,
     align: 'center',
     renderer: generarRenderer('#e1de98', '#000000')
 }, {
     dataIndex: 'ahorros_metodo',
-    header: 'Ahorros<br>(Min)<br>Método',
+    header: 'Ahorros<br>Método<br>(Min)',
     tooltip: 'Ahorros del método (Minutos)',
     width: 110,
     align: 'center',

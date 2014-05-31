@@ -1450,14 +1450,14 @@ class reporte_graficomensualActions extends sfActions
 
 		$xml.='<graphs>';
 
-		$xml.='<graph color="#59b4b4" title="Ahorros alistamiento" bullet="round" >';
+		$xml.='<graph color="#5cd65c" title="Ahorros alistamiento" bullet="round" >';
 		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
                     $numero_alistamiento_dia=$datos[$diasmes]['ahorros_alistamiento'];
                     $xml.='<value xid="'.$diasmes.'">'.$numero_alistamiento_dia.'</value>';
 		}
 		$xml.='</graph>';
 
-		$xml.='<graph color="#e68a00" title="Ahorros método" bullet="round" >';
+		$xml.='<graph color="#33add6" title="Ahorros método" bullet="round" >';
 		for($diasmes=1;$diasmes<$cant_dias;$diasmes++){
                     $numero_metodo_dia=$datos[$diasmes]['ahorros_metodo'];
                     $xml.='<value xid="'.$diasmes.'">'.$numero_metodo_dia.'</value>';
@@ -1523,8 +1523,8 @@ class reporte_graficomensualActions extends sfActions
 
             $xml='<?xml version="1.0"?>';
             $xml.='<pie>';
-            $xml.='<slice title="Ahorros alistamiento" color="#59b4b4" pull_out="false">'.$datos['ahorros_alistamiento'].'</slice>';
-            $xml.='<slice title="Ahorros método" color="#e68a00" pull_out="false">'.$datos['ahorros_metodo'].'</slice>';		
+            $xml.='<slice title="Ahorros alistamiento" color="#5cd65c" pull_out="false">'.$datos['ahorros_alistamiento'].'</slice>';
+            $xml.='<slice title="Ahorros método" color="#33add6" pull_out="false">'.$datos['ahorros_metodo'].'</slice>';		
             $xml.='</pie>';
 
             $this->getRequest()->setRequestFormat('xml');
