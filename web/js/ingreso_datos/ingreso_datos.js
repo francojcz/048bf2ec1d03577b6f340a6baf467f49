@@ -449,14 +449,14 @@ Ext.onReady(function()
                 {
                     return valor;
                 } else if((rowIndex % 2) == 0)
-{
+                {
                     return '<div style="background-color: ' + colorFondoPar + '; color: ' + colorFuentePar + '">' + valor + '</div>';
                 } else
-{
+                {
                     return '<div style="background-color: ' + colorFondoImpar + '; color: ' + colorFuenteImpar + '">' + valor + '</div>';
                 }
             } else
-{
+            {
                 return valor;
             }
         }
@@ -1032,7 +1032,7 @@ Ext.onReady(function()
         {
             dataIndex : 'numero_inyecciones_muestra',
             header : 'No.<br>inyecc./<br>Muestra',
-            tooltip : 'N�mero inyecciones por muestra',
+            tooltip : 'Número inyecciones por muestra',
             width : 80,
             align : 'center',
             editor :
@@ -1257,7 +1257,7 @@ Ext.onReady(function()
         dataIndex : 'tiempo_entre_metodos',
         header : 'Tiempo entre<br>métodos<br>(Hrs)',
         tooltip : 'Tiempo entre métodos (Horas)',
-        width : 80,
+        width : 75,
         align : 'center',
         editor : new Ext.form.TimeField(
         {
@@ -1272,7 +1272,7 @@ Ext.onReady(function()
         dataIndex : 'cambio_metodo_ajuste',
         header : 'Cambio método<br>(alistamiento)<br>(Min)',
         tooltip : 'Cambio de método y ajustes',
-        width : 90,
+        width : 85,
         align : 'center',
         editor :
         {
@@ -1332,7 +1332,7 @@ Ext.onReady(function()
             dataIndex : 'numero_inyecciones_estandar' + i,
             header : 'No.<br>inyec.<br>Std. ' + i,
             tooltip : 'N&uacute;mero de inyecciones del estándar No. ' + i,
-            width : 50,
+            width : 45,
             align : 'center',
             editor :
             {
@@ -1357,9 +1357,9 @@ Ext.onReady(function()
     columns_tab1.push(
     {
         dataIndex : 'hora_inicio_corrida',
-        header : 'Hora<br>inicio corrida',
+        header : 'Hora<br>inicio<br>corrida',
         tooltip : 'Hora de inicio de corrida',
-        width : 75,
+        width : 70,
         align : 'center',
         editor : new Ext.form.TimeField(
         {
@@ -1372,9 +1372,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'hora_fin_corrida',
-        header : 'Hora<br>fin corrida',
+        header : 'Hora<br>fin<br>corrida',
         tooltip : 'Hora de inicio de corrida',
-        width : 75,
+        width : 70,
         align : 'center',
         editor : new Ext.form.TimeField(
         {
@@ -1401,7 +1401,7 @@ Ext.onReady(function()
         dataIndex : 'observaciones',
         header : 'Observaciones Muestra',
         tooltip : 'Observaciones',
-        width : 180,
+        width : 170,
         align : 'center',
         editor :
         {
@@ -1481,7 +1481,7 @@ Ext.onReady(function()
         dataIndex : 'numero_inyecciones_x_muestra_producto',
         header : '<a style="color:#B80000;">No.<br>inyec.<br>x<br>lotes</a>',
         tooltip : 'N&uacute;mero de muestras del producto',
-        width : 53,
+        width : 45,
         align : 'center',
         editor :
         {
@@ -1523,7 +1523,7 @@ Ext.onReady(function()
         dataIndex : 'numero_inyecciones_x_muestra_estabilidad',
         header : '<a style="color:#0033CC;">No.<br>inyec.<br>x<br>lotes</a>',
         tooltip : 'N&uacute;mero de muestras de estabilidad',
-        width : 53,
+        width : 45,
         align : 'center',
         editor :
         {
@@ -1565,7 +1565,7 @@ Ext.onReady(function()
         dataIndex : 'numero_inyecciones_x_muestra_materia_prima',
         header : '<a style="color:#004C00;">No.<br>inyec.<br>x<br>lotes</a>',
         tooltip : 'N&uacute;mero de muestras de materia prima',
-        width : 53,
+        width : 45,
         align : 'center',
         editor :
         {
@@ -1607,7 +1607,7 @@ Ext.onReady(function()
         dataIndex : 'numero_inyecciones_x_muestra_pureza',
         header : '<a style="color:#8B4513;">No.<br>inyec.<br>x<br>lotes</a>',
         tooltip : 'N&uacute;mero de muestras de pureza',
-        width : 53,
+        width : 45,
         align : 'center',
         editor :
         {
@@ -1649,7 +1649,7 @@ Ext.onReady(function()
         dataIndex : 'numero_inyecciones_x_muestra_disolucion',
         header : '<a style="color:#006666;">No.<br>inyec.<br>x<br>lotes</a>',
         tooltip : 'N&uacute;mero de muestras de disolucion',
-        width : 53,
+        width : 45,
         align : 'center',
         editor :
         {
@@ -1691,7 +1691,7 @@ Ext.onReady(function()
         dataIndex : 'numero_inyecciones_x_muestra_uniformidad',
         header : '<a style="color:#E63E00;">No.<br>inyec.<br>x<br>lotes</a>',
         tooltip : 'N&uacute;mero de muestras de uniformidad',
-        width : 53,
+        width : 45,
         align : 'center',
         editor :
         {
@@ -1746,7 +1746,7 @@ Ext.onReady(function()
         dataIndex : 'col_codigo_interno',
         header : 'C&oacute;digo Interno',
         tooltip : 'C&oacute;digo Interno',
-        width : 130,
+        width : 120,
         align : 'center',
         editor : new Ext.form.ComboBox(
         {
@@ -1767,7 +1767,7 @@ Ext.onReady(function()
         dataIndex : 'etapa_nombre',
         header : 'Etapa',
         tooltip : 'Etapa',
-        width : 130,
+        width : 125,
         align : 'center',
         editor : new Ext.form.ComboBox(
         {
@@ -1786,9 +1786,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'tiempo_retencion',
-        header : 'Tiempo Retenci&oacute;n (tr)',
+        header : 'Tiempo Retenci&oacute;n<br>(tr)',
         tooltip : 'Tiempo de Retenci&oacute;n (tr)',
-        width : 130,
+        width : 120,
         align : 'center',
         editor :
         {
@@ -1800,9 +1800,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'platos_teoricos',
-        header : 'Platos Te&oacute;ricos (N)',
+        header : 'Platos Te&oacute;ricos<br>(N)',
         tooltip : 'Platos Te&oacute;ricos',
-        width : 130,
+        width : 120,
         align : 'center',
         editor :
         {
@@ -1814,9 +1814,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'tailing',
-        header : 'Factor de Cola (T)',
+        header : 'Factor de Cola<br>(T)',
         tooltip : 'Factor de Cola (T)',
-        width : 130,
+        width : 120,
         align : 'center',
         editor :
         {
@@ -1828,9 +1828,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'resolucion',
-        header : 'Resoluci&oacute;n (R)',
+        header : 'Resoluci&oacute;n<br>(R)',
         tooltip : 'Resoluci&oacute;n (R)',
-        width : 130,
+        width : 120,
         align : 'center',
         editor :
         {
@@ -1842,9 +1842,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'presion',
-        header : 'Presi&oacute;n de Sistema (psi)',
+        header : 'Presi&oacute;n de Sistema<br>(psi)',
         tooltip : 'Presi&oacute;n de Sistema (psi)',
-        width : 130,
+        width : 120,
         align : 'center',
         editor :
         {
@@ -1858,7 +1858,7 @@ Ext.onReady(function()
         dataIndex : 'observaciones_col',
         header : 'Observaciones Columna',
         tooltip : 'Observaciones',
-        width : 170,
+        width : 165,
         align : 'center',
         editor :
         {

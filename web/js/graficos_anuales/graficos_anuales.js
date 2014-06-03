@@ -416,6 +416,75 @@ var win_grupos_anual = new Ext.Window(
     });
 
 
+//Cambios: 24 de febrero de 2014
+//Color de celdas de las tablas de consolidado
+var generarRendererTiempos = function()
+{
+    return function(valor, metaData, record, rowIndex, colIndex, store)
+    {
+        if (rowIndex == 0) {
+            return '<div style="background-color: #47d552; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 1) {
+            return '<div style="background-color: #ffdc44; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 2) {
+            return '<div style="background-color: #ff5454; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 3) {
+            return '<div style="background-color: #72a8cd; color: #000000">' + valor + '</div>';
+        } else {
+            return valor;
+        }
+    }
+}
+var generarRendererIndicadores = function()
+{
+    return function(valor, metaData, record, rowIndex, colIndex, store)
+    {
+        if (rowIndex == 0) {
+            return '<div style="background-color: #ff5454; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 1) {
+            return '<div style="background-color: #47d552; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 2) {
+            return '<div style="background-color: #f0a05f; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 3) {
+            return '<div style="background-color: #ffdc44; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 4) {
+            return '<div style="background-color: #72a8cd; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 5) {
+            return '<div style="background-color: #b97a57; color: #000000">' + valor + '</div>';
+        } else {
+            return valor;
+        }
+    }
+}
+var generarRendererPerdidas = function()
+{
+    return function(valor, metaData, record, rowIndex, colIndex, store)
+    {
+        if (rowIndex == 0) {
+            return '<div style="background-color: #ff5454; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 1) {
+            return '<div style="background-color: #47d552; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 2) {
+            return '<div style="background-color: #47d599; color: #000000">' + valor + '</div>';
+        } else {
+            return valor;
+        }
+    }
+}
+var generarRendererAhorros = function()
+{
+    return function(valor, metaData, record, rowIndex, colIndex, store)
+    {
+        if (rowIndex == 0) {
+            return '<div style="background-color: #5cd65c; color: #000000">' + valor + '</div>';
+        } else if(rowIndex == 1) {
+            return '<div style="background-color: #33add6; color: #000000">' + valor + '</div>';
+        } else {
+            return valor;
+        }
+    }
+}
+
 
 
 //TABLAS CONSOLIDADO TIEMPOS
@@ -448,17 +517,20 @@ var tiemposanual_colmodel = new Ext.grid.ColumnModel({
         header: "Indicador",
         width: 75,
         align : 'center',
-        dataIndex: 'ano_tiempo'
+        dataIndex: 'ano_tiempo',
+        renderer : generarRendererTiempos()
     }, {
         header: "Días",
         width: 83,
         align : 'center',
-        dataIndex: 'ano_horas'
+        dataIndex: 'ano_horas',
+        renderer : generarRendererTiempos()
     }, {
         header: "Porcentaje (%)",
         width: 85,
         align : 'center',
-        dataIndex: 'ano_porcentaje'
+        dataIndex: 'ano_porcentaje',
+        renderer : generarRendererTiempos()
     }, ]
 });
 
@@ -582,17 +654,20 @@ var indicadoresanual_colmodel = new Ext.grid.ColumnModel({
         header: "Indicador",
         width: 87,
         align : 'center',
-        dataIndex: 'ano_indicador'
+        dataIndex: 'ano_indicador',
+        renderer : generarRendererIndicadores()
     }, {
         header: "Valor Actual (%)",
         width: 93,
         align : 'center',
-        dataIndex: 'ano_actual'
+        dataIndex: 'ano_actual',
+        renderer : generarRendererIndicadores()
     }, {
         header: "Meta (%)",
         width: 70,
         align : 'center',
-        dataIndex: 'ano_meta'
+        dataIndex: 'ano_meta',
+        renderer : generarRendererIndicadores()
     }, ]
 });
 
@@ -668,17 +743,20 @@ var perdidasanual_colmodel = new Ext.grid.ColumnModel({
         header: "Indicador",
         width: 91,
         align : 'center',
-        dataIndex: 'ano_perdida'
+        dataIndex: 'ano_perdida',
+        renderer : generarRendererPerdidas()
     }, {
         header: "Días",
         width: 70,
         align : 'center',
-        dataIndex: 'ano_dias_perd'
+        dataIndex: 'ano_dias_perd',
+        renderer : generarRendererPerdidas()
     }, {
         header: "Porcentaje (%)",
         width: 85,
         align : 'center',
-        dataIndex: 'ano_porcentaje_perd'
+        dataIndex: 'ano_porcentaje_perd',
+        renderer : generarRendererPerdidas()
     }, ]
 });
 
@@ -754,17 +832,20 @@ var ahorrosanual_colmodel = new Ext.grid.ColumnModel({
         header: "Indicador",
         width: 91,
         align : 'center',
-        dataIndex: 'ano_ahorro'
+        dataIndex: 'ano_ahorro',
+        renderer : generarRendererAhorros()
     }, {
         header: "Días",
         width: 70,
         align : 'center',
-        dataIndex: 'ano_dias_ahorro'
+        dataIndex: 'ano_dias_ahorro',
+        renderer : generarRendererAhorros()
     }, {
         header: "Porcentaje (%)",
         width: 85,
         align : 'center',
-        dataIndex: 'ano_porcentaje_ahorro'
+        dataIndex: 'ano_porcentaje_ahorro',
+        renderer : generarRendererAhorros()
     }, ]
 });
 
