@@ -700,11 +700,26 @@ class ingreso_datosActions extends sfActions
             if($tpnp_temp > 0) {
                 $minutosTiempoParadaNoProgramada1 += $tpnp_temp;
             }
-            if(round($minutosTiempoParadaNoProgramada1, 2) != 0.00) {
+            if(round($minutosTiempoParadaNoProgramada1) != 0) {
                 $tiempos[] = round($minutosTiempoParadaNoProgramada1, 2);
                 $orden_tiempos[] = 'TPNP';
             }            
 
+            $ahorro = 0;
+            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
+                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                $TF = ($registro->obtenerTFMetodo())*60;
+                $TO = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+                $TPNP = $registro->calcularDuracionEventos($registro->getRumCodigo());
+                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+                $ahorro = $TF - $TO - $TPNP;
+                if(round($ahorro) < 0) {
+                    $tiempos[] = round($ahorro, 2);
+                    $orden_tiempos[] = 'TPNP';
+                }
+            }
+            
             $minutosTiempoProgramado = 0;
             $minutosTiempoProgramado += ($registro -> getRumTiempoCorridaSistema() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumeroInyeccionEstandar();
             $inyeccionesEstandarPromedio = $empresa -> getEmpInyectEstandarPromedio();
@@ -719,6 +734,10 @@ class ingreso_datosActions extends sfActions
             $minutosTiempoProgramado += ($registro -> getRumTcPureza() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasPureza() * $registro -> getRumNumInyecXMuestraPureza();
             $minutosTiempoProgramado += ($registro -> getRumTcDisolucion() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasDisolucion() * $registro -> getRumNumInyecXMuestraDisolu();
             $minutosTiempoProgramado += ($registro -> getRumTcUniformidad() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasUniformidad() * $registro -> getRumNumInyecXMuestraUnifor();
+            //Se resta al TO el ahorro en el Tiempo de Funcionamiento
+            if(round($ahorro) < 0) {
+                $minutosTiempoProgramado += $ahorro;
+            }            
             if(round($minutosTiempoProgramado, 2) != 0.00) {
                 $tiempos[] = round($minutosTiempoProgramado, 2);
                 $orden_tiempos[] = 'TO';
@@ -731,23 +750,9 @@ class ingreso_datosActions extends sfActions
             //Cambios: 24 de febrero de 2014
             //Se quitó la columna fallas de la interfaz de ingreso de datos
 //            $minutosTiempoParadaNoProgramada2 += $registro -> getRumFallas();
-            if(round($minutosTiempoParadaNoProgramada2, 2) != 0.00) {
+            if(round($minutosTiempoParadaNoProgramada2) != 0) {
                 $tiempos[] = round($minutosTiempoParadaNoProgramada2, 2);
                 $orden_tiempos[] = 'TPNP';
-            }
-            
-            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
-            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
-                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
-                $TF = ($registro->obtenerTFMetodo())*60;
-                $TO = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
-                $TPNP = $registro->calcularDuracionEventos($registro->getRumCodigo());
-                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
-                $ahorro = $TF - $TO - $TPNP;
-                if(round($ahorro) < 0) {
-                    $tiempos[] = round($ahorro, 2);
-                    $orden_tiempos[] = 'TPNP';
-                }
             }
             
             $minutosActuales = ($registro -> getRumHoraFinTrabajo('H') * 60) + $registro -> getRumHoraFinTrabajo('i') + ($registro -> getRumHoraFinTrabajo('s') / 60);

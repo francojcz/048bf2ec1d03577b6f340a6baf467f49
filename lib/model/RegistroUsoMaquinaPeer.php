@@ -506,6 +506,21 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             }
 
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
+            $ahorro = 0;
+            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
+                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                $TF_temp = ($registro->obtenerTFMetodo())*60;
+                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
+                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
+                if(round($ahorro) < 0) {
+                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
+                    $TO += $ahorro;
+                }
+            }
+            
             
             //Cambios: 24 de febrero de 2014
             //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
@@ -563,8 +578,23 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         {
             $TNP += round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
             $TNP -= $minutosActuales;
-            $TPP += $registro -> getRumTiempoCambioModelo();           
+            $TPP += $registro -> getRumTiempoCambioModelo();
+            
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
+            $ahorro = 0;
+            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
+                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                $TF_temp = ($registro->obtenerTFMetodo())*60;
+                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
+                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
+                if(round($ahorro) < 0) {
+                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
+                    $TO += $ahorro;
+                }
+            }
             
             $TPNP += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             $TPNP += $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
