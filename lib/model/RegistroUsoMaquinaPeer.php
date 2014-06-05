@@ -512,27 +512,32 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             if($tpnp_temp > 0) {
                 $TPNP += $tpnp_temp;
             }
+            //Se resta la duración de los eventos ocurridos a las pérdidas en el tiempo de alistamiento
+            $duracion = $registro->calcularDuracionEventosCambioMetodo($registro->getRumCodigo()); 
+            $TPNP -= $duracion; 
+            
 
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
-//            $ahorro = 0;
-//            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
-//            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
-//                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
-//                $TF_temp = ($registro->obtenerTFMetodo())*60;
-//                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
-//                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
-//                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
-//                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
-//                if(round($ahorro) < 0) {
-//                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
-//                    $TO += $ahorro;
-//                }
-//            }
-  
+            $ahorro = 0;
+            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
+                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                $TF_temp = ($registro->obtenerTFMetodo())*60;
+                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
+                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
+                if(round($ahorro) < 0) {
+                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
+                    $TO += $ahorro;
+                }
+            }
+
+            //Cambios: 24 de febrero de 2014
             //Se eliminó la columna de fallas en la interfaz de ingreso de datos
-//            $TPNP += $registro -> getRumFallas();
+            //$TPNP += $registro -> getRumFallas();
             //El tiempo correspondiente a reinyecciones no se muestra en la barra de tiempo de ingreso de datos
-//            $TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+            //$TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
             
             $TPNP += $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
            
@@ -591,30 +596,33 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             if($tpnp_temp > 0) {
                 $TPNP += $tpnp_temp;
             }
+            //Se resta la duración de los eventos ocurridos a las pérdidas en el tiempo de alistamiento
+            $duracion = $registro->calcularDuracionEventosCambioMetodo($registro->getRumCodigo()); 
+            $TPNP -= $duracion;            
             
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
-//            $ahorro = 0;
-//            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
-//            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
-//                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
-//                $TF_temp = ($registro->obtenerTFMetodo())*60;
-//                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
-//                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
-//                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
-//                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
-//                if(round($ahorro) < 0) {
-//                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
-//                    $TO += $ahorro;
-//                }
-//            }
+            $ahorro = 0;
+            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
+                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+                $TF_temp = ($registro->obtenerTFMetodo())*60;
+                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
+                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
+                if(round($ahorro) < 0) {
+                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
+                    $TO += $ahorro;
+                }
+            }
             
             $TPNP += $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
             
             //Cambios: 24 de febrero de 2014
             //El tiempo correspondiente a reinyecciones no se muestra en la barra de tiempo de ingreso de datos
-//            $TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);                      
+            //$TPNP += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);                      
             //Se eliminó la columna de fallas en la interfaz de ingreso de datos            
-//            $TPNP += $registro -> getRumFallas();
+            //$TPNP += $registro -> getRumFallas();
             
             //Cambios: 24 de febrero de 2014
             //Se suma la duración de los eventos a los TPNP

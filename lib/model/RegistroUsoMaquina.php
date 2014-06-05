@@ -305,7 +305,7 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
             return 0;
         }
     }
-    
+
     //Cambios: 24 de febrero de 2014
     //Calcula los paros menores teniendo en cuenta los paros por eventos para un método específico
     public function calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio)
@@ -315,13 +315,7 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         
         //Cambios: 24 de febrero de 2014
         //Calcula la duración de los eventos del método
-        $duracion = 0;
-        $criteria = new Criteria();
-        $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $this->getRumCodigo());
-        $eventos_rum = EventoEnRegistroPeer::doSelect($criteria);
-        foreach ($eventos_rum as $evento_rum) {                
-            $duracion += round($evento_rum->getEvrgDuracion(), 2);
-        }
+        $duracion = $this->calcularDuracionEventos($this->getRumCodigo());
 
         //Cambios: 24 de febrero de 2014
         //Las reinyecciones se deben ingresar como evento para que sean tenidas en cuenta en la barra de tiempo
@@ -578,18 +572,58 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
     }
     
     //Cambios: 24 de febrero de 2014
-    //Calcula la duración de los eventos ocurridos en un corrida analítica
+    //Calcula la duración de los eventos que no hayan ocurrido en un tiempo de alistamiento
     public function calcularDuracionEventos($rum_codigo) {
-        $duracion = 0;
+        $tpnp_eventos = 0;
+        $registro = RegistroUsoMaquinaPeer::retrieveByPK($rum_codigo);
+        //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
+        $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
+        //Se calcula la hora de fin del tiempo de alistamiento de la corrida
+        $tiempo_cambio = round($registro->getRumTiempoCambioModelo());        
+        $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));
+        
+        //Se buscan los eventos asociados a la corrida analítica
         $criteria = new Criteria();
         $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $rum_codigo);
         $eventos = EventoEnRegistroPeer::doSelect($criteria);
-        
+      
         foreach ($eventos as $evento) {
-            $duracion += $evento->getEvrgDuracion();
+            $hora_inicio = $evento->getEvrgHoraOcurrio('H:i');
+            //Se verifica si el evento ocurrió en un tiempo de alistamiento. Si no fue así, se obtiene la duración del evento
+            //Si(hora de finalización del tiempo de alistamiento < hora de inicio del evento)
+            if($tiempo_fin < $hora_inicio){
+                $tpnp_eventos += $evento->getEvrgDuracion();
+            }
         }
-        
-        return $duracion;
+        return $tpnp_eventos;
     }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula la duración de los eventos que hayan ocurrido en un tiempo de alistamiento
+    public function calcularDuracionEventosCambioMetodo($rum_codigo)
+    {
+        $tpp_eventos = 0;
+        $registro = RegistroUsoMaquinaPeer::retrieveByPK($rum_codigo);
+        //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
+        $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
+        //Se calcula la hora de fin del tiempo de alistamiento de la corrida
+        $tiempo_cambio = round($registro->getRumTiempoCambioModelo());        
+        $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));
+        
+        //Se buscan los eventos asociados a la corrida analítica
+        $criteria = new Criteria();
+        $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $rum_codigo);
+        $eventos = EventoEnRegistroPeer::doSelect($criteria);
+      
+        foreach ($eventos as $evento) {
+            $hora_inicio = $evento->getEvrgHoraOcurrio('H:i');
+            //Se verifica si el evento ocurrió en un tiempo de alistamiento. Si fue así, se obtiene la duración del evento
+            //Si((hora de inicio del evento >= hora de inicio del tiempo de alistamiento)&&(hora de inicio del evento <= hora de finalización del tiempo de alistamiento))
+            if(($hora_inicio>=$tiempo_inicio) && ($hora_inicio<=$tiempo_fin)){
+                $tpp_eventos += $evento->getEvrgDuracion();
+            }
+        }
+        return $tpp_eventos;
+    }  
 
-} // RegistroUsoMaquina
+}
