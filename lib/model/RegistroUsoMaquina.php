@@ -520,7 +520,6 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         $tnp = 0;
 
         $minutosFin = $this -> getRumHoraFinTrabajo('H') + ($this -> getRumHoraFinTrabajo('i') / 60) + ($this -> getRumHoraFinTrabajo('s') / 3600);
-        //calcularPerdidaCambioMetodoAjusteMinutos por  getRumTiempoCambioModeloPerdi
         $minutoCambioModelo = ($this -> getRumTiempoCambioModelo() + $this -> calcularPerdidaCambioMetodoAjusteMinutos()) / 60;
         $tiempoDeCorrida = $this -> calcularTiempoCorridaHoras();
 

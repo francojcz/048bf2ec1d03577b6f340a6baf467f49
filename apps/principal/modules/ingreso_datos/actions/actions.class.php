@@ -709,11 +709,11 @@ class ingreso_datosActions extends sfActions
             //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
             if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
                 $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
-                $TF = ($registro->obtenerTFMetodo())*60;
-                $TO = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
-                $TPNP = $registro->calcularDuracionEventos($registro->getRumCodigo());
+                $TF_temp = ($registro->obtenerTFMetodo())*60;
+                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
                 //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
-                $ahorro = $TF - $TO - $TPNP;
+                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
                 if(round($ahorro) < 0) {
                     $tiempos[] = round($ahorro, 2);
                     $orden_tiempos[] = 'TPNP';
@@ -735,9 +735,9 @@ class ingreso_datosActions extends sfActions
             $minutosTiempoProgramado += ($registro -> getRumTcDisolucion() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasDisolucion() * $registro -> getRumNumInyecXMuestraDisolu();
             $minutosTiempoProgramado += ($registro -> getRumTcUniformidad() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasUniformidad() * $registro -> getRumNumInyecXMuestraUnifor();
             //Se resta al TO el ahorro en el Tiempo de Funcionamiento
-            if(round($ahorro) < 0) {
-                $minutosTiempoProgramado += $ahorro;
-            }            
+//            if(round($ahorro) < 0) {
+//                $minutosTiempoProgramado += $ahorro;
+//            }            
             if(round($minutosTiempoProgramado, 2) != 0.00) {
                 $tiempos[] = round($minutosTiempoProgramado, 2);
                 $orden_tiempos[] = 'TO';
@@ -2216,7 +2216,6 @@ class ingreso_datosActions extends sfActions
             $fields['id_metodo'] = $registro -> getRumMetCodigo();
             $fields['tiempo_entre_metodos'] = number_format(round($registro -> calcularTiempoEntreMetodosHoras($horasFin, $minutosFin, $segundosFin), 2), 2, '.', '');
             $fields['cambio_metodo_ajuste'] = number_format($registro -> calcularPerdidaCambioMetodoAjusteMinutos(), 2, '.', '');
-            //			$fields['cambio_metodo_ajuste'] = sprintf('%g', $registro->getRumTiempoCambioModeloPerdi());
             $fields['tiempo_corrida_ss'] = number_format($registro -> getRumTiempoCorridaSistema(), 2, '.', '');
             $fields['numero_inyecciones_ss'] = number_format($registro -> getRumNumInyeccionEstandarPer(), 2, '.', '');
             $fields['tiempo_corrida_cc'] = number_format($registro -> getRumTiempoCorridaCurvas(), 2, '.', '');

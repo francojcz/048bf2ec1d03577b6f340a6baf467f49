@@ -30,14 +30,15 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $tiempoATrasladar = $segundosAlistamiento; //no deberia entrar nunca porque ya estaria el metodo completamente en el dia siguiente
         }
 
-        // $registroPrimerDia = new RegistroUsoMaquina();
-
-        $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
-		
+//        $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
+	
+        //Cambios: 24 de febrero de 2014
+        //Se comentó la siguiente línea pues le asignaba a la hora de inicio de la corrida el valor de '23:59:59'
 //        $registroPrimerDia -> setRumHoraInicioTrabajo("23:59:59.999");
+        
         $timestampHoraFin = $registroPrimerDia -> getRumHoraFinTrabajo('U');
         
-	$registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
+//	$registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
 		
         $timestampHoraInicio = $registroSegundoDia -> getRumHoraInicioTrabajo('U');
         $timestampHoraInicio += $tiempoATrasladar;
@@ -47,7 +48,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $fecha->add(new DateInterval('PT'.$tiempoATrasladar.'S'));
         $timezone = date_default_timezone_get();
         $fecha -> setTimezone(new DateTimeZone($timezone));
-        $registroSegundoDia -> setRumHoraInicioTrabajo( $fecha-> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraInicioTrabajo('00:00:00');
 		
         $timestampHoraFin = $registroSegundoDia -> getRumHoraFinTrabajo('U');
 		
@@ -78,18 +79,20 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         // $registroPrimerDia = new RegistroUsoMaquina();
 
-        $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
+//        $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
 
         $timestampHoraInicio = $registroPrimerDia -> getRumHoraInicioTrabajo('U');
         $timestampHoraInicio -= $tiempoATrasladar;
         $datetimeHoraInicio = new DateTime("@$timestampHoraInicio");
         $timezone = date_default_timezone_get();
         $datetimeHoraInicio -> setTimezone(new DateTimeZone($timezone));
-        $registroPrimerDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));
+        //Cambios: 24 de febrero de 2014
+        //Se comentó la siguiente línea pues modificaba la hora de inicio de la corrida del primer día
+//        $registroPrimerDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));
 
         $timestampHoraFin = $registroPrimerDia -> getRumHoraFinTrabajo('U');
 
-        $registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
+//        $registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
 
         $timestampHoraInicio = $registroSegundoDia -> getRumHoraInicioTrabajo('U');
         $timestampHoraInicio += $tiempoATrasladar;
@@ -130,7 +133,9 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $datetimeHoraInicio = new DateTime("@$timestampHoraInicio");
         $timezone = date_default_timezone_get();
         $datetimeHoraInicio -> setTimezone(new DateTimeZone($timezone));
-        $registroPrimerDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));
+        //Cambios: 24 de febrero de 2014
+        //Se comentó la siguiente línea pues modificaba la hora de inicio de la corrida del primer día
+//        $registroPrimerDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));
 
         $timestampHoraFin = $registroPrimerDia -> getRumHoraFinTrabajo('U');
 
@@ -489,7 +494,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $TPNP = 0;
         $TO = 0;
         $minutosActuales = 0;
-        $ahorros = 0;
         
         foreach ($registros as $registro)
         {
@@ -504,31 +508,27 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             if($tpnp_temp < 0) {
                 $TPP += $tpnp_temp;
             }
-
-            $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
-            $ahorro = 0;
-            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
-            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
-                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
-                $TF_temp = ($registro->obtenerTFMetodo())*60;
-                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
-                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
-                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
-                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
-                if(round($ahorro) < 0) {
-                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
-                    $TO += $ahorro;
-                }
-            }
-            
-            
-            //Cambios: 24 de febrero de 2014
             //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
             if($tpnp_temp > 0) {
                 $TPNP += $tpnp_temp;
-            } else {
-                $ahorros += (-1)*$tpnp_temp;
             }
+
+            $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
+//            $ahorro = 0;
+//            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+//            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
+//                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+//                $TF_temp = ($registro->obtenerTFMetodo())*60;
+//                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+//                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
+//                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+//                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
+//                if(round($ahorro) < 0) {
+//                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
+//                    $TO += $ahorro;
+//                }
+//            }
+  
             //Se eliminó la columna de fallas en la interfaz de ingreso de datos
 //            $TPNP += $registro -> getRumFallas();
             //El tiempo correspondiente a reinyecciones no se muestra en la barra de tiempo de ingreso de datos
@@ -578,25 +578,36 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         {
             $TNP += round($registro -> getRumTiempoEntreModelo('H') * 60 + $registro -> getRumTiempoEntreModelo('i') + ($registro -> getRumTiempoEntreModelo('s') / 60), 2);
             $TNP -= $minutosActuales;
-            $TPP += $registro -> getRumTiempoCambioModelo();
             
-            $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
-            $ahorro = 0;
-            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
-            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
-                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
-                $TF_temp = ($registro->obtenerTFMetodo())*60;
-                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
-                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
-                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
-                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
-                if(round($ahorro) < 0) {
-                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
-                    $TO += $ahorro;
-                }
+            $TPP += $registro -> getRumTiempoCambioModelo();
+            //Cambios: 24 de febrero de 2014
+            //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
+            $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
+            if($tpnp_temp < 0) {
+                $TPP += $tpnp_temp;
+            }
+            //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
+            if($tpnp_temp > 0) {
+                $TPNP += $tpnp_temp;
             }
             
-            $TPNP += $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
+//            $ahorro = 0;
+//            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+//            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
+//                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+//                $TF_temp = ($registro->obtenerTFMetodo())*60;
+//                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+//                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
+//                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+//                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
+//                if(round($ahorro) < 0) {
+//                    //Se resta al TO el ahorro en el Tiempo de Funcionamiento
+//                    $TO += $ahorro;
+//                }
+//            }
+            
             $TPNP += $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registro->getRumCodigo());
             
             //Cambios: 24 de febrero de 2014
