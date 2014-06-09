@@ -579,7 +579,12 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
         $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
         //Se calcula la hora de fin del tiempo de alistamiento de la corrida
-        $tiempo_cambio = round($registro->getRumTiempoCambioModelo());        
+        $tiempo_cambio = round($registro->getRumTiempoCambioModelo());
+        //Se verifica si hubo ahorros en los tiempos de alistamiento y se lo suma a la duración del tiempo de alistamiento
+        $perdidas = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+        if($perdidas < 0) {
+            $tiempo_cambio += $perdidas;
+        }
         $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));
         
         //Se buscan los eventos asociados a la corrida analítica
@@ -607,7 +612,12 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
         $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
         //Se calcula la hora de fin del tiempo de alistamiento de la corrida
-        $tiempo_cambio = round($registro->getRumTiempoCambioModelo());        
+        $tiempo_cambio = round($registro->getRumTiempoCambioModelo());
+        //Se verifica si hubo ahorros en los tiempos de alistamiento y se lo suma a la duración del tiempo de alistamiento
+        $perdidas = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+        if($perdidas < 0) {
+            $tiempo_cambio += $perdidas;
+        }
         $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));
         
         //Se buscan los eventos asociados a la corrida analítica

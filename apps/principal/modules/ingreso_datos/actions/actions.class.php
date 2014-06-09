@@ -1105,13 +1105,18 @@ class ingreso_datosActions extends sfActions
         //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
         $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
         //Se calcula la hora de fin del tiempo de alistamiento de la corrida
-        $tiempo_cambio = round($registro->getRumTiempoCambioModelo());        
+        $tiempo_cambio = round($registro->getRumTiempoCambioModelo());
+        //Se verifica si hubo ahorros en los tiempos de alistamiento y se lo suma a la duración del tiempo de alistamiento
+        $perdidas = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+        if($perdidas < 0) {
+            $tiempo_cambio += $perdidas;
+        }
         $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));
         
         //Cambios: 24 de febrero de 2014        
         $hora_fin = $request -> getParameter('hora_fin');
         if($hora_fin != '') {
-            //Se verifica si el evento ocurrió en un tiempo de alistamiento.  Si así fue, se registra tal cual se ingresó
+            //Se verifica si el evento ocurrió en un tiempo de alistamiento. Si así fue, se registra tal cual se ingresó
             if(($hora_inicio>=$tiempo_inicio) && ($hora_inicio<=$tiempo_fin)){
                 $hora_fin_total = $hora_fin;
             }
@@ -1170,29 +1175,35 @@ class ingreso_datosActions extends sfActions
         {
             $fields = array();
             $fields['codigo'] = $registroEvento -> getEvrgCodigo();
-            $fields['id_evento'] = $registroEvento -> getEvrgEveCodigo();            
-            
-            //Cambios: 24 de febrero de 2014
-            //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
-            $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
-            //Se calcula la hora de fin del tiempo de alistamiento de la corrida
-            $tiempo_cambio = round($registro->getRumTiempoCambioModelo());        
-            $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));            
+            $fields['id_evento'] = $registroEvento -> getEvrgEveCodigo();   
             
             $hora_inicio = $registroEvento -> getEvrgHoraOcurrio('H:i');
             $fields['hora_inicio'] = $hora_inicio;
             
             //Cambios: 24 de febrero de 2014
+            //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
+            $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
+            //Se calcula la hora de fin del tiempo de alistamiento de la corrida
+            $tiempo_cambio = round($registro->getRumTiempoCambioModelo());
+            //Se verifica si hubo ahorros en los tiempos de alistamiento y se lo suma a la duración del tiempo de alistamiento
+            $perdidas = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
+            if($perdidas < 0) {
+                $tiempo_cambio += $perdidas;
+            }
+            $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));
+
+            //Cambios: 24 de febrero de 2014        
             $hora_fin = $registroEvento -> getEvrgHoraFin('H:i:s');
             if($hora_fin != '') {
-                //Se verifica si el evento ocurrió en un tiempo de alistamiento.  Si así fue, no se le resta nada
+                //Se verifica si el evento ocurrió en un tiempo de alistamiento.  Si así fue, se registra tal cual se ingresó
+                //Si((hora de inicio del evento >= hora de inicio del tiempo de alistamiento)&&(hora de inicio del evento <= hora de finalización del tiempo de alistamiento))
                 if(($hora_inicio>=$tiempo_inicio) && ($hora_inicio<=$tiempo_fin)){
                     $hora_fin_total = $hora_fin;
                 }
-                //Restar a la hora de fin el tiempo de la corrida
+                 //Se resta a la hora de fin ingresada el tiempo de inyección de la máquina
                 else {
-                    $hora_fin_total = $this->operarHoraTiempoInyeccion($registro, $hora_fin, '+');
-                } 
+                    $hora_fin_total = $this->operarHoraTiempoInyeccion($registro, $hora_fin, '+');            
+                }            
                 $fields['hora_fin'] = date('H:i', strtotime($hora_fin_total));
             }
             else {
