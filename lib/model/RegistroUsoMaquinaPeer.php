@@ -28,17 +28,23 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         } else
         {
             $tiempoATrasladar = $segundosAlistamiento; //no deberia entrar nunca porque ya estaria el metodo completamente en el dia siguiente
-        }
+        }       
 
-//        $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
+        $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
 	
         //Cambios: 24 de febrero de 2014
-        //Se comentó la siguiente línea pues le asignaba a la hora de inicio de la corrida el valor de '23:59:59'
+        //Se comentó la siguiente línea
 //        $registroPrimerDia -> setRumHoraInicioTrabajo("23:59:59.999");
+        //Cambios: 24 de febrero de 2014
+        //Si el método del primer día no registra hora de inicio de la corrida, asigna 23:59:59
+        if($registroPrimerDia->getRumHoraInicioTrabajo()=='') {
+            $registroPrimerDia -> setRumHoraInicioTrabajo('23:59:59.999');
+            $registroPrimerDia -> setRumHoraInicioTrabajoOriginal('23:59:59.999');
+        }      
         
         $timestampHoraFin = $registroPrimerDia -> getRumHoraFinTrabajo('U');
         
-//	$registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
+        $registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
 		
         $timestampHoraInicio = $registroSegundoDia -> getRumHoraInicioTrabajo('U');
         $timestampHoraInicio += $tiempoATrasladar;
@@ -48,7 +54,9 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $fecha->add(new DateInterval('PT'.$tiempoATrasladar.'S'));
         $timezone = date_default_timezone_get();
         $fecha -> setTimezone(new DateTimeZone($timezone));
-        $registroSegundoDia -> setRumHoraInicioTrabajo('00:00:00');
+		
+        $registroSegundoDia -> setRumHoraInicioTrabajo( $fecha-> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraInicioTrabajoOriginal( $fecha-> format('H:i:s'));
 		
         $timestampHoraFin = $registroSegundoDia -> getRumHoraFinTrabajo('U');
 		
@@ -77,22 +85,18 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             $tiempoATrasladar = $segundosAlistamiento;
         }
 
-        // $registroPrimerDia = new RegistroUsoMaquina();
-
-//        $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
+        $registroPrimerDia -> setRumTiempoCambioModelo(($segundosAlistamiento - $tiempoATrasladar) / 60);
 
         $timestampHoraInicio = $registroPrimerDia -> getRumHoraInicioTrabajo('U');
         $timestampHoraInicio -= $tiempoATrasladar;
         $datetimeHoraInicio = new DateTime("@$timestampHoraInicio");
         $timezone = date_default_timezone_get();
         $datetimeHoraInicio -> setTimezone(new DateTimeZone($timezone));
-        //Cambios: 24 de febrero de 2014
-        //Se comentó la siguiente línea pues modificaba la hora de inicio de la corrida del primer día
-//        $registroPrimerDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));
+        $registroPrimerDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));
 
         $timestampHoraFin = $registroPrimerDia -> getRumHoraFinTrabajo('U');
 
-//        $registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
+        $registroSegundoDia -> setRumTiempoCambioModelo($tiempoATrasladar / 60);
 
         $timestampHoraInicio = $registroSegundoDia -> getRumHoraInicioTrabajo('U');
         $timestampHoraInicio += $tiempoATrasladar;
@@ -100,6 +104,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraInicio -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));
+        $registroSegundoDia -> setRumHoraInicioTrabajoOriginal($datetimeHoraInicio -> format('H:i:s'));
 
         $timestampHoraFin = $registroSegundoDia -> getRumHoraFinTrabajo('U');
         $timestampHoraFin += $tiempoATrasladar;
@@ -116,8 +121,14 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
     public static function dividirPerdidaAlistamiento($deficitTiempo, $registroPrimerDia, $registroSegundoDia)
     {
-        $segundosPerdidaAlistamiento = $registroPrimerDia -> calcularPerdidaCambioMetodoAjusteMinutos() * 60;
-
+        //Cambios: 24 de febrero de 2014
+        //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
+        $tpnp_temp = $registroPrimerDia -> calcularPerdidaCambioMetodoAjusteMinutos() * 60;
+        //Sólo se tienen en cuenta los tiempos positivos
+        if($tpnp_temp > 0) {
+            $segundosPerdidaAlistamiento += $tpnp_temp;
+        }
+        
         $tiempoATrasladar = 0;
         if ($segundosPerdidaAlistamiento >= $deficitTiempo)
         {
@@ -133,9 +144,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $datetimeHoraInicio = new DateTime("@$timestampHoraInicio");
         $timezone = date_default_timezone_get();
         $datetimeHoraInicio -> setTimezone(new DateTimeZone($timezone));
-        //Cambios: 24 de febrero de 2014
-        //Se comentó la siguiente línea pues modificaba la hora de inicio de la corrida del primer día
-//        $registroPrimerDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));
+//        $registroPrimerDia -> setRumHoraInicioTrabajo($datetimeHoraInicio -> format('H:i:s'));        
 
         $timestampHoraFin = $registroPrimerDia -> getRumHoraFinTrabajo('U');
 
@@ -152,7 +161,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
-        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -190,7 +198,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
-        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -228,7 +235,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
-        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -266,7 +272,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
-        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -304,7 +309,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
-        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -334,7 +338,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
     {
         $registroSegundoDia -> setRumHoraInicioTrabajo('00:00:00');
 
-        $segundosParosMenores = $registroPrimerDia -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio, $registroPrimerDia->getRumCodigo()) * 60;
+        $segundosParosMenores = $registroPrimerDia -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio) * 60;
 
         $tiempoATrasladar = 0;
         if ($segundosParosMenores >= $deficitTiempo)
@@ -354,7 +358,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         $datetimeHoraFinSegundoDia = new DateTime('@' . round($tiempoATrasladar, 0));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFinSegundoDia -> format('H:i:s'));
-        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFinSegundoDia -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -396,7 +399,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
-        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -416,7 +418,8 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         } else
         {
             $tiempoATrasladar = $segundosMuestras;
-        }        
+        }
+        // $registro = new RegistroUsoMaquina();
         $denominador = (($tiempoCorrida + $tiempoInyeccion) * $numeroInyeccionesPorMuestra * 60);
         if ($denominador == 0)
         {
@@ -424,6 +427,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         }
         $numeroMuestrasATrasladar = $tiempoATrasladar / $denominador;
         eval('$registroPrimerDia -> set' . $parametro2 . '($numeroMuestras - $numeroMuestrasATrasladar);');
+
         eval('$registroSegundoDia -> set' . $parametro1 . '($tiempoCorrida);');
         eval('$registroSegundoDia -> set' . $parametro2 . '($numeroMuestrasATrasladar);');
         eval('$registroSegundoDia -> set' . $parametro3 . '($numeroInyeccionesPorMuestra);');
@@ -433,7 +437,6 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
         $timezone = date_default_timezone_get();
         $datetimeHoraFin -> setTimezone(new DateTimeZone($timezone));
         $registroSegundoDia -> setRumHoraFinTrabajo($datetimeHoraFin -> format('H:i:s'));
-        $registroSegundoDia -> setRumHoraFinTrabajoOriginal($datetimeHoraFin -> format('H:i:s'));
 
         $deficitTiempo = $deficitTiempo - $tiempoATrasladar;
 
@@ -505,7 +508,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
             $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
-            if($tpnp_temp < 0) {
+            if(($tpnp_temp < 0) && ($registro->getRumHoraFinTrabajo()!='')) {
                 $TPP += $tpnp_temp;
             }
             //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
@@ -519,7 +522,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
             $ahorro = 0;
-            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la hora de finalización de la corrida
             if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
                 $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
                 $TF_temp = ($registro->obtenerTFMetodo())*60;
@@ -589,7 +592,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
             $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
-            if($tpnp_temp < 0) {
+            if(($tpnp_temp < 0) && ($registro->getRumHoraFinTrabajo()!='')) {
                 $TPP += $tpnp_temp;
             }
             //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
@@ -602,7 +605,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             
             $TO += $registro -> calcularTOMinutos($inyeccionesEstandarPromedio);
             $ahorro = 0;
-            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la fecha de finalización de la corrida
+            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la hora de finalización de la corrida
             if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
                 $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
                 $TF_temp = ($registro->obtenerTFMetodo())*60;

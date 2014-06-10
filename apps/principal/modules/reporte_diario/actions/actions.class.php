@@ -162,7 +162,7 @@ class reporte_diarioActions extends sfActions
             }
             $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
             $tp = $registro -> obtenerTPMetodo($maq_tiempo_inyeccion);
-            $tf = $registro -> obtenerTFMetodo();
+            $tf = $registro -> obtenerTFMetodo();            
             $to = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
             $fecha_dia = $registro -> getRumFecha();
 
