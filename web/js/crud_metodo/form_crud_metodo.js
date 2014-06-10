@@ -107,7 +107,7 @@ var ayuda_met_tc_disolucion = 'Tiempo de corrida en muestras de disolución';
 var ayuda_met_tc_uniformidad = 'Tiempo de corrida en muestras de uniformidad';
 var ayuda_met_mantenimiento = 'Seleccione si el método pertenece a un mantenimiento';
 
-var largo_panel = 500;
+var largo_panel = 420;
 
 
 var crud_metodo_datastore = new Ext.data.Store({

@@ -16,7 +16,7 @@ var  ayuda_emp_fecha_inicio_licencia='Seleccione o escriba la fecha inicio licen
 //--var  ayuda_emp_tiempo_alerta_consumible='Escoja la fecha en que adquirió la máquina'; 
 
 
-	var largo_panel=500;
+	var largo_panel = 420;
 
 /*--
 	var crud_empresa_tipolicencia_datastore = new Ext.data.Store({

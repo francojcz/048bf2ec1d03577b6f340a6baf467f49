@@ -6,7 +6,7 @@ Desarrollado maryit sanchez
 	//ayudas
 	var ayuda_maestra_eve_codigo='C&oacute;digo identificador en el sistema';
 	var ayuda_maestra_eve_nombre='Nombre evento';
-        var largo_panel = 500;
+        var largo_panel = 420;
 	
 	var maestra_evento_datastore = new Ext.data.Store({
         id: 'maestra_evento_datastore',

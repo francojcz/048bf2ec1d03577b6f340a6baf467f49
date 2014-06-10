@@ -13,7 +13,7 @@ create table META_ANUAL_X_INDICADOR
    MEA_VALOR            numeric(8,2),
    MEA_FECHA_REGISTRO_SISTEMA datetime
 );*/
-var largo_panel=500;
+var largo_panel = 420;
 	var ayuda_mea_valor='Ingrese la meta que se desea tener este a&ntilde;o para este indicador';
 	var ayuda_mea_anio='Seleccione un a&ntilde;o';
 	var mea_fecha = new Date();

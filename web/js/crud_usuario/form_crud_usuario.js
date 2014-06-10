@@ -7,7 +7,7 @@ var ayuda_usu_repassword = 'Repetir el password del usuario';
 var ayuda_usu_per_codigo = 'Seleccione el perfil del usuario';
 var ayuda_usu_habilitado = 'Seleccione si el usuario esta habilitado';
 
-var largo_panel=500;
+var largo_panel = 420;
 var crud_usuario_datastore = new Ext.data.JsonStore({
     id: 'crud_usuario_datastore',
     url: getAbsoluteUrl('crud_usuario', 'cargar'),

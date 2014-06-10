@@ -2,7 +2,7 @@
 Cambios: 24 de febrero de 2014
 Interfaz para la eliminación de certificados de equipos registrados en la base de datos del sistema
 */
-var largo_panel = 500;
+var largo_panel = 420;
 
 var crud_certificado_datastore = new Ext.data.Store({
     id: 'crud_certificado_datastore',

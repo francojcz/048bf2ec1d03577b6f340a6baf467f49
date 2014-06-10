@@ -14,7 +14,7 @@ var ayuda_maq_tiempo_inyeccion = 'Escriba cual es el tiempo estandar de inyecci�
 var ayuda_maq_fecha_adquisicion = 'Escoja la fecha en que adquirió el equipo';
 //var ayuda_maq_tiempo_inyeccion_actual = 'Escriba cual es el tiempo de inyección actual del equipo'; 
 
-var largo_panel = 500;
+var largo_panel = 420;
 
 
 var crud_maquina_estado_datastore = new Ext.data.Store({

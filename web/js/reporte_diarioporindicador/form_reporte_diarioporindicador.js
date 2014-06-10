@@ -174,7 +174,7 @@ var reporte_diarioporindicador_configuracion = new Ext.FormPanel({
 });
 
 
-var largo_panel = 500;
+var largo_panel = 420;
 var reporte_diarioporindicador_datastore = new Ext.data.Store({
     id: 'reporte_diarioporindicador_datastore',
     proxy: new Ext.data.HttpProxy({

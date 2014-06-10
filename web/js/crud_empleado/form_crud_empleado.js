@@ -10,7 +10,7 @@ var ayuda_empl_tid_codigo = 'Escoja el tipo de identificación';
 var ayuda_empl_emp_codigo = 'Seleccione la empresa';
 var ayuda_empl_url_foto = 'Seleccione la foto del empleado';
 var ayuda_empl_usu_codigo = 'Seleccione el login usuario que usará el empleado';
-var largo_panel=500;
+var largo_panel = 420;
 
 
 var crud_empleado_datastore = new Ext.data.JsonStore({

@@ -16,7 +16,7 @@ var ayuda_emplusu_emp_codigo = 'Seleccione la empresa';
 var ayuda_emplusu_url_foto = 'Seleccione la foto del empleado';
 var ayuda_emplusu_emplusu_codigo = 'Seleccione el login usuario que usará el empleado';
 
-var largo_panel = 500;
+var largo_panel = 420;
 
 var crud_empleadousuario_datastore = new Ext.data.JsonStore({
     url: getAbsoluteUrl('crud_empleadousuario', 'listarUsuarios'),

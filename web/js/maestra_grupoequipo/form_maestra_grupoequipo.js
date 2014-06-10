@@ -1,6 +1,6 @@
 var ayuda_maestra_gru_codigo='C&oacute;digo identificador en el sistema';
 var ayuda_maestra_gru_nombre='Nombre grupo equipos';
-var largo_panel = 500;
+var largo_panel = 420;
 
 var maestra_grupo_datastore = new Ext.data.Store({
 id: 'maestra_grupo_datastore',

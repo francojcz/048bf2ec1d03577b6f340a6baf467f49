@@ -7,7 +7,7 @@ var ayuda_col_fase_nombre = 'Seleccione la fase ligada de la columna';
 var ayuda_col_dim_nombre = 'Seleccione la dimensi&oacute;n de la columna';
 var ayuda_col_tam_nombre = 'Seleccione el tama&ntilde;o de part&iacute;cula de la columna';
 
-var largo_panel = 500;
+var largo_panel = 420;
 
 var crud_columna_datastore = new Ext.data.Store({
     id: 'crud_columna_datastore',
