@@ -206,17 +206,7 @@ Desarrollado maryit sanchez
 				}
 			}
 		],
-		plugins:[maestra_estado_roweditor,
-		    new Ext.ux.grid.Search({
-				mode:          'local',
-				position:      top,
-				searchText:    'Filtrar',
-				iconCls:  'filtrar',
-				selectAllText: 'Seleccionar todos',
-				searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
-				width:         100
-			})
-		]
+		plugins:[maestra_estado_roweditor]
     });
 	
 

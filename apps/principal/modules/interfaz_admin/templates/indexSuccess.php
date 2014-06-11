@@ -33,8 +33,11 @@ body {
 	<img align=left  hspace=10  height=55 width=100  src="<?php if($urlLogo!=''){ echo (url_for('default/index').'../'.$urlLogo);} else {echo(url_for('default/index').'../images/vacio.png');}  ?>" alt="empresa logo"/>
 	</div>
 
-	<div  style="padding-left:10px;padding-top:7px;float:left;">
-	<font face="arial" size=6 color=#4E79B2><?php echo $nombreEmpresa; ?></font>
+	<div style="padding-left:10px;padding-top:7px;float:left;" >
+	<p>
+            <font face="arial" size=5 color=#4E79B2><?php echo $nombreEmpresa; ?></font><br/>
+            <b><font face="arial" size=2 color=#4E79B2><?php echo 'Perfil de usuario en sesión: '.$perfilUsuario; ?></font></b>
+        </p>
 	</div>
 
 	<div  style="float:right;width:200px;"  onclick="abrirAcercaDe();"  >

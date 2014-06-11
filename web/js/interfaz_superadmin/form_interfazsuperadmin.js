@@ -6,6 +6,8 @@ var form_interfazsuperadmin = function(){
         init: function(){
             var titulo_interfaz_superadmin = '<div style="padding:8px;float:left;width:570px;">';
             titulo_interfaz_superadmin += '<font face="arial" size=6 color=#4E79B2>TPM-QLabs Administraci&oacute;n del sistema</font>';
+            titulo_interfaz_superadmin += '<br />';
+            titulo_interfaz_superadmin += '<b><font face="arial" size=2 color=#4E79B2>Perfil de usuario en sesión: Super Administrador</font></b>';
             titulo_interfaz_superadmin += '</div>';
             titulo_interfaz_superadmin += '<div  style="float:right;width:200px;" onclick="abrirAcercaDe();" >';
             titulo_interfaz_superadmin += '<img   height=60  src="' + urlPrefix + '../images/logo-quantar-color-horizontal.jpg" alt="logo Quantar"/>';

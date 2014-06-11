@@ -509,60 +509,80 @@ Ext.onReady(function()
         errorSummary : false,
         onKey : function(f, e)
         {
-            if(e.getKey() === e.ENTER && this.isValid())
-            {
-                this.stopEditing(true);
-                e.stopPropagation();
-            }
+            if(!esCoordinador) {
+                if(e.getKey() === e.ENTER && this.isValid())
+                {
+                    this.stopEditing(true);
+                    e.stopPropagation();
+                }
+            } else {
+                Ext.Msg.show(
+                {
+                    title : 'Información',
+                    msg : 'Su perfil de usuario no está autorizado para modificar información',
+                    buttons : Ext.Msg.OK,
+                    icon : Ext.MessageBox.INFO
+                });
+            }            
         },
         listeners :
         {
             'afteredit' : function()
             {
-                var record = grillaEventos.getSelectionModel().getSelected();
-        
-                //Guarda en sm la grilla seleccionada (Son tres grillas: Info. Método, Info. Muestras e Info. Columnas)        
-                var activeTab = pestanas_grilla.getActiveTab();
-                var sm;
-                if (activeTab.id == 1) {
-                    sm = grid_tab1.getSelectionModel();
-                }
-                if (activeTab.id == 2) {
-                    sm = grid_tab2.getSelectionModel();
-                }
-                if (activeTab.id == 3) {
-                    sm = grid_tab3.getSelectionModel();
-                }
-        
-                var cell = sm.getSelectedCell();
-                var index = cell[0];
-                var registro = datastore.getAt(index);
-                Ext.Ajax.request(
-                {
-                    url : getAbsoluteUrl('ingreso_datos', 'modificarRegistroEvento'),
-                    failure : function()
-                    {
-                        recargarDatosEventos();
-                    },
-                    success : function(result)
-                    {
-                        recargarDatosEventos();
-                        if(result.responseText != 'Ok')
-                        {
-                            alert(result.responseText);
-                        }
-                    },
-                    params :
-                    {
-                        'codigo' : record.get('codigo'),
-                        'id_evento' : record.get('id_evento'),
-                        'hora_inicio' : record.get('hora_inicio'),
-                        'hora_fin' : record.get('hora_fin'),
-                        'observaciones' : record.get('observaciones'),
-                        'evrg_duracion' : record.get('evrg_duracion'),
-                        'codigo_rum' : registro.get('id_registro_uso_maquina')
+                if(!esCoordinador) {
+                    var record = grillaEventos.getSelectionModel().getSelected();
+
+                    //Guarda en sm la grilla seleccionada (Son tres grillas: Info. Método, Info. Muestras e Info. Columnas)        
+                    var activeTab = pestanas_grilla.getActiveTab();
+                    var sm;
+                    if (activeTab.id == 1) {
+                        sm = grid_tab1.getSelectionModel();
                     }
-                });
+                    if (activeTab.id == 2) {
+                        sm = grid_tab2.getSelectionModel();
+                    }
+                    if (activeTab.id == 3) {
+                        sm = grid_tab3.getSelectionModel();
+                    }
+
+                    var cell = sm.getSelectedCell();
+                    var index = cell[0];
+                    var registro = datastore.getAt(index);
+                    Ext.Ajax.request(
+                    {
+                        url : getAbsoluteUrl('ingreso_datos', 'modificarRegistroEvento'),
+                        failure : function()
+                        {
+                            recargarDatosEventos();
+                        },
+                        success : function(result)
+                        {
+                            recargarDatosEventos();
+                            if(result.responseText != 'Ok')
+                            {
+                                alert(result.responseText);
+                            }
+                        },
+                        params :
+                        {
+                            'codigo' : record.get('codigo'),
+                            'id_evento' : record.get('id_evento'),
+                            'hora_inicio' : record.get('hora_inicio'),
+                            'hora_fin' : record.get('hora_fin'),
+                            'observaciones' : record.get('observaciones'),
+                            'evrg_duracion' : record.get('evrg_duracion'),
+                            'codigo_rum' : registro.get('id_registro_uso_maquina')
+                        }
+                    });
+                } else {
+                    Ext.Msg.show(
+                    {
+                        title : 'Información',
+                        msg : 'Su perfil de usuario no está autorizado para modificar información',
+                        buttons : Ext.Msg.OK,
+                        icon : Ext.MessageBox.INFO
+                    });
+                }
             },
             'canceledit' : function()
             {
@@ -779,22 +799,32 @@ Ext.onReady(function()
             iconCls : 'agregar',
             handler : function()
             {
-                var id_evento = evento_para_agregar_combobox.getValue();
-                if(id_evento == '')
-                {
-                    alert('Primero debe seleccionar un evento');
-                    evento_para_agregar_combobox.focus();
-                } else
-{
-                    var row = new grillaEventos.store.recordType(
+                if(!esCoordinador) {
+                    var id_evento = evento_para_agregar_combobox.getValue();
+                    if(id_evento == '')
                     {
-                        'id_evento' : id_evento
+                        alert('Primero debe seleccionar un evento');
+                        evento_para_agregar_combobox.focus();
+                    } else
+                    {
+                        var row = new grillaEventos.store.recordType(
+                        {
+                            'id_evento' : id_evento
+                        });
+                        grillaEventos.getSelectionModel().clearSelections();
+                        rowEditor.stopEditing();
+                        grillaEventos.store.insert(0, row);
+                        grillaEventos.getSelectionModel().selectRow(0);
+                        rowEditor.startEditing(0);
+                    }
+               } else {
+                    Ext.Msg.show(
+                    {
+                        title : 'Información',
+                        msg : 'Su perfil de usuario no está autorizado para modificar información',
+                        buttons : Ext.Msg.OK,
+                        icon : Ext.MessageBox.INFO
                     });
-                    grillaEventos.getSelectionModel().clearSelections();
-                    rowEditor.stopEditing();
-                    grillaEventos.store.insert(0, row);
-                    grillaEventos.getSelectionModel().selectRow(0);
-                    rowEditor.startEditing(0);
                 }
             }
         }, '-', {
@@ -802,27 +832,37 @@ Ext.onReady(function()
             iconCls : 'eliminar',
             handler : function()
             {
-                var record = grillaEventos.getSelectionModel().getSelected();
-                Ext.Ajax.request(
-                {
-                    url : getAbsoluteUrl('ingreso_datos', 'eliminarRegistroEvento'),
-                    failure : function()
+                if(!esCoordinador) {
+                    var record = grillaEventos.getSelectionModel().getSelected();
+                    Ext.Ajax.request(
                     {
-                        recargarDatosEventos();
-                    },
-                    success : function(result)
-                    {
-                        recargarDatosEventos();
-                        if(result.responseText != 'Ok')
+                        url : getAbsoluteUrl('ingreso_datos', 'eliminarRegistroEvento'),
+                        failure : function()
                         {
-                            alert(result.responseText);
+                            recargarDatosEventos();
+                        },
+                        success : function(result)
+                        {
+                            recargarDatosEventos();
+                            if(result.responseText != 'Ok')
+                            {
+                                alert(result.responseText);
+                            }
+                        },
+                        params :
+                        {
+                            'codigo' : record.get('codigo')
                         }
-                    },
-                    params :
+                    });
+                } else {
+                    Ext.Msg.show(
                     {
-                        'codigo' : record.get('codigo')
-                    }
-                });
+                        title : 'Información',
+                        msg : 'Su perfil de usuario no está autorizado para modificar información',
+                        buttons : Ext.Msg.OK,
+                        icon : Ext.MessageBox.INFO
+                    });
+                }
             }
         }],
         columns : [
@@ -1915,7 +1955,7 @@ Ext.onReady(function()
                         break;
                     case '3':
                         mensaje = 'Su perfil de usuario no está autorizado para crear registros';
-                        break;
+                        break;                    
                 }
                 if(mensaje != null)
                 {
@@ -2102,6 +2142,9 @@ Ext.onReady(function()
                 break;
             case '1':
                 mensaje = 'Su perfil no está autorizado para modificar registros con antigüedad superior a un (1) día';
+                break;
+            case '2':
+                mensaje = 'Su perfil de usuario no está autorizado para modificar información';
                 break;
             case 'Ahorro_TF':
                 mensaje = 'Verifique que la hora de finalización ingresada sea correcta';
@@ -2455,7 +2498,7 @@ Ext.onReady(function()
         readOnly : true
     });
 
-    if(esAdministrador)
+    if(esAdministrador || esCoordinador)
     {
         var operarios_datastore = new Ext.data.Store(
         {
@@ -2673,38 +2716,47 @@ Ext.onReady(function()
                     iconCls : 'agregar',          
                     handler : function()
                     {
-                        var codigo_equipo = maquina_combobox.getValue();
-                        if(codigo_equipo == '') {                
+                        if(!esCoordinador) {
+                            var codigo_equipo = maquina_combobox.getValue();
+                            if(codigo_equipo == '') {                
+                                Ext.Msg.show(
+                                {
+                                    title : 'Información',
+                                    msg : 'Primero debe seleccionar un equipo',
+                                    buttons : Ext.Msg.OK,
+                                    icon : Ext.MessageBox.INFO
+                                });
+                                maquina_combobox.focus();
+                            }
+
+                            var codigo_metodo = metodo_para_agregar_combobox.getValue();            
+                            if(codigo_metodo == '' && codigo_equipo != '') {                
+                                metodo_para_agregar_combobox.focus();
+                                Ext.Msg.show(
+                                {
+                                    title : 'Información',
+                                    msg : 'Primero debe seleccionar un método',
+                                    buttons : Ext.Msg.OK,
+                                    icon : Ext.MessageBox.INFO
+                                });
+                                metodo_para_agregar_combobox.focus();
+                            } else {
+                                var params =
+                                {
+                                    'id_metodo' : codigo_metodo,
+                                    'codigo_maquina' : maquina_combobox.getValue(),
+                                    'fecha' : fechaField.getValue()
+                                };
+                                crearRegistroUsoMaquina(params);
+                            }
+                        } else {
                             Ext.Msg.show(
                             {
                                 title : 'Información',
-                                msg : 'Primero debe seleccionar un equipo',
+                                msg : 'Su perfil de usuario no está autorizado para modificar información',
                                 buttons : Ext.Msg.OK,
                                 icon : Ext.MessageBox.INFO
                             });
-                            maquina_combobox.focus();
-                        }
-            
-                        var codigo_metodo = metodo_para_agregar_combobox.getValue();            
-                        if(codigo_metodo == '' && codigo_equipo != '') {                
-                            metodo_para_agregar_combobox.focus();
-                            Ext.Msg.show(
-                            {
-                                title : 'Información',
-                                msg : 'Primero debe seleccionar un método',
-                                buttons : Ext.Msg.OK,
-                                icon : Ext.MessageBox.INFO
-                            });
-                            metodo_para_agregar_combobox.focus();
-                        } else
-{
-                            var params =
-                            {
-                                'id_metodo' : codigo_metodo,
-                                'codigo_maquina' : maquina_combobox.getValue(),
-                                'fecha' : fechaField.getValue()
-                            };
-                            crearRegistroUsoMaquina(params);
                         }
                     }
                 }, '-',
@@ -2713,65 +2765,74 @@ Ext.onReady(function()
                     iconCls : 'eliminar',
                     handler : function()
                     {
-                        var activeTab = pestanas_grilla.getActiveTab();
-                        var sm;
-                        if (activeTab.id == 1) {
-                            sm = grid_tab1.getSelectionModel();
-                        }
-                        if (activeTab.id == 2) {
-                            sm = grid_tab2.getSelectionModel();
-                        }
-                        if (activeTab.id == 3) {
-                            sm = grid_tab3.getSelectionModel();
-                        }
-                        if(sm.hasSelection())
-                        {
-                            Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
+                        if(!esCoordinador) {
+                            var activeTab = pestanas_grilla.getActiveTab();
+                            var sm;
+                            if (activeTab.id == 1) {
+                                sm = grid_tab1.getSelectionModel();
+                            }
+                            if (activeTab.id == 2) {
+                                sm = grid_tab2.getSelectionModel();
+                            }
+                            if (activeTab.id == 3) {
+                                sm = grid_tab3.getSelectionModel();
+                            }
+                            if(sm.hasSelection())
                             {
-                                if(idButton == 'yes')
+                                Ext.Msg.confirm('Eliminar método', "Esta operación es irreversible. ¿Está seguro(a) de querer eliminar este método?", function(idButton)
                                 {
-                                    var cell = sm.getSelectedCell();
-                                    var index = cell[0];
-                                    var registro = datastore.getAt(index);
-                                    Ext.Msg.prompt('Eliminar método', 'Digite la causa de la eliminación de este método', function(idButton, text)
+                                    if(idButton == 'yes')
                                     {
-                                        if(idButton == 'ok')
+                                        var cell = sm.getSelectedCell();
+                                        var index = cell[0];
+                                        var registro = datastore.getAt(index);
+                                        Ext.Msg.prompt('Eliminar método', 'Digite la causa de la eliminación de este método', function(idButton, text)
                                         {
-                                            Ext.Ajax.request(
+                                            if(idButton == 'ok')
                                             {
-                                                url : getAbsoluteUrl('ingreso_datos', 'eliminarRegistroUsoMaquina'),
-                                                failure : function()
+                                                Ext.Ajax.request(
                                                 {
-                                                    recargarDatosMetodos();
-                                                },
-                                                success : function(result)
-                                                {
-                                                    recargarDatosMetodos();
-                                                    if(result.responseText != 'Ok')
+                                                    url : getAbsoluteUrl('ingreso_datos', 'eliminarRegistroUsoMaquina'),
+                                                    failure : function()
                                                     {
-                                                        alert(result.responseText);
+                                                        recargarDatosMetodos();
+                                                    },
+                                                    success : function(result)
+                                                    {
+                                                        recargarDatosMetodos();
+                                                        if(result.responseText != 'Ok')
+                                                        {
+                                                            alert(result.responseText);
+                                                        }
+                                                    },
+                                                    params :
+                                                    {
+                                                        'id_registro_uso_maquina' : registro.get('id_registro_uso_maquina'),
+                                                        'causa' : text
                                                     }
-                                                },
-                                                params :
-                                                {
-                                                    'id_registro_uso_maquina' : registro.get('id_registro_uso_maquina'),
-                                                    'causa' : text
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        } else
-{
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                Ext.Msg.show(
+                                {
+                                    title : 'Información',
+                                    msg : 'Primero debe seleccionar un método',
+                                    buttons : Ext.Msg.OK,
+                                    icon : Ext.MessageBox.INFO
+                                });
+                            }
+                        } else {
                             Ext.Msg.show(
                             {
                                 title : 'Información',
-                                msg : 'Primero debe seleccionar un método',
+                                msg : 'Su perfil de usuario no está autorizado para modificar información',
                                 buttons : Ext.Msg.OK,
                                 icon : Ext.MessageBox.INFO
                             });
-                        }
+                        }    
                     }
                 }, '-',
                 {
@@ -2832,39 +2893,49 @@ Ext.onReady(function()
                     width : 70,
                     handler : function()
                     {
-                        if(maquina_combobox.isValid() && fechaField.isValid() && maquina_combobox.getValue() != '')
-                        {
-                            Ext.Ajax.request(
+                        if(!esCoordinador) {
+                            if(maquina_combobox.isValid() && fechaField.isValid() && maquina_combobox.getValue() != '')
                             {
-                                url : getAbsoluteUrl('ingreso_datos', 'dividirRegistro'),
-                                failure : function()
+                                Ext.Ajax.request(
                                 {
-                                },
-                                success : function(result)
-                                {
-                                    var mensaje = '';
-                                    switch(result.responseText)
+                                    url : getAbsoluteUrl('ingreso_datos', 'dividirRegistro'),
+                                    failure : function()
                                     {
-                                        case 'Ok':
-                                            mensaje = 'El último registro del día fue divido exitosamente';
-                                            break;
-                                        case '1':
-                                            mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
-                                            break;
-                                        default:
-                                            mensaje = result.responseText;
-                                            break;                          
+                                    },
+                                    success : function(result)
+                                    {
+                                        var mensaje = '';
+                                        switch(result.responseText)
+                                        {
+                                            case 'Ok':
+                                                mensaje = 'El último registro del día fue divido exitosamente';
+                                                break;
+                                            case '1':
+                                                mensaje = 'No es necesario ejecutar el proceso de división debido a que ningún registro ha excedido el tiempo diario';
+                                                break;
+                                            default:
+                                                mensaje = result.responseText;
+                                                break;                          
+                                        }
+                                        recargarDatosMetodos(function()
+                                        {
+                                            });
+                                        alert(mensaje);
+                                    },
+                                    params :
+                                    {
+                                        'codigo_maquina' : maquina_combobox.getValue(),
+                                        'fecha' : fechaField.getValue()
                                     }
-                                    recargarDatosMetodos(function()
-                                    {
-                                        });
-                                    alert(mensaje);
-                                },
-                                params :
-                                {
-                                    'codigo_maquina' : maquina_combobox.getValue(),
-                                    'fecha' : fechaField.getValue()
-                                }
+                                });
+                            }
+                         } else {
+                            Ext.Msg.show(
+                            {
+                                title : 'Información',
+                                msg : 'Su perfil de usuario no está autorizado para modificar información',
+                                buttons : Ext.Msg.OK,
+                                icon : Ext.MessageBox.INFO
                             });
                         }
                     }
@@ -2883,8 +2954,7 @@ Ext.onReady(function()
     if(esAdministrador)
     {
 
-    } else
-{
+    } else {
         var datos_operario_datastore = new Ext.data.Store(
         {
             proxy : new Ext.data.HttpProxy(

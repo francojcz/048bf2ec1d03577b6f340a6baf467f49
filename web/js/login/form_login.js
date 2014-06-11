@@ -131,7 +131,7 @@ function login_autenticar(){
                     window.location = getAbsoluteUrl('ingreso_datos', 'index');
                 }
                 if (obj.mensaje == '4') {
-                    window.location = getAbsoluteUrl('interfaz_reporte', 'index');
+                    window.location = getAbsoluteUrl('ingreso_datos', 'index');
                 }
             }
             else {

@@ -1125,6 +1125,7 @@ var crud_metodo_formpanel_info_inyec = new Ext.form.FormPanel({
     layout: 'form',
     labelWidth: 240,
     padding: 10,
+    autoScroll: true,
     defaults: {
         anchor: '100%'
     },
@@ -1140,11 +1141,8 @@ var crud_metodo_formpanel_info_inyec = new Ext.form.FormPanel({
     }, {
         xtype: 'label',
         html: '<br/>'
-    }, met_num_inyeccion_estandar_1, met_num_inyeccion_estandar_2, met_num_inyeccion_estandar_3, met_num_inyeccion_estandar_4, met_num_inyeccion_estandar_5, met_num_inyeccion_estandar_6, //	met_num_inyeccion_estandar_7,
-    //	met_num_inyeccion_estandar_8
-    met_tiempo_corrida_curvas]
+    }, met_num_inyeccion_estandar_1, met_num_inyeccion_estandar_2, met_num_inyeccion_estandar_3, met_num_inyeccion_estandar_4, met_num_inyeccion_estandar_5, met_num_inyeccion_estandar_6, met_tiempo_corrida_curvas]
 });
-
 
 
 var crud_metodo_formpanel_info_inyec_x_mu = new Ext.form.FormPanel({
@@ -1224,9 +1222,9 @@ var crud_metodo_formpanel = new Ext.Panel({
         xtype: 'tabpanel',
         activeTab: 0,
         deferredRender: false,
-        height: 330,
-        items: [crud_metodo_formpanel_info_analisis, //crud_metodo_formpanel_info_tc,
- crud_metodo_formpanel_info_inyec, crud_metodo_formpanel_info_inyec_x_mu]
+        height: 250,
+                
+        items: [crud_metodo_formpanel_info_analisis, crud_metodo_formpanel_info_inyec, crud_metodo_formpanel_info_inyec_x_mu]
     }],
     buttons: [{
         text: 'Guardar',

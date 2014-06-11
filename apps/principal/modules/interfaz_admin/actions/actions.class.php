@@ -43,6 +43,17 @@ class interfaz_adminActions extends sfActions
 
 		$this->nombreEmpresa = $nombreEmpresa;
 		$this->urlLogo = $urlLogo;
-
+                
+                //Cambios: 24 de febrero de 2014
+                //Retorna el nombre del perfil de usuario en sesión
+                if($codigo_usuario == 1) {
+                    $this -> perfilUsuario = 'Super Administrador';
+                } else if($codigo_usuario == 2) {
+                    $this -> perfilUsuario = 'Administrador';
+                } else if($codigo_usuario == 3) {
+                    $this -> perfilUsuario = 'Analista';
+                } else if($codigo_usuario == 5) {
+                    $this -> perfilUsuario = 'Coordinador o Supervisor';
+                }
 	}
 }

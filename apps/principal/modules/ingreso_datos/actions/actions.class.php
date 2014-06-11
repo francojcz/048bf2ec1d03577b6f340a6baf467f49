@@ -686,7 +686,7 @@ class ingreso_datosActions extends sfActions
             //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
             $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
-            if(($tpnp_temp < 0) && ($registro->getRumHoraFinTrabajo()!='')) {
+            if($tpnp_temp < 0) {
                 $minutosTiempoParadaProgramada += $tpnp_temp;
             }            
             if(round($minutosTiempoParadaProgramada, 2) != 0.00) {
@@ -882,6 +882,19 @@ class ingreso_datosActions extends sfActions
         $this -> inyeccionesEstandarPromedio = $empresa -> getEmpInyectEstandarPromedio();
 
         $this -> esAdministrador = ($user -> getAttribute('usu_per_codigo') == '2') ? 'true' : 'false';
+        $this -> esCoordinador = ($user -> getAttribute('usu_per_codigo') == '4') ? 'true' : 'false';
+        
+        //Cambios: 24 de febrero de 2014
+        //Retorna el nombre del perfil de usuario en sesión
+        if($codigo_usuario == 1) {
+            $this -> perfilUsuario = 'Super Administrador';
+        } else if($codigo_usuario == 2) {
+            $this -> perfilUsuario = 'Administrador';
+        } else if($codigo_usuario == 3) {
+            $this -> perfilUsuario = 'Analista';
+        } else if($codigo_usuario == 5) {
+            $this -> perfilUsuario = 'Coordinador o Supervisor';
+        }
     }
 
     public function executeConsultarDatosOperario()
@@ -1269,9 +1282,17 @@ class ingreso_datosActions extends sfActions
             if ($timeStampFechaUso < $timeStampDiaAnterior && $user -> getAttribute('usu_per_codigo') == '3')
             {
                 return $this -> renderText('1');
-            }            
+            }
 
             $codigo_usuario = $user -> getAttribute('usu_codigo');
+            $usuario = $this -> getUser();
+            $codigo_perfil = $usuario -> getAttribute('usu_per_codigo');
+            
+            //Cambios: 24 de febrero de 2014
+            //El usuario con perfil Coordinador puede visualizar pero no puede modificar datos de corridas analíticas
+            if($codigo_perfil == '4') {
+                return $this -> renderText('2');
+            }
 
             $registroModificacion = new RegistroModificacion();
             $registroModificacion -> setRemUsuCodigo($codigo_usuario);
@@ -1299,9 +1320,7 @@ class ingreso_datosActions extends sfActions
                 $registro -> setRumTiempoCorridaCurvas($request -> getParameter('tiempo_corrida_cc'));
                 $registroModificacion -> setRemValorNuevo('' . $registro -> getRumTiempoCorridaCurvas());
             }
-            //Estándares
-            $usuario = $this -> getUser();
-            $codigo_perfil = $usuario -> getAttribute('usu_per_codigo');
+            //Estándares            
             if($codigo_perfil == '2' || $codigo_perfil == '3')
             {
                 //Cambios: 24 de febrero de 2014

@@ -50,7 +50,7 @@ var crud_certificado_gridpanel = new Ext.grid.GridPanel({
     selModel: new Ext.grid.RowSelectionModel({
         singleSelect: true
     }),
-    height: largo_panel,
+    height: largo_panel-15,
     bbar: new Ext.PagingToolbar({
         pageSize: 15,
         store: crud_certificado_datastore,
