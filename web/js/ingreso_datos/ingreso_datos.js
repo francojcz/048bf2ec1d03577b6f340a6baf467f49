@@ -340,7 +340,7 @@ Ext.onReady(function()
                             'codigo_maquina' : maquina_combobox.getValue(),
                             'fecha' : fechaField.getValue()
                         };
-                        if(esAdministrador && operario_field.getValue != '')
+                        if((esAdministrador || esCoordinador) && operario_field.getValue != '')
                         {
                             params['codigo_operario'] = operario_field.getValue();
                         }
@@ -364,7 +364,7 @@ Ext.onReady(function()
                             'codigo_maquina' : maquina_combobox.getValue(),
                             'fecha' : fechaField.getValue()
                         };
-                        if(esAdministrador && operario_field.getValue != '')
+                        if((esAdministrador || esCoordinador) && operario_field.getValue != '')
                         {
                             params['codigo_operario'] = operario_field.getValue();
                         }
@@ -2562,8 +2562,7 @@ Ext.onReady(function()
                 operario_field.setValue('-1');
             }
         });
-    } else
-{
+    } else {
         operario_field =
         {
             xtype : 'textfield',
@@ -2951,9 +2950,7 @@ Ext.onReady(function()
         }]
     });
 
-    if(esAdministrador)
-    {
-
+    if(esAdministrador) { 
     } else {
         var datos_operario_datastore = new Ext.data.Store(
         {

@@ -311,7 +311,7 @@ Desarrollado maryit sanchez
 		ds: maestra_eventoporcategoria_datastore,
 		cm: maestra_eventoporcategoria_colmodel,
 		sm: maestra_eventoporcategoria_pertenece_selmodel,
-		height: 280,
+		height: 310,
 		tbar:[maestra_eventoporcategoria_cat_codigo,
 			{text:'Agregar a categor&iacute;a',iconCls:'agregar',
 				handler:function(){

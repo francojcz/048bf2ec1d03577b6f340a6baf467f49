@@ -886,13 +886,14 @@ class ingreso_datosActions extends sfActions
         
         //Cambios: 24 de febrero de 2014
         //Retorna el nombre del perfil de usuario en sesión
-        if($codigo_usuario == 1) {
+        $codigo_perfil = $user -> getAttribute('usu_per_codigo');
+        if($codigo_perfil == 1) {
             $this -> perfilUsuario = 'Super Administrador';
-        } else if($codigo_usuario == 2) {
+        } else if($codigo_perfil == 2) {
             $this -> perfilUsuario = 'Administrador';
-        } else if($codigo_usuario == 3) {
+        } else if($codigo_perfil == 3) {
             $this -> perfilUsuario = 'Analista';
-        } else if($codigo_usuario == 5) {
+        } else if($codigo_perfil == 4) {
             $this -> perfilUsuario = 'Coordinador o Supervisor';
         }
     }
@@ -2206,19 +2207,6 @@ class ingreso_datosActions extends sfActions
             $fields['numero_inyecciones_x_muestra_uniformidad'] = number_format($registro -> getRumNumInyecXMuestraUnifor(), 2, '.', '');
             // }
 
-//            $cod_metodo = $registro->getRumMetCodigo();
-//            $metodo = MetodoPeer::retrieveByPK($cod_metodo);
-//            //Sumar a la hora de inicio ingresada el tiempo de inyección de la máquina
-//            if($registro -> getRumHoraInicioTrabajo() != '') {                
-//                //Si el método es de mantenimiento no se debe sumar nada
-//                if($metodo->getMetMantenimiento() == 1) {
-//                    $fields['hora_inicio_corrida'] = $registro -> getRumHoraInicioTrabajo('H:i:s');
-//                }
-//                else {
-//                    $hora_inicio = $registro -> getRumHoraInicioTrabajo('H:i:s');
-//                    $fields['hora_inicio_corrida'] = $this->operarHoraTiempoInyeccion($registro, $hora_inicio, '+');
-//                }                
-//            }
             $fields['hora_inicio_corrida'] = $registro -> getRumHoraInicioTrabajoOriginal('H:i:s');
             $fields['hora_fin_corrida'] = $registro -> getRumHoraFinTrabajoOriginal('H:i:s');
             $fields['fallas'] = number_format($registro -> getRumFallas() / 60, 2, '.', '');

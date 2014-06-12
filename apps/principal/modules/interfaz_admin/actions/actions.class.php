@@ -46,13 +46,14 @@ class interfaz_adminActions extends sfActions
                 
                 //Cambios: 24 de febrero de 2014
                 //Retorna el nombre del perfil de usuario en sesión
-                if($codigo_usuario == 1) {
+                $codigo_perfil = $user -> getAttribute('usu_per_codigo');
+                if($codigo_perfil == 1) {
                     $this -> perfilUsuario = 'Super Administrador';
-                } else if($codigo_usuario == 2) {
+                } else if($codigo_perfil == 2) {
                     $this -> perfilUsuario = 'Administrador';
-                } else if($codigo_usuario == 3) {
+                } else if($codigo_perfil == 3) {
                     $this -> perfilUsuario = 'Analista';
-                } else if($codigo_usuario == 5) {
+                } else if($codigo_perfil == 4) {
                     $this -> perfilUsuario = 'Coordinador o Supervisor';
                 }
 	}

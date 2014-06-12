@@ -125,12 +125,12 @@ Ext.onReady(function(){
         width: 400,
         frame: false,
         layout: 'form',
-        height: 500,
+        height: 420,
         items: [{
             layout: 'column',
             padding: 10,
             border: false,
-            height: 500,
+            height: 420,
             items: [{
                 padding: 10,
                 border: false,
