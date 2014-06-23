@@ -560,7 +560,8 @@ class reporte_diarioActions extends sfActions
             $fields['nombre_metodo'] = $registro -> obtenerMetodo();
 
             $tiempoCorrida = round($registro -> calcularTiempoCorridaHoras(), 2);
-            $fields['paros_menores'] = number_format(round($registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio), 2), 2);
+            $fields['paros_menores'] = number_format(round($registro -> calcularParosMenoresMinutos($inyeccionesEstandarPromedio), 2), 2);            
+            $fields['paros_menores_alistamiento'] = number_format(round($registro -> calcularTPNPMinutosConPerdidasAlistamiento(8), 2), 2);
             $fields['retrabajos'] = number_format($registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio), 2);
             $fields['fallas'] = number_format(round($registro -> getRumFallas(), 2), 2);
             $fields['perdidas_velocidad'] = number_format(round($registro -> calcularPerdidasVelocidadMinutos($inyeccionesEstandarPromedio), 2), 2);
@@ -638,25 +639,41 @@ class reporte_diarioActions extends sfActions
         foreach ($registros as $registro)
         {
             $fields = array();
-
+            
             $fields['ahor_nombre_maquina'] = $registro -> obtenerMaquina();
             $fields['ahor_nombre_grupo'] = $registro -> obtenerGrupo();
             $fields['ahor_nombre_operario'] = $registro -> obtenerAnalista();            
             $fields['ahor_nombre_metodo'] = $registro -> obtenerMetodo();
+
             
+            //Ahorros alistamiento
             $ahorros_alistamiento = number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
-            $fields['ahorros_alistamiento'] = $ahorros_alistamiento;
+            $fields['ahorros_alistamiento'] = number_format($ahorros_alistamiento, 2, '.', ',');
             $ahorros_dia += $ahorros_alistamiento;
-                        
+                      
+            
+            //Ahorros Método
+            //Ahorros en el método cuando la hora ingresada es inferior a la hora en la cual debe finalizar la corrida
             $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
             $TF = $registro -> obtenerTFMetodo();
             $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
             $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
+            $ahorros_metodo = number_format($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP));
             
-            $ahorros_metodo = number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
-            $fields['ahorros_metodo'] = $ahorros_metodo;
+            //Ahorros en el método cuando se cambia el tiempo de corrida del método
+            $TP = $registro -> obtenerTPMetodo($maq_tiempo_inyeccion);
+            $ahorros_tc = $TP - $TO;
+            //Se tiene en cuenta sólo si la diferencia entre el TP y el TO es positiva
+            if($ahorros_tc > 0) {
+                //Se pasan los ahorros a minutos
+                $ahorros_tc *= 60;
+                $ahorros_metodo += $ahorros_tc;
+            }            
+            
+            
+            $fields['ahorros_metodo'] = number_format($ahorros_metodo, 2, '.', ',');
             $ahorros_dia += $ahorros_metodo;
-
+            
             $data[] = $fields;
         }
         

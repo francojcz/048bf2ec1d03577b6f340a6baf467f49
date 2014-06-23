@@ -1069,7 +1069,7 @@ var grumensual_gridpanel_ahorro = new Ext.grid.GridPanel({
         var params = '?mes=' + mes + '&anio=' + anio + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         
         //Tiempos
-        var reporgrafmens_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
+        var reporgrafmens_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "490", "400", "8", "#FFFFFF");
         reporgrafmens_tiempos_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafmens_tiempos_dispersion.addParam("wmode", "opaque");
         reporgrafmens_tiempos_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/amline_st_grafico_tiempos.php');
@@ -1079,7 +1079,7 @@ var grumensual_gridpanel_ahorro = new Ext.grid.GridPanel({
         
         //Cambios: 24 de febrero de 2014
         //Para modificar el margen entre el gráfico de líneas y el de torta, cambiar el valor 430
-        var reporgrafmens_tiempos_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "430", "400", "8");
+        var reporgrafmens_tiempos_torta = new SWFObject(urlWeb + "flash/ampie/ampie.swf", "ampie", "400", "400", "8");
         reporgrafmens_tiempos_torta.addVariable("path", urlWeb + "flash/ampie/");
         reporgrafmens_tiempos_torta.addParam("wmode", "opaque");
         reporgrafmens_tiempos_torta.addVariable("settings_file", urlWeb + 'js/reporte_graficomensual/ampie_st_grafico_tiempos_torta.php');

@@ -1032,7 +1032,7 @@ var grusemanal_gridpanel_ahorro = new Ext.grid.GridPanel({
         var params = '?fecha_inicio=' + fecha_inicio + '&fecha_fin=' + fecha_fin + '&cods_equipos=' + arrayEquipos + '&cods_grupos=' + arrayGrupos + '&metodo_codigo=' + metodo_codigo + '&analista_codigo=' + analista_codigo;
         
         //Tiempos
-        var reporgrafseman_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "520", "400", "8", "#FFFFFF");
+        var reporgrafseman_tiempos_dispersion = new SWFObject(urlWeb + "flash/amline/amline.swf", "amline", "490", "400", "8", "#FFFFFF");
         reporgrafseman_tiempos_dispersion.addVariable("path", urlWeb + "flash/amline/");
         reporgrafseman_tiempos_dispersion.addParam("wmode", "opaque");
         reporgrafseman_tiempos_dispersion.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/amline_st_grafico_tiempos.php');
@@ -1060,7 +1060,7 @@ var grusemanal_gridpanel_ahorro = new Ext.grid.GridPanel({
         reporgrafseman_indicadores_dispersion.addVariable("loading_data", "... CARGANDO ...");
         reporgrafseman_indicadores_dispersion.write("div_reporte_graficosemanal_indicadores_dispersion");        
         
-        var reporgrafseman_indicadores_barras = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "520", "400", "0", "#FFFFFF");
+        var reporgrafseman_indicadores_barras = new SWFObject(urlWeb + "flash/amcolumn/amcolumn.swf", "amcolumn", "430", "400", "0", "#FFFFFF");
         reporgrafseman_indicadores_barras.addVariable("path", urlWeb + "flash/amcolumn/");
         reporgrafseman_indicadores_barras.addParam("wmode", "opaque");
         reporgrafseman_indicadores_barras.addVariable("settings_file", urlWeb + 'js/reporte_graficosemanal/amcolumn_st_grafico_indicadores_barras.php');

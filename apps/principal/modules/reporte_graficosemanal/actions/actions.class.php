@@ -1589,13 +1589,24 @@ class reporte_graficosemanalActions extends sfActions
                 {                   
                     //Ahorros alistamiento
                     $ahorros_alistamiento += number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
-                    
-                    //Ahorros método
+
+                    //Ahorros Método
+                    //Ahorros en el método cuando la hora ingresada es inferior a la hora en la cual debe finalizar la corrida
                     $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
                     $TF = $registro -> obtenerTFMetodo();
                     $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
                     $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
                     $ahorros_metodo += number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+                    
+                    //Ahorros en el método cuando se cambia el tiempo de corrida del método
+                    $TP = $registro -> obtenerTPMetodo($maq_tiempo_inyeccion);
+                    $ahorros_tc = $TP - $TO;
+                    //Se tiene en cuenta sólo si la diferencia entre el TP y el TO es positiva
+                    if($ahorros_tc > 0) {
+                        //Se pasan los ahorros a minutos
+                        $ahorros_tc *= 60;
+                        $ahorros_metodo += $ahorros_tc;
+                    }
                 }
                 $datos['ahorros_alistamiento'] = round($ahorros_alistamiento/60, 2);
                 $datos['ahorros_metodo'] = round($ahorros_metodo/60, 2);
@@ -1642,6 +1653,7 @@ class reporte_graficosemanalActions extends sfActions
             try {
                 $ahorros_alistamiento = 0;
                 $ahorros_metodo = 0;
+                $ahorros_tc = 0;
 
                 $conexion = $this->obtenerConexionSemana($fecha_inicio, $fecha_fin);
                 $registros_uso_maquina = RegistroUsoMaquinaPeer::doSelect($conexion);
@@ -1651,12 +1663,23 @@ class reporte_graficosemanalActions extends sfActions
                     //Ahorros alistamiento
                     $ahorros_alistamiento += number_format(round($registro -> calcularAhorrosAlistamientoMinutos(), 2), 2);
 
-                    //Ahorros método
+                    //Ahorros Método
+                    //Ahorros en el método cuando la hora ingresada es inferior a la hora en la cual debe finalizar la corrida
                     $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
                     $TF = $registro -> obtenerTFMetodo();
                     $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
                     $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
                     $ahorros_metodo += number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+                    
+                    //Ahorros en el método cuando se cambia el tiempo de corrida del método
+                    $TP = $registro -> obtenerTPMetodo($maq_tiempo_inyeccion);
+                    $ahorros_tc = $TP - $TO;
+                    //Se tiene en cuenta sólo si la diferencia entre el TP y el TO es positiva
+                    if($ahorros_tc > 0) {
+                        //Se pasan los ahorros a minutos
+                        $ahorros_tc *= 60;
+                        $ahorros_metodo += $ahorros_tc;
+                    }
                 }
                 $datos['ahorros_alistamiento'] = round(($ahorros_alistamiento/60),2);
                 $datos['ahorros_metodo'] = round($ahorros_metodo/60,2);

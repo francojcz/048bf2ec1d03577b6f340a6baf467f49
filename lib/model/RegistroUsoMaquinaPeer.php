@@ -1696,12 +1696,23 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 
         foreach ($registros as $registro)
         {
-            //Ahorros método
+            //Ahorros Método
+            //Ahorros en el método cuando la hora ingresada es inferior a la hora en la cual debe finalizar la corrida
             $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
             $TF = $registro -> obtenerTFMetodo();
             $TO = $registro -> obtenerTOMetodo($maq_tiempo_inyeccion);
             $TPNP = round($registro -> calcularTPNPMinutos(8) / 60, 2);
             $ahorros_metodo += number_format(round($registro -> calcularAhorrosMetodoMinutos($TF, $TO, $TPNP), 2), 2);
+
+            //Ahorros en el método cuando se cambia el tiempo de corrida del método
+            $TP = $registro -> obtenerTPMetodo($maq_tiempo_inyeccion);
+            $ahorros_tc = $TP - $TO;
+            //Se tiene en cuenta sólo si la diferencia entre el TP y el TO es positiva
+            if($ahorros_tc > 0) {
+                //Se pasan los ahorros a minutos
+                $ahorros_tc *= 60;
+                $ahorros_metodo += $ahorros_tc;
+            }
         }
 
         return ($ahorros_metodo / 60);

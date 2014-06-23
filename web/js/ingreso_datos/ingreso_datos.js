@@ -1784,9 +1784,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'col_codigo_interno',
-        header : 'C&oacute;digo Interno',
+        header : 'C&oacute;digo<br>Interno',
         tooltip : 'C&oacute;digo Interno',
-        width : 120,
+        width : 110,
         align : 'center',
         editor : new Ext.form.ComboBox(
         {
@@ -1807,7 +1807,7 @@ Ext.onReady(function()
         dataIndex : 'etapa_nombre',
         header : 'Etapa',
         tooltip : 'Etapa',
-        width : 125,
+        width : 120,
         align : 'center',
         editor : new Ext.form.ComboBox(
         {
@@ -1826,9 +1826,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'tiempo_retencion',
-        header : 'Tiempo Retenci&oacute;n<br>(tr)',
-        tooltip : 'Tiempo de Retenci&oacute;n (tr)',
-        width : 120,
+        header : 'Tiempo Retenci&oacute;n (tr) Min.',
+        tooltip : 'Tiempo de Retenci&oacute;n (tr) en Minutos',
+        width : 140,
         align : 'center',
         editor :
         {
@@ -1840,7 +1840,7 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'platos_teoricos',
-        header : 'Platos Te&oacute;ricos<br>(N)',
+        header : 'Platos Te&oacute;ricos (N)',
         tooltip : 'Platos Te&oacute;ricos',
         width : 120,
         align : 'center',
@@ -1854,7 +1854,7 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'tailing',
-        header : 'Factor de Cola<br>(T)',
+        header : 'Factor de Cola (T)',
         tooltip : 'Factor de Cola (T)',
         width : 120,
         align : 'center',
@@ -1868,9 +1868,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'resolucion',
-        header : 'Resoluci&oacute;n<br>(R)',
+        header : 'Resoluci&oacute;n (R)',
         tooltip : 'Resoluci&oacute;n (R)',
-        width : 120,
+        width : 110,
         align : 'center',
         editor :
         {
@@ -1882,9 +1882,9 @@ Ext.onReady(function()
     },
     {
         dataIndex : 'presion',
-        header : 'Presi&oacute;n de Sistema<br>(psi)',
+        header : 'Presi&oacute;n de Sistema (psi)',
         tooltip : 'Presi&oacute;n de Sistema (psi)',
-        width : 120,
+        width : 130,
         align : 'center',
         editor :
         {
@@ -1898,7 +1898,7 @@ Ext.onReady(function()
         dataIndex : 'observaciones_col',
         header : 'Observaciones Columna',
         tooltip : 'Observaciones',
-        width : 165,
+        width : 160,
         align : 'center',
         editor :
         {

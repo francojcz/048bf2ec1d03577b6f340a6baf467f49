@@ -2226,11 +2226,21 @@ class ingreso_datosActions extends sfActions
                 $etapa = EtapaPeer::retrieveByPK($registro->getRumEtaCodigo());
                 $fields['etapa_nombre'] = $etapa -> getEtaNombre();
             }
-            $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
-            $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
-            $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
-            $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
-            $fields['presion'] = number_format($registro -> getRumPresion(), 2, '.', '');
+            if ($registro -> getRumPlatosTeoricos() != '') {
+                $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
+            }
+            if ($registro -> getRumTiempoRetencion() != '') {
+                $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
+            }
+            if ($registro -> getRumResolucion() != '') {
+                $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
+            }
+            if ($registro -> getRumTailing() != '') {
+                $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
+            }
+            if ($registro -> getRumPresion() != '') {
+                $fields['presion'] = number_format($registro -> getRumPresion(), 2, '.', '');
+            }
             $fields['observaciones_col'] = $registro -> getRumObservacionesCol();
 
             $data[] = $fields;
@@ -2298,11 +2308,21 @@ class ingreso_datosActions extends sfActions
             } else {
                 $fields['etapa_nombre'] = $etapa -> getEtaNombre();
             }
-            $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
-            $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
-            $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
-            $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
-            $fields['presion'] = number_format($registro -> getRumPresion(), 2, '.', '');
+            if ($registro -> getRumPlatosTeoricos() != '') {
+                $fields['platos_teoricos'] = number_format($registro -> getRumPlatosTeoricos(), 2, '.', '');
+            }
+            if ($registro -> getRumTiempoRetencion() != '') {
+                $fields['tiempo_retencion'] = number_format($registro -> getRumTiempoRetencion(), 2, '.', '');
+            }
+            if ($registro -> getRumResolucion() != '') {
+                $fields['resolucion'] = number_format($registro -> getRumResolucion(), 2, '.', '');
+            }
+            if ($registro -> getRumTailing() != '') {
+                $fields['tailing'] = number_format($registro -> getRumTailing(), 2, '.', '');
+            }
+            if ($registro -> getRumPresion() != '') {
+                $fields['presion'] = number_format($registro -> getRumPresion(), 2, '.', '');
+            }
             $fields['observaciones_col'] = $registro -> getRumObservacionesCol();
             
             $horasFin = $registro -> getRumHoraFinTrabajo('H');

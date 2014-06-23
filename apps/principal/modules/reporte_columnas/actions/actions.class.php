@@ -509,13 +509,13 @@ class reporte_columnasActions extends sfActions
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
-                    $cant_columnas = 0;
+//                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
-                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumTiempoRetencion();
-                        $cant_columnas++;
+                        $datos[$fecha][$columnas[$columna]['codigo']] = $dato_col->getRumTiempoRetencion();
+//                        $cant_columnas++;
                     }
                     //Calcula el promedio de tiempos de retención de la columna para el día en análisis
-                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+//                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
                 }
             }
             
@@ -523,7 +523,7 @@ class reporte_columnasActions extends sfActions
             $fechas_texto = array();
             for($i=0; $i<sizeof($fechas); $i++) {
                 $fechas_texto[] = $this->mes($fechas[$i]);
-            }            
+            }
 
             $xml = '<?xml version="1.0"?>';
             $xml .= '<chart>';
@@ -533,11 +533,19 @@ class reporte_columnasActions extends sfActions
             }
             $xml .= '</series>';
             $xml .= '<graphs>';
+            //Guarda el tiempo de retención anterior más próximo diferente de cero
+            $tiempo_anterior = 0;
             for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
                 $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
-                for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
+                for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++) {                    
                     $tiempos_retencion = $datos[$diasmes][$columnas[$indicador]['codigo']];
-                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($tiempos_retencion, 2).'</value>';
+                    if($tiempos_retencion != '') {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($tiempos_retencion, 2).'</value>';
+                        $tiempo_anterior = $tiempos_retencion;
+                    } else {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($tiempo_anterior, 2).'</value>';
+                    }
+                    
                 }
                 $xml.='</graph>';
             }

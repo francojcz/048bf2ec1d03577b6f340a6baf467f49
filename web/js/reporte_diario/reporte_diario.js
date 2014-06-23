@@ -744,6 +744,9 @@ var rdperdi_fields = [{
     name: 'paros_menores'
 }, {
     type: 'string',
+    name: 'paros_menores_alistamiento'
+}, {
+    type: 'string',
     name: 'paros_menores_dia'
 }, {
     type: 'string',
@@ -786,14 +789,14 @@ var rdperdi_columns = [{
     dataIndex: 'nombre_maquina',
     header: 'Equipo',
     tooltip: 'Equipo que llev&oacute; a cabo el m&eacute;todo',
-    width: 150,
+    width: 105,
     align: 'center',
     renderer: generarRenderer('#bfbfbf', '#000000')
 }, {
     dataIndex: 'nombre_grupo',
     header: 'Grupo Equipo',
     tooltip: 'Grupo al cual pertenece el equipo que llev&oacute; a cabo el m&eacute;todo',
-    width: 150,
+    width: 105,
     align: 'center',
     renderer: generarRenderer('#bfbfbf', '#000000')
 }, {
@@ -804,30 +807,37 @@ var rdperdi_columns = [{
     align: 'center',
     renderer: generarRenderer('#bfbfbf', '#000000')
 }, {
+    dataIndex: 'paros_menores_alistamiento',
+    header: 'Paros menores y fallas<br>(Min)<br>Alistamiento',
+    tooltip: 'Paros menores y fallas dl alistamiento (Minutos)',
+    width: 125,
+    align: 'center',
+    renderer: generarRenderer('#ff5454', '#000000')
+}, {
     dataIndex: 'paros_menores',
     header: 'Paros menores y fallas<br>(Min)<br>Método',
-    tooltip: 'Paros menores y fallas (Minutos)',
-    width: 130,
+    tooltip: 'Paros menores y fallas del método (Minutos)',
+    width: 125,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'paros_menores_dia',
     header: 'Paros menores y fallas<br>(Min)<br>Día',
-    tooltip: 'Paros menores y fallas (Minutos) del día',
-    width: 130,
+    tooltip: 'Paros menores y fallas del día (Minutos)',
+    width: 125,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'retrabajos',
     header: 'Reensayos<br>(Min)<br>Método',
-    tooltip: 'Reensayos (Minutos)',
+    tooltip: 'Reensayos del método (Minutos)',
     width: 70,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'retrabajos_dia',
     header: 'Reensayos<br>(Min)<br>Día',
-    tooltip: 'Reensayos (Minutos) del día',
+    tooltip: 'Reensayos del día (Minutos)',
     width: 70,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
@@ -852,15 +862,15 @@ var rdperdi_columns = [{
 {
     dataIndex: 'perdidas_velocidad',
     header: 'Pérdidas de velocidad<br>(Min)<br>Método',
-    tooltip: 'Pérdidas de velocidad (Minutos)',
-    width: 130,
+    tooltip: 'Pérdidas de velocidad en el método (Minutos)',
+    width: 120,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }, {
     dataIndex: 'perdidas_velocidad_dia',
     header: 'Pérdidas de velocidad<br>(Min)<br>Día',
-    tooltip: 'Perdidas de velocidad (Minutos) en el día',
-    width: 130,
+    tooltip: 'Perdidas de velocidad en el día (Minutos)',
+    width: 120,
     align: 'center',
     renderer: generarRenderer('#ff5454', '#000000')
 }];
