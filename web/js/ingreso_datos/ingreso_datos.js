@@ -2333,15 +2333,21 @@ Ext.onReady(function()
                     
                     //Cambios: 24 de febrero de 2014
                     //Cuando se modifica el número de lotes de una reinyección se abre la interfaz para la edición de eventos
-                    //Número de la columna (El número de columnas inicia desde uno)
+                    //Número de la columna (Inicia desde uno)
                     var number_col = grid_tab2.getColumnModel().getColumnId(column);
-                    //Se verifica si la fila es par o impar (El número de filas inicia desde cero)
+//                    alert("Col: "+number_col);
+                    //Número de la fila (El número de filas inicia desde cero)
                     var par_impar = (e.row % 2);
-                    if((par_impar == 1) && ((number_col==3)||(number_col==6)||(number_col==9)||(number_col==12)||(number_col==15)||(number_col==18))) {
-                        //Se abre la interfaz para el ingreso del evento de Reinyección
-                        recargarDatosEventos();
-                        Ext.getBody().mask();
-                        win.show();
+//                    alert("Par_impar: "+par_impar);
+                    //Se verifica que la fila sea impar (Reinyección)
+                    if(par_impar == 1) {
+                        //Se verifica que la columna corresponda a 'No. lotes'
+                        if((number_col==3)||(number_col==6)||(number_col==9)||(number_col==12)||(number_col==15)||(number_col==18)) {
+                            //Se abre la interfaz para el ingreso del evento de Reinyección
+                            recargarDatosEventos();
+                            Ext.getBody().mask();
+                            win.show();
+                        }
                     }
                 }
                 
