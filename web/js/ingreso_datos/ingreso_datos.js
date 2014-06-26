@@ -2335,10 +2335,8 @@ Ext.onReady(function()
                     //Cuando se modifica el número de lotes de una reinyección se abre la interfaz para la edición de eventos
                     //Número de la columna (Inicia desde uno)
                     var number_col = grid_tab2.getColumnModel().getColumnId(column);
-//                    alert("Col: "+number_col);
                     //Número de la fila (El número de filas inicia desde cero)
                     var par_impar = (e.row % 2);
-//                    alert("Par_impar: "+par_impar);
                     //Se verifica que la fila sea impar (Reinyección)
                     if(par_impar == 1) {
                         //Se verifica que la columna corresponda a 'No. lotes'

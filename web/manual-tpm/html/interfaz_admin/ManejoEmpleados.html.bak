@@ -22,15 +22,15 @@
       </table>
       <big><span style="font-weight: bold;"><br>
           MANUAL DE USUARIO<br>
-        </span></big> <big><span style="font-weight: bold;">TPM-QLabs&nbsp; -
-          MANEJO DE EMPLEADOS</span></big><br>
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs - MANEJO
+          DE EMPLEADOS</span></big><br>
       <div style="text-align: left;">
         <div style="text-align: center;"><big><br>
             <br>
           </big></div>
         <div style="text-align: justify;"><big>Cuando el usuario selecciona del
-            menú la opción <span style="font-weight: bold;">Usuarios</span>, el
-            sistema le desplegará una pantalla como la que se muestra en la
+            menú principal la opción <span style="font-weight: bold;">Usuarios</span>,
+            el sistema desplegiega una pantalla como la que se muestra en la
             Figura 1. En esta pantalla el usuario podrá ver los empleados de la
             empresa, registrar nuevos empleados, actualizar su información,
             habilitarlos y deshabilitarlos.</big></div>
@@ -39,39 +39,53 @@
       <div style="text-align: left;">
         <div style="text-align: center;"><img title="Empleados" alt="Empleados"
             src="../imagenes/admin/2_empleado.png"></div>
-        <div style="text-align: center;"> Figura 1. Pantalla de manejo de
+        <div style="text-align: center;"> Figura 1. Pantalla para el manejo de
           empleados.<br>
         </div>
         <div style="text-align: center;"><big style="font-weight: bold;"><br>
+            <br>
           </big>
           <div style="text-align: left;"><big><span style="font-weight: bold;">Agregar
                 empleado</span><br>
               <br>
             </big>
             <div style="text-align: justify;"><big> Para agregar un empleado
-                pulse el botón <span style="font-weight: bold;">Agregar</span>,
+                pulse el botón <span style="font-weight: bold;">Agregar </span>(1),
                 diligencie el formulario ubicado al lado derecho de la pantalla
-                y pulse el botón <span style="font-weight: bold;">Crear</span>.&nbsp;
-                La información que se debe ingresar del usuario es la siguiente:</big></div>
+                (2) y pulse el botón <span style="font-weight: bold;">Crear</span>
+                (3), tal y como se muestra en la Figura 2.<br>
+                <br>
+                <br>
+              </big>
+              <div style="text-align: center;"><big><img title="Agregar" alt="Agregar"
+                    src="../imagenes/admin/2_empleado_agregar.png"></big><br>
+                Figura 2. Pantalla para agregar un empleado.</div>
+              <big><br>
+                La información que se debe ingresar para el registro de un
+                usuario es la siguiente:</big></div>
             <big> <br>
               <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp; Datos del
                 usuario</span><br>
             </big><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
                 class="Apple-style-span" style="color: rgb(51, 51, 51); font-family: Arial,Helvetica,sans-serif; font-size: 12px; text-align: left;">
                 <ul style="text-align: justify;">
-                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big>Login
-                      de usuario:&nbsp; Ingrese el login de usuario&nbsp; (es un
-                      campo obligatorio).</big></li>
-                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big>Password:&nbsp;
-                      Ingrese el pasword de usuario el cual debe ser mínimo de 8
-                      caracteres alfanumericos<span class="Apple-converted-space">
-                      </span></big><big>(es un campo obligatorio)</big><big>.</big></li>
-                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big>Repetir
-                      password:&nbsp; Repita el password<span class="Apple-converted-space">&nbsp;</span></big><big>(es
+                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                        style="font-weight: bold;">Login de usuario:</span>
+                      Ingrese el login de usuario&nbsp; (es un campo
+                      obligatorio).</big></li>
+                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                        style="font-weight: bold;">Password:</span> Ingrese el
+                      pasword de usuario el cual debe ser mínimo de 8 caracteres
+                      alfanumericos<span class="Apple-converted-space"> </span></big><big>(es
                       un campo obligatorio)</big><big>.</big></li>
-                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big>Perfil:&nbsp;
-                      Seleccione un perfil de usuarios, los perfiles definen que
-                      puede hacer cada persona,<span class="Apple-converted-space">&nbsp;</span></big><big>(es
+                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                        style="font-weight: bold;">Repetir password:</span>
+                      Repita el password<span class="Apple-converted-space">&nbsp;</span></big><big>(es
+                      un campo obligatorio)</big><big>.</big></li>
+                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                        style="font-weight: bold;">Perfil:</span> Seleccione un
+                      perfil de usuarios, los perfiles definen que puede hacer
+                      cada persona,<span class="Apple-converted-space">&nbsp;</span></big><big>(es
                       un campo obligatorio)</big></li>
                   <ul>
                     <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big>Administrador:
@@ -91,10 +105,11 @@ de
                         ingresar a los reportes de toma de decisiones.<br>
                       </big></li>
                   </ul>
-                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big>Habilitado:&nbsp;
-                      Seleccione si el usuario está habilitado o deshabilitado,
-                      tenga en cuenta que los usuarios deshabilitados no podrán
-                      ingresar al sistema<span class="Apple-converted-space">&nbsp;</span></big><big>(es
+                  <li style="font-family: Arial,Helvetica,sans-serif; font-weight: normal; text-align: justify; color: rgb(51, 51, 51); font-size: 12px;"><big><span
+                        style="font-weight: bold;">Habilitado:</span> Seleccione
+                      si el usuario está habilitado o deshabilitado, tenga en
+                      cuenta que los usuarios deshabilitados no podrán ingresar
+                      al sistema<span class="Apple-converted-space">&nbsp;</span></big><big>(es
                       un campo obligatorio).</big></li>
                 </ul>
                 <big>Nota: El login y el password deben ser entregados a los
@@ -103,42 +118,61 @@ de
                 </big></span></span><big style="font-weight: bold;">&nbsp;&nbsp;&nbsp;
               Datos del empleado</big>
             <ul>
-              <li><big>Nombre:&nbsp; Ingrese el nombre del empleado&nbsp; (es un
+              <li><big><span style="font-weight: bold;">Nombre: </span>Ingrese
+                  el nombre del empleado&nbsp; (es un campo obligatorio).</big></li>
+              <li><big><span style="font-weight: bold;">Apellidos:</span>
+                  Ingrese los apellidos del empleado&nbsp; </big><big>(es un
+                  campo obligatorio)</big><big>.</big></li>
+              <li><big><span style="font-weight: bold;">Tipo identificación:</span>
+                </big><big>Seleccione el tipo</big><big> de identificación</big><big>
+                  del empleado (</big><big>es un campo obligatorio</big><big>).</big></li>
+              <li><big><span style="font-weight: bold;">Número identificación:</span>&nbsp;</big><big>
+                  Ingrese el número de identificación&nbsp;</big><big>(es un
                   campo obligatorio).</big></li>
-              <li><big>Apellidos:&nbsp; Ingrese los apellidos del empleado&nbsp;
-                </big><big>(es un campo obligatorio)</big><big>.</big></li>
-              <li><big>Tipo identificación:&nbsp;&nbsp;</big><big>Seleccione el
-                  tipo</big><big> de identificación</big><big> del empleado (</big><big>es
-                  un campo obligatorio</big><big>).</big></li>
-              <li><big>Número identificación:&nbsp; </big><big> Ingrese el
-                  número de identificación&nbsp;</big><big>(es un campo
-                  obligatorio).</big></li>
-              <li><big>Empresa:&nbsp; Seleccione la empresa a la cual pertenece
-                  el empleado.<br>
+              <li><big><span style="font-weight: bold;">Empresa:</span>
+                  Seleccione la empresa a la cual pertenece el empleado.<br>
                 </big></li>
-              <li><big>Escoger Foto:&nbsp; Utilícelo para subir el sistema una
-                  foto del usuario (es opcional)<br>
+              <li><big><span style="font-weight: bold;">Escoger Foto:</span>
+                  Utilícelo para subir al sistema una foto del usuario (es
+                  opcional)<br>
                 </big></li>
             </ul>
-            <big>Nota: Para agregar un empleado previamente debe haber
-              creado&nbsp; el usuario.<br>
-              <br>
+            <big> <br>
               <br>
               <span style="font-weight: bold;">Actualizar</span><br>
               <br>
             </big>
             <div style="text-align: justify;"><big> Para actualizar un empleado,
-                seleccione el empleado que desea actualizar de la lista,
+                seleccione el empleado que desea actualizar de la lista (1),
                 actualice la información en el formulario del lado derecho y
-                pulse el botón <span style="font-weight: bold;">Actualizar</span>.
-                El sistema desplegara una pequeña ventana donde le preguntará
-                porque razón desea actualizar el empleado, digite la razón y
-                pulse el botón <span style="font-weight: bold;">Aceptar</span>.
-                Luego el sistema le mostrará un breve mensaje en el que informa
-                del éxito del cambio.</big></div>
-            <big> <br>
-            </big><br>
-            <big> <span style="font-weight: bold;">Deshabilitar</span></big><br>
+                pulse el botón <span style="font-weight: bold;">Actualizar</span>
+                (2). El sistema desplegara una pequeña ventana donde le
+                preguntará porque razón desea actualizar el empleado, digite la
+                razón (3) y pulse el botón <span style="font-weight: bold;">Aceptar
+                  </span>(4), tal y como se muestra en la Figura 3. Luego el
+                sistema le mostrará un breve mensaje en el que informará del
+                éxito del cambio.&nbsp; <br>
+                <br>
+                En caso de que alguno de los usuarios haya olvidado la
+                contraseña para el acceso al sistema, el administrador puede
+                hacer uso de esta interfaz para asignarle una nueva
+                contraseña.&nbsp; Para asignar una nueva contraseña a un
+                usuario, se debe seguir el mismo proceso para la actualización
+                de información descrito en la Figura 3 con la única diferencia
+                de que en vez de ingresar algún dato del usuario o empleado, se
+                ingresa la nueva contraseña en los campos <span style="font-weight: bold;">Password
+                  </span>y <span style="font-weight: bold;">Repassword</span>
+                (5).<br>
+                <br>
+              </big></div>
+            <big> </big><br>
+            <div style="text-align: center;"><br>
+              Figura 3. Pantalla para actualizar la información de un empleado.
+              <big> <span style="font-weight: bold;"></span></big><br>
+              <big><span style="font-weight: bold;"></span></big></div>
+            <big><span style="font-weight: bold;"><br>
+                <br>
+                Deshabilitar</span></big><br>
             <big><span style="font-weight: bold;"> </span></big><br>
             <div style="text-align: justify;"><big><span style="font-weight: bold;">
                 </span> </big><big>Para deshabilitar </big><big>un empleado</big><big>,
@@ -149,7 +183,7 @@ de
                   class="Apple-style-span" style="line-height: 15px;"><em style="font-weight: bold; font-style: normal;"></em></span></span><big>la
                 opción <span style="font-weight: bold;">No</span> (1) y pulse
                 el botón <span style="font-weight: bold;">Actualizar </span>(2),
-                tal y como se muestra en la Figura 2.&nbsp; El sistema
+                tal y como se muestra en la Figura 4.&nbsp; El sistema
                 desplegará una peque</big><big>ñ</big><big>a ventana donde le
                 preguntará porque razón desea actualizarlo, digite la razón y
                 pulse el botón <span style="font-weight: bold;">Aceptar</span>.
@@ -174,7 +208,7 @@ por
             </big>
             <div style="text-align: center;"><img title="Deshabilitar" alt="Deshabilitar"
                 src="../imagenes/admin/2_empleado_deshabilitar.png"><br>
-              Figura 2. Pantalla para deshabilitar un empleado.<big> </big> </div>
+              Figura 4. Pantalla para deshabilitar un empleado.<big> </big> </div>
           </div>
         </div>
       </div>

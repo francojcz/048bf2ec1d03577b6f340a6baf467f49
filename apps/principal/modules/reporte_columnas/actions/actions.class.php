@@ -426,13 +426,13 @@ class reporte_columnasActions extends sfActions
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
-                    $cant_columnas = 0;
+//                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
                         $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumPlatosTeoricos();
-                        $cant_columnas++;
+//                        $cant_columnas++;
                     }
                     //Calcula el promedio de platos teóricos de la columna para el día en análisis
-                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+//                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
                 }
             }
             
@@ -449,12 +449,19 @@ class reporte_columnasActions extends sfActions
                 $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas_texto[$dias].'</value>';
             }
             $xml .= '</series>';
-            $xml .= '<graphs>';
+            $xml .= '<graphs>';            
             for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                //Guarda el valor de los platos teóricos anterior más próximo diferente de cero
+                $platos_anterior = 0;
                 $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
                 for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
                     $numero_platos = $datos[$diasmes][$columnas[$indicador]['codigo']];
-                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($numero_platos, 2).'</value>';
+                    if($numero_platos != '') {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($numero_platos, 2).'</value>';
+                        $platos_anterior = $numero_platos;
+                    } else {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($platos_anterior, 2).'</value>';
+                    }                    
                 }
                 $xml.='</graph>';
             }
@@ -532,10 +539,10 @@ class reporte_columnasActions extends sfActions
                 $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas_texto[$dias].'</value>';
             }
             $xml .= '</series>';
-            $xml .= '<graphs>';
-            //Guarda el tiempo de retención anterior más próximo diferente de cero
-            $tiempo_anterior = 0;
+            $xml .= '<graphs>';            
             for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                //Guarda el tiempo de retención anterior más próximo diferente de cero
+                $tiempo_anterior = 0;
                 $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
                 for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++) {                    
                     $tiempos_retencion = $datos[$diasmes][$columnas[$indicador]['codigo']];
@@ -545,7 +552,6 @@ class reporte_columnasActions extends sfActions
                     } else {
                         $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($tiempo_anterior, 2).'</value>';
                     }
-                    
                 }
                 $xml.='</graph>';
             }
@@ -600,13 +606,13 @@ class reporte_columnasActions extends sfActions
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
-                    $cant_columnas = 0;
+//                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
                         $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumTailing();
-                        $cant_columnas++;
+//                        $cant_columnas++;
                     }
                     //Calcula el promedio de factor de cola de la columna para el día en análisis
-                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+//                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
                 }
             }
             
@@ -623,12 +629,19 @@ class reporte_columnasActions extends sfActions
                 $xml .= '<value xid="'.$fechas[$dias].'">'.$fechas_texto[$dias].'</value>';
             }
             $xml .= '</series>';
-            $xml .= '<graphs>';
+            $xml .= '<graphs>';            
             for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                //Guarda el factor de cola anterior más próximo diferente de cero
+                $factor_anterior = 0;
                 $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
                 for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
                     $factor_cola = $datos[$diasmes][$columnas[$indicador]['codigo']];
-                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($factor_cola, 2).'</value>';
+                    if($factor_cola != '') {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($factor_cola, 2).'</value>';
+                        $factor_anterior = $factor_cola;
+                    } else {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($factor_anterior, 2).'</value>';
+                    }
                 }
                 $xml.='</graph>';
             }
@@ -683,13 +696,13 @@ class reporte_columnasActions extends sfActions
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
-                    $cant_columnas = 0;
+//                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
                         $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumResolucion();
-                        $cant_columnas++;
+//                        $cant_columnas++;
                     }
                     //Calcula el promedio de resoluciones de la columna para el día en análisis
-                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+//                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
                 }
             }
             
@@ -708,10 +721,17 @@ class reporte_columnasActions extends sfActions
             $xml .= '</series>';
             $xml .= '<graphs>';
             for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                //Guarda la resolución anterior más próxima diferente de cero
+                $resolucion_anterior = 0;
                 $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
                 for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
                     $resoluciones = $datos[$diasmes][$columnas[$indicador]['codigo']];
-                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($resoluciones, 2).'</value>';
+                    if($resoluciones != '') {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($resoluciones, 2).'</value>';
+                        $resolucion_anterior = $resoluciones;
+                    } else {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($resolucion_anterior, 2).'</value>';
+                    }                    
                 }
                 $xml.='</graph>';
             }
@@ -766,13 +786,13 @@ class reporte_columnasActions extends sfActions
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_FECHA, $fechas[$fecha]);
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columnas[$columna]['codigo']);
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
-                    $cant_columnas = 0;
+//                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
                         $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumPresion();
-                        $cant_columnas++;
+//                        $cant_columnas++;
                     }
                     //Calcula el promedio de presiones de sistema de la columna para el día en análisis
-                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
+//                    $datos[$fecha][$columnas[$columna]['codigo']] /= $cant_columnas;
                 }
             }
             
@@ -791,10 +811,17 @@ class reporte_columnasActions extends sfActions
             $xml .= '</series>';
             $xml .= '<graphs>';
             for ($indicador=0; $indicador<sizeof($columnas); $indicador++){
+                //Guarda la presión del sistema anterior más próxima diferente de cero
+                $presion_anterior = 0;
                 $xml.='<graph color="#'.$columnas[$indicador]['color'].'" title="'.$columnas[$indicador]['informacion'].'" bullet="round">';                
                 for($diasmes=0;$diasmes<sizeof($fechas);$diasmes++){
                     $presion_sistema = $datos[$diasmes][$columnas[$indicador]['codigo']];
-                    $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($presion_sistema, 2).'</value>';
+                    if($presion_sistema != '') {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($presion_sistema, 2).'</value>';
+                        $presion_anterior = $presion_sistema;
+                    } else {
+                        $xml .= '<value xid="'.$fechas[$diasmes].'">'.round($presion_anterior, 2).'</value>';
+                    }
                 }
                 $xml.='</graph>';
             }

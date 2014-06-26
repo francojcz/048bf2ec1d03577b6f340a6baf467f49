@@ -22,41 +22,33 @@
       </table>
       <big><span style="font-weight: bold;"><br>
           MANUAL DE USUARIO<br>
-        </span></big> <big><span style="font-weight: bold;">TPM-QLabs&nbsp; -
+        </span></big> <big><span style="font-weight: bold;">TPM-QLabs -
           INTERFAZ&nbsp; ADMINISTRADOR</span></big><br>
       <div style="text-align: left;">
         <div style="text-align: center;"><big><br>
             <br>
           </big></div>
-        <div style="text-align: justify;"><big>Una vez hayamos digitado
-            correctamente la clave y la contraseña, el usuario administrador
-            ingresará a una pantalla como se muestra en la Figura 1.</big><br>
-        </div>
+        <div style="text-align: justify;"><big>Una vez se haya digitado
+            correctamente el nombre de usuario y la contraseña, el usuario
+            administrador ingresará a una pantalla como se muestra en la Figura
+            1.<br>
+            <br>
+          </big><big>La interfaz del&nbsp; administrador está compuesta de los
+            siguientes componentes:<br>
+            <br>
+          </big><big>(1) <span style="font-weight: bold;">Cabecera</span>: Muestra
+            el nombre de la empresa.<br>
+          </big><big>(2) <span style="font-weight: bold;">Menú</span>: Muestra
+            las opciones a las cuales puede acceder el administrador.<br>
+            (3) <span style="font-weight: bold;">Área de trabajo</span> la cual
+            muestra información según el menú que seleccione el usuario.</big> </div>
         <big> <br>
         </big> </div>
       <div style="text-align: left;">
         <div style="text-align: center;"><img title="Administrador" alt="Administrador"
             src="../imagenes/admin/1_area_partes.png"></div>
         <div style="text-align: center;">Figura 1. Pantalla principal del
-          administrador.<br>
-        </div>
-        <div style="text-align: center;"><br>
-          <div style="text-align: left;">
-            <div style="text-align: justify;"><big>Básicamente la interfaz
-                del&nbsp; administrador está compuesta de los siguientes
-                componentes:<br>
-              </big><big>(1) <span style="font-weight: bold;">Cabecera</span>
-                donde se muestra el nombre de la empresa.<br>
-              </big><big>(2) <span style="font-weight: bold;">Menú</span> que
-                muestra las opciones a las cuales puede acceder el
-                administrador.<br>
-                (3) <span style="font-weight: bold;">Área de trabajo</span> que
-                muestra información según el menú que seleccione el usuario.</big><br>
-              <big> </big></div>
-            &nbsp;&nbsp;&nbsp; </div>
-          <br>
-          <big style="font-weight: bold;"><br>
-          </big></div>
+          usuario administrador.<big style="font-weight: bold;"></big></div>
       </div>
     </div>
   </body>
