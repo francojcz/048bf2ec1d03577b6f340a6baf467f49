@@ -24,6 +24,7 @@ class reporte_columnasActions extends sfActions
 		$desde_fecha = $this->getRequestParameter('desde_fecha');
 		$hasta_fecha = $this->getRequestParameter('hasta_fecha');
 		$metodo_codigo=$this->getRequestParameter('metodo_codigo');
+                $columna_codigo=$this->getRequestParameter('columna_codigo');
                 $marca_codigo=$this->getRequestParameter('marca_codigo');
                 $modelo_codigo=$this->getRequestParameter('modelo_codigo');
                 $fase_codigo=$this->getRequestParameter('fase_codigo');
@@ -51,39 +52,44 @@ class reporte_columnasActions extends sfActions
                     $conexion->add(RegistroUsoMaquinaPeer::RUM_MET_CODIGO,$metodo_codigo,CRITERIA::EQUAL);
                 }
                 
-                //Se buscan las columnas que cumplan con los criterios seleccionados
-                $conexion_columna = new Criteria();
-                if($marca_codigo!='') {
-                    $conexion_columna->add(ColumnaPeer::COL_MAR_CODIGO, $marca_codigo);                    
-                }
-                if($modelo_codigo!='') {
-                    $conexion_columna->add(ColumnaPeer::COL_MOD_CODIGO, $modelo_codigo);                    
-                }
-                if($fase_codigo!='') {
-                    $conexion_columna->add(ColumnaPeer::COL_FASE_CODIGO, $fase_codigo);                    
-                }
-                if($dimension_codigo!='') {
-                    $conexion_columna->add(ColumnaPeer::COL_DIM_CODIGO, $dimension_codigo);                    
-                }
-                if($tamano_codigo!='') {
-                    $conexion_columna->add(ColumnaPeer::COL_TAM_CODIGO, $tamano_codigo);                    
-                }
-                $columnas = ColumnaPeer::doSelect($conexion_columna);
-                //Si existe al menos una columna que coincida con los criterios
-                if(count($columnas) > 0) {                    
-                    foreach ($columnas as $columna) {
-                        //Se búsca en la tabla RegistroUsoMáquina los códigos de las columnas que cumplieron con los criterios
-                        $conexion->addOr(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columna->getColCodigo());
+                if($columna_codigo!='') {
+                    $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO,$columna_codigo,CRITERIA::EQUAL);
+                } else {                
+                    //Se buscan las columnas que cumplan con los criterios seleccionados
+                    $conexion_columna = new Criteria();
+                    if($marca_codigo!='') {
+                        $conexion_columna->add(ColumnaPeer::COL_MAR_CODIGO, $marca_codigo);                    
                     }
-                }
-                else 
-                {
-                    /* No existe ninguna columna que coincida con los criterios, 
-                       entonces para que no muestre ningún registro, se coloca la siguiente condición */
-                    $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, -1);
+                    if($modelo_codigo!='') {
+                        $conexion_columna->add(ColumnaPeer::COL_MOD_CODIGO, $modelo_codigo);                    
+                    }
+                    if($fase_codigo!='') {
+                        $conexion_columna->add(ColumnaPeer::COL_FASE_CODIGO, $fase_codigo);                    
+                    }
+                    if($dimension_codigo!='') {
+                        $conexion_columna->add(ColumnaPeer::COL_DIM_CODIGO, $dimension_codigo);                    
+                    }
+                    if($tamano_codigo!='') {
+                        $conexion_columna->add(ColumnaPeer::COL_TAM_CODIGO, $tamano_codigo);                    
+                    }
+                    $columnas = ColumnaPeer::doSelect($conexion_columna);
+                    //Si existe al menos una columna que coincida con los criterios
+                    if(count($columnas) > 0) {                    
+                        foreach ($columnas as $columna) {
+                            //Se búsca en la tabla RegistroUsoMáquina los códigos de las columnas que cumplieron con los criterios
+                            $conexion->addOr(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, $columna->getColCodigo());
+                        }
+                    }
+                    else 
+                    {
+                        /* No existe ninguna columna que coincida con los criterios, 
+                           entonces para que no muestre ningún registro, se coloca la siguiente condición */
+                        $conexion->add(RegistroUsoMaquinaPeer::RUM_COL_CODIGO, -1);
+                    }
                 }
 
 		$conexion->add(RegistroUsoMaquinaPeer::RUM_ELIMINADO, false);
+                $conexion->addAscendingOrderByColumn(RegistroUsoMaquinaPeer::RUM_FECHA);
                 
 		return $conexion;
 	}        
@@ -200,6 +206,7 @@ class reporte_columnasActions extends sfActions
                 <Column ss:AutoFitWidth="0" ss:Width="120"/>
                 <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Column ss:AutoFitWidth="0" ss:Width="100"/>
+                <Column ss:AutoFitWidth="0" ss:Width="100"/>
                 <Row ss:AutoFitHeight="0" ss:Height="40">                
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Fecha</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">C&oacute;digo Interno</Data></Cell>
@@ -214,6 +221,7 @@ class reporte_columnasActions extends sfActions
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Presi&oacute;n de Sistema (psi)</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Observaciones</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Método</Data></Cell>
+                <Cell ss:StyleID="s73"><Data ss:Type="String">Analista</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Equipo</Data></Cell>
                 <Cell ss:StyleID="s73"><Data ss:Type="String">Grupo Equipo</Data></Cell>
                </Row>');
@@ -254,6 +262,7 @@ class reporte_columnasActions extends sfActions
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.number_format($registro->getRumPresion(), 2, '.', '').'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->getRumObservacionesCol().'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMetodo().'</Data></Cell>
+                            <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerAnalista().'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerMaquina().'</Data></Cell>
                             <Cell ss:StyleID="s64"><Data ss:Type="String">'.$registro->obtenerGrupo().'</Data></Cell>
                             </Row>');
@@ -334,6 +343,7 @@ class reporte_columnasActions extends sfActions
                             if($temporal->getRumColCodigo() != '') {
                                 $datos[$fila]['rum_col_fecha'] = $temporal->getRumFecha();
                                 $datos[$fila]['rum_col_metodo'] = $temporal->obtenerMetodo();
+                                $datos[$fila]['rum_col_analista'] = $temporal->obtenerAnalista();
                                 $datos[$fila]['rum_col_maquina'] = $temporal->obtenerMaquina();
                                 $datos[$fila]['rum_col_grupo'] = $temporal->obtenerGrupo();
 
@@ -428,7 +438,7 @@ class reporte_columnasActions extends sfActions
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
 //                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
-                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumPlatosTeoricos();
+                        $datos[$fecha][$columnas[$columna]['codigo']] = $dato_col->getRumPlatosTeoricos();
 //                        $cant_columnas++;
                     }
                     //Calcula el promedio de platos teóricos de la columna para el día en análisis
@@ -608,7 +618,7 @@ class reporte_columnasActions extends sfActions
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
 //                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
-                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumTailing();
+                        $datos[$fecha][$columnas[$columna]['codigo']] = $dato_col->getRumTailing();
 //                        $cant_columnas++;
                     }
                     //Calcula el promedio de factor de cola de la columna para el día en análisis
@@ -698,7 +708,7 @@ class reporte_columnasActions extends sfActions
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
 //                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
-                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumResolucion();
+                        $datos[$fecha][$columnas[$columna]['codigo']] = $dato_col->getRumResolucion();
 //                        $cant_columnas++;
                     }
                     //Calcula el promedio de resoluciones de la columna para el día en análisis
@@ -788,7 +798,7 @@ class reporte_columnasActions extends sfActions
                     $datos_col = RegistroUsoMaquinaPeer::doSelect($conexion);
 //                    $cant_columnas = 0;
                     foreach ($datos_col as $dato_col) {
-                        $datos[$fecha][$columnas[$columna]['codigo']] += $dato_col->getRumPresion();
+                        $datos[$fecha][$columnas[$columna]['codigo']] = $dato_col->getRumPresion();
 //                        $cant_columnas++;
                     }
                     //Calcula el promedio de presiones de sistema de la columna para el día en análisis
@@ -1034,6 +1044,43 @@ class reporte_columnasActions extends sfActions
 		}catch (Exception $excepcion)
 		{
 			$salida='Excepci&oacute;n en listar Tamanos';
+		}
+		return $this->renderText($salida);
+        }
+        
+        /**
+	 * Esta funcion retorna un listado de codigos internos de las columnas registradas
+	*/
+	public function executeListarCodigosInternos(sfWebRequest $request)
+	{
+                $salida = '({"total":"0", "results":""})';
+		$fila = 0;
+		$datos = array();
+
+		try{
+
+			$conexion = new Criteria();
+                        $conexion->add(ColumnaPeer::COL_ELIMINADO, 0);
+                        $conexion->addAscendingOrderByColumn(ColumnaPeer::COL_CODIGO_INTERNO);
+			$codigos = ColumnaPeer::doSelect($conexion);
+
+			foreach($codigos As $temporal)
+			{
+				$datos[$fila]['col_codigo'] = $temporal->getColCodigo();
+				$datos[$fila]['col_nombre'] = $temporal->getColCodigoInterno();
+				$fila++;
+			}
+                        
+                        $datos[$fila]['col_codigo']='';
+			$datos[$fila]['col_nombre'] ='TODOS';
+
+			if($fila>0){
+				$jsonresult = json_encode($datos);
+				$salida= '({"total":"'.$fila.'","results":'.$jsonresult.'})';
+			}
+		}catch (Exception $excepcion)
+		{
+			$salida='Excepci&oacute;n en listar Códigos';
 		}
 		return $this->renderText($salida);
         }

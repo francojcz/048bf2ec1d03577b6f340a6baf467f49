@@ -27,7 +27,38 @@ Ext.onReady(function(){
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
         selectOnFocus: true
-    });    
+    });
+    
+    
+    var reporcol_columna_codigo_datastore = new Ext.data.JsonStore({
+        id: 'reporcol_columna_codigo_datastore',
+        url: getAbsoluteUrl('reporte_columnas', 'listarCodigosInternos'),
+        root: 'results',
+        totalProperty: 'total',
+        fields: [{
+            name: 'col_codigo',
+            type: 'string'
+        }, {
+            name: 'col_nombre',
+            type: 'string'
+        }, ]
+    });
+    reporcol_columna_codigo_datastore.load();
+    
+    var reporcol_columna_codigo_combobox = new Ext.form.ComboBox({
+        xtype: 'combo',
+        store: reporcol_columna_codigo_datastore,
+        hiddenName: 'columna_codigo',
+        name: 'reporcol_columna_codigo_combobox',
+        id: 'reporcol_columna_codigo_combobox',
+        mode: 'local',
+        valueField: 'col_codigo',
+        forceSelection: true,
+        displayField: 'col_nombre',
+        triggerAction: 'all',
+        emptyText: 'Seleccione ..',
+        selectOnFocus: true
+    });
     
     
     var reporcol_marca_codigo_datastore = new Ext.data.JsonStore({
@@ -226,6 +257,10 @@ Ext.onReady(function(){
                 style: 'padding: 4px 0px 0px 30px',
                 value: 'Método'
             }, reporcol_metodo_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 30px',
+                value: 'Cód. Interno'
+            }, reporcol_columna_codigo_combobox, {
                 xtype: 'button',
                 style: 'padding: 0px 0px 0px 30px',
                 iconCls: 'exportar_excel',
@@ -234,6 +269,7 @@ Ext.onReady(function(){
                     redirigirSiSesionExpiro();
                     
                     var metodo_codigo = reporcol_metodo_codigo_combobox.getValue();
+                    var columna_codigo = reporcol_columna_codigo_combobox.getValue();
                     var marca_codigo = reporcol_marca_codigo_combobox.getValue();
                     var modelo_codigo = reporcol_modelo_codigo_combobox.getValue();
                     var fase_codigo = reporcol_fase_codigo_combobox.getValue();
@@ -249,7 +285,7 @@ Ext.onReady(function(){
                         hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
                     }
 
-                    var params = 'metodo_codigo=' + metodo_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
+                    var params = 'metodo_codigo=' + metodo_codigo + '&columna_codigo=' + columna_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
                     params += '&marca_codigo=' + marca_codigo + '&modelo_codigo=' + modelo_codigo + '&fase_codigo=' + fase_codigo + '&dimension_codigo=' + dimension_codigo + '&tamano_codigo=' + tamano_codigo;
                     
                     window.location = getAbsoluteUrl('reporte_columnas', 'exportar') + '?' + params;                   
@@ -284,7 +320,7 @@ Ext.onReady(function(){
                 xtype: 'button',
                 iconCls: 'filtrar',
                 style: 'padding: 0px 0px 0px 10px',
-                handler: function(){                
+                handler: function(){
                     var desde = '';
                     if (reporcol_desde_fecha_datefield.getValue() != '') {
                         desde = reporcol_desde_fecha_datefield.getValue().format('Y-m-d');
@@ -296,6 +332,7 @@ Ext.onReady(function(){
                     reporcol_datastore.reload({
                         params: {                            
                             metodo_codigo: reporcol_metodo_codigo_combobox.getValue(),
+                            columna_codigo: reporcol_columna_codigo_combobox.getValue(),
                             marca_codigo: reporcol_marca_codigo_combobox.getValue(),
                             modelo_codigo: reporcol_modelo_codigo_combobox.getValue(),
                             fase_codigo: reporcol_fase_codigo_combobox.getValue(),
@@ -329,6 +366,9 @@ Ext.onReady(function(){
             type: 'string'
         }, {
             name: 'rum_col_metodo',
+            type: 'string'
+        }, {
+            name: 'rum_col_analista',
             type: 'string'
         }, {
             name: 'rum_col_fecha',
@@ -443,6 +483,11 @@ Ext.onReady(function(){
             align : 'center',
             dataIndex: 'rum_col_metodo'
         }, {
+            header: "Analista",
+            width: 160,
+            align : 'center',
+            dataIndex: 'rum_col_analista'
+        }, {
             header: "Equipo",
             width: 150,
             align : 'center',
@@ -515,6 +560,7 @@ Ext.onReady(function(){
         redirigirSiSesionExpiro();
         
         var metodo_codigo = reporcol_metodo_codigo_combobox.getValue();
+        var columna_codigo = reporcol_columna_codigo_combobox.getValue();
         var marca_codigo = reporcol_marca_codigo_combobox.getValue();
         var modelo_codigo = reporcol_modelo_codigo_combobox.getValue();
         var fase_codigo = reporcol_fase_codigo_combobox.getValue();
@@ -530,7 +576,7 @@ Ext.onReady(function(){
             hasta = reporcol_hasta_fecha_datefield.getValue().format('Y-m-d');
         }
         
-        var params = '?metodo_codigo=' + metodo_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
+        var params = '?metodo_codigo=' + metodo_codigo + '&columna_codigo=' + columna_codigo + '&desde_fecha=' + desde + '&hasta_fecha=' + hasta;
         params += '&marca_codigo=' + marca_codigo + '&modelo_codigo=' + modelo_codigo + '&fase_codigo=' + fase_codigo + '&dimension_codigo=' + dimension_codigo + '&tamano_codigo=' + tamano_codigo;
                 
         //Tiempo de Retención

@@ -1491,8 +1491,7 @@ class ingreso_datosActions extends sfActions
                    el mismo valor de la hora de inicio de la corrida ingresada */
                 $cod_metodo = $registro->getRumMetCodigo();
                 $metodo = MetodoPeer::retrieveByPK($cod_metodo);
-                if($metodo->getMetMantenimiento() == 1) {
-                                  
+                if($metodo->getMetMantenimiento() == 1) {                                  
                     $registroModificacion -> setRemNombreCampo('Hora inicio');
                     $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraInicioTrabajo('H:i:s'));
                     $registro -> setRumHoraInicioTrabajo($hora_inicio);
@@ -1523,52 +1522,56 @@ class ingreso_datosActions extends sfActions
             if ($request -> hasParameter('hora_fin_corrida'))
             {
                 $hora_fin = $request -> getParameter('hora_fin_corrida');
-                //Sumar a la hora de fin el tiempo de la corrida                
-                $hora_total = $this->operarHoraTiempoCorrida($registro, $hora_fin, '+');
-                //Se obtiene la fecha actual
-                $fecha_actual = date('Y-m-d');
-                //Se suma a la fecha actual la hora fin ingresada
-                $horas_hora_ing = date('H', strtotime($hora_fin));
-                $mins_hora_ing = date('i', strtotime($hora_fin));
-                $segs_hora_ing = date('s', strtotime($hora_fin));
-                $fecha_actual_hora = date('Y-m-d H:i:s', strtotime('+ '.$horas_hora_ing.' hour', strtotime($fecha_actual)));
-                $fecha_actual_min = date('Y-m-d H:i:s', strtotime('+ '.$mins_hora_ing.' minute', strtotime($fecha_actual_hora)));
-                $fecha_final_ing = date('Y-m-d H:i:s', strtotime('+ '.$segs_hora_ing.' second', strtotime($fecha_actual_min)));
                 
-                //Se obtiene el tiempo de corrida del método y se suma ese tiempo a la variable $fecha_final_ing
-                $tc = array();
-                $tc[] = number_format($registro -> getRumTcUniformidad(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcDisolucion(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcPureza(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcMateriaPrima(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcEstabilidad(), 2, '.', '');
-                $tc[] = number_format($registro -> getRumTcProductoTerminado(), 2, '.', '');
-                $tiempo_corrida_min = 0;
-                $tiempo_corrida_seg = 0;
-                for($i=0; $i<sizeof($tc); $i++) {
-                    if($tc[$i] != 0.00) {
-                        $tiempo_corrida_min += (int) ($tc[$i]);
-                        $tiempo_corrida_seg += round(($tc[$i]-$tiempo_corrida_min)*60);
-                        $i = sizeof($tc);
-                    }
-                }
-                //Se suman a la variable $fecha_final_ing los minutos y segundos del tiempo de corrida
-                $fecha_final_minutos = date('Y-m-d H:i', strtotime('+ '.$tiempo_corrida_min.' minute', strtotime($fecha_final_ing)));                
-                $fecha_final_tc = date('Y-m-d H:i', strtotime('+ '.$tiempo_corrida_seg.' second', strtotime($fecha_final_minutos)));
-
-                //Se cambia la fecha ingresada y la fecha que incluye el tiempo de corrida al formato 'Y-m-d'
-                $fecha_ing_ymd = date('Y-m-d', strtotime($fecha_final_ing));
-                $fecha_tc_ymd = date('Y-m-d', strtotime($fecha_final_tc));
-                
-                /* Si la fecha que incluye el tiempo de corrida corresponde al día siguiente, se coloca como 
-                 * hora fin la hora ingresada y como hora fin corregida 23:59:59 */                
-                if($fecha_tc_ymd > $fecha_ing_ymd) {
-                    $hora_total = '23:59:59';
-                }
+                //Cambios: 24 de febrero de 2014
+                //Las siguientes líneas comentadas ya no se tienen en cuenta
+//                //Sumar a la hora de fin el tiempo de la corrida                
+//                $hora_total = $this->operarHoraTiempoCorrida($registro, $hora_fin, '+');
+//                //Se obtiene la fecha actual
+//                $fecha_actual = date('Y-m-d');
+//                //Se suma a la fecha actual la hora fin ingresada
+//                $horas_hora_ing = date('H', strtotime($hora_fin));
+//                $mins_hora_ing = date('i', strtotime($hora_fin));
+//                $segs_hora_ing = date('s', strtotime($hora_fin));
+//                $fecha_actual_hora = date('Y-m-d H:i:s', strtotime('+ '.$horas_hora_ing.' hour', strtotime($fecha_actual)));
+//                $fecha_actual_min = date('Y-m-d H:i:s', strtotime('+ '.$mins_hora_ing.' minute', strtotime($fecha_actual_hora)));
+//                $fecha_final_ing = date('Y-m-d H:i:s', strtotime('+ '.$segs_hora_ing.' second', strtotime($fecha_actual_min)));
+//                
+//                //Se obtiene el tiempo de corrida del método y se suma ese tiempo a la variable $fecha_final_ing
+//                $tc = array();
+//                $tc[] = number_format($registro -> getRumTcUniformidad(), 2, '.', '');
+//                $tc[] = number_format($registro -> getRumTcDisolucion(), 2, '.', '');
+//                $tc[] = number_format($registro -> getRumTcPureza(), 2, '.', '');
+//                $tc[] = number_format($registro -> getRumTcMateriaPrima(), 2, '.', '');
+//                $tc[] = number_format($registro -> getRumTcEstabilidad(), 2, '.', '');
+//                $tc[] = number_format($registro -> getRumTcProductoTerminado(), 2, '.', '');
+//                $tiempo_corrida_min = 0;
+//                $tiempo_corrida_seg = 0;
+//                for($i=0; $i<sizeof($tc); $i++) {
+//                    if($tc[$i] != 0.00) {
+//                        $tiempo_corrida_min += (int) ($tc[$i]);
+//                        $tiempo_corrida_seg += round(($tc[$i]-$tiempo_corrida_min)*60);
+//                        $i = sizeof($tc);
+//                    }
+//                }
+//                //Se suman a la variable $fecha_final_ing los minutos y segundos del tiempo de corrida
+//                $fecha_final_minutos = date('Y-m-d H:i', strtotime('+ '.$tiempo_corrida_min.' minute', strtotime($fecha_final_ing)));                
+//                $fecha_final_tc = date('Y-m-d H:i', strtotime('+ '.$tiempo_corrida_seg.' second', strtotime($fecha_final_minutos)));
+//
+//                //Se cambia la fecha ingresada y la fecha que incluye el tiempo de corrida al formato 'Y-m-d'
+//                $fecha_ing_ymd = date('Y-m-d', strtotime($fecha_final_ing));
+//                $fecha_tc_ymd = date('Y-m-d', strtotime($fecha_final_tc));
+//                
+//                /* Si la fecha que incluye el tiempo de corrida corresponde al día siguiente, se coloca como 
+//                 * hora fin la hora ingresada y como hora fin corregida 23:59:59 */                
+//                if($fecha_tc_ymd > $fecha_ing_ymd) {
+//                    $hora_total = '23:59:59';
+//                }                
                 
                 $registroModificacion -> setRemNombreCampo('Hora fin');
                 $registroModificacion -> setRemValorAntiguo('' . $registro -> getRumHoraFinTrabajo('H:i:s'));
-                $registro -> setRumHoraFinTrabajo($hora_total);
+                $registro -> setRumHoraFinTrabajo($hora_fin);
+//                $registro -> setRumHoraFinTrabajo($hora_total);
                 $registroModificacion -> setRemValorNuevo($hora_total);
                 
                 //Cambios: 24 de febrero deo 2014
@@ -2463,10 +2466,10 @@ class ingreso_datosActions extends sfActions
     
     //Cambios: 24 de febrero de 2014
     //Restar a la hora inicio el tiempo de inyección de la máquina
-    public function operarHoraTiempoInyeccion($registro, $hora_inicio, $operacion) {
-        //Obtener el tiempo de inyección de la máquina
-        $maquina = MaquinaPeer::retrieveByPK($registro -> getRumMaqCodigo());
-        $tiempo_inyeccion = $maquina->getMaqTiempoInyeccion();
+    public function operarHoraTiempoInyeccion($registro, $hora_inicio, $operacion) {        
+        //Obtener el método y el tiempo de inyección
+        $metodo = MetodoPeer::retrieveByPK($registro->getRumMetCodigo());
+        $tiempo_inyeccion = $metodo->getMetTiempoInyeccion();
         //Obtener la parte entera del tiempo de inyeccion para restarla en minutos a la hora de inicio de trabajo
         $entera = (int) ($tiempo_inyeccion);                
         $hora_minutos = date('H:i:s',strtotime($operacion.''.$entera.' minute', strtotime($hora_inicio)));

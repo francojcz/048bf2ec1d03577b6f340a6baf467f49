@@ -105,6 +105,7 @@ var ayuda_met_tc_materia_prima = 'Tiempo de corrida en muestras de  materia prim
 var ayuda_met_tc_pureza = 'Tiempo de corrida en muestras de pureza';
 var ayuda_met_tc_disolucion = 'Tiempo de corrida en muestras de disolución';
 var ayuda_met_tc_uniformidad = 'Tiempo de corrida en muestras de uniformidad';
+var ayuda_met_tiempo_inyeccion = 'Tiempo de inyección del método';
 var ayuda_met_mantenimiento = 'Seleccione si el método pertenece a un mantenimiento';
 
 var largo_panel = 420;
@@ -116,7 +117,6 @@ var crud_metodo_datastore = new Ext.data.Store({
         url: getAbsoluteUrl('crud_metodo', 'listarMetodo'),
         method: 'POST'
     }),baseParams: {
-//        met_mantenimiento: '0'
     },
     reader: new Ext.data.JsonReader({
         root: 'results',
@@ -219,6 +219,9 @@ var crud_metodo_datastore = new Ext.data.Store({
     }, {
         name: 'met_tc_uniformidad',
         type: 'float'
+    }, {
+        name: 'met_tiempo_inyeccion',
+        type: 'string'
     }, {
         name: 'met_mantenimiento',
         type: 'int'
@@ -757,6 +760,23 @@ var met_tc_uniformidad = new Ext.form.NumberField({
     }
 });
 
+var met_tiempo_inyeccion = new Ext.form.NumberField({
+    xtype: 'numberfield',
+    labelStyle: ' text-align:right;',
+    name: 'met_tiempo_inyeccion',
+    id: 'met_tiempo_inyeccion',
+    fieldLabel: 'Tiempo inyección (Min.)',
+    allowDecimals: true,
+    allowNegative: false,
+    allowBlank: false,
+    maxLength: 100,
+    listeners: {
+        'render': function(){
+            ayuda('met_tiempo_inyeccion', ayuda_met_tiempo_inyeccion);
+        }
+    }
+});
+
 var met_mantenimiento = new Ext.form.RadioGroup({
     xtype: 'radiogroup',
     labelStyle: 'text-align:right;',
@@ -1209,7 +1229,7 @@ var crud_metodo_formpanel = new Ext.Panel({
         anchor: '98%'
     },
     labelWidth: 180,
-    items: [met_codigo, met_nombre, met_mantenimiento, {
+    items: [met_codigo, met_nombre, met_tiempo_inyeccion, met_mantenimiento, {
         xtype: 'label',
         html: '<br/>'
     }, {
@@ -1249,7 +1269,7 @@ var crud_metodo_formpanel = new Ext.Panel({
 var crud_metodo_columnHeaderGroup = new Ext.ux.grid.ColumnHeaderGroup({
     rows: [[{
         header: '<h3>M&eacute;todo</h3>',
-        colspan: 3,
+        colspan: 4,
         align: 'center'
     },    /*{
      header: '<h3>Pre an&aacute;lisis</h3>',
@@ -1317,6 +1337,10 @@ var crud_metodo_colmodel = new Ext.grid.ColumnModel({
         width: 150,
         dataIndex: 'met_nombre',
         renderer: crud_metodo_renderizar_gris
+    }, {
+        header: "Tiempo Iny.",
+        width: 70,
+        dataIndex: 'met_tiempo_inyeccion'
     }, {
         header: "Mantenimiento",
         width: 80,
@@ -1486,6 +1510,7 @@ var crud_metodo_gridpanel = new Ext.grid.GridPanel({
                 //Ext.getCmp('crud_metodo_formpanel').getForm().loadRecord(record);
                 Ext.getCmp('met_codigo').setValue(record.data.met_codigo);
                 Ext.getCmp('met_nombre').setValue(record.data.met_nombre);
+                Ext.getCmp('met_tiempo_inyeccion').setValue(record.data.met_tiempo_inyeccion);
                 Ext.getCmp('met_mantenimiento').setValue(record.data.met_mantenimiento);
                 Ext.getCmp('crud_metodo_formpanel_info_analisis').getForm().loadRecord(record);
                 //--Ext.getCmp('crud_metodo_formpanel_info_tc').getForm().loadRecord(record);
@@ -1607,6 +1632,7 @@ function crud_metodo_actualizar(text){
         subirDatosAjax(getAbsoluteUrl('crud_metodo', 'actualizarMetodo'), {
             met_codigo: met_codigo.getValue(),
             met_nombre: met_nombre.getValue(),
+            met_tiempo_inyeccion: met_tiempo_inyeccion.getValue(),
             met_mantenimiento: met_mantenimiento.getValue().getGroupValue(),
             /*
              met_cambiar_puente_x_columna: met_cambiar_puente_x_columna.getValue(),
@@ -1657,6 +1683,7 @@ function crud_metodo_actualizar(text){
         
             Ext.getCmp('met_codigo').reset();
             Ext.getCmp('met_nombre').reset();
+            Ext.getCmp('met_tiempo_inyeccion').reset();
             
             Ext.getCmp('crud_metodo_formpanel_info_analisis').getForm().reset();
             //--Ext.getCmp('crud_metodo_formpanel_info_tc').getForm().reset();
@@ -1704,6 +1731,7 @@ function crud_metodo_agregar(btn, ev){
 //    crud_metodo_formpanel.getForm().reset();
     Ext.getCmp('met_codigo').reset();
     Ext.getCmp('met_nombre').reset();
+    Ext.getCmp('met_tiempo_inyeccion').reset();
     Ext.getCmp('met_mantenimiento_si').setValue(false);
     Ext.getCmp('met_mantenimiento_no').setValue(true);
     

@@ -36,17 +36,6 @@ propel:
     _attributes: { phpName: Computador }
     com_certificado: { phpName: ComCertificado, type: VARCHAR, size: '40', primaryKey: true, required: true }
     com_nombre: { phpName: ComNombre, type: VARCHAR, size: '255', required: false }
-  consumible_maquina:
-    _attributes: { phpName: ConsumibleMaquina }
-    com_codigo: { phpName: ComCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    com_maq_codigo: { phpName: ComMaqCodigo, type: INTEGER, size: '11', required: false, foreignTable: maquina, foreignReference: maq_codigo, onDelete: RESTRICT, onUpdate: RESTRICT }
-    com_fecha_cambio: { phpName: ComFechaCambio, type: TIMESTAMP, required: false }
-    com_item: { phpName: ComItem, type: VARCHAR, size: '200', required: false }
-    com_numero_parte: { phpName: ComNumeroParte, type: VARCHAR, size: '200', required: false }
-    com_periodicidad: { phpName: ComPeriodicidad, type: INTEGER, size: '11', required: false }
-    com_proximo_mantenimiento: { phpName: ComProximoMantenimiento, type: TIMESTAMP, required: false }
-    com_fecha_registro_sistema: { phpName: ComFechaRegistroSistema, type: TIMESTAMP, required: false }
-    _indexes: { FK_reference_17: [com_maq_codigo] }
   dimension:
     _attributes: { phpName: Dimension }
     dim_codigo: { phpName: DimCodigo, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
@@ -286,6 +275,7 @@ propel:
     met_tc_disolucion: { phpName: MetTcDisolucion, type: DECIMAL, size: '12', scale: '4', required: false }
     met_tc_uniformidad: { phpName: MetTcUniformidad, type: DECIMAL, size: '12', scale: '4', required: false }
     met_mantenimiento: { phpName: MetMantenimiento, type: SMALLINT, size: '6', required: false }
+    met_tiempo_inyeccion: { phpName: MetTiempoInyeccion, type: DECIMAL, size: '8', scale: '4', required: false }
     _indexes: { FK_reference_27: [met_usu_crea], FK_reference_28: [met_usu_actualiza] }
   modelo:
     _attributes: { phpName: Modelo }

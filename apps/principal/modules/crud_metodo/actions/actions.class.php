@@ -98,7 +98,9 @@ class crud_metodoActions extends sfActions
 				$metodo->setMetTcDisolucion($this->getRequestParameter('met_tc_disolucion'));
 				$metodo->setMetTcUniformidad($this->getRequestParameter('met_tc_uniformidad'));
                                                                 
-                                //Cambios: 20 de Febrero de 2014
+                                //Cambios: 24 de febrero de 2014
+                                //Se agregaron los campos Tiempo de inyección y Mantenimiento
+                                $metodo->setMetTiempoInyeccion($this->getRequestParameter('met_tiempo_inyeccion'));
                                 $metodo->setMetMantenimiento($this->getRequestParameter('met_mantenimiento'));
 
 				$metodo->save();
@@ -138,6 +140,7 @@ class crud_metodoActions extends sfActions
 
 			$conexion = new Criteria();
 			$conexion->add(MetodoPeer::MET_ELIMINADO,$met_eliminado);
+                        $conexion->addAscendingOrderByColumn(MetodoPeer::MET_CODIGO);
 			/*if($est_codigo){
 				$conexion->add(MetodoPeer::MET_EST_CODIGO,$est_codigo);
 				}*/
@@ -215,7 +218,9 @@ class crud_metodoActions extends sfActions
 				$datos[$fila]['met_tc_uniformidad'] = $temporal->getMetTcUniformidad();
 				//				$datos[$fila]['met_tc_otro'] = $temporal->getMetTcOtro();
 
-                                //Cambios: 20 de Febrero de 2014
+                                //Cambios: 24 de febrero de 2014
+                                //Se agregaron los campos Tiempo de inyección y Mantenimiento
+                                $datos[$fila]['met_tiempo_inyeccion'] = round($temporal->getMetTiempoInyeccion(), 2);
                                 $datos[$fila]['met_mantenimiento'] = $temporal->getMetMantenimiento();
                                 
 				$fila++;
