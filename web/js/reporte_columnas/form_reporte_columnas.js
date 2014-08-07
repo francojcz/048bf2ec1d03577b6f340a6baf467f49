@@ -26,7 +26,8 @@ Ext.onReady(function(){
         displayField: 'met_nombre',
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
-        selectOnFocus: true
+        selectOnFocus: true,
+        width: 160
     });
     
     
@@ -57,7 +58,8 @@ Ext.onReady(function(){
         displayField: 'col_nombre',
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
-        selectOnFocus: true
+        selectOnFocus: true,
+        width: 135
     });
     
     
@@ -89,7 +91,7 @@ Ext.onReady(function(){
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
         selectOnFocus: true,
-        width: 140
+        width: 135
     });
     
     
@@ -121,7 +123,7 @@ Ext.onReady(function(){
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
         selectOnFocus: true,
-        width: 140
+        width: 135
     });    
     
     
@@ -153,7 +155,7 @@ Ext.onReady(function(){
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
         selectOnFocus: true,
-        width: 130
+        width: 125
     }); 
     
     
@@ -217,7 +219,7 @@ Ext.onReady(function(){
         triggerAction: 'all',
         emptyText: 'Seleccione ..',
         selectOnFocus: true,
-        width: 130
+        width: 120
     }); 
     
     
@@ -254,15 +256,15 @@ Ext.onReady(function(){
                 value: 'Hasta'                
             }, reporcol_hasta_fecha_datefield, {
                 xtype: 'displayfield',
-                style: 'padding: 4px 0px 0px 30px',
+                style: 'padding: 4px 0px 0px 20px',
                 value: 'Método'
             }, reporcol_metodo_codigo_combobox, {
                 xtype: 'displayfield',
-                style: 'padding: 4px 0px 0px 30px',
+                style: 'padding: 4px 0px 0px 20px',
                 value: 'Cód. Interno'
             }, reporcol_columna_codigo_combobox, {
                 xtype: 'button',
-                style: 'padding: 0px 0px 0px 30px',
+                style: 'padding: 0px 0px 0px 15px',
                 iconCls: 'exportar_excel',
                 text: 'Guardar en formato Excel',
                 handler: function(){
@@ -290,36 +292,11 @@ Ext.onReady(function(){
                     
                     window.location = getAbsoluteUrl('reporte_columnas', 'exportar') + '?' + params;                   
                 }
-            }]
-        }, {
-            xtype: 'compositefield',
-            fieldLabel: '',
-            hideLabel: true,
-            items: [{
-                xtype: 'displayfield',
-                style: 'padding: 4px 0px 0px 0px',
-                value: 'Marca'
-            }, reporcol_marca_codigo_combobox, {
-                xtype: 'displayfield',
-                style: 'padding: 4px 0px 0px 10px',
-                value: 'Modelo'
-            }, reporcol_modelo_codigo_combobox, {
-                xtype: 'displayfield',
-                style: 'padding: 4px 0px 0px 10px',
-                value: 'Fase Ligada'
-            }, reporcol_fase_codigo_combobox, {
-                xtype: 'displayfield',
-                style: 'padding: 4px 0px 0px 10px',
-                value: 'Dimensi&oacute;n'
-            }, reporcol_dimension_codigo_combobox, {
-                xtype: 'displayfield',
-                style: 'padding: 4px 0px 0px 10px',
-                value: 'Tama&ntilde;o de Part&iacute;cula (μm)'
-            }, reporcol_tamano_codigo_combobox, {
+            }, {
                 text: 'Buscar',
                 xtype: 'button',
                 iconCls: 'filtrar',
-                style: 'padding: 0px 0px 0px 10px',
+                style: 'padding: 0px 0px 0px 15px',
                 handler: function(){
                     var desde = '';
                     if (reporcol_desde_fecha_datefield.getValue() != '') {
@@ -345,6 +322,32 @@ Ext.onReady(function(){
                     reporcol_cargardatosreportes();
                 }
             }]
+        }, {
+            xtype: 'compositefield',
+            fieldLabel: '',
+            hideLabel: true,
+            items: [{
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 0px',
+                value: 'Marca'
+            }, reporcol_marca_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 10px',
+                value: 'Modelo'
+            }, reporcol_modelo_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 10px',
+                value: 'Fase Ligada'
+            }, reporcol_fase_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 10px',
+                value: 'Dimensi&oacute;n'
+            }, reporcol_dimension_codigo_combobox, {
+                xtype: 'displayfield',
+                style: 'padding: 4px 0px 0px 10px',
+                value: 'Tama&ntilde;o de Part&iacute;cula (μm)'
+            }, reporcol_tamano_codigo_combobox
+        ]
         }],
         renderTo: 'div_form_reporte_columnas'
     });    

@@ -332,7 +332,7 @@ var crud_maquina_formpanel = new Ext.FormPanel({
     defaults: {
         anchor: '98%'
     },
-    items: [maq_eliminado, maq_codigo, maq_codigo_inventario, maq_nombre, maq_est_codigo, maq_tiempo_inyeccion, /*maq_tiempo_inyeccion_actual,*/ maq_marca, maq_modelo, maq_fecha_adquisicion, certificado_combo, maq_fecha_registro_sistema],
+    items: [maq_eliminado, maq_codigo, maq_codigo_inventario, maq_nombre, maq_est_codigo, /*maq_tiempo_inyeccion,*/ /*maq_tiempo_inyeccion_actual,*/ maq_marca, maq_modelo, maq_fecha_adquisicion, certificado_combo, maq_fecha_registro_sistema],
     buttons: [{
         text: 'Guardar',
         iconCls: 'guardar',

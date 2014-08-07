@@ -2250,6 +2250,23 @@ Ext.onReady(function()
                     {
                         column++;
                     }
+                    
+                    //Cambios: 24 de febrero de 2014
+                    //Cuando se ingresa una reinyección de estándar, se abre la interfaz para la edición de eventos
+                    //Número de la columna (Inicia desde uno)
+                    var number_col = grid_tab1.getColumnModel().getColumnId(column);
+                    //Número de la fila (El número de filas inicia desde cero)
+                    var par_impar = (e.row % 2);
+                    //Se verifica que la fila sea impar (Reinyección)
+                    if(par_impar == 1) {
+//                        //Se verifica que la columna corresponda a 'No. inyec. Std. #'
+                        if((number_col==7)||(number_col==8)||(number_col==9)||(number_col==10)||(number_col==11)||(number_col==12)) {
+                            //Se abre la interfaz para el ingreso del evento de Reinyección
+                            recargarDatosEventos();
+                            Ext.getBody().mask();
+                            win.show();
+                        }
+                    }
                 }
                 var callback = function()
                 {

@@ -365,7 +365,7 @@ abstract class BaseColumna extends BaseObject  implements Persistent {
 	public function setColCodigoInterno($v)
 	{
 		if ($v !== null) {
-			$v = (int) $v;
+			$v = (string) $v;
 		}
 
 		if ($this->col_codigo_interno !== $v) {
@@ -727,7 +727,7 @@ abstract class BaseColumna extends BaseObject  implements Persistent {
 		try {
 
 			$this->col_codigo = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->col_codigo_interno = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->col_codigo_interno = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->col_lote = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->col_eliminado = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->col_fecha_registro_sistema = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
