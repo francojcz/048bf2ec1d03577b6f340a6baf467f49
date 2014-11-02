@@ -508,7 +508,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             //Verificar si existe un ahorro en el tiempo de alistamiento de la corrida analítica
             $tpnp_temp = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
             //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
-            if(($tpnp_temp < 0) && ($registro->getRumHoraFinTrabajo()!='')) {
+            if($tpnp_temp < 0) {
                 $TPP += $tpnp_temp;
             }
             //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
