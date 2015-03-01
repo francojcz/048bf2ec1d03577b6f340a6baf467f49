@@ -625,7 +625,7 @@ class ingreso_datosActions extends sfActions
     }
     
     //Cambios: 24 de febrero de 2014
-    //Calcula el orden y el valor de los tiempos que se grafican en la barra de tiempo
+    //Calcula el orden y el valor de los tiempos que se grafican en la barra de tiempo en término de minutos
     public function generarTiemposGraficoMinutos($codigoMaquina, $fecha)
     {
         $user = $this -> getUser();
@@ -688,40 +688,46 @@ class ingreso_datosActions extends sfActions
             //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
             if($tpnp_temp < 0) {
                 $minutosTiempoParadaProgramada += $tpnp_temp;
+                //Se suman las pérdidas al tiempo de alistamiento para evitar error en división de tiempo para alistamiento
+                if($registro->getRumHoraInicioTrabajo() == '') {
+                    $minutosTiempoParadaProgramada += (-1)*$tpnp_temp;
+                }
             }            
             if(round($minutosTiempoParadaProgramada, 2) != 0.00) {
                 $tiempos[] = round($minutosTiempoParadaProgramada, 2);
                 $orden_tiempos[] = 'TPP';
             }
             
+            //Se resta a las pérdidas en los tiempos de alistamiento la duración de los eventos ocurridos
+            $hora_fin_alistamiento = $registro->calcularHoraFinTiempoAlistamiento($registro->getRumCodigo(), $minutosTiempoParadaProgramada-1);
+            $hora_inicio_metodo = $registro->getRumHoraInicioTrabajo();
+            $duracion_eventos = $registro->calcularDuracionEventosTiempoAlistamiento($registro->getRumCodigo(), $hora_fin_alistamiento, $hora_inicio_metodo);
             $minutosTiempoParadaNoProgramada1 = 0;
             //Cambios: 24 de febrero de 2014
             //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
             if($tpnp_temp > 0) {
                 $minutosTiempoParadaNoProgramada1 += $tpnp_temp;
             }
-            //Se resta la duración de los eventos ocurridos a las pérdidas en el tiempo de alistamiento
-            $duracion = $registro->calcularDuracionEventosCambioMetodo($registro->getRumCodigo()); 
-            $minutosTiempoParadaNoProgramada1 -= $duracion;
-            if(round($minutosTiempoParadaNoProgramada1) != 0) {
+            $minutosTiempoParadaNoProgramada1 -= $duracion_eventos;
+            if($minutosTiempoParadaNoProgramada1 != 0) {
                 $tiempos[] = round($minutosTiempoParadaNoProgramada1, 2);
                 $orden_tiempos[] = 'TPNP';
-            }            
-
-            $ahorro = 0;
-            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la hora de finalización de la corrida
-            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
-                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
-                $TF_temp = ($registro->obtenerTFMetodo())*60;
-                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
-                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
-                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
-                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
-                if(round($ahorro) < 0) {
-                    $tiempos[] = round($ahorro, 2);
-                    $orden_tiempos[] = 'TPNP';
-                }
-            }
+            }  
+            
+//            $ahorro = 0;
+//            //Se verifica si existe algún ahorro en los tiempos de funcionamiento solo si se ha ingresado la hora de finalización de la corrida
+//            if(($registro->getRumHoraInicioTrabajo()!='') && ($registro->getRumHoraFinTrabajo()!='')) {
+//                $maq_tiempo_inyeccion = $registro -> obtenerTiempoInyeccionMaquina();
+//                $TF_temp = ($registro->obtenerTFMetodo())*60;
+//                $TO_temp = ($registro->obtenerTOMetodo($maq_tiempo_inyeccion))*60;
+//                $TPNP_temp = $registro->calcularDuracionEventos($registro->getRumCodigo());
+//                //Se verifica si TF es menor a (TO+TPNP).  Si es menor, existe un ahorro en el TF
+//                $ahorro = $TF_temp - $TO_temp - $TPNP_temp;
+//                if(round($ahorro) < 0) {
+//                    $tiempos[] = round($ahorro, 2);
+//                    $orden_tiempos[] = 'TPNP';
+//                }
+//            }
             
             $minutosTiempoProgramado = 0;
             $inyeccionesEstandarPromedio = $empresa -> getEmpInyectEstandarPromedio();
@@ -738,9 +744,9 @@ class ingreso_datosActions extends sfActions
             $minutosTiempoProgramado += ($registro -> getRumTcDisolucion() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasDisolucion() * $registro -> getRumNumInyecXMuestraDisolu();
             $minutosTiempoProgramado += ($registro -> getRumTcUniformidad() + $maquina -> getMaqTiempoInyeccion()) * $registro -> getRumNumMuestrasUniformidad() * $registro -> getRumNumInyecXMuestraUnifor();
             //Se resta al TO el ahorro en el Tiempo de Funcionamiento
-            if(round($ahorro) < 0) {
-                $minutosTiempoProgramado += $ahorro;
-            }            
+//            if(round($ahorro) < 0) {
+//                $minutosTiempoProgramado += $ahorro;
+//            }            
             if(round($minutosTiempoProgramado, 2) != 0.00) {
                 $tiempos[] = round($minutosTiempoProgramado, 2);
                 $orden_tiempos[] = 'TO';
@@ -748,13 +754,13 @@ class ingreso_datosActions extends sfActions
             
             //Cambios: 24 de febrero de 2014
             //Las reinyecciones se deben ingresar como evento para que sean tenidas en cuenta en la barra de tiempo
-//            $minutosTiempoParadaNoProgramada2 += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);            
+            //$minutosTiempoParadaNoProgramada2 += $registro -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);            
             //Cambios: 24 de febrero de 2014
             //Se quitó la columna fallas de la interfaz de ingreso de datos
-//            $minutosTiempoParadaNoProgramada2 += $registro -> getRumFallas();
+            //$minutosTiempoParadaNoProgramada2 += $registro -> getRumFallas();
             //Cambios: 24 de febrero de 2014
             //Se calcula la duración de los eventos y se muestran en la barra de tiempos como TPNP
-            $minutosTiempoParadaNoProgramada2 = $registro -> calcularParosMenoresMinutosConEvento($inyeccionesEstandarPromedio);
+            $minutosTiempoParadaNoProgramada2 = $registro -> calcularParosMenoresMinutosEnEvento($registro->getRumCodigo(), $inyeccionesEstandarPromedio);
             if(round($minutosTiempoParadaNoProgramada2) != 0) {
                 $tiempos[] = round($minutosTiempoParadaNoProgramada2, 2);
                 $orden_tiempos[] = 'TPNP';

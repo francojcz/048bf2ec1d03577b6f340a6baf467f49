@@ -330,7 +330,46 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         }
 
         return $minutosParosMenores;
-    }    
+    }
+    
+    //Calcula los paros menores teniendo en cuenta los paros por eventos para un método específico
+    public function calcularParosMenoresMinutosEnEvento($rum_codigo, $inyeccionesEstandarPromedio)
+    {
+        $TF = $this -> calcularTiempoFuncionamientoMinutos();
+        $TO = $this -> calcularTOMinutos($inyeccionesEstandarPromedio);                
+        
+        $registro = RegistroUsoMaquinaPeer::retrieveByPK($rum_codigo);
+        //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
+        $hora_inicio_met = $registro->getRumHoraInicioTrabajo('H:i:s');       
+        
+        //Se buscan los eventos asociados a la corrida analítica
+        $criteria = new Criteria();
+        $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $rum_codigo);
+        $eventos = EventoEnRegistroPeer::doSelect($criteria);
+        
+        foreach ($eventos as $evento) {
+            $hora_inicio = $evento->getEvrgHoraOcurrio('H:i');
+            //Se verifica si el evento ocurrió en un el tiempo de pérdida del tiempo de alistamiento. Si fue así, se obtiene la duración del evento
+            //Si((hora de inicio del evento >= hora fin del tiempo de alistamiento)&&(hora de inicio del evento <= hora de inicio del método))
+            if($hora_inicio>=$hora_inicio_met) {                
+                $duracion += $evento->getEvrgDuracion();
+            }
+        }
+
+        //Cambios: 24 de febrero de 2014
+        //Las reinyecciones se deben ingresar como evento para que sean tenidas en cuenta en la barra de tiempo
+//        $minutosRetrabajos = $this -> calcularRetrabajosMinutos($inyeccionesEstandarPromedio);
+//        $minutosParosMenores = $TF - $TO - $minutosRetrabajos - $duracion;
+        
+        $minutosParosMenores = $TF - $TO - $duracion;
+
+        if ($minutosParosMenores < 0)
+        {
+            $minutosParosMenores = 0;
+        }
+
+        return $minutosParosMenores;
+    }
 
     //proposito sumar todas las inyecciones obligatorias y reinyecciones
     public function contarNumeroTotalInyecciones($inyeccionesEstandarPromedio)
@@ -611,14 +650,15 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
         $registro = RegistroUsoMaquinaPeer::retrieveByPK($rum_codigo);
         //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
         $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
-        //Se calcula la hora de fin del tiempo de alistamiento de la corrida
+        //Se calcula la duracion del tiempo de alistamiento de la corrida
         $tiempo_cambio = round($registro->getRumTiempoCambioModelo());
         //Se verifica si hubo ahorros en los tiempos de alistamiento y se lo suma a la duración del tiempo de alistamiento
         $perdidas = $registro -> calcularPerdidaCambioMetodoAjusteMinutos();
         if($perdidas < 0) {
             $tiempo_cambio += $perdidas;
         }
-        $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));
+        
+        $tiempo_fin = date('H:i:s',strtotime($tiempo_cambio.' minute', strtotime($tiempo_inicio)));        
         
         //Se buscan los eventos asociados a la corrida analítica
         $criteria = new Criteria();
@@ -634,6 +674,38 @@ class RegistroUsoMaquina extends BaseRegistroUsoMaquina
             }
         }
         return $tpp_eventos;
-    }  
-
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula la hora fin del tiempo de alistamiento incluyendo la duración de los eventos
+    public function calcularHoraFinTiempoAlistamiento($rum_codigo, $duracion)
+    {
+        $registro = RegistroUsoMaquinaPeer::retrieveByPK($rum_codigo);
+        //Se obtiene la hora de inicio del tiempo de alistamiento de la corrida
+        $tiempo_inicio = $registro->getRumTiempoEntreModelo('H:i:s');
+        
+        $hora_fin = date('H:i:s',strtotime($duracion.' minute', strtotime($tiempo_inicio)));        
+        
+        return $hora_fin;
+    }
+    
+    //Cambios: 24 de febrero de 2014
+    //Calcula la duración de los eventos que ocurren en el tiempo de pérdida del alistamiento
+    public function calcularDuracionEventosTiempoAlistamiento($rum_codigo, $hora_fin_alistamiento, $hora_inicio_metodo)
+    {
+        //Se buscan los eventos asociados a la corrida analítica
+        $criteria = new Criteria();
+        $criteria->add(EventoEnRegistroPeer::EVRG_RUM_CODIGO, $rum_codigo);
+        $eventos = EventoEnRegistroPeer::doSelect($criteria);
+        
+        foreach ($eventos as $evento) {
+            $hora_inicio = $evento->getEvrgHoraOcurrio('H:i');
+            //Se verifica si el evento ocurrió en un el tiempo de pérdida del tiempo de alistamiento. Si fue así, se obtiene la duración del evento
+            //Si((hora de inicio del evento >= hora fin del tiempo de alistamiento)&&(hora de inicio del evento <= hora de inicio del método))
+            if(($hora_inicio>=$hora_fin_alistamiento) && ($hora_inicio<=$hora_inicio_metodo)){                
+                $tpp_eventos += $evento->getEvrgDuracion();
+            }
+        }
+        return $tpp_eventos;
+    }
 }

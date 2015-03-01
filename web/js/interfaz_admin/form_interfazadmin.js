@@ -111,7 +111,7 @@ var form_interfazdministrador = function(){
                             }]
                         }, {
                             title: 'M&eacute;todos',
-                            tabTip: ' manejo de m&eacute;todos',
+                            tabTip: 'Manejo de m&eacute;todos',
                             border: false,
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',
@@ -125,7 +125,7 @@ var form_interfazdministrador = function(){
                             }]
                         }, {
                             title: 'Metas',
-                            tabTip: 'manejo de metas',
+                            tabTip: 'Manejo de metas',
                             border: false,
                             style: 'padding: 10px;',
                             iconCls: 'x-icon-maestra',

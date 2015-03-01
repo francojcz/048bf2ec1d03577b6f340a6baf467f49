@@ -207,7 +207,7 @@ var ayuda_maestra_eta_nombre='Nombre etapa';
 				iconCls:  'filtrar',
 				selectAllText: 'Seleccionar todos',
 				searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
-				width:         150
+				width:         300
 			})
 		]
     });

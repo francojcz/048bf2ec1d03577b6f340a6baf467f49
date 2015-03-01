@@ -34,7 +34,7 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
 	
         //Cambios: 24 de febrero de 2014
         //Se comentó la siguiente línea
-//        $registroPrimerDia -> setRumHoraInicioTrabajo("23:59:59.999");
+        //$registroPrimerDia -> setRumHoraInicioTrabajo("23:59:59.999");
         //Cambios: 24 de febrero de 2014
         //Si el método del primer día no registra hora de inicio de la corrida, asigna 23:59:59
         if($registroPrimerDia->getRumHoraInicioTrabajo()=='') {
@@ -510,6 +510,9 @@ class RegistroUsoMaquinaPeer extends BaseRegistroUsoMaquinaPeer
             //Los tiempos que son negativos se toman como ahorros y se deben restar a los tiempos de alistamiento
             if($tpnp_temp < 0) {
                 $TPP += $tpnp_temp;
+                if($registro->getRumHoraInicioTrabajo() == '') {
+                    $TPP += (-1)*$tpnp_temp;
+                }
             }
             //Los tiempos que aparecen como pérdidas se suman a los TPNP siempre y cuando sean positivos
             if($tpnp_temp > 0) {

@@ -207,7 +207,7 @@ var ayuda_maestra_tam_nombre='Tama&ntilde;o de Part&iacute;cula';
 				iconCls:  'filtrar',
 				selectAllText: 'Seleccionar todos',
 				searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
-				width:         150
+				width:         300
 			})
 		]
     });

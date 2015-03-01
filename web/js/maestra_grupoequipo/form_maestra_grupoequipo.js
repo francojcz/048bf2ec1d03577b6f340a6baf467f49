@@ -216,7 +216,7 @@ var maestra_grupo_gridpanel = new Ext.grid.GridPanel({
                         iconCls:  'filtrar',
                         selectAllText: 'Seleccionar todos',
                         searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
-                        width:         100
+                        width:         300
                 })
         ]
 });

@@ -1916,7 +1916,7 @@ Ext.onReady(function()
         triggerAction : 'all',
         forceSelection : true,
         allowBlank : false,
-        width : 150,
+        width : 370,
         allQuery: 'nombre',
         disabled: true,
         listeners: {
@@ -2146,9 +2146,9 @@ Ext.onReady(function()
             case '2':
                 mensaje = 'Su perfil de usuario no está autorizado para modificar información';
                 break;
-            case 'Ahorro_TF':
-                mensaje = 'Verifique que la hora de finalización ingresada sea correcta';
-                break;
+//            case 'Ahorro_TF':
+//                mensaje = 'Verifique que la hora de finalización ingresada sea correcta';
+//                break;
         }
         if(mensaje != null)
         {

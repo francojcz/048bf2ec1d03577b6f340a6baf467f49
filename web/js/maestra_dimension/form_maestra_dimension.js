@@ -207,7 +207,7 @@ var ayuda_maestra_dim_nombre='Dimensi&oacute;n';
 				iconCls:  'filtrar',
 				selectAllText: 'Seleccionar todos',
 				searchTipText: 'Escriba el texto que desea buscar y presione la tecla enter',
-				width:         150
+				width:         300
 			})
 		]
     });
